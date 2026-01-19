@@ -538,7 +538,7 @@ const Navbar = () => {
             </motion.a>
 
             <motion.a
-              href="https://www.linkedin.com/in/bhagavan-g/"
+              href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/"
               target="_blank"
               rel="noreferrer"
               whileHover={{ scale: 1.3, rotate: -12 }}

@@ -1,7 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import profileImage from "../assets/profile.jpeg";
+import resumePDF from "../assets/bhagavanresume.pdf";
 
-import { Award, Briefcase, Rocket, Sparkles, ExternalLink, GraduationCap, Code, Cpu, Database, Globe, BrainCircuit, Zap, Terminal, ChevronRight, Download } from "lucide-react";
+
+import { Award, Briefcase, Rocket, Download, ChevronRight, Terminal, GraduationCap } from "lucide-react";
 
 export default function FuturisticDevHero() {
   const [visible, setVisible] = useState(false);
@@ -79,8 +81,16 @@ export default function FuturisticDevHero() {
     { icon: Rocket, value: "5+", label: "Live Projects", color: "#a78bfa" },
     { icon: Award, value: "13+", label: "Certifications", color: "#34d399" }
   ];
+  const handleResumeDownload = () => {
+  const link = document.createElement("a");
+  link.href = resumePDF;
+  link.download = "Bhagavan-Resume.pdf"; // download file name
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
-  
+
   return (
     <div
       onMouseMove={handleMouseMove}
@@ -386,7 +396,7 @@ export default function FuturisticDevHero() {
             </div>
           </div>
 
-          {/* Right - Profile with Orbiting Tech Icons */}
+          {/* Right - Square Profile with Orbiting Tech Icons */}
           <div style={{
             position: 'relative',
             opacity: visible ? 1 : 0,
@@ -395,26 +405,41 @@ export default function FuturisticDevHero() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: '500px',
+            minHeight: '600px',
             order: window.innerWidth < 1024 ? 1 : 2,
             padding: '2rem'
           }}>
             
-            {/* Outer Rotating Rings */}
-            {[0, 1, 2, 3].map((i) => (
+            {/* Animated Square Borders - Multiple Layers */}
+            {[0, 1, 2].map((i) => (
               <div
-                key={i}
+                key={`border-${i}`}
                 style={{
                   position: 'absolute',
-                  width: `${300 + i * 80}px`,
-                  height: `${300 + i * 80}px`,
-                  borderRadius: '50%',
-                  border: `2px solid transparent`,
-                  background: `conic-gradient(from ${i * 90}deg, transparent 20%, ${['#22d3ee', '#a78bfa', '#34d399', '#f59e0b'][i]} 40%, transparent 80%)`,
-                  WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 1px))',
-                  mask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 1px))',
-                  animation: `ring${i % 2 === 0 ? 'Forward' : 'Reverse'} ${20 + i * 5}s linear infinite`,
-                  opacity: 0.4 - i * 0.08
+                  width: `${320 + i * 60}px`,
+                  height: `${320 + i * 60}px`,
+                  border: `2px solid ${i === 0 ? 'rgba(34,211,238,0.5)' : i === 1 ? 'rgba(168,139,250,0.4)' : 'rgba(52,211,153,0.3)'}`,
+                  borderRadius: '28px',
+                  animation: `spinSquare ${20 + i * 10}s linear infinite ${i % 2 === 0 ? '' : 'reverse'}`,
+                  boxShadow: `0 0 40px ${i === 0 ? 'rgba(34,211,238,0.3)' : i === 1 ? 'rgba(168,139,250,0.2)' : 'rgba(52,211,153,0.15)'}`
+                }}
+              />
+            ))}
+
+            {/* Corner Accent Borders */}
+            {[0, 1].map((i) => (
+              <div
+                key={`accent-${i}`}
+                style={{
+                  position: 'absolute',
+                  width: `${380 + i * 40}px`,
+                  height: `${380 + i * 40}px`,
+                  border: '2px solid transparent',
+                  borderRadius: '32px',
+                  borderTop: `2px solid rgba(${i === 0 ? '34,211,238' : '168,139,250'},0.6)`,
+                  borderRight: `2px solid rgba(${i === 0 ? '34,211,238' : '168,139,250'},0.6)`,
+                  animation: `spinSquare ${15 + i * 8}s linear infinite ${i === 0 ? 'reverse' : ''}`,
+                  opacity: 0.5
                 }}
               />
             ))}
@@ -429,7 +454,7 @@ export default function FuturisticDevHero() {
             }}>
               {techStack.map((tech, i) => {
                 const angle = (i / techStack.length) * Math.PI * 2;
-                const radius = window.innerWidth < 768 ? 180 : 260;
+                const radius = window.innerWidth < 768 ? 200 : 280;
                 return (
                   <div
                     key={i}
@@ -437,21 +462,21 @@ export default function FuturisticDevHero() {
                       position: 'absolute',
                       top: '50%',
                       left: '50%',
-                      width: 'clamp(60px, 8vw, 80px)',
-                      height: 'clamp(60px, 8vw, 80px)',
+                      width: 'clamp(64px, 8vw, 80px)',
+                      height: 'clamp(64px, 8vw, 80px)',
                       transform: `translate(-50%, -50%)`,
-                      animation: `orbit 20s linear infinite`,
-                      animationDelay: `${-i * (20 / techStack.length)}s`,
+                      animation: `orbit 25s linear infinite`,
+                      animationDelay: `${-i * (25 / techStack.length)}s`,
                     }}
                   >
                     <div style={{
                       width: '100%',
                       height: '100%',
-                      borderRadius: '20px',
-                      background: 'rgba(15,15,40,0.95)',
+                      borderRadius: '18px',
+                      background: 'rgba(10,10,25,0.95)',
                       backdropFilter: 'blur(20px)',
-                      border: `2px solid ${tech.color}60`,
-                      boxShadow: `0 10px 40px ${tech.color}40, inset 0 0 20px ${tech.color}20`,
+                      border: `2px solid ${tech.color}50`,
+                      boxShadow: `0 10px 40px ${tech.color}40, inset 0 0 20px ${tech.color}15`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -462,12 +487,14 @@ export default function FuturisticDevHero() {
                       overflow: 'hidden'
                     }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.15)';
-                        e.currentTarget.style.boxShadow = `0 15px 50px ${tech.color}60, inset 0 0 30px ${tech.color}40`;
+                        e.currentTarget.style.transform = 'scale(1.2)';
+                        e.currentTarget.style.boxShadow = `0 15px 50px ${tech.color}70, inset 0 0 30px ${tech.color}40`;
+                        e.currentTarget.style.borderColor = tech.color;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = `0 10px 40px ${tech.color}40, inset 0 0 20px ${tech.color}20`;
+                        e.currentTarget.style.boxShadow = `0 10px 40px ${tech.color}40, inset 0 0 20px ${tech.color}15`;
+                        e.currentTarget.style.borderColor = `${tech.color}50`;
                       }}
                     >
                       <div style={{
@@ -483,7 +510,7 @@ export default function FuturisticDevHero() {
                           width: '100%', 
                           height: '100%', 
                           objectFit: 'contain',
-                          filter: `drop-shadow(0 0 10px ${tech.color})`,
+                          filter: `drop-shadow(0 0 8px ${tech.color})`,
                           position: 'relative',
                           zIndex: 1
                         }}
@@ -494,16 +521,16 @@ export default function FuturisticDevHero() {
               })}
             </div>
 
-            {/* Central Profile Image */}
+            {/* Central Square Profile Image */}
             <div style={{
               position: 'relative',
-              width: 'clamp(280px, 40vw, 380px)',
-              height: 'clamp(280px, 40vw, 380px)',
-              borderRadius: '50%',
+              width: 'clamp(300px, 40vw, 380px)',
+              height: 'clamp(300px, 40vw, 380px)',
+              borderRadius: '24px',
               overflow: 'hidden',
-              border: '6px solid rgba(34,211,238,0.5)',
-              boxShadow: '0 0 80px rgba(34,211,238,0.6), inset 0 0 60px rgba(34,211,238,0.2)',
-              background: 'linear-gradient(135deg, rgba(34,211,238,0.2), rgba(167,139,250,0.2))',
+              border: '4px solid rgba(34,211,238,0.6)',
+              boxShadow: '0 0 60px rgba(34,211,238,0.5), inset 0 0 40px rgba(34,211,238,0.15)',
+              background: 'linear-gradient(135deg, rgba(34,211,238,0.15), rgba(167,139,250,0.15))',
               animation: 'profileFloat 6s ease-in-out infinite',
               zIndex: 5
             }}>
@@ -511,13 +538,14 @@ export default function FuturisticDevHero() {
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
                 backgroundSize: '200% 100%',
                 animation: 'shimmer 3s linear infinite',
                 zIndex: 2
               }} />
               
-              <img
+              {/* Profile Image */}
+             <img
   src={profileImage}
   alt="Siva Satya Sai Bhagavan"
   style={{
@@ -539,9 +567,9 @@ export default function FuturisticDevHero() {
               maxHeight: '700px'
             }}>
               {stats.map((stat, i) => {
-                const angles = [-60, 60, 180]; // Top-left, top-right, bottom
+                const angles = [-50, 50, 180];
                 const angle = angles[i] * (Math.PI / 180);
-                const radius = window.innerWidth < 768 ? 160 : 240;
+                const radius = window.innerWidth < 768 ? 180 : 260;
                 const Icon = stat.icon;
                 
                 return (
@@ -552,15 +580,15 @@ export default function FuturisticDevHero() {
                       top: '50%',
                       left: '50%',
                       transform: `translate(-50%, -50%) translate(${Math.cos(angle) * radius}px, ${Math.sin(angle) * radius}px)`,
-                      width: 'clamp(120px, 15vw, 160px)',
+                      width: 'clamp(120px, 15vw, 150px)',
                       animation: `fadeInUp 0.8s ease-out ${i * 0.2 + 0.5}s both`
                     }}
                   >
                     <div
                       style={{
-                        background: 'rgba(0,0,0,0.85)',
-                        borderRadius: '20px',
-                        border: `2px solid ${stat.color}60`,
+                        background: 'rgba(5,5,15,0.9)',
+                        borderRadius: '18px',
+                        border: `2px solid ${stat.color}50`,
                         boxShadow: `0 15px 40px ${stat.color}40`,
                         padding: 'clamp(1rem, 3vw, 1.5rem)',
                         display: 'flex',
@@ -573,19 +601,19 @@ export default function FuturisticDevHero() {
                         cursor: 'pointer'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1) translateY(-5px)';
+                        e.currentTarget.style.transform = 'scale(1.15) translateY(-8px)';
                         e.currentTarget.style.borderColor = stat.color;
-                        e.currentTarget.style.boxShadow = `0 20px 50px ${stat.color}60`;
+                        e.currentTarget.style.boxShadow = `0 20px 60px ${stat.color}70`;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                        e.currentTarget.style.borderColor = `${stat.color}60`;
+                        e.currentTarget.style.borderColor = `${stat.color}50`;
                         e.currentTarget.style.boxShadow = `0 15px 40px ${stat.color}40`;
                       }}
                     >
                       <Icon size={window.innerWidth < 768 ? 28 : 36} color={stat.color} />
                       <div style={{
-                        fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+                        fontSize: 'clamp(1.75rem, 5vw, 2.5rem)',
                         fontWeight: '900',
                         color: stat.color,
                         textShadow: `0 0 20px ${stat.color}80`,
@@ -610,24 +638,27 @@ export default function FuturisticDevHero() {
             {/* Talent Badge */}
             <div style={{
               position: 'absolute',
-              bottom: 'clamp(20px, 5vw, 40px)',
+              bottom: 'clamp(-10px, 2vw, 20px)',
               left: '50%',
               transform: 'translateX(-50%)',
-              padding: 'clamp(12px, 3vw, 16px) clamp(24px, 5vw, 36px)',
-              background: 'linear-gradient(135deg, #22d3ee, #06b6d4)',
+              padding: 'clamp(10px, 2.5vw, 14px) clamp(20px, 4vw, 32px)',
+              background: 'linear-gradient(135deg, rgba(34,211,238,0.2), rgba(168,139,250,0.2))',
+              border: '2px solid rgba(34,211,238,0.5)',
               borderRadius: '100px',
-              fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
+              fontSize: 'clamp(0.75rem, 2vw, 0.95rem)',
               fontWeight: '800',
-              color: 'white',
-              boxShadow: '0 10px 40px rgba(34,211,238,0.6)',
+              color: '#22d3ee',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 10px 40px rgba(34,211,238,0.4)',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
+              gap: '8px',
               animation: 'glow 4s ease-in-out infinite',
               zIndex: 10,
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              letterSpacing: '1px'
             }}>
-              <GraduationCap size={window.innerWidth < 768 ? 18 : 22} />
+              <GraduationCap size={window.innerWidth < 768 ? 16 : 20} />
               FINAL YEAR TALENT
             </div>
           </div>
@@ -649,50 +680,37 @@ export default function FuturisticDevHero() {
           50% { transform: translate(20px, -30px); }
         }
         @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.3); }
-        }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(34,211,238,0.3); }
-          50% { box-shadow: 0 0 40px rgba(34,211,238,0.6); }
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.5); opacity: 0.5; }
         }
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
         }
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        @keyframes spinSquare { 
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
-        @keyframes ringForward {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes ringReverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-        @keyframes orbit {
-          from { 
-            transform: translate(-50%, -50%) rotate(0deg) translateX(${window.innerWidth < 768 ? 180 : 260}px) rotate(0deg);
-          }
-          to {  
-            transform: translate(-50%, -50%) rotate(360deg) translateX(${window.innerWidth < 768 ? 180 : 260}px) rotate(-360deg);
-          }
+        @keyframes orbit {  
+          0% { transform: translate(-50%, -50%) rotate(0deg) translateX(280px) rotate(0deg); }
+          100% { transform: translate(-50%, -50%) rotate(360deg) translateX(280px) rotate(-360deg); }
         }
         @keyframes shimmer {
           0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+          100% { background-position: 200% 0; } 
         }
         @keyframes profileFloat {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-15px); }
+        }
+        @keyframes fadeInUp {
+
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(34,211,238,0.5); }
+          50% { box-shadow: 0 0 40px rgba(34,211,238,1); }
         }
       `}</style>
     </div>
