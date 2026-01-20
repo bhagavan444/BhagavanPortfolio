@@ -1,1037 +1,820 @@
+// src/pages/Home.jsx
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Mail,
+  Phone,
+  Linkedin,
+  Github,
+  ExternalLink,
+  Code2,
+  Brain,
+  Database,
+  Server,
+  Zap,
+  Award,
+  Briefcase,
+  Terminal,
+  Globe,
+  Rocket,
+} from "lucide-react";
 
-import { Code, Database, Server, Zap, Cpu, Globe, Terminal, Award, Rocket, Briefcase, ChevronRight, Download, Coffee, Brain, Cloud, GitBranch } from "lucide-react";
-
-export default function UltimateMERNPortfolio() {
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const [scrollY, setScrollY] = useState(0);
-  const [activeSection, setActiveSection] = useState(0);
-  const [codeLines, setCodeLines] = useState([]);
-  const [matrixRain, setMatrixRain] = useState([]);
+export default function Home() {
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [currentRole, setCurrentRole] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const canvasRef = useRef(null);
 
-  // MERN Stack technologies with animated icons
-  const mernStack = [
-    { 
-      name: "MongoDB", 
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-      color: "#47A248",
-      angle: 0,
-      description: "NoSQL Database Expert"
-    },
-    { 
-      name: "Express.js", 
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-      color: "#FFFFFF",
-      angle: 90,
-      description: "Backend Framework Master"
-    },
-    { 
-      name: "React", 
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-      color: "#61DAFB",
-      angle: 180,
-      description: "Frontend Architect"
-    },
-    { 
-      name: "Node.js", 
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-      color: "#339933",
-      angle: 270,
-      description: "JavaScript Runtime Pro"
-    }
+  const roles = [
+    "AI & Data Science Engineer",
+    "Full-Stack Developer",
+    "Machine Learning Specialist",
+    "MERN Stack Expert",
   ];
 
-  const techEcosystem = [
-    { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg", color: "#3776AB" },
-    { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg", color: "#FF6F00" },
-    { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", color: "#2496ED" },
-    { name: "AWS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg", color: "#FF9900" },
-    { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", color: "#F05032" },
-    { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg", color: "#F7DF1E" },
-    { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg", color: "#007396" },
-    { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", color: "#336791" }
-  ];
-
-  const codeSnippets = [
-    "const express = require('express');",
-    "app.use(express.json());",
-    "mongoose.connect(DB_URL);",
-    "const server = app.listen(3000);",
-    "React.useEffect(() => {});",
-    "await fetch('/api/data');",
-    "const pipeline = [...stages];",
-    "JWT.sign(payload, secret);",
-    "docker build -t app .",
-    "git push origin main"
-  ];
-
-  // Initialize matrix rain effect
+  // Typing animation
   useEffect(() => {
-    const columns = Math.floor(window.innerWidth / 20);
-    const drops = Array(columns).fill(1).map(() => Math.random() * 100);
-    setMatrixRain(drops);
+    setIsVisible(true);
 
-    const interval = setInterval(() => {
-      setMatrixRain(prev => prev.map(drop => drop > 100 ? 0 : drop + 0.5));
-    }, 50);
+    const typingSpeed = isDeleting ? 30 : 80;
+    const currentText = roles[currentRole];
 
-    return () => clearInterval(interval);
-  }, []);
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        if (displayText.length < currentText.length) {
+          setDisplayText(currentText.substring(0, displayText.length + 1));
+        } else {
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      } else {
+        if (displayText.length > 0) {
+          setDisplayText(currentText.substring(0, displayText.length - 1));
+        } else {
+          setIsDeleting(false);
+          setCurrentRole((prev) => (prev + 1) % roles.length);
+        }
+      }
+    }, typingSpeed);
 
-  // Scroll-based animations
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, currentRole]);
+
+  // Particle network background
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-      const section = Math.floor(window.scrollY / 400);
-      setActiveSection(section);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    const setCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  // Animated code lines
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCodeLines(prev => {
-        const newLines = [...prev, codeSnippets[Math.floor(Math.random() * codeSnippets.length)]];
-        return newLines.slice(-8);
+    setCanvasSize();
+
+    const particles = Array.from({ length: 140 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      radius: Math.random() * 2 + 0.7,
+    }));
+
+    let animationId;
+
+    const animate = () => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.07)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        const alpha = 0.5 + Math.sin(Date.now() / 1400 + i) * 0.3;
+        ctx.fillStyle = `rgba(96, 165, 250, ${alpha})`;
+        ctx.fill();
+
+        particles.forEach((p2, j) => {
+          if (i <= j) return;
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 200) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            const opacity = (1 - dist / 200) * 0.3;
+            ctx.strokeStyle = `rgba(96, 165, 250, ${opacity})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        });
       });
-    }, 2000);
-    return () => clearInterval(interval);
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleResize = () => setCanvasSize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
-  // Mouse parallax effect
   const handleMouseMove = (e) => {
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
+    const x = (e.clientX / window.innerWidth) * 2 - 1;
+    const y = (e.clientY / window.innerHeight) * 2 - 1;
     setMousePos({ x, y });
   };
 
-  // 3D DNA Helix Effect with Profile
-  const DNAHelix = () => {
-    const [rotation, setRotation] = useState(0);
+  const techStack = [
+    { icon: Code2, label: "MERN Stack", color: "from-blue-400 to-cyan-400" },
+    { icon: Brain, label: "TensorFlow", color: "from-purple-400 to-pink-400" },
+    { icon: Database, label: "MongoDB", color: "from-green-400 to-emerald-400" },
+    { icon: Server, label: "AWS Cloud", color: "from-orange-400 to-red-400" },
+    { icon: Terminal, label: "Python", color: "from-yellow-400 to-orange-400" },
+    { icon: Globe, label: "REST APIs", color: "from-indigo-400 to-blue-400" },
+  ];
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setRotation(prev => (prev + 1) % 360);
-      }, 30);
-      return () => clearInterval(interval);
-    }, []);
+  const stats = [
+    { icon: Briefcase, value: "3", label: "Internships", desc: "Production Experience" },
+    { icon: Rocket, value: "5+", label: "Projects", desc: "Live Deployments" },
+    { icon: Award, value: "13+", label: "Certifications", desc: "Google, IBM, AWS" },
+  ];
 
-    return (
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '600px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        perspective: '1000px'
-      }}>
-        {/* DNA Strands */}
-        {[...Array(30)].map((_, i) => {
-          const angle1 = (rotation + i * 12) * Math.PI / 180;
-          const angle2 = (rotation + i * 12 + 180) * Math.PI / 180;
-          const y = i * 18 - 270;
-          
-          return (
-            <div key={i}>
-              {/* Strand 1 */}
-              <div style={{
-                position: 'absolute',
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                background: `linear-gradient(135deg, ${mernStack[i % 4].color}, ${mernStack[(i + 1) % 4].color})`,
-                boxShadow: `0 0 20px ${mernStack[i % 4].color}`,
-                left: '50%',
-                top: '50%',
-                transform: `
-                  translateX(${Math.cos(angle1) * 180}px) 
-                  translateY(${y}px) 
-                  translateZ(${Math.sin(angle1) * 100}px)
-                `,
-                opacity: 0.8
-              }} />
-              
-              {/* Strand 2 */}
-              <div style={{
-                position: 'absolute',
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                background: `linear-gradient(135deg, ${mernStack[(i + 2) % 4].color}, ${mernStack[(i + 3) % 4].color})`,
-                boxShadow: `0 0 20px ${mernStack[(i + 2) % 4].color}`,
-                left: '50%',
-                top: '50%',
-                transform: `
-                  translateX(${Math.cos(angle2) * 180}px) 
-                  translateY(${y}px) 
-                  translateZ(${Math.sin(angle2) * 100}px)
-                `,
-                opacity: 0.8
-              }} />
-              
-              {/* Connecting line */}
-              <div style={{
-                position: 'absolute',
-                height: '2px',
-                width: Math.abs(Math.cos(angle1) - Math.cos(angle2)) * 180 + 'px',
-                background: `linear-gradient(90deg, ${mernStack[i % 4].color}50, transparent)`,
-                left: '50%',
-                top: '50%',
-                transform: `
-                  translateX(${Math.min(Math.cos(angle1), Math.cos(angle2)) * 180}px) 
-                  translateY(${y}px)
-                `,
-                opacity: 0.3
-              }} />
-            </div>
-          );
-        })}
+  const links = [
+    { icon: Github, label: "GitHub", href: "https://github.com/bhagavan444", color: "hover:text-purple-400" },
+    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/bhagavan", color: "hover:text-blue-400" },
+    { icon: Mail, label: "Email", href: "mailto:g.sivasatyasaibhagavan@gmail.com", color: "hover:text-cyan-400" },
+    { icon: Phone, label: "+91 7569205626", href: "tel:+917569205626", color: "hover:text-green-400" },
+  ];
 
-        {/* Central Profile with Holographic Ring */}
-        <div style={{
-          position: 'absolute',
-          width: '280px',
-          height: '280px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, rgba(15,15,35,0.95), rgba(30,30,60,0.95))',
-          border: '3px solid rgba(97,218,251,0.6)',
-          boxShadow: `
-            0 0 60px rgba(97,218,251,0.4),
-            inset 0 0 60px rgba(97,218,251,0.1),
-            0 0 120px rgba(71,162,72,0.2)
-          `,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          animation: 'holoPulse 3s ease-in-out infinite',
-          zIndex: 10
-        }}>
-          {/* Rotating holographic rings */}
-          {[0, 1, 2].map(i => (
-            <div key={i} style={{
-              position: 'absolute',
-              width: `${100 + i * 20}%`,
-              height: `${100 + i * 20}%`,
-              borderRadius: '50%',
-              border: `2px solid ${i === 0 ? 'rgba(97,218,251,0.3)' : i === 1 ? 'rgba(71,162,72,0.3)' : 'rgba(255,159,0,0.3)'}`,
-              animation: `holoSpin ${3 + i}s linear infinite ${i % 2 === 0 ? '' : 'reverse'}`
-            }} />
-          ))}
-          
-          {/* Profile image placeholder */}
-          <div style={{
-            width: '240px',
-            height: '240px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1a1a3a, #2a2a4a)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '4rem',
-            color: '#61DAFB',
-            fontWeight: '900',
-            zIndex: 1,
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(135deg, rgba(97,218,251,0.2), rgba(71,162,72,0.2))',
-              animation: 'shimmer 3s linear infinite'
-            }} />
-            <span style={{ position: 'relative', zIndex: 2 }}>SS</span>
-          </div>
-        </div>
-      </div>
-    );
+  // Handle CTA clicks
+  const handleViewProjects = () => {
+    navigate("/projects");
+  };
+
+  const handleDownloadResume = () => {
+    const link = document.createElement("a");
+    link.href = "/assets/bhagavanresume.pdf";
+    link.download = "Bhagavan_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <div
       onMouseMove={handleMouseMove}
       style={{
-        position: 'relative',
-        minHeight: '100vh',
-        background: '#000000',
-        color: 'white',
-        overflow: 'hidden',
-        fontFamily: '"Space Grotesk", -apple-system, sans-serif'
+        position: "relative",
+        minHeight: "100vh",
+        background: "linear-gradient(to bottom right, #0f172a, #020617, #000000)",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
       }}
     >
-      {/* Matrix Rain Background */}
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 0,
-        opacity: 0.15
-      }}>
-        {matrixRain.map((drop, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            left: `${(i / matrixRain.length) * 100}%`,
-            top: `${drop}%`,
-            color: '#00ff41',
-            fontSize: '14px',
-            fontFamily: 'monospace',
-            textShadow: '0 0 10px #00ff41'
-          }}>
-            {codeSnippets[i % codeSnippets.length].charAt(Math.floor(drop) % 20)}
-          </div>
-        ))}
+      {/* Particle Canvas */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          opacity: 0.7,
+        }}
+      />
+
+      {/* Glowing Gradient Orbs */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "5%",
+            left: "10%",
+            width: "32rem",
+            height: "32rem",
+            backgroundColor: "#3b82f6",
+            borderRadius: "9999px",
+            mixBlendMode: "multiply",
+            filter: "blur(100px)",
+            opacity: 0.14,
+            animation: "blob 15s infinite",
+            transform: `translate(${mousePos.x * 40}px, ${mousePos.y * 40}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "15%",
+            right: "5%",
+            width: "36rem",
+            height: "36rem",
+            backgroundColor: "#a855f7",
+            borderRadius: "9999px",
+            mixBlendMode: "multiply",
+            filter: "blur(110px)",
+            opacity: 0.14,
+            animation: "blob 18s infinite",
+            animationDelay: "4s",
+            transform: `translate(${-mousePos.x * 50}px, ${mousePos.y * 50}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10%",
+            left: "45%",
+            width: "34rem",
+            height: "34rem",
+            backgroundColor: "#ec4899",
+            borderRadius: "9999px",
+            mixBlendMode: "multiply",
+            filter: "blur(105px)",
+            opacity: 0.2,
+            animation: "blob 20s infinite",
+            animationDelay: "8s",
+            transform: `translate(${mousePos.x * 60}px, ${-mousePos.y * 40}px)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        />
       </div>
 
-      {/* Animated grid with parallax */}
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(97,218,251,0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(97,218,251,0.05) 1px, transparent 1px)
-        `,
-        backgroundSize: '60px 60px',
-        transform: `translate(${mousePos.x * 0.02}px, ${mousePos.y * 0.02}px)`,
-        transition: 'transform 0.3s ease',
-        maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)'
-      }} />
-
-      {/* Floating orbs with mouse tracking */}
-      {[0, 1, 2, 3].map(i => (
-        <div key={i} style={{
-          position: 'fixed',
-          width: `${300 + i * 100}px`,
-          height: `${300 + i * 100}px`,
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${mernStack[i].color}20, transparent 70%)`,
-          filter: 'blur(60px)',
-          top: `${20 + i * 20}%`,
-          left: `${10 + i * 20}%`,
-          transform: `translate(${mousePos.x * (i + 1) * 0.5}px, ${mousePos.y * (i + 1) * 0.5}px)`,
-          transition: 'transform 0.5s ease',
-          animation: `float ${8 + i * 2}s ease-in-out infinite`,
-          zIndex: 1
-        }} />
-      ))}
-
-      {/* Main Content Container */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '1600px',
-        margin: '0 auto',
-        padding: '2rem'
-      }}>
-        
-        {/* Hero Header Section */}
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          position: 'relative'
-        }}>
-          
-          {/* Animated Status Badge */}
-          <div style={{
-            padding: '12px 32px',
-            borderRadius: '100px',
-            background: 'rgba(97,218,251,0.1)',
-            border: '2px solid rgba(97,218,251,0.5)',
-            backdropFilter: 'blur(20px)',
-            marginBottom: '2rem',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            animation: 'glow 2s ease-in-out infinite'
-          }}>
-            <div style={{
-              width: '10px',
-              height: '10px',
-              borderRadius: '50%',
-              background: '#00ff41',
-              boxShadow: '0 0 20px #00ff41',
-              animation: 'pulse 2s ease-in-out infinite'
-            }} />
-            <span style={{
-              fontWeight: '700',
-              fontSize: '0.9rem',
-              letterSpacing: '2px',
-              color: '#00ff41'
-            }}>
-              AVAILABLE FOR OPPORTUNITIES 2026
-            </span>
-          </div>
-
-          {/* Main Title with Glitch Effect */}
-          <h1 style={{
-            fontSize: 'clamp(3rem, 12vw, 8rem)',
-            fontWeight: '900',
-            lineHeight: 1,
-            marginBottom: '1rem',
-            position: 'relative'
-          }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #61DAFB 50%, #47A248 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'gradientShift 3s ease infinite',
-              textShadow: '0 0 80px rgba(97,218,251,0.5)'
-            }}>
-              Bhagavan Mern & AIDS Student
-            </div>
-            <div style={{
-              background: 'linear-gradient(135deg, #61DAFB 0%, #339933 50%, #FF6F00 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'gradientShift 3s ease infinite 1s'
-            }}>
-              RCEE
-            </div>
-          </h1>
-
-          {/* Typing Console Effect */}
-          <div style={{
-            background: 'rgba(10,10,25,0.9)',
-            border: '2px solid rgba(97,218,251,0.3)',
-            borderRadius: '12px',
-            padding: '1.5rem 2rem',
-            marginBottom: '2rem',
-            fontFamily: 'monospace',
-            fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
-            backdropFilter: 'blur(20px)',
-            maxWidth: '800px'
-          }}>
-            <div style={{ color: '#00ff41', marginBottom: '0.5rem' }}>
-              <Terminal size={20} style={{ display: 'inline', marginRight: '8px' }} />
-              bhagavan@portfolio:~$
-            </div>
-            {codeLines.map((line, i) => (
-              <div key={i} style={{
-                color: '#61DAFB',
-                opacity: 1 - (i * 0.1),
-                marginBottom: '4px',
-                animation: 'fadeIn 0.5s ease'
-              }}>
-                {'>'} {line}
-              </div>
-            ))}
-            <span style={{
-              display: 'inline-block',
-              width: '10px',
-              height: '20px',
-              background: '#61DAFB',
-              animation: 'blink 1s step-end infinite',
-              marginLeft: '4px'
-            }} />
-          </div>
-
-          {/* Subtitle */}
-          <p style={{
-            fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
-            color: '#9ca3af',
-            maxWidth: '800px',
-            lineHeight: 1.6,
-            marginBottom: '3rem'
-          }}>
-            Final-Year <span style={{ color: '#61DAFB', fontWeight: '700' }}>AI & Data Science</span> Engineer 
-            crafting <span style={{ color: '#47A248', fontWeight: '700' }}>Full-Stack Solutions</span> with 
-            cutting-edge <span style={{ color: '#FF6F00', fontWeight: '700' }}>Intelligence</span>
-          </p>
-
-          {/* CTA Buttons */}
-          <div style={{
-            display: 'flex',
-            gap: '1.5rem',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            marginBottom: '4rem'
-          }}>
-            <button style={{
-              padding: '18px 40px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #61DAFB, #339933)',
-              color: 'white',
-              fontWeight: '700',
-              fontSize: '1.1rem',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 10px 40px rgba(97,218,251,0.4)',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
+      {/* Main Hero Container */}
+      <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "95rem", margin: "0 auto", padding: "7rem 2.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "6rem",
+            alignItems: "center",
+            "@media (min-width: 1024px)": {
+              flexDirection: "row",
+              gap: "10rem",
+              alignItems: "flex-start",
+            },
+          }}
+        >
+          {/* Profile Image Card - MOBILE: Top | DESKTOP: Right */}
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "420px",
+              order: 1,
+              "@media (min-width: 1024px)": {
+                order: 2,
+                flex: "0 0 420px",
+              },
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(70px)",
+              transition: "all 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s",
             }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
-                e.currentTarget.style.boxShadow = '0 20px 60px rgba(97,218,251,0.6)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(97,218,251,0.4)';
-              }}
-            >
-              <Rocket size={20} />
-              Explore Projects
-              <ChevronRight size={20} />
-            </button>
-
-            <button style={{
-              padding: '18px 40px',
-              borderRadius: '12px',
-              background: 'rgba(255,255,255,0.05)',
-              border: '2px solid rgba(97,218,251,0.5)',
-              backdropFilter: 'blur(10px)',
-              color: '#61DAFB',
-              fontWeight: '700',
-              fontSize: '1.1rem',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(97,218,251,0.1)';
-                e.currentTarget.style.transform = 'translateY(-5px)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <Download size={20} />
-              Download Resume
-            </button>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div style={{
-            position: 'absolute',
-            bottom: '40px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '10px',
-            opacity: 0.6,
-            animation: 'bounce 2s ease-in-out infinite'
-          }}>
-            <span style={{ fontSize: '0.9rem', letterSpacing: '2px' }}>SCROLL</span>
-            <ChevronRight size={24} style={{ transform: 'rotate(90deg)' }} />
-          </div>
-        </div>
-
-        {/* DNA Helix Section with MERN Focus */}
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'relative',
-          padding: '4rem 0'
-        }}>
-          <h2 style={{
-            fontSize: 'clamp(2.5rem, 8vw, 5rem)',
-            fontWeight: '900',
-            textAlign: 'center',
-            marginBottom: '1rem',
-            background: 'linear-gradient(135deg, #61DAFB, #47A248, #339933)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            MERN DNA
-          </h2>
-          <p style={{
-            fontSize: '1.2rem',
-            color: '#9ca3af',
-            textAlign: 'center',
-            marginBottom: '3rem'
-          }}>
-            Full-Stack Mastery Encoded in My Engineering
-          </p>
-
-          <DNAHelix />
-
-          {/* MERN Stack Cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '2rem',
-            width: '100%',
-            maxWidth: '1200px',
-            marginTop: '4rem'
-          }}>
-            {mernStack.map((tech, i) => (
-              <div key={i} style={{
-                background: 'rgba(10,10,25,0.9)',
-                border: `2px solid ${tech.color}50`,
-                borderRadius: '20px',
-                padding: '2rem',
-                backdropFilter: 'blur(20px)',
-                transition: 'all 0.4s ease',
-                cursor: 'pointer',
-                animation: `fadeInUp 0.6s ease ${i * 0.2}s both`
-              }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-10px) scale(1.05)';
-                  e.currentTarget.style.borderColor = tech.color;
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${tech.color}60`;
+          >
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "relative",
+                  borderRadius: "2rem",
+                  overflow: "hidden",
+                  border: "3px solid rgba(34,211,238,0.5)",
+                  boxShadow: "0 30px 70px -20px rgba(34,211,238,0.6)",
+                  transition: "all 0.6s ease",
+                  aspectRatio: "4 / 5",
                 }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.borderColor = `${tech.color}50`;
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                className="group hover:scale-[1.04] hover:shadow-[0_40px_100px_-25px_rgba(34,211,238,0.8)]"
               >
-                <div style={{
-                  width: '80px',
-                  height: '80px',
-                  margin: '0 auto 1.5rem',
-                  position: 'relative'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '50%',
-                    background: `${tech.color}20`,
-                    filter: 'blur(20px)'
-                  }} />
-                  <img 
-                    src={tech.icon} 
-                    alt={tech.name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      filter: `drop-shadow(0 0 10px ${tech.color})`,
-                      position: 'relative'
-                    }}
-                  />
-                </div>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '700',
-                  color: tech.color,
-                  textAlign: 'center',
-                  marginBottom: '0.5rem'
-                }}>
-                  {tech.name}
-                </h3>
-                <p style={{
-                  color: '#9ca3af',
-                  textAlign: 'center',
-                  fontSize: '0.95rem'
-                }}>
-                  {tech.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Tech Ecosystem Galaxy */}
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'relative',
-          padding: '4rem 0'
-        }}>
-          <h2 style={{
-            fontSize: 'clamp(2.5rem, 8vw, 5rem)',
-            fontWeight: '900',
-            textAlign: 'center',
-            marginBottom: '3rem',
-            background: 'linear-gradient(135deg, #FF6F00, #61DAFB, #47A248)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            TECH GALAXY
-          </h2>
-
-          {/* Orbiting Tech Icons */}
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            maxWidth: '800px',
-            height: '800px',
-            margin: '0 auto'
-          }}>
-            {/* Central Core */}
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '200px',
-              height: '200px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(97,218,251,0.3), rgba(71,162,72,0.3))',
-              boxShadow: '0 0 100px rgba(97,218,251,0.5), inset 0 0 50px rgba(255,255,255,0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '3rem',
-              fontWeight: '900',
-              animation: 'coreGlow 3s ease-in-out infinite'
-            }}>
-              <Code size={80} color="#61DAFB" />
-            </div>
-
-            {/* Orbiting Technologies */}
-            {techEcosystem.map((tech, i) => {
-              const angle = (i / techEcosystem.length) * 360;
-              const radius = 320;
-              
-              return (
-                <div key={i} style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  width: '100px',
-                  height: '100px',
-                  animation: `orbit ${20 + i * 2}s linear infinite`,
-                  animationDelay: `${-i * (20 / techEcosystem.length)}s`
-                }}>
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '20px',
-                    background: 'rgba(10,10,25,0.95)',
-                    border: `3px solid ${tech.color}60`,
-                    boxShadow: `0 10px 40px ${tech.color}40`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer',
-                    backdropFilter: 'blur(10px)'
+                <img
+                  src="https://lh3.googleusercontent.com/d/1hFtkcydF2n7kk2XtWqD9hSGcLGiDRKuB"
+                  alt="Siva Satya Sai Bhagavan"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center 20%",
+                    transition: "transform 1s ease",
                   }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'scale(1.3)';
-                      e.currentTarget.style.borderColor = tech.color;
-                      e.currentTarget.style.boxShadow = `0 15px 60px ${tech.color}80`;
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.borderColor = `${tech.color}60`;
-                      e.currentTarget.style.boxShadow = `0 10px 40px ${tech.color}40`;
-                    }}
-                  >
-                    <img 
-                      src={tech.icon} 
-                      alt={tech.name}
-                      style={{
-                        width: '70%',
-                        height: '70%',
-                        objectFit: 'contain',
-                        filter: `drop-shadow(0 0 10px ${tech.color})`
-                      }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                  className="group-hover:scale-115"
+                />
 
-        {/* Stats Section with Animated Cards */}
-        <div style={{
-          minHeight: '80vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '4rem 0'
-        }}>
-          <h2 style={{
-            fontSize: 'clamp(2.5rem, 8vw, 5rem)',
-            fontWeight: '900',
-            textAlign: 'center',
-            marginBottom: '1rem',
-            background: 'linear-gradient(135deg, #61DAFB, #FF6F00)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
-            ACHIEVEMENTS
-          </h2>
-          <p style={{
-            fontSize: '1.2rem',
-            color: '#9ca3af',
-            textAlign: 'center',
-            marginBottom: '4rem'
-          }}>
-            Building Experience Through Real Projects
-          </p>
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(135deg, rgba(34,211,238,0.2) 0%, rgba(168,85,247,0.2) 50%, rgba(236,72,153,0.2) 100%)",
+                    backdropFilter: "blur(6px)",
+                    opacity: 0.7,
+                    transition: "opacity 0.7s",
+                  }}
+                  className="group-hover:opacity-90"
+                />
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem',
-            width: '100%',
-            maxWidth: '1200px'
-          }}>
-            {[
-              { icon: Briefcase, value: "3+", label: "Internships", color: "#61DAFB", desc: "MERN, AI/ML, Data Science" },
-              { icon: Rocket, value: "5+", label: "Live Projects", color: "#47A248", desc: "Production Applications" },
-              { icon: Award, value: "13+", label: "Certifications", color: "#FF6F00", desc: "Google, IBM, Infosys" },
-              { icon: Brain, value: "AI/ML", label: "Specialist", color: "#a78bfa", desc: "TensorFlow & Deep Learning" }
-            ].map((stat, i) => {
-              const Icon = stat.icon;
-              return (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    opacity: 0.15,
+                    pointerEvents: "none",
+                    backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(96,165,250,0.08) 4px, rgba(96,165,250,0.08) 8px)",
+                  }}
+                />
+
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%, transparent 100%)",
+                    opacity: 0,
+                    transition: "opacity 0.8s",
+                  }}
+                  className="group-hover:opacity-100"
+                />
+              </div>
+
+              {/* Floating Badges */}
+              {[
+                { text: "React Expert", pos: { top: "-2rem", left: "1rem" }, color: "from-cyan-500 to-blue-600", delay: 0 },
+                { text: "AI/ML Pro", pos: { top: "-1.5rem", right: "1rem" }, color: "from-purple-500 to-pink-600", delay: 0.4 },
+                { text: "Python Dev", pos: { bottom: "7rem", left: "-4rem" }, color: "from-yellow-500 to-orange-600", delay: 0.8 },
+                { text: "AWS Cloud", pos: { bottom: "6rem", right: "-4rem" }, color: "from-orange-500 to-red-600", delay: 1.2 },
+              ].map((badge, i) => (
                 <div
                   key={i}
                   style={{
-                    background: 'rgba(10,10,25,0.9)',
-                    border: `2px solid ${stat.color}50`,
-                    borderRadius: '24px',
-                    padding: '2.5rem',
-                    backdropFilter: 'blur(20px)',
-                    transition: 'all 0.4s ease',
-                    cursor: 'pointer',
-                    animation: `fadeInUp 0.6s ease ${i * 0.15}s both`,
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translateY(-15px) scale(1.05)';
-                    e.currentTarget.style.borderColor = stat.color;
-                    e.currentTarget.style.boxShadow = `0 25px 70px ${stat.color}70`;
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.borderColor = `${stat.color}50`;
-                    e.currentTarget.style.boxShadow = 'none';
+                    position: "absolute",
+                    ...badge.pos,
+                    animation: `floatBadge 6s ease-in-out infinite ${badge.delay}s`,
+                    opacity: isVisible ? 1 : 0,
+                    transition: `opacity 0.8s ease ${badge.delay + 0.8}s`,
                   }}
                 >
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: `linear-gradient(135deg, transparent, ${stat.color}15)`,
-                    animation: 'shimmer 3s linear infinite'
-                  }} />
-                  
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    margin: '0 auto 1.5rem',
-                    borderRadius: '50%',
-                    background: `${stat.color}20`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'relative'
-                  }}>
-                    <Icon size={40} color={stat.color} />
+                  <div
+                    style={{
+                      padding: "0.8rem 1.6rem",
+                      borderRadius: "9999px",
+                      background: `linear-gradient(to right, ${badge.color.split(" ")[1]}, ${badge.color.split(" ")[3]})`,
+                      color: "white",
+                      fontSize: "1rem",
+                      fontWeight: 700,
+                      boxShadow: "0 15px 30px -8px rgba(0,0,0,0.5)",
+                      border: "1px solid rgba(255,255,255,0.3)",
+                      backdropFilter: "blur(12px)",
+                      transition: "all 0.5s",
+                    }}
+                    className="hover:scale-115 hover:shadow-2xl"
+                  >
+                    {badge.text}
                   </div>
-
-                  <div style={{
-                    fontSize: '3.5rem',
-                    fontWeight: '900',
-                    color: stat.color,
-                    textAlign: 'center',
-                    textShadow: `0 0 30px ${stat.color}80`,
-                    marginBottom: '0.5rem'
-                  }}>
-                    {stat.value}
-                  </div>
-                  
-                  <h3 style={{
-                    fontSize: '1.3rem',
-                    fontWeight: '700',
-                    color: 'white',
-                    textAlign: 'center',
-                    marginBottom: '0.5rem'
-                  }}>
-                    {stat.label}
-                  </h3>
-                  
-                  <p style={{
-                    fontSize: '0.95rem',
-                    color: '#9ca3af',
-                    textAlign: 'center'
-                  }}>
-                    {stat.desc}
-                  </p>
                 </div>
-              );
-            })}
+              ))}
+
+              {/* Open to Work Badge */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "-4rem",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  opacity: isVisible ? 1 : 0,
+                  transition: "opacity 0.8s ease 1.5s",
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: "-0.5rem",
+                      background: "linear-gradient(to right, #22c55e, #10b981)",
+                      borderRadius: "9999px",
+                      filter: "blur(15px)",
+                      opacity: 0.85,
+                      animation: "pulse-slow 5s ease-in-out infinite",
+                    }}
+                    className="group-hover:opacity-100"
+                  />
+                  <div
+                    style={{
+                      position: "relative",
+                      padding: "1.2rem 2.5rem",
+                      background: "linear-gradient(to right, #16a34a, #059669)",
+                      borderRadius: "9999px",
+                      boxShadow: "0 20px 40px -10px rgba(16,185,129,0.6)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      color: "white",
+                      fontWeight: 900,
+                      fontSize: "1.1rem",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    <span style={{ position: "relative", display: "flex", width: "1.2rem", height: "1.2rem" }}>
+                      <span
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          borderRadius: "9999px",
+                          backgroundColor: "white",
+                          opacity: 0.85,
+                          animation: "ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite",
+                        }}
+                      />
+                      <span
+                        style={{
+                          position: "relative",
+                          borderRadius: "9999px",
+                          width: "1.2rem",
+                          height: "1.2rem",
+                          backgroundColor: "white",
+                        }}
+                      />
+                    </span>
+                    OPEN TO WORK
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Final CTA Section */}
-        <div style={{
-          minHeight: '60vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          padding: '4rem 2rem'
-        }}>
-          <div style={{
-            maxWidth: '800px'
-          }}>
-            <h2 style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
-              fontWeight: '900',
-              marginBottom: '2rem',
-              background: 'linear-gradient(135deg, #61DAFB, #47A248, #FF6F00)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'gradientShift 3s ease infinite'
-            }}>
-              Let's Build Something Amazing
-            </h2>
-            
-            <p style={{
-              fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
-              color: '#9ca3af',
-              marginBottom: '3rem',
-              lineHeight: 1.6
-            }}>
-              Ready to bring your next <span style={{ color: '#61DAFB', fontWeight: '700' }}>MERN Stack</span> project to life with 
-              <span style={{ color: '#FF6F00', fontWeight: '700' }}> AI-powered intelligence</span>? 
-              Let's connect and create the future together.
-            </p>
-
-            <div style={{
-              display: 'flex',
-              gap: '1.5rem',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}>
-              <button style={{
-                padding: '20px 50px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #61DAFB, #47A248)',
-                color: 'white',
-                fontWeight: '700',
-                fontSize: '1.2rem',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 15px 50px rgba(97,218,251,0.4)',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
+          {/* Text Content - MOBILE: Below image | DESKTOP: Left side */}
+          <div
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? "translateY(0)" : "translateY(70px)",
+              transition: "all 1.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "3rem",
+              order: 2,
+              "@media (min-width: 1024px)": {
+                order: 1,
+              },
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.8rem",
+                padding: "0.7rem 1.4rem",
+                borderRadius: "9999px",
+                background: "linear-gradient(to right, rgba(34,197,94,0.18), rgba(16,185,129,0.18))",
+                border: "1px solid rgba(34,197,94,0.35)",
+                backdropFilter: "blur(14px)",
               }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 25px 70px rgba(97,218,251,0.6)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.boxShadow = '0 15px 50px rgba(97,218,251,0.4)';
+            >
+              <span style={{ position: "relative", display: "flex", width: "1rem", height: "1rem" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "9999px",
+                    backgroundColor: "#4ade80",
+                    opacity: 0.85,
+                    animation: "ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite",
+                  }}
+                />
+                <span
+                  style={{
+                    position: "relative",
+                    borderRadius: "9999px",
+                    width: "1rem",
+                    height: "1rem",
+                    backgroundColor: "#22c55e",
+                  }}
+                />
+              </span>
+              <span style={{ color: "#4ade80", fontSize: "1rem", fontWeight: 600 }}>Available for Opportunities</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <h1
+                style={{
+                  fontSize: "4rem",
+                  lineHeight: 1.1,
+                  fontWeight: 900,
+                  letterSpacing: "-0.025em",
+                  "@media (min-width: 640px)": { fontSize: "5rem" },
+                  "@media (min-width: 1024px)": { fontSize: "6.2rem" },
                 }}
               >
-                <Coffee size={24} />
-                Get In Touch
-                <ChevronRight size={24} />
-              </button>
+                <span
+                  style={{
+                    display: "block",
+                    background: "linear-gradient(to right, #60a5fa, #22d3ee, #60a5fa)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    backgroundSize: "200% 200%",
+                    animation: "gradient 5s ease infinite",
+                  }}
+                >
+                  Siva Satya Sai
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    background: "linear-gradient(to right, #c084fc, #ec4899, #c084fc)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    backgroundSize: "200% 200%",
+                    animation: "gradient 5s ease infinite",
+                    animationDelay: "1.5s",
+                  }}
+                >
+                  Bhagavan
+                </span>
+              </h1>
 
-              <button style={{
-                padding: '20px 50px',
-                borderRadius: '12px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '2px solid rgba(97,218,251,0.5)',
-                backdropFilter: 'blur(10px)',
-                color: '#61DAFB',
-                fontWeight: '700',
-                fontSize: '1.2rem',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(97,218,251,0.1)';
-                  e.currentTarget.style.transform = 'translateY(-5px)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                  e.currentTarget.style.transform = 'translateY(0)';
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  fontSize: "1.8rem",
+                  fontWeight: 700,
+                  color: "white",
+                  minHeight: "3.5rem",
+                  "@media (min-width: 640px)": { fontSize: "2.2rem" },
                 }}
               >
-                <GitBranch size={24} />
-                View GitHub
+                <span style={{ color: "#22d3ee", fontSize: "2rem" }}>&gt;</span>
+                <span>{displayText}</span>
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "0.25rem",
+                    height: "3rem",
+                    backgroundColor: "#22d3ee",
+                    animation: "pulse 1.3s infinite",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <p style={{ fontSize: "1.3rem", color: "#cbd5e1", lineHeight: "2rem" }}>
+                AI & Data Science undergraduate with hands-on experience in{" "}
+                <span style={{ color: "#22d3ee", fontWeight: 600 }}>machine learning</span> and{" "}
+                <span style={{ color: "#c084fc", fontWeight: 600 }}>full-stack development</span>.
+                <br />
+                Building intelligent, scalable solutions with modern tech stacks.
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {[
+                  "3 production internships in Full-Stack & AI/ML",
+                  "13+ professional certifications (Google, IBM, AWS)",
+                  "Expertise in MERN stack & TensorFlow",
+                  "Building real-world ML & web applications",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "1rem",
+                      color: "#94a3b8",
+                      opacity: isVisible ? 1 : 0,
+                      transform: isVisible ? "translateX(0)" : "translateX(-40px)",
+                      transition: `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.2 + 0.5}s`,
+                    }}
+                  >
+                    <Zap size={24} style={{ color: "#22d3ee", marginTop: "0.25rem" }} />
+                    <span style={{ fontSize: "1.1rem" }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "1.2rem" }}>
+              {techStack.map((tech, i) => {
+                const [start, end] = tech.color.split(" to-").map((s) => s.replace("from-", "").replace("to-", ""));
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      position: "relative",
+                      opacity: isVisible ? 1 : 0,
+                      transform: isVisible ? "scale(1)" : "scale(0.6)",
+                      transition: `all 0.7s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.1 + 0.7}s`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: "-0.25rem",
+                        background: `linear-gradient(to right, ${start}, ${end})`,
+                        borderRadius: "1rem",
+                        filter: "blur(8px)",
+                        opacity: 0,
+                        transition: "opacity 0.5s",
+                      }}
+                      className="group-hover:opacity-75"
+                    />
+                    <div
+                      style={{
+                        position: "relative",
+                        padding: "0.8rem 1.5rem",
+                        backgroundColor: "rgba(15, 23, 42, 0.9)",
+                        border: "1px solid rgba(51, 65, 85, 0.7)",
+                        borderRadius: "1rem",
+                        backdropFilter: "blur(12px)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.7rem",
+                        transition: "all 0.5s",
+                      }}
+                      className="group-hover:scale-115 group-hover:shadow-xl"
+                    >
+                      <tech.icon size={20} style={{ color: "#94a3b8" }} />
+                      <span style={{ fontSize: "1rem", fontWeight: 600, color: "#cbd5e1" }}>{tech.label}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+              {stats.map((stat, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "relative",
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateY(0)" : "translateY(40px)",
+                    transition: `all 0.9s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.2 + 0.9}s`,
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: "-0.25rem",
+                      background: "linear-gradient(to right, #3b82f6, #22d3ee)",
+                      borderRadius: "1.25rem",
+                      filter: "blur(12px)",
+                      opacity: 0,
+                      transition: "opacity 0.5s",
+                    }}
+                    className="group-hover:opacity-85"
+                  />
+                  <div
+                    style={{
+                      position: "relative",
+                      padding: "1.75rem",
+                      backgroundColor: "rgba(15, 23, 42, 0.9)",
+                      border: "1px solid rgba(51, 65, 85, 0.7)",
+                      borderRadius: "1.25rem",
+                      backdropFilter: "blur(12px)",
+                      transition: "all 0.5s",
+                    }}
+                    className="group-hover:border-cyan-400/70 group-hover:scale-110"
+                  >
+                    <stat.icon size={32} style={{ color: "#22d3ee", marginBottom: "1rem" }} />
+                    <div style={{ fontSize: "2.25rem", fontWeight: 900, color: "white", marginBottom: "0.4rem" }}>{stat.value}</div>
+                    <div
+                      style={{
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        color: "#94a3b8",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.07em",
+                      }}
+                    >
+                      {stat.label}
+                    </div>
+                    <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "0.4rem" }}>{stat.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Buttons */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", "@media (min-width: 640px)": { flexDirection: "row" } }}>
+              <button
+                onClick={handleViewProjects}
+                style={{
+                  position: "relative",
+                  padding: "1.4rem 3rem",
+                  borderRadius: "1.25rem",
+                  overflow: "hidden",
+                  background: "linear-gradient(to right, #2563eb, #06b6d4)",
+                  color: "white",
+                  fontWeight: 700,
+                  fontSize: "1.2rem",
+                  boxShadow: "0 20px 40px -10px rgba(6,182,212,0.5)",
+                  transition: "all 0.5s",
+                  cursor: "pointer",
+                }}
+                className="hover:from-blue-500 hover:to-cyan-500 hover:shadow-cyan-700/60 hover:scale-105 hover:translate-y-[-3px]"
+              >
+                <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+                  <Rocket size={24} />
+                  View Projects
+                  <ExternalLink size={20} />
+                </div>
               </button>
+
+              <button
+                onClick={handleDownloadResume}
+                style={{
+                  padding: "1.4rem 3rem",
+                  borderRadius: "1.25rem",
+                  border: "2px solid #475569",
+                  backgroundColor: "rgba(15, 23, 42, 0.7)",
+                  backdropFilter: "blur(14px)",
+                  color: "white",
+                  fontWeight: 700,
+                  fontSize: "1.2rem",
+                  transition: "all 0.5s",
+                  cursor: "pointer",
+                }}
+                className="hover:border-cyan-400 hover:bg-slate-800/70 hover:scale-105 hover:translate-y-[-3px]"
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+                  Download Resume
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  </svg>
+                </div>
+              </button>
+            </div>
+
+            {/* Social Links */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "2.5rem" }}>
+              {links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    color: "#94a3b8",
+                    transition: "all 0.5s",
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateY(0)" : "translateY(30px)",
+                    transitionDelay: `${i * 0.15 + 1.4}s`,
+                  }}
+                  className={link.color}
+                >
+                  <link.icon size={28} className="group-hover:scale-130 transition-transform" />
+                  <span style={{ fontSize: "1.1rem", fontWeight: 500 }}>{link.label}</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Animations & Keyframes */}
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-30px); }
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.5); opacity: 0.5; }
-        }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(97,218,251,0.5); }
-          50% { box-shadow: 0 0 50px rgba(97,218,251,1); }
-        }
-        @keyframes gradientShift {
+      {/* Global Keyframes */}
+      <style jsx global>{`
+        @keyframes gradient {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
+        @keyframes blob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(80px, -100px) scale(1.2); }
+          66% { transform: translate(-70px, 80px) scale(0.9); }
         }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-30px); }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes floatBadge {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(4deg); }
         }
-        @keyframes bounce {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50% { transform: translateX(-50%) translateY(-20px); }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
         }
-        @keyframes holoSpin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes ping {
+          75%, 100% { transform: scale(3); opacity: 0; }
         }
-        @keyframes holoPulse {
-          0%, 100% { box-shadow: 0 0 60px rgba(97,218,251,0.4), inset 0 0 60px rgba(97,218,251,0.1); }
-          50% { box-shadow: 0 0 100px rgba(97,218,251,0.7), inset 0 0 80px rgba(97,218,251,0.2); }
-        }
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-        @keyframes orbit {
-          0% { transform: translate(-50%, -50%) rotate(0deg) translateX(320px) rotate(0deg); }
-          100% { transform: translate(-50%, -50%) rotate(360deg) translateX(320px) rotate(-360deg); }
-        }
-        @keyframes coreGlow {
-          0%, 100% { box-shadow: 0 0 100px rgba(97,218,251,0.5); }
-          50% { box-shadow: 0 0 150px rgba(97,218,251,0.8); }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
         }
       `}</style>
     </div>

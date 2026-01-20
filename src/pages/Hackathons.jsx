@@ -1,11 +1,10 @@
 import { 
   Trophy, Award, X, Code, Database, Shield, Rocket, Crown, 
   Clock, Users, Sparkles, Zap, Star, Flame, Target, Cpu, GitBranch, Download,
-  TrendingUp, Layers, Box, CheckCircle, ArrowRight, Hexagon
+  TrendingUp, Layers, Box, CheckCircle, ArrowRight, Hexagon, Terminal, Server, Lock
 } from "lucide-react";
-import certificateImage from "../assets/images/Brainovision-certificate.jpg";
-
 import { useState, useEffect, useRef } from "react";
+import certificateImage from "../assets/images/Brainovision-certificate.jpg";
 
 export default function HackathonShowcase() {
   const [modal, setModal] = useState(false);
@@ -14,51 +13,48 @@ export default function HackathonShowcase() {
   const [scrollY, setScrollY] = useState(0);
   const containerRef = useRef(null);
 
-  // Certificate image - replace with your actual path
- 
-
   const phases = [
     { 
       hour: "0-6h", 
-      icon: Code, 
+      icon: Terminal, 
       title: "Foundation Sprint", 
-      desc: "System architecture design, MongoDB schema modeling, JWT authentication core, project scaffolding",
+      desc: "System architecture design, MongoDB schema modeling, JWT authentication core, project scaffolding, RESTful API structure planning",
       color: "#06b6d4",
-      achievements: ["Database Schema", "Auth System", "API Structure"]
+      achievements: ["Database Schema Design", "Auth System Core", "API Architecture", "Environment Setup"]
     },
     { 
       hour: "6-14h", 
-      icon: Database, 
+      icon: Code, 
       title: "Core Development", 
-      desc: "RESTful API endpoints, React component library, state management, real-time features integration",
+      desc: "RESTful API endpoints implementation, React component library, state management architecture, routing system, real-time features integration foundation",
       color: "#8b5cf6",
-      achievements: ["15+ API Routes", "UI Components", "State Logic"]
+      achievements: ["15+ API Endpoints", "UI Component Library", "State Management", "Routing System"]
     },
     { 
       hour: "14-20h", 
-      icon: Shield, 
+      icon: Zap, 
       title: "Integration Phase", 
-      desc: "Socket.io chat implementation, security hardening, error handling, data validation layers",
+      desc: "Socket.io real-time chat implementation, security hardening, comprehensive error handling, data validation layers, middleware integration",
       color: "#ec4899",
-      achievements: ["Real-time Chat", "Security Layer", "Validation"]
+      achievements: ["Real-time Chat System", "Security Hardening", "Error Handling", "Data Validation"]
     },
     { 
       hour: "20-24h", 
       icon: Rocket, 
       title: "Launch Sequence", 
-      desc: "Production optimization, comprehensive testing, demo preparation, cloud deployment pipeline",
+      desc: "Production optimization, comprehensive testing suite, performance tuning, demo preparation, cloud deployment pipeline, final documentation",
       color: "#10b981",
-      achievements: ["Testing Suite", "Deployment", "Documentation"]
+      achievements: ["Testing Suite", "Cloud Deployment", "Performance Optimization", "Documentation"]
     }
   ];
 
   const techStack = [
     { icon: Database, name: "MongoDB", desc: "NoSQL Database", color: "#10b981" },
-    { icon: Zap, name: "Express.js", desc: "Backend Framework", color: "#06b6d4" },
+    { icon: Server, name: "Express.js", desc: "Backend Framework", color: "#06b6d4" },
     { icon: Sparkles, name: "React", desc: "UI Library", color: "#8b5cf6" },
-    { icon: GitBranch, name: "Node.js", desc: "Runtime", color: "#ec4899" },
-    { icon: Shield, name: "JWT", desc: "Authentication", color: "#f59e0b" },
-    { icon: Code, name: "Socket.io", desc: "Real-time", color: "#3b82f6" }
+    { icon: Hexagon, name: "Node.js", desc: "Runtime Environment", color: "#ec4899" },
+    { icon: Lock, name: "JWT", desc: "Authentication", color: "#f59e0b" },
+    { icon: Zap, name: "Socket.io", desc: "Real-time Engine", color: "#3b82f6" }
   ];
 
   const stats = [
@@ -82,27 +78,25 @@ export default function HackathonShowcase() {
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("mousemove", handleMove);
 
-    // Auto-cycle phases
     const interval = setInterval(() => {
       setActivePhase(prev => (prev + 1) % phases.length);
-    }, 4000);
+    }, 5000);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMove);
       clearInterval(interval);
     };
-  }, []);
+  }, [phases.length]);
 
   const handleDownload = () => {
-  const link = document.createElement("a");
-  link.href = certificateImage;
-  link.download = "Brainovision-Certificate-2024.jpg";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
+    const link = document.createElement("a");
+    link.href = certificateImage;
+    link.download = "Brainovision-Certificate-2024.jpg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div
@@ -111,161 +105,167 @@ export default function HackathonShowcase() {
         minHeight: "100vh",
         background: "#000000",
         color: "#ffffff",
-        fontFamily: "system-ui, -apple-system, sans-serif",
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         position: "relative",
         overflow: "hidden"
       }}
     >
       <style>{`
-        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
-        @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 20px currentColor); } 50% { filter: drop-shadow(0 0 40px currentColor); } }
-        @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        @keyframes shimmer { 0% { background-position: -200%; } 100% { background-position: 200%; } }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.05); } }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .float { animation: float 6s ease-in-out infinite; }
-        .glow { animation: glow 2s ease-in-out infinite; }
-        .shimmer { animation: shimmer 3s linear infinite; }
-        .pulse { animation: pulse 3s ease-in-out infinite; }
-        .rotate { animation: rotate 20s linear infinite; }
-        .fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes floatSlow { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-25px) rotate(3deg); } }
+        @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 25px currentColor); } 50% { filter: drop-shadow(0 0 50px currentColor); } }
+        @keyframes shimmer { 0% { backgroundPosition: -100% 0; } 100% { backgroundPosition: 200% 0; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.08); } }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes gradient { 0%, 100% { backgroundPosition: 0% 50%; } 50% { backgroundPosition: 100% 50%; } }
+        @keyframes slideRight { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .float { animation: floatSlow 8s ease-in-out infinite; }
+        .glow { animation: glow 3s ease-in-out infinite; }
+        .pulse { animation: pulse 4s ease-in-out infinite; }
+        .rotate { animation: rotate 25s linear infinite; }
+        .fadeInUp { animation: fadeInUp 1s ease-out forwards; opacity: 0; }
       `}</style>
 
-      {/* Animated Background */}
+      {/* Dynamic Background Gradient */}
       <div style={{
         position: "fixed",
         inset: 0,
-        background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(139,92,246,0.15), transparent 50%)`,
-        transition: "background 0.3s ease",
+        background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(139,92,246,0.18), transparent 60%)`,
+        transition: "background 0.4s ease",
         zIndex: 0
       }} />
       
+      {/* Grid Pattern */}
       <div style={{
         position: "fixed",
         inset: 0,
         backgroundImage: `
-          linear-gradient(rgba(139,92,246,0.03) 2px, transparent 2px),
-          linear-gradient(90deg, rgba(139,92,246,0.03) 2px, transparent 2px)
+          linear-gradient(rgba(139,92,246,0.04) 1.5px, transparent 1.5px),
+          linear-gradient(90deg, rgba(139,92,246,0.04) 1.5px, transparent 1.5px)
         `,
-        backgroundSize: "100px 100px",
-        transform: `translateY(${scrollY * 0.5}px)`,
+        backgroundSize: "80px 80px",
+        transform: `translateY(${scrollY * 0.3}px)`,
         zIndex: 0
       }} />
 
-      {/* Floating particles */}
-      {[...Array(30)].map((_, i) => (
+      {/* Ambient Particles */}
+      {[...Array(40)].map((_, i) => (
         <div
           key={i}
           style={{
             position: "fixed",
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            width: `${2 + Math.random() * 4}px`,
-            height: `${2 + Math.random() * 4}px`,
-            background: `hsl(${250 + Math.random() * 80}, 80%, 60%)`,
+            width: `${3 + Math.random() * 5}px`,
+            height: `${3 + Math.random() * 5}px`,
+            background: `hsl(${260 + Math.random() * 60}, 85%, 65%)`,
             borderRadius: "50%",
-            opacity: 0.6,
-            animation: `float ${8 + Math.random() * 10}s ease-in-out infinite ${Math.random() * 5}s`,
+            opacity: 0.5,
+            animation: `floatSlow ${10 + Math.random() * 15}s ease-in-out infinite ${Math.random() * 8}s`,
             zIndex: 0,
-            filter: "blur(1px)"
+            filter: "blur(1.5px)",
+            boxShadow: `0 0 ${8 + Math.random() * 12}px currentColor`
           }}
         />
       ))}
 
-      {/* Main Content */}
-      <div style={{ position: "relative", zIndex: 10, maxWidth: "1400px", margin: "0 auto", padding: "80px 24px" }}>
+      {/* Main Content Container */}
+      <div style={{ position: "relative", zIndex: 10, maxWidth: "1500px", margin: "0 auto", padding: "100px 32px" }}>
         
         {/* Hero Section */}
-        <div style={{ textAlign: "center", marginBottom: "100px" }}>
+        <div style={{ textAlign: "center", marginBottom: "140px" }}>
+          
           {/* Champion Badge */}
-          <div className="fadeIn" style={{ marginBottom: "40px", animationDelay: "0.2s" }}>
+          <div className="fadeInUp" style={{ marginBottom: "50px", animationDelay: "0.1s" }}>
             <div style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "16px",
-              padding: "16px 40px",
+              gap: "20px",
+              padding: "20px 50px",
               borderRadius: "100px",
-              background: "linear-gradient(135deg, rgba(251,191,36,0.2), rgba(249,115,22,0.1))",
-              border: "2px solid rgba(251,191,36,0.5)",
-              boxShadow: "0 20px 60px rgba(251,191,36,0.3), inset 0 1px 0 rgba(255,255,255,0.1)"
+              background: "linear-gradient(135deg, rgba(251,191,36,0.25), rgba(249,115,22,0.15))",
+              border: "2.5px solid rgba(251,191,36,0.6)",
+              boxShadow: "0 25px 70px rgba(251,191,36,0.35), inset 0 1px 0 rgba(255,255,255,0.15)"
             }}>
-              <Trophy className="glow" size={32} color="#fbbf24" />
+              <Trophy className="glow" size={38} color="#fbbf24" />
               <span style={{
-                fontSize: "1.1rem",
+                fontSize: "1.2rem",
                 fontWeight: 900,
-                letterSpacing: "0.15em",
+                letterSpacing: "0.18em",
                 background: "linear-gradient(90deg, #fef08a, #fbbf24, #f59e0b)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
                 backgroundSize: "200%",
-                animation: "gradient 3s ease infinite"
+                animation: "gradient 4s ease infinite"
               }}>
                 NATIONAL CHAMPION 2024
               </span>
-              <Crown className="pulse" size={28} color="#fde047" />
+              <Crown className="pulse" size={34} color="#fde047" />
             </div>
           </div>
 
           {/* Main Title */}
-          <h1 className="fadeIn" style={{
-            fontSize: "clamp(3rem, 10vw, 7rem)",
+          <h1 className="fadeInUp" style={{
+            fontSize: "clamp(3.5rem, 12vw, 8rem)",
             fontWeight: 900,
-            lineHeight: 0.9,
-            background: "linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%)",
+            lineHeight: 0.95,
+            background: "linear-gradient(135deg, #06b6d4 0%, #8b5cf6 45%, #ec4899 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
-            marginBottom: "24px",
-            filter: "drop-shadow(0 0 60px rgba(139,92,246,0.5))",
+            marginBottom: "30px",
+            filter: "drop-shadow(0 0 80px rgba(139,92,246,0.6))",
             backgroundSize: "200%",
-            animation: "gradient 4s ease infinite",
-            animationDelay: "0.4s"
+            animation: "gradient 5s ease infinite",
+            animationDelay: "0.3s",
+            letterSpacing: "-0.02em"
           }}>
             Brainovision
           </h1>
 
-          <div className="fadeIn" style={{
-            fontSize: "clamp(1.5rem, 4vw, 3rem)",
+          <div className="fadeInUp" style={{
+            fontSize: "clamp(1.6rem, 5vw, 3.2rem)",
             fontWeight: 800,
             background: "linear-gradient(90deg, #06b6d4, #8b5cf6)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
-            marginBottom: "16px",
-            letterSpacing: "0.1em",
-            animationDelay: "0.6s"
+            marginBottom: "24px",
+            letterSpacing: "0.12em",
+            animationDelay: "0.5s"
           }}>
             TALENT HUNT 2024
           </div>
 
-          <div className="fadeIn" style={{
+          <div className="fadeInUp" style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "8px",
-            padding: "12px 28px",
-            background: "rgba(16,185,129,0.15)",
-            border: "2px solid rgba(16,185,129,0.4)",
-            borderRadius: "12px",
+            gap: "10px",
+            padding: "14px 34px",
+            background: "rgba(16,185,129,0.18)",
+            border: "2.5px solid rgba(16,185,129,0.5)",
+            borderRadius: "14px",
             color: "#34d399",
-            fontSize: "1.1rem",
+            fontSize: "1.15rem",
             fontWeight: 700,
-            marginBottom: "32px",
-            animationDelay: "0.8s"
+            marginBottom: "40px",
+            animationDelay: "0.7s",
+            boxShadow: "0 10px 30px rgba(16,185,129,0.2)"
           }}>
-            <Star size={20} />
+            <Star size={22} />
             FIRST PLACE WINNER
           </div>
 
-          <p className="fadeIn" style={{
-            fontSize: "1.3rem",
+          <p className="fadeInUp" style={{
+            fontSize: "1.35rem",
             color: "#cbd5e1",
-            lineHeight: 1.8,
-            maxWidth: "900px",
-            margin: "0 auto 60px",
-            animationDelay: "1s"
+            lineHeight: 1.85,
+            maxWidth: "950px",
+            margin: "0 auto 80px",
+            animationDelay: "0.9s",
+            fontWeight: 400
           }}>
             A production-grade <span style={{ color: "#8b5cf6", fontWeight: 700 }}>MERN marketplace</span> featuring 
             JWT authentication, real-time Socket.io chat, and enterprise architecture — 
@@ -275,43 +275,45 @@ export default function HackathonShowcase() {
           {/* Stats Grid */}
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: "24px",
-            maxWidth: "800px",
-            margin: "0 auto 60px"
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: "28px",
+            maxWidth: "900px",
+            margin: "0 auto 80px"
           }}>
             {stats.map((stat, i) => (
               <div
                 key={i}
-                className="fadeIn"
+                className="fadeInUp"
                 style={{
-                  padding: "32px 20px",
-                  borderRadius: "20px",
-                  background: "rgba(15,23,42,0.6)",
-                  backdropFilter: "blur(20px)",
-                  border: `2px solid ${stat.color}40`,
-                  boxShadow: `0 10px 40px ${stat.color}20`,
-                  transition: "all 0.3s ease",
+                  padding: "40px 24px",
+                  borderRadius: "24px",
+                  background: "rgba(15,23,42,0.7)",
+                  backdropFilter: "blur(30px)",
+                  border: `2.5px solid ${stat.color}50`,
+                  boxShadow: `0 15px 50px ${stat.color}25`,
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   cursor: "pointer",
-                  animationDelay: `${1.2 + i * 0.1}s`
+                  animationDelay: `${1.1 + i * 0.15}s`
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-10px) scale(1.05)";
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${stat.color}40`;
+                  e.currentTarget.style.transform = "translateY(-12px) scale(1.06)";
+                  e.currentTarget.style.boxShadow = `0 25px 70px ${stat.color}45`;
+                  e.currentTarget.style.borderColor = stat.color;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0) scale(1)";
-                  e.currentTarget.style.boxShadow = `0 10px 40px ${stat.color}20`;
+                  e.currentTarget.style.boxShadow = `0 15px 50px ${stat.color}25`;
+                  e.currentTarget.style.borderColor = `${stat.color}50`;
                 }}
               >
-                <stat.icon size={40} color={stat.color} style={{ margin: "0 auto 16px", filter: `drop-shadow(0 0 12px ${stat.color})` }} />
-                <div style={{ fontSize: "2.5rem", fontWeight: 900, color: "white", marginBottom: "8px" }}>
+                <stat.icon size={46} color={stat.color} style={{ margin: "0 auto 20px", filter: `drop-shadow(0 0 16px ${stat.color})` }} />
+                <div style={{ fontSize: "3rem", fontWeight: 900, color: "white", marginBottom: "10px", letterSpacing: "-0.02em" }}>
                   {stat.value}
                 </div>
-                <div style={{ color: stat.color, fontSize: "0.9rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <div style={{ color: stat.color, fontSize: "0.95rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                   {stat.unit}
                 </div>
-                <div style={{ color: "#94a3b8", fontSize: "0.85rem", marginTop: "4px" }}>
+                <div style={{ color: "#94a3b8", fontSize: "0.88rem", marginTop: "6px" }}>
                   {stat.label}
                 </div>
               </div>
@@ -319,175 +321,176 @@ export default function HackathonShowcase() {
           </div>
 
           {/* CTA Buttons */}
-          <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "24px", justifyContent: "center", flexWrap: "wrap" }}>
             <button
               onClick={() => setModal(true)}
               style={{
-                padding: "20px 48px",
-                fontSize: "1.15rem",
+                padding: "22px 54px",
+                fontSize: "1.18rem",
                 fontWeight: 700,
                 background: "linear-gradient(135deg, #7c3aed, #8b5cf6, #ec4899)",
                 borderRadius: "100px",
                 color: "white",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "12px",
+                gap: "14px",
                 border: "none",
                 cursor: "pointer",
-                boxShadow: "0 20px 60px rgba(139,92,246,0.4)",
+                boxShadow: "0 25px 70px rgba(139,92,246,0.5)",
                 position: "relative",
                 overflow: "hidden",
-                transition: "all 0.3s ease"
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px) scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 30px 80px rgba(139,92,246,0.6)";
+                e.currentTarget.style.transform = "translateY(-5px) scale(1.06)";
+                e.currentTarget.style.boxShadow = "0 35px 90px rgba(139,92,246,0.65)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "0 20px 60px rgba(139,92,246,0.4)";
+                e.currentTarget.style.boxShadow = "0 25px 70px rgba(139,92,246,0.5)";
               }}
             >
               <div style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-                animation: "slide 3s linear infinite"
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+                animation: "slideRight 3.5s linear infinite"
               }} />
-              <Zap size={24} />
-              <span>View Timeline</span>
+              <Zap size={26} />
+              <span style={{ position: "relative", zIndex: 1 }}>View Timeline</span>
             </button>
 
             <button
               onClick={handleDownload}
               style={{
-                padding: "20px 48px",
-                fontSize: "1.15rem",
+                padding: "22px 54px",
+                fontSize: "1.18rem",
                 fontWeight: 700,
-                background: "rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.12)",
                 borderRadius: "100px",
                 color: "white",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "12px",
-                border: "2px solid rgba(255,255,255,0.2)",
+                gap: "14px",
+                border: "2.5px solid rgba(255,255,255,0.25)",
                 cursor: "pointer",
-                backdropFilter: "blur(10px)",
-                transition: "all 0.3s ease"
+                backdropFilter: "blur(20px)",
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.15)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+                e.currentTarget.style.transform = "translateY(-5px)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.18)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.45)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
               }}
             >
-              <Download size={24} />
+              <Download size={26} />
               <span>Certificate</span>
             </button>
           </div>
         </div>
 
-        {/* Certificate Preview */}
-        <div style={{ marginBottom: "120px", position: "relative" }}>
+        {/* Certificate Showcase */}
+        <div style={{ marginBottom: "160px", position: "relative" }}>
           <div style={{
-            maxWidth: "900px",
+            maxWidth: "1000px",
             margin: "0 auto",
-            borderRadius: "32px",
+            borderRadius: "36px",
             overflow: "hidden",
             position: "relative",
-            boxShadow: "0 40px 100px rgba(0,0,0,0.5)"
+            boxShadow: "0 50px 120px rgba(0,0,0,0.6)"
           }}>
             <div style={{
               position: "absolute",
-              inset: -4,
+              inset: -5,
               background: "conic-gradient(from 0deg at 50% 50%, #8b5cf6, #ec4899, #06b6d4, #8b5cf6)",
-              borderRadius: "32px",
-              animation: "rotate 15s linear infinite",
+              borderRadius: "36px",
+              animation: "rotate 18s linear infinite",
               zIndex: -1,
-              opacity: 0.7
+              opacity: 0.8
             }} />
             
             <div style={{
-              padding: "16px",
+              padding: "20px",
               background: "linear-gradient(135deg, #0f172a, #1e293b)",
-              borderRadius: "28px"
+              borderRadius: "32px"
             }}>
-             <img
-  src={certificateImage}
-  alt="Brainovision Certificate"
-  style={{
-    width: "100%",
-    height: "auto",
-    borderRadius: "20px",
-    display: "block"
-  }}
-/>
-
+              <img
+                src={certificateImage}
+                alt="Brainovision National Championship Certificate"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "24px",
+                  display: "block"
+                }}
+              />
             </div>
 
             <div style={{
               position: "absolute",
               inset: 0,
-              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
-              animation: "slide 4s linear infinite",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
+              animation: "slideRight 5s linear infinite",
               pointerEvents: "none"
             }} />
           </div>
         </div>
 
-        {/* Development Phases */}
+        {/* Development Timeline */}
         <div>
           <h2 style={{
-            fontSize: "clamp(2.5rem, 6vw, 4rem)",
+            fontSize: "clamp(2.8rem, 7vw, 4.5rem)",
             fontWeight: 900,
             textAlign: "center",
             background: "linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
-            marginBottom: "24px"
+            marginBottom: "30px",
+            letterSpacing: "-0.02em"
           }}>
             24-Hour Development Sprint
           </h2>
           <p style={{
             textAlign: "center",
             color: "#94a3b8",
-            fontSize: "1.2rem",
-            marginBottom: "80px"
+            fontSize: "1.25rem",
+            marginBottom: "100px",
+            fontWeight: 400
           }}>
             Four intense phases from concept to deployment
           </p>
 
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "32px"
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "40px"
           }}>
             {phases.map((phase, i) => (
               <div
                 key={i}
                 onClick={() => setActivePhase(i)}
                 style={{
-                  padding: "40px 32px",
-                  borderRadius: "28px",
+                  padding: "48px 38px",
+                  borderRadius: "32px",
                   background: activePhase === i 
-                    ? `linear-gradient(135deg, ${phase.color}20, rgba(15,23,42,0.8))`
-                    : "rgba(15,23,42,0.6)",
-                  backdropFilter: "blur(20px)",
-                  border: `2px solid ${activePhase === i ? phase.color : 'rgba(139,92,246,0.2)'}`,
+                    ? `linear-gradient(135deg, ${phase.color}25, rgba(15,23,42,0.85))`
+                    : "rgba(15,23,42,0.7)",
+                  backdropFilter: "blur(30px)",
+                  border: `2.5px solid ${activePhase === i ? phase.color : 'rgba(139,92,246,0.25)'}`,
                   cursor: "pointer",
-                  transition: "all 0.4s ease",
+                  transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   position: "relative",
                   overflow: "hidden"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px)";
-                  e.currentTarget.style.boxShadow = `0 30px 80px ${phase.color}40`;
+                  e.currentTarget.style.transform = "translateY(-10px)";
+                  e.currentTarget.style.boxShadow = `0 35px 90px ${phase.color}50`;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
@@ -495,65 +498,67 @@ export default function HackathonShowcase() {
                 }}
               >
                 <div style={{
-                  width: "90px",
-                  height: "90px",
-                  margin: "0 auto 24px",
-                  borderRadius: "24px",
-                  background: `${phase.color}30`,
+                  width: "100px",
+                  height: "100px",
+                  margin: "0 auto 28px",
+                  borderRadius: "28px",
+                  background: `${phase.color}35`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: `0 0 60px ${phase.color}50`,
-                  border: `2px solid ${phase.color}60`,
-                  transition: "all 0.3s ease"
+                  boxShadow: `0 0 70px ${phase.color}60`,
+                  border: `2.5px solid ${phase.color}70`,
+                  transition: "all 0.4s ease"
                 }}>
-                  <phase.icon size={48} color={phase.color} />
+                  <phase.icon size={52} color={phase.color} />
                 </div>
 
                 <div style={{
                   textAlign: "center",
                   color: phase.color,
                   fontWeight: 900,
-                  fontSize: "1.1rem",
-                  marginBottom: "12px",
-                  letterSpacing: "0.1em"
+                  fontSize: "1.15rem",
+                  marginBottom: "14px",
+                  letterSpacing: "0.12em"
                 }}>
                   {phase.hour}
                 </div>
 
                 <h3 style={{
-                  fontSize: "2rem",
+                  fontSize: "2.2rem",
                   fontWeight: 900,
                   color: "white",
-                  marginBottom: "16px",
-                  textAlign: "center"
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  letterSpacing: "-0.01em"
                 }}>
                   {phase.title}
                 </h3>
 
                 <p style={{
                   color: "#cbd5e1",
-                  lineHeight: 1.7,
-                  fontSize: "1.05rem",
-                  marginBottom: "24px",
-                  textAlign: "center"
+                  lineHeight: 1.75,
+                  fontSize: "1.08rem",
+                  marginBottom: "28px",
+                  textAlign: "center",
+                  fontWeight: 400
                 }}>
                   {phase.desc}
                 </p>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                   {phase.achievements.map((achievement, idx) => (
                     <div key={idx} style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "12px",
-                      padding: "12px 16px",
-                      background: "rgba(255,255,255,0.05)",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(255,255,255,0.1)"
+                      gap: "14px",
+                      padding: "14px 18px",
+                      background: "rgba(255,255,255,0.06)",
+                      borderRadius: "14px",
+                      border: "1.5px solid rgba(255,255,255,0.12)"
                     }}>
-                      <CheckCircle size={18} color={phase.color} />
-                      <span style={{ color: "#e2e8f0", fontSize: "0.95rem" }}>{achievement}</span>
+                      <CheckCircle size={20} color={phase.color} />
+                      <span style={{ color: "#e2e8f0", fontSize: "0.98rem" }}>{achievement}</span>
                     </div>
                   ))}
                 </div>
@@ -562,60 +567,62 @@ export default function HackathonShowcase() {
           </div>
         </div>
 
-        {/* Tech Stack */}
-        <div style={{ marginTop: "120px" }}>
+        {/* Technology Stack */}
+        <div style={{ marginTop: "160px" }}>
           <h3 style={{
-            fontSize: "2.5rem",
+            fontSize: "2.8rem",
             fontWeight: 900,
             textAlign: "center",
             color: "white",
-            marginBottom: "60px"
+            marginBottom: "80px",
+            letterSpacing: "-0.01em"
           }}>
-            <Cpu size={40} style={{ display: "inline", marginRight: "16px", color: "#8b5cf6" }} />
+            <Cpu size={44} style={{ display: "inline", marginRight: "18px", color: "#8b5cf6", verticalAlign: "middle" }} />
             Technology Stack
           </h3>
 
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "24px",
-            maxWidth: "1000px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "30px",
+            maxWidth: "1100px",
             margin: "0 auto"
           }}>
             {techStack.map((tech, i) => (
               <div
                 key={i}
                 style={{
-                  padding: "32px 24px",
-                  borderRadius: "20px",
-                  background: "rgba(15,23,42,0.6)",
-                  backdropFilter: "blur(20px)",
-                  border: `2px solid ${tech.color}30`,
+                  padding: "38px 28px",
+                  borderRadius: "24px",
+                  background: "rgba(15,23,42,0.7)",
+                  backdropFilter: "blur(30px)",
+                  border: `2.5px solid ${tech.color}35`,
                   textAlign: "center",
-                  transition: "all 0.3s ease",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   cursor: "pointer"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-8px) rotate(2deg)";
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${tech.color}40`;
+                  e.currentTarget.style.transform = "translateY(-10px) rotate(2deg)";
+                  e.currentTarget.style.boxShadow = `0 25px 70px ${tech.color}45`;
                   e.currentTarget.style.borderColor = tech.color;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0) rotate(0deg)";
                   e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.borderColor = `${tech.color}30`;
+                  e.currentTarget.style.borderColor = `${tech.color}35`;
                 }}
               >
-                <tech.icon size={48} color={tech.color} style={{ margin: "0 auto 16px", filter: `drop-shadow(0 0 12px ${tech.color})` }} />
+                <tech.icon size={52} color={tech.color} style={{ margin: "0 auto 20px", filter: `drop-shadow(0 0 16px ${tech.color})` }} />
                 <div style={{
-                  fontSize: "1.4rem",
+                  fontSize: "1.5rem",
                   fontWeight: 800,
                   color: "white",
-                  marginBottom: "8px"
+                  marginBottom: "10px",
+                  letterSpacing: "-0.01em"
                 }}>
                   {tech.name}
                 </div>
-                <div style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                <div style={{ color: "#94a3b8", fontSize: "0.95rem" }}>
                   {tech.desc}
                 </div>
               </div>
@@ -632,26 +639,26 @@ export default function HackathonShowcase() {
             position: "fixed",
             inset: 0,
             zIndex: 1000,
-            background: "rgba(0,0,0,0.95)",
-            backdropFilter: "blur(40px)",
+            background: "rgba(0,0,0,0.96)",
+            backdropFilter: "blur(50px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "24px",
-            animation: "fadeIn 0.3s ease-out"
+            padding: "32px",
+            animation: "scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              maxWidth: "1000px",
+              maxWidth: "1100px",
               width: "100%",
-              background: "rgba(15,23,42,0.95)",
-              backdropFilter: "blur(50px)",
-              borderRadius: "32px",
-              padding: "60px",
-              border: "2px solid rgba(139,92,246,0.4)",
-              boxShadow: "0 50px 100px rgba(0,0,0,0.9)",
+              background: "rgba(15,23,42,0.96)",
+              backdropFilter: "blur(60px)",
+              borderRadius: "40px",
+              padding: "70px",
+              border: "2.5px solid rgba(139,92,246,0.5)",
+              boxShadow: "0 60px 120px rgba(0,0,0,0.95)",
               maxHeight: "90vh",
               overflowY: "auto",
               position: "relative"
@@ -661,128 +668,132 @@ export default function HackathonShowcase() {
               onClick={() => setModal(false)}
               style={{
                 position: "absolute",
-                top: "24px",
-                right: "24px",
-                width: "48px",
-                height: "48px",
-                borderRadius: "12px",
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
+                top: "30px",
+                right: "30px",
+                width: "52px",
+                height: "52px",
+                borderRadius: "14px",
+                background: "rgba(255,255,255,0.12)",
+                border: "2px solid rgba(255,255,255,0.25)",
                 color: "white",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer",
-                transition: "all 0.3s ease"
+                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "rgba(255,255,255,0.2)";
                 e.currentTarget.style.transform = "rotate(90deg)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
                 e.currentTarget.style.transform = "rotate(0deg)";
               }}
             >
-              <X size={24} />
-            </button>
+              <X size={26} />
+              </button>
 
-            <h2 style={{
-              fontSize: "3rem",
-              fontWeight: 900,
-              background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-              textAlign: "center",
-              marginBottom: "60px"
+        <h2 style={{
+          fontSize: "3.5rem",
+          fontWeight: 900,
+          background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+          textAlign: "center",
+          marginBottom: "70px",
+          letterSpacing: "-0.02em"
+        }}>
+          Complete Development Timeline
+        </h2>
+
+        {phases.map((phase, i) => (
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              gap: "40px",
+              padding: "42px",
+              background: "rgba(255,255,255,0.06)",
+              borderRadius: "28px",
+              border: `2.5px solid ${phase.color}45`,
+              marginBottom: "38px",
+              transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateX(10px)";
+              e.currentTarget.style.boxShadow = `0 25px 70px ${phase.color}45`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateX(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            <div style={{
+              width: "110px",
+              height: "110px",
+              borderRadius: "28px",
+              background: `${phase.color}35`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: `0 0 70px ${phase.color}60`,
+              border: `2.5px solid ${phase.color}70`,
+              flexShrink: 0
             }}>
-              Complete Development Timeline
-            </h2>
-
-            {phases.map((phase, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  gap: "32px",
-                  padding: "36px",
-                  background: "rgba(255,255,255,0.05)",
-                  borderRadius: "24px",
-                  border: `2px solid ${phase.color}40`,
-                  marginBottom: "32px",
-                  transition: "all 0.3s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateX(8px)";
-                  e.currentTarget.style.boxShadow = `0 20px 60px ${phase.color}40`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateX(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <div style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "24px",
-                  background: `${phase.color}30`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: `0 0 60px ${phase.color}50`,
-                  border: `2px solid ${phase.color}60`
-                }}>
-                  <phase.icon size={48} color={phase.color} />
-                </div>
-                <div>
-                  <div style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 700,
-                    color: phase.color,
-                    marginBottom: "8px",
-                    letterSpacing: "0.1em"
+              <phase.icon size={54} color={phase.color} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{
+                fontSize: "1.25rem",
+                fontWeight: 700,
+                color: phase.color,
+                marginBottom: "10px",
+                letterSpacing: "0.12em"
+              }}>
+                {phase.hour}
+              </div>  
+              <h3 style={{
+                fontSize: "2.2rem",
+                fontWeight: 900,
+                color: "white",
+                marginBottom: "18px",
+                letterSpacing: "-0.01em"
+              }}>
+                {phase.title}
+              </h3>
+              <p style={{
+                color: "#cbd5e1",
+                lineHeight: 1.75,
+                fontSize: "1.08rem",
+                marginBottom: "20px",
+                fontWeight: 400
+              }}>
+                {phase.desc}
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                {phase.achievements.map((achievement, idx) => (
+                  <div key={idx} style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",  
+                    padding: "14px 18px",
+                    background: "rgba(255,255,255,0.06)",
+                    borderRadius: "14px", 
+                    border: "1.5px solid rgba(255,255,255,0.12)" 
                   }}>
-                    {phase.hour}
-                  </div>  
-                  <h3 style={{
-                    fontSize: "2rem",
-                    fontWeight: 900,
-                    color: "white",
-                    marginBottom: "16px"
-                  }}>
-                    {phase.title}
-                  </h3>
-                  <p style={{
-                    color: "#cbd5e1",
-                    lineHeight: 1.7,
-                    fontSize: "1.05rem",
-                    marginBottom: "16px"
-                  }}>
-                    {phase.desc}
-                  </p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {phase.achievements.map((achievement, idx) => (
-                      <div key={idx} style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",  
-                        padding: "12px 16px",
-                        background: "rgba(255,255,255,0.05)",
-                        borderRadius: "12px", 
-                        border: "1px solid rgba(255,255,255,0.1)" 
-                      }}>
-                        <CheckCircle size={18} color={phase.color} />
-                        <span style={{ color: "#e2e8f0", fontSize: "0.95rem" }}>{achievement}</span>
-                      </div>
-                    ))}
+                    <CheckCircle size={20} color={phase.color} />
+                    <span style={{ color: "#e2e8f0", fontSize: "0.98rem" }}>{achievement}</span>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
-  );
+  )}
+</div>
+);
 }
