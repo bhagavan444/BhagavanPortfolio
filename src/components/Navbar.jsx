@@ -4,23 +4,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  FaBars,
-  FaTimes,
-  FaGithub,
-  FaLinkedin,
-  FaHome,
-  FaGraduationCap,
-  FaBriefcase,
-  FaCode,
-  FaEllipsisH,
-  FaTrophy,
-  FaLaptopCode,
-  FaFileAlt,
-  FaCertificate,
-  FaHeart,
-  FaAward,
-  FaEnvelope,
-  FaChevronDown,
+  FaBars, FaTimes, FaGithub, FaLinkedin, FaHome, FaGraduationCap,
+  FaBriefcase, FaCode, FaEllipsisH, FaTrophy, FaLaptopCode, FaFileAlt,
+  FaCertificate, FaHeart, FaAward, FaEnvelope, FaChevronDown
 } from "react-icons/fa";
 
 const Navbar = () => {
@@ -31,10 +17,9 @@ const Navbar = () => {
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
-  const dropdownRef = useRef(null);
   const navRef = useRef(null);
 
-  // Spring-based mouse following glow (very subtle)
+  // Mouse-following subtle glow
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const springX = useSpring(mouseX, { damping: 50, stiffness: 300 });
@@ -65,27 +50,6 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") {
-        setMenuOpen(false);
-        setMoreDropdownOpen(false);
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setMoreDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const handleMouseMove = useCallback(
     (e) => {
       if (!isMobile && navRef.current) {
@@ -108,7 +72,7 @@ const Navbar = () => {
     { label: "Resume", path: "/resume", icon: <FaFileAlt /> },
     { label: "Certifications", path: "/certifications", icon: <FaCertificate /> },
     { label: "Beyond Coding", path: "/beyondcoding", icon: <FaHeart /> },
-    { label: "Achivements", path: "/achivements", icon: <FaAward /> },
+    { label: "Achievements", path: "/achivements", icon: <FaAward /> },
     { label: "Contact", path: "/contact", icon: <FaEnvelope /> },
   ];
 
@@ -123,178 +87,86 @@ const Navbar = () => {
     setMoreDropdownOpen(false);
   };
 
-  const navContainer = {
-    hidden: { opacity: 0, y: -90 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1, type: "spring", stiffness: 80, damping: 14 },
-    },
-  };
-
-  const itemContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.07, delayChildren: 0.3 },
-    },
-  };
-
-  const itemSpring = {
-    hidden: { y: 32, opacity: 0, scale: 0.92 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring", stiffness: 260, damping: 24 },
-    },
-  };
-
-  const dropdownSpring = {
-    hidden: { opacity: 0, scale: 0.88, y: -16 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 380, damping: 28 },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.88,
-      y: -16,
-      transition: { duration: 0.18, ease: "easeIn" },
-    },
-  };
-
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
         :root {
-          --primary: #7c3aed;
-          --primary-light: #a78bfa;
-          --primary-dark: #5b21b6;
-          --accent:black;
-          --text: #ffffff;
-          --text-dim: #e0e7ff;
+          --neon-cyan: #00ffff;
+          --neon-purple: #8a2be2;
           --bg-dark: #000000;
-          --bg-nav: #000000;
+          --glass: rgba(8,8,22,0.84);
+          --border-glow: rgba(0,255,255,0.24);
         }
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+        @keyframes scan {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
         }
 
-        @keyframes breathe-glow {
-          0%, 100% { opacity: 0.35; transform: scale(1); }
-          50%      { opacity: 0.7;  transform: scale(1.15); }
+        @keyframes float {
+          0%,100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
         }
 
-        @keyframes ultra-shimmer {
-          0%   { background-position: -1200px 0; }
-          100% { background-position: 1200px 0; }
+        @keyframes pulse {
+          0%,100% { opacity: 1; }
+          50% { opacity: 0.7; }
         }
 
-        @keyframes flow-border {
-          0%   { background-position: 0% 50%; }
-          50%  { background-position: 200% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .nav-container {
+        .nav-item {
           position: relative;
           overflow: hidden;
+          transition: all 0.45s cubic-bezier(0.23,1,0.32,1);
         }
 
-        .nav-glow-core {
-          position: relative;
+        .nav-item:hover {
+          transform: translateY(-4px) scale(1.05);
+        }
+
+        .nav-item::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, transparent 35%, rgba(0,255,255,0.18) 50%, transparent 65%);
+          animation: scan 7s linear infinite;
+          pointer-events: none;
           z-index: 1;
-          transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-          color: var(--text) !important;
+          opacity: 0;
+          transition: opacity 0.4s;
         }
 
-        .nav-glow-core:hover {
-          transform: translateY(-3px) scale(1.04);
+        .nav-item:hover::before,
+        .nav-active::before {
+          opacity: 0.8;
         }
 
-        .nav-active .nav-glow-core {
-          background: linear-gradient(135deg, rgba(124,58,237,0.38), rgba(236,72,153,0.32), rgba(167,139,250,0.38)) !important;
-          background-size: 300% 300%;
-          animation: flow-border 6s ease infinite, breathe-glow 4s ease-in-out infinite;
-          color: white !important;
+        .nav-active {
+          background: rgba(0,255,255,0.18) !important;
+          border-color: var(--neon-cyan) !important;
+          box-shadow: 0 0 40px var(--neon-cyan) !important;
+          color: var(--neon-cyan) !important;
           font-weight: 700 !important;
-          box-shadow: 0 0 28px rgba(124,58,237,0.55);
         }
 
-        .nav-active::after {
-          content: '';
-          position: absolute;
-          inset: -3px;
-          border-radius: inherit;
-          background: linear-gradient(45deg, transparent, var(--accent), transparent);
-          opacity: 0.6;
-          filter: blur(12px);
-          z-index: -1;
+        .nav-active .icon {
+          animation: float 3s ease-in-out infinite;
         }
 
-        .logo-gradient {
-          background: linear-gradient(
-            90deg,
-            #7c3aed 0%,
-            #c084fc 25%,
-            #ec4899 50%,
-            #a78bfa 75%,
-            #7c3aed 100%
-          );
-          background-size: 300% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: ultra-shimmer 8s linear infinite;
+        .mobile-menu {
+          background: rgba(0,0,0,0.92);
+          backdrop-filter: blur(16px);
+          border-top: 2px solid rgba(0,255,255,0.3);
         }
 
-        .mobile-overlay {
-          background: radial-gradient(circle at 30% 20%, rgba(124,58,237,0.18), transparent 40%),
-                      radial-gradient(circle at 70% 80%, rgba(236,72,153,0.14), transparent 50%),
-                      #000000;
-        }
-
-        .dropdown-premium {
-          background: linear-gradient(145deg, rgba(20,20,20,0.96), rgba(10,10,10,0.96));
-          backdrop-filter: blur(32px);
-          border: 1px solid rgba(167,139,250,0.28);
-        }
-
-        .dropdown-premium::before {
-          content: '';
-          position: absolute;
-          inset: -2px;
-          border-radius: inherit;
-          background: linear-gradient(90deg, transparent, rgba(167,139,250,0.45), transparent);
-          animation: ultra-shimmer 7s linear infinite;
-          opacity: 0.4;
-          z-index: -1;
-        }
-
-        @media (max-width: 1024px) {
-          .nav-items-desktop { display: none !important; }
-        }
-
-        @media (min-width: 1025px) {
-          .hamburger { display: none !important; }
-        }
-
-        .nav-glow-core, .nav-glow-core * {
-          color: #ffffff !important;
+        .logo-glow {
+          text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
         }
       `}</style>
 
       <motion.nav
         ref={navRef}
-        variants={navContainer}
-        initial="hidden"
-        animate="visible"
         onMouseMove={handleMouseMove}
         style={{
           position: "fixed",
@@ -303,22 +175,25 @@ const Navbar = () => {
           right: 0,
           zIndex: 1000,
           height: "88px",
-          background: "#000000",
+          background: 'var(--bg-dark)',
           backdropFilter: isScrolled ? "blur(32px) saturate(180%)" : "blur(24px) saturate(160%)",
           borderBottom: isScrolled
-            ? "1px solid rgba(167,139,250,0.42)"
-            : "1px solid rgba(167,139,250,0.18)",
+            ? "2px solid rgba(0,255,255,0.35)"
+            : "1px solid rgba(0,255,255,0.18)",
           boxShadow: isScrolled
-            ? "0 16px 60px rgba(0,0,0,0.9), 0 0 100px rgba(124,58,237,0.22)"
+            ? "0 16px 60px rgba(0,0,0,0.9), 0 0 100px rgba(0,255,255,0.22)"
             : "0 10px 40px rgba(0,0,0,0.75)",
           transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
-        {isScrolled && !isMobile && (
+        {/* Subtle mouse-follow glow */}
+        {!isMobile && isScrolled && (
           <motion.div
-            className="absolute inset-0 pointer-events-none"
             style={{
-              background: `radial-gradient(circle 800px at ${springX}px ${springY}px, rgba(167,139,250,0.08), transparent 60%)`,
+              position: "absolute",
+              inset: 0,
+              background: `radial-gradient(circle 600px at ${springX}px ${springY}px, rgba(0,255,255,0.12), transparent 60%)`,
+              pointerEvents: "none",
               opacity: 0.7,
             }}
           />
@@ -336,17 +211,18 @@ const Navbar = () => {
             position: "relative",
           }}
         >
+          {/* Logo */}
           <motion.button
             onClick={() => handleNavClick("/home")}
-            whileHover={{ scale: 1.06 }}
+            whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.96 }}
             style={{
               background: "none",
               border: "none",
               cursor: "pointer",
-              fontSize: isMobile ? "1.8rem" : "2.2rem",
+              fontSize: isMobile ? "2.2rem" : "2.6rem",
               fontWeight: "900",
-              letterSpacing: "-1.1px",
+              letterSpacing: "-1.2px",
               display: "flex",
               alignItems: "center",
               gap: "14px",
@@ -355,9 +231,9 @@ const Navbar = () => {
           >
             <motion.span
               animate={{
-                rotate: [0, 18, -18, 0],
-                y: [0, -8, 0],
-                scale: [1, 1.12, 1],
+                rotate: [0, 12, -12, 0],
+                y: [0, -6, 0],
+                scale: [1, 1.1, 1],
               }}
               transition={{
                 duration: 4.2,
@@ -365,88 +241,93 @@ const Navbar = () => {
                 repeatDelay: 2.8,
                 ease: "easeInOut",
               }}
-              style={{ fontSize: isMobile ? "2rem" : "2.4rem" }}
+              className="logo-glow"
+              style={{ color: "#00ffff" }}
             >
               ⚡
             </motion.span>
-            <span className="logo-gradient">SSSB</span>
+            <span style={{
+              background: "linear-gradient(90deg, #00ffff, #8a2be2, #00ffff)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              fontSize: isMobile ? "1.8rem" : "2.2rem",
+            }}>
+              SSSB
+            </span>
           </motion.button>
 
+          {/* Desktop Nav */}
           {!isMobile && (
-            <motion.div
-              variants={itemContainer}
-              initial="hidden"
-              animate="visible"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "14px",
-              }}
-              className="nav-items-desktop"
-            >
-              {visibleItems.map((item, i) => (
-                <motion.div
-                  key={item.path}
-                  variants={itemSpring}
-                  custom={i}
-                  className={`nav-glow ${currentPath === item.path ? "nav-active" : ""}`}
-                >
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}>
+              {visibleItems.map((item) => {
+                const isActive = currentPath === item.path;
+
+                return (
                   <motion.button
+                    key={item.path}
                     onClick={() => handleNavClick(item.path)}
-                    whileHover={{ scale: 1.06, y: -2 }}
+                    whileHover={{ scale: 1.06, y: -3 }}
                     whileTap={{ scale: 0.97 }}
-                    className="nav-glow-core"
+                    className={`nav-item ${isActive ? "nav-active" : ""}`}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
-                      padding: "12px 24px",
+                      padding: "12px 22px",
                       color: "#ffffff",
-                      fontSize: "0.97rem",
-                      fontWeight: "500",
+                      fontSize: "0.98rem",
+                      fontWeight: isActive ? "700" : "500",
                       borderRadius: "14px",
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(167,139,250,0.16)",
+                      background: isActive ? "rgba(0,255,255,0.16)" : "rgba(255,255,255,0.04)",
+                      border: isActive
+                        ? "1.5px solid rgba(0,255,255,0.5)"
+                        : "1px solid rgba(0,255,255,0.18)",
                       backdropFilter: "blur(12px)",
                       cursor: "pointer",
                       whiteSpace: "nowrap",
+                      position: "relative",
+                      overflow: "hidden",
                     }}
                   >
                     <motion.span
-                      animate={
-                        currentPath === item.path
-                          ? { rotate: [0, 12, -12, 0], scale: [1, 1.15, 1] }
-                          : {}
-                      }
-                      transition={{ duration: 0.6 }}
-                      style={{ fontSize: "1.1rem", opacity: 0.9, color: "#ffffff" }}
+                      animate={isActive ? { rotate: [0, 12, -12, 0], scale: [1, 1.15, 1] } : {}}
+                      transition={{ duration: 0.7 }}
+                      style={{ fontSize: "1.2rem", color: isActive ? "#00ffff" : "#e0e0ff" }}
                     >
                       {item.icon}
                     </motion.span>
-                    <span style={{ color: "#ffffff" }}>{item.label}</span>
+                    <span style={{ color: isActive ? "#00ffff" : "#e0e0ff" }}>
+                      {item.label}
+                    </span>
                   </motion.button>
-                </motion.div>
-              ))}
+                );
+              })}
 
-              <div ref={dropdownRef} style={{ position: "relative" }}>
+              {/* More Dropdown */}
+              <div style={{ position: "relative" }}>
                 <motion.button
                   whileHover={{ scale: 1.07 }}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
-                  className={`nav-glow ${moreDropdownOpen ? "nav-active" : ""}`}
+                  className={`nav-item ${moreDropdownOpen ? "nav-active" : ""}`}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
-                    padding: "12px 24px",
+                    padding: "12px 22px",
                     color: "#ffffff",
-                    fontSize: "0.97rem",
-                    fontWeight: "600",
+                    fontSize: "0.98rem",
+                    fontWeight: moreDropdownOpen ? "700" : "500",
                     borderRadius: "14px",
-                    background: moreDropdownOpen
-                      ? "rgba(124,58,237,0.22)"
-                      : "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(167,139,250,0.22)",
+                    background: moreDropdownOpen ? "rgba(0,255,255,0.16)" : "rgba(255,255,255,0.04)",
+                    border: moreDropdownOpen
+                      ? "1.5px solid rgba(0,255,255,0.5)"
+                      : "1px solid rgba(0,255,255,0.18)",
                     backdropFilter: "blur(12px)",
                     cursor: "pointer",
                   }}
@@ -454,74 +335,80 @@ const Navbar = () => {
                   <motion.span
                     animate={{ rotate: moreDropdownOpen ? 180 : 0 }}
                     transition={{ duration: 0.4 }}
-                    style={{ color: "#ffffff" }}
+                    style={{ color: moreDropdownOpen ? "#00ffff" : "#e0e0ff" }}
                   >
                     <FaEllipsisH />
                   </motion.span>
-                  <span style={{ color: "#ffffff" }}>More</span>
-                  <FaChevronDown style={{ fontSize: "0.8rem", color: "#ffffff" }} />
+                  <span style={{ color: moreDropdownOpen ? "#00ffff" : "#e0e0ff" }}>
+                    More
+                  </span>
+                  <FaChevronDown style={{ fontSize: "0.8rem" }} />
                 </motion.button>
 
                 <AnimatePresence>
                   {moreDropdownOpen && (
                     <motion.div
-                      variants={dropdownSpring}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="dropdown-premium"
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.25 }}
                       style={{
                         position: "absolute",
-                        top: "calc(100% + 20px)",
+                        top: "calc(100% + 16px)",
                         right: 0,
-                        minWidth: "300px",
-                        borderRadius: "20px",
-                        padding: "16px",
-                        boxShadow: "0 30px 90px rgba(0,0,0,0.85), 0 0 80px rgba(124,58,237,0.28)",
+                        minWidth: "280px",
+                        background: "rgba(8,8,22,0.94)",
+                        backdropFilter: "blur(20px)",
+                        border: "2px solid rgba(0,255,255,0.4)",
+                        borderRadius: "16px",
+                        boxShadow: "0 20px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,255,0.25)",
+                        padding: "1rem",
                         zIndex: 1001,
                       }}
                     >
-                      {moreItems.map((item, i) => (
-                        <motion.button
-                          key={item.path}
-                          onClick={() => handleNavClick(item.path)}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.05 }}
-                          whileHover={{ x: 8, scale: 1.03 }}
-                          whileTap={{ scale: 0.97 }}
-                          className={`nav-glow ${currentPath === item.path ? "nav-active" : ""}`}
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "16px",
-                            padding: "16px 20px",
-                            color: "#ffffff",
-                            fontSize: "0.98rem",
-                            fontWeight: "500",
-                            borderRadius: "14px",
-                            background: "transparent",
-                            border: "none",
-                            cursor: "pointer",
-                            textAlign: "left",
-                            marginBottom: i < moreItems.length - 1 ? "6px" : "0",
-                          }}
-                        >
-                          <motion.span style={{ fontSize: "1.2rem", opacity: 0.9, color: "#ffffff" }}>
-                            {item.icon}
-                          </motion.span>
-                          <span style={{ color: "#ffffff" }}>{item.label}</span>
-                        </motion.button>
-                      ))}
+                      {moreItems.map((item) => {
+                        const isActive = currentPath === item.path;
+
+                        return (
+                          <motion.button
+                            key={item.path}
+                            onClick={() => handleNavClick(item.path)}
+                            whileHover={{ x: 8, scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            className={`nav-item ${isActive ? "nav-active" : ""}`}
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "16px",
+                              padding: "14px 20px",
+                              color: isActive ? "#00ffff" : "#e0e0ff",
+                              fontSize: "0.98rem",
+                              fontWeight: isActive ? "700" : "500",
+                              borderRadius: "12px",
+                              background: "transparent",
+                              border: "none",
+                              cursor: "pointer",
+                              textAlign: "left",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            <motion.span style={{ fontSize: "1.3rem", color: isActive ? "#00ffff" : "#e0e0ff" }}>
+                              {item.icon}
+                            </motion.span>
+                            <span>{item.label}</span>
+                          </motion.button>
+                        );
+                      })}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
-            </motion.div>
+            </div>
           )}
 
-          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "20px" : "32px" }}>
+          {/* Right Side - Social + Hamburger */}
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "28px" }}>
             <motion.a
               href="https://github.com/bhagavan444"
               target="_blank"
@@ -529,9 +416,9 @@ const Navbar = () => {
               whileHover={{ scale: 1.3, rotate: 12 }}
               whileTap={{ scale: 0.88 }}
               style={{
-                color: "#ffffff",
-                fontSize: isMobile ? "1.4rem" : "1.7rem",
-                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))",
+                color: "#00ffff",
+                fontSize: isMobile ? "1.5rem" : "1.8rem",
+                filter: "drop-shadow(0 0 12px rgba(0,255,255,0.6))",
               }}
             >
               <FaGithub />
@@ -544,9 +431,9 @@ const Navbar = () => {
               whileHover={{ scale: 1.3, rotate: -12 }}
               whileTap={{ scale: 0.88 }}
               style={{
-                color: "#ffffff",
-                fontSize: isMobile ? "1.4rem" : "1.7rem",
-                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))",
+                color: "#00ffff",
+                fontSize: isMobile ? "1.5rem" : "1.8rem",
+                filter: "drop-shadow(0 0 12px rgba(0,255,255,0.6))",
               }}
             >
               <FaLinkedin />
@@ -555,21 +442,23 @@ const Navbar = () => {
             {isMobile && (
               <motion.button
                 onClick={() => setMenuOpen(!menuOpen)}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.92 }}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
                 style={{
                   background: menuOpen
-                    ? "linear-gradient(135deg, rgba(124,58,237,0.4), rgba(236,72,153,0.35))"
-                    : "rgba(255,255,255,0.07)",
-                  border: "1px solid rgba(167,139,250,0.3)",
-                  color: "#ffffff",
-                  fontSize: "1.7rem",
+                    ? "linear-gradient(135deg, rgba(0,255,255,0.35), rgba(138,43,226,0.3))"
+                    : "rgba(255,255,255,0.08)",
+                  border: menuOpen
+                    ? "2px solid rgba(0,255,255,0.6)"
+                    : "1.5px solid rgba(0,255,255,0.3)",
+                  color: "#00ffff",
+                  fontSize: "1.8rem",
                   padding: "14px",
                   borderRadius: "14px",
                   cursor: "pointer",
                   boxShadow: menuOpen
-                    ? "0 0 40px rgba(124,58,237,0.45)"
-                    : "0 6px 16px rgba(0,0,0,0.3)",
+                    ? "0 0 50px rgba(0,255,255,0.5)"
+                    : "0 6px 20px rgba(0,0,0,0.4)",
                 }}
                 aria-label="Toggle menu"
               >
@@ -580,9 +469,9 @@ const Navbar = () => {
                       initial={{ rotate: -180, opacity: 0 }}
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.45 }}
+                      transition={{ duration: 0.4 }}
                     >
-                      <FaTimes style={{ color: "#ffffff" }} />
+                      <FaTimes />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -590,9 +479,9 @@ const Navbar = () => {
                       initial={{ rotate: 180, opacity: 0 }}
                       animate={{ rotate: 0, opacity: 1 }}
                       exit={{ rotate: -180, opacity: 0 }}
-                      transition={{ duration: 0.45 }}
+                      transition={{ duration: 0.4 }}
                     >
-                      <FaBars style={{ color: "#ffffff" }} />
+                      <FaBars />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -602,85 +491,81 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {menuOpen && isMobile && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="mobile-overlay"
+            transition={{ duration: 0.35 }}
             style={{
               position: "fixed",
               inset: "88px 0 0 0",
-              backdropFilter: "blur(32px) saturate(190%)",
+              background: "rgba(0,0,0,0.94)",
+              backdropFilter: "blur(20px)",
               zIndex: 999,
               overflowY: "auto",
               padding: "2.5rem 1.8rem",
+              borderTop: "2px solid rgba(0,255,255,0.4)",
             }}
             onClick={(e) => e.target === e.currentTarget && setMenuOpen(false)}
           >
             <motion.div
-              variants={itemContainer}
-              initial="hidden"
-              animate="visible"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "16px",
+                gap: "1.2rem",
                 maxWidth: "540px",
                 margin: "0 auto",
-                paddingBottom: "4rem",
+                paddingBottom: "5rem",
               }}
             >
-              {navItems.map((item, i) => (
-                <motion.button
-                  key={item.path}
-                  variants={itemSpring}
-                  custom={i}
-                  onClick={() => handleNavClick(item.path)}
-                  whileHover={{ scale: 1.04, x: 10 }}
-                  whileTap={{ scale: 0.97 }}
-                  className={`nav-glow ${currentPath === item.path ? "nav-active" : ""}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "20px",
-                    padding: "22px 28px",
-                    background: currentPath === item.path
-                      ? "rgba(124,58,237,0.32)"
-                      : "rgba(255,255,255,0.06)",
-                    borderRadius: "18px",
-                    color: "#ffffff",
-                    fontSize: "1.1rem",
-                    fontWeight: "500",
-                    border: "1px solid rgba(167,139,250,0.22)",
-                    backdropFilter: "blur(12px)",
-                    cursor: "pointer",
-                    width: "100%",
-                    textAlign: "left",
-                  }}
-                >
-                  <motion.span
-                    style={{ fontSize: "1.6rem", opacity: 0.92, color: "#ffffff" }}
-                    animate={
-                      currentPath === item.path
-                        ? { rotate: [0, 18, -18, 0], scale: [1, 1.2, 1] }
-                        : {}
-                    }
-                    transition={{ duration: 0.7 }}
+              {navItems.map((item) => {
+                const isActive = currentPath === item.path;
+
+                return (
+                  <motion.button
+                    key={item.path}
+                    onClick={() => handleNavClick(item.path)}
+                    whileHover={{ scale: 1.04, x: 10 }}
+                    whileTap={{ scale: 0.97 }}
+                    className={`nav-item ${isActive ? "nav-active" : ""}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "18px",
+                      padding: "22px 28px",
+                      background: isActive ? "rgba(0,255,255,0.22)" : "rgba(255,255,255,0.06)",
+                      borderRadius: "18px",
+                      color: isActive ? "#00ffff" : "#e0e0ff",
+                      fontSize: "1.15rem",
+                      fontWeight: isActive ? "700" : "500",
+                      border: isActive
+                        ? "1.5px solid rgba(0,255,255,0.6)"
+                        : "1px solid rgba(0,255,255,0.22)",
+                      backdropFilter: "blur(12px)",
+                      cursor: "pointer",
+                      width: "100%",
+                      textAlign: "left",
+                    }}
                   >
-                    {item.icon}
-                  </motion.span>
-                  <span style={{ color: "#ffffff" }}>{item.label}</span>
-                </motion.button>
-              ))}
+                    <motion.span style={{ fontSize: "1.7rem", color: isActive ? "#00ffff" : "#e0e0ff" }}>
+                      {item.icon}
+                    </motion.span>
+                    <span>{item.label}</span>
+                  </motion.button>
+                );
+              })}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
   );
-};
+}
 
 export default Navbar;

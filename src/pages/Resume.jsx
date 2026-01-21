@@ -1,52 +1,80 @@
 import { useState, useEffect, useRef } from 'react';
 import { 
   Download, Eye, FileText, Award, Code, Rocket, Star, Sparkles, 
-  X, CheckCircle, TrendingUp, Zap, Target, Brain, Flame, Trophy,
-  Briefcase, GraduationCap, Calendar, MapPin, Linkedin, Github, Mail
+  X, CheckCircle2, TrendingUp, Zap, Target, Brain, Trophy,
+  GraduationCap, Calendar, MapPin, Linkedin, Github, Mail,
+  Briefcase, Terminal, Database, Server, Code2, GitBranch,
+  ExternalLink, Users, Cpu, Cloud
 } from 'lucide-react';
 
 const RESUME_URL = "https://drive.google.com/file/d/1BfrC-GloabR5mOXuPb8mjkKQmya5luDE/preview";
 const RESUME_DOWNLOAD = "https://drive.google.com/uc?export=download&id=1BfrC-GloabR5mOXuPb8mjkKQmya5luDE";
 
-export default function FuturisticResume() {
+export default function CyberpunkResume() {
   const [showModal, setShowModal] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const [isVisible, setIsVisible] = useState(false);
-  const containerRef = useRef(null);
-  const sectionRef = useRef(null);
+  const [hoveredStat, setHoveredStat] = useState(null);
+  const canvasRef = useRef(null);
 
+  // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.1 }
-    );
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
 
-  useEffect(() => {
-    const handleMove = (e) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePos({
-        x: ((e.clientX - rect.left) / rect.width) * 100,
-        y: ((e.clientY - rect.top) / rect.height) * 100
+    const particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 2.8 + 1.2
+    }));
+
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
+        gradient.addColorStop(0, 'rgba(0, 255, 255, 0.38)');
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
+        ctx.fill();
       });
+
+      animationId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
+    animate();
+    window.addEventListener('resize', resize);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   const stats = [
-    { icon: GraduationCap, value: '8.5+', label: 'CGPA', color: '#fbbf24' },
-    { icon: Code, value: '30+', label: 'Technologies', color: '#06b6d4' },
-    { icon: Rocket, value: '6+', label: 'Projects', color: '#a855f7' },
-    { icon: Award, value: '13+', label: 'Certifications', color: '#ec4899' }
+    { icon: GraduationCap, value: '8.5+', label: 'CGPA', color: '#00ffff' },
+    { icon: Code, value: '30+', label: 'Technologies', color: '#8a2be2' },
+    { icon: Rocket, value: '6+', label: 'Projects', color: '#00ffff' },
+    { icon: Award, value: '13+', label: 'Certifications', color: '#8a2be2' }
   ];
 
-  const skills = [
+  const coreSkills = [
     { name: 'React', color: '#61DAFB' },
     { name: 'Node.js', color: '#339933' },
     { name: 'MongoDB', color: '#47A248' },
@@ -58,558 +86,392 @@ export default function FuturisticResume() {
   ];
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f0f1a 0%, #000000 100%)',
-        color: '#ffffff',
-        overflow: 'hidden',
-        position: 'relative',
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif'
-      }}
-    >
+    <>
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(2deg); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+        @keyframes slideIn { from { opacity:0; transform:translateY(60px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+        .stat-card {
+          transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.85; transform: scale(1.05); }
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes glow {
-          0%, 100% { filter: blur(60px) brightness(1); }
-          50% { filter: blur(90px) brightness(1.4); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+
+        .stat-card:hover {
+          transform: translateY(-12px) scale(1.04);
+          box-shadow: 0 0 60px currentColor;
         }
       `}</style>
 
-      {/* Subtle Background Effects */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        {/* Gradient Orbs */}
-        <div style={{
-          position: 'absolute',
-          width: '900px',
-          height: '900px',
-          top: '-15%',
-          right: '-15%',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.22), transparent 70%)',
-          filter: 'blur(100px)',
-          animation: 'float 24s ease-in-out infinite'
-        }} />
-        
-        <div style={{
-          position: 'absolute',
-          width: '700px',
-          height: '700px',
-          bottom: '-10%',
-          left: '-10%',
-          background: 'radial-gradient(circle, rgba(168,85,247,0.18), transparent 70%)',
-          filter: 'blur(90px)',
-          animation: 'float 28s ease-in-out infinite 6s'
-        }} />
-
-        {/* Grid Pattern */}
+      <div style={{
+        minHeight: '100vh',
+        background: '#000000',
+        color: '#e0e0ff',
+        position: 'relative',
+        overflow: 'hidden',
+        padding: '8rem 2rem 6rem',
+        fontFamily: "'Outfit', sans-serif"
+      }}>
+        {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(59,130,246,0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59,130,246,0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,255,255,0.09) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,255,0.09) 1px, transparent 1px)
           `,
-          backgroundSize: '80px 80px',
-          opacity: 0.25
+          backgroundSize: '60px 60px',
+          opacity: 0.22,
+          pointerEvents: 'none'
         }} />
-      </div>
 
-      <div ref={sectionRef} style={{
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '1600px',
-        margin: '0 auto',
-        padding: 'clamp(80px, 12vh, 140px) clamp(20px, 5vw, 60px)'
-      }}>
-        {/* Header */}
+        {/* Particles */}
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 1
+          }}
+        />
+
         <div style={{
-          textAlign: 'center',
-          marginBottom: 'clamp(60px, 10vh, 100px)',
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(-40px)',
-          transition: 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          position: 'relative',
+          zIndex: 10,
+          maxWidth: '1600px',
+          margin: '0 auto'
         }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '12px 32px',
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '999px',
-            border: '1px solid rgba(255,255,255,0.12)',
-            marginBottom: '32px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
-          }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
             <div style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: '#10b981',
-              animation: 'pulse 2s infinite',
-              boxShadow: '0 0 15px #10b981'
-            }} />
-            <span style={{
-              fontSize: '13px',
-              fontWeight: '900',
-              letterSpacing: '3px',
-              color: '#ffffff'
+              display: 'inline-block',
+              fontFamily: "'Fira Code', monospace",
+              color: '#00ffff',
+              fontSize: '1.15rem',
+              padding: '0.9rem 2rem',
+              border: '2.5px solid rgba(0,255,255,0.4)',
+              borderRadius: '999px',
+              marginBottom: '1.8rem',
+              animation: 'pulse 3.5s infinite'
             }}>
-              PROFESSIONAL RESUME 2026
-            </span>
-            <FileText size={20} style={{ color: '#3b82f6' }} />
-          </div>
+              {'>'} resume.display()
+            </div>
 
-          <h1 style={{
-            fontSize: 'clamp(3.5rem, 10vw, 7.5rem)',
-            fontWeight: '900',
-            lineHeight: 1,
-            marginBottom: '24px',
-            background: 'linear-gradient(90deg, #3b82f6, #a855f7, #ec4899, #3b82f6)',
-            backgroundSize: '300%',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            animation: 'shimmer 8s linear infinite',
-            textShadow: '0 0 60px rgba(59,130,246,0.4)'
-          }}>
-            Resume
-          </h1>
+            <h1 style={{
+              fontSize: 'clamp(4rem, 9vw, 7rem)',
+              fontWeight: 900,
+              color: '#00ffff',
+              letterSpacing: '5px',
+              textTransform: 'uppercase',
+              marginBottom: '1.5rem',
+              textShadow: '0 0 40px #00ffff90'
+            }}>
+              PROFESSIONAL RESUME
+            </h1>
 
-          <p style={{
-            fontSize: 'clamp(1.2rem, 2.8vw, 1.6rem)',
-            color: '#9ca3af',
-            maxWidth: '800px',
-            margin: '0 auto 40px',
-            lineHeight: 1.6
-          }}>
-            Artificial Intelligence & Data Science Engineer | Full-Stack Developer
-            <br />
-            <span style={{ color: '#3b82f6', fontWeight: '600' }}>
-              Building intelligent systems with production-grade code
-            </span>
-          </p>
-        </div>
+            <p style={{
+              fontSize: 'clamp(1.25rem, 2.8vw, 1.6rem)',
+              color: '#a0a0c8',
+              maxWidth: '820px',
+              margin: '0 auto 3rem',
+              fontFamily: "'Fira Code', monospace",
+              lineHeight: 1.8
+            }}>
+              AI & Data Science Engineer | Full-Stack Developer<br/>
+              Building intelligent, production-grade systems — 2026 edition
+            </p>
 
-        {/* Main Content Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 2fr',
-          gap: 'clamp(32px, 5vw, 64px)',
-          '@media (max-width: 1024px)': {
-            gridTemplateColumns: '1fr'
-          }
-        }}>
-          {/* Left Column - Stats & Actions */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'clamp(24px, 4vw, 40px)',
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s'
-          }}>
-            {/* Stats Cards */}
+            {/* Quick Stats */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '16px'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '1.5rem',
+              marginBottom: '4rem'
             }}>
               {stats.map((stat, i) => (
                 <div
                   key={i}
+                  className="stat-card"
+                  onMouseEnter={() => setHoveredStat(i)}
+                  onMouseLeave={() => setHoveredStat(null)}
                   style={{
-                    padding: 'clamp(20px, 3vw, 28px)',
-                    background: 'rgba(255,255,255,0.04)',
-                    backdropFilter: 'blur(20px)',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    padding: '1.8rem',
+                    background: 'rgba(0,0,0,0.65)',
+                    border: `2px solid ${stat.color}40`,
+                    borderRadius: '16px',
                     textAlign: 'center',
-                    transition: 'all 0.4s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translateY(-6px) scale(1.03)';
-                    e.currentTarget.style.boxShadow = `0 15px 40px rgba(0,0,0,0.3)`;
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    boxShadow: hoveredStat === i ? `0 0 50px ${stat.color}60` : 'none'
                   }}
                 >
-                  <stat.icon 
-                    size={32} 
-                    style={{ 
-                      color: stat.color,
-                      marginBottom: '12px',
-                      filter: `drop-shadow(0 0 8px ${stat.color}60)`
-                    }} 
-                  />
+                  <stat.icon size={36} style={{ color: stat.color, marginBottom: '1rem' }} />
                   <div style={{
-                    fontSize: 'clamp(1.8rem, 4vw, 2.2rem)',
-                    fontWeight: '900',
-                    color: '#ffffff',
-                    marginBottom: '4px'
+                    fontSize: '2.2rem',
+                    fontWeight: 900,
+                    color: stat.color
                   }}>
                     {stat.value}
                   </div>
-                  <div style={{
-                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
-                    color: '#9ca3af',
-                    fontWeight: '600'
-                  }}>
+                  <div style={{ color: '#b0b0d0', fontSize: '1.1rem' }}>
                     {stat.label}
                   </div>
                 </div>
               ))}
             </div>
+          </div>
 
-            {/* Skills Snapshot */}
-            <div style={{
-              padding: 'clamp(24px, 4vw, 32px)',
-              background: 'rgba(255,255,255,0.04)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}>
-              <h3 style={{
-                fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
-                fontWeight: '900',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}>
-                <Brain size={24} style={{ color: '#a855f7' }} />
-                Core Competencies
-              </h3>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: '12px'
-              }}>
-                {skills.map((skill, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: '10px 14px',
-                      background: 'rgba(255,255,255,0.06)',
-                      borderRadius: '12px',
-                      border: `1px solid ${skill.color}30`,
-                      textAlign: 'center',
-                      fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
-                      fontWeight: '600',
-                      color: '#e2e8f0',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    {skill.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
+          {/* Main Content - Mobile: stacked, Desktop: side-by-side */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 2fr',
+            gap: '3rem',
+            '@media (max-width: 1024px)': {
+              gridTemplateColumns: '1fr'
+            }
+          }}>
+            {/* Left Column - Info & Actions (stacks first on mobile) */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px'
+              gap: '2.5rem'
             }}>
-              <a
-                href={RESUME_DOWNLOAD}
-                style={{
-                  padding: 'clamp(14px, 3vw, 18px) clamp(24px, 5vw, 40px)',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #3b82f6, #a855f7, #ec4899)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  color: '#fff',
-                  fontWeight: '800',
-                  fontSize: 'clamp(1rem, 2.2vw, 1.2rem)',
-                  textDecoration: 'none',
-                  boxShadow: '0 12px 40px rgba(59,130,246,0.4)',
-                  transition: 'all 0.4s ease',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.6)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(59,130,246,0.4)';
-                }}
-              >
-                <Download size={22} />
-                Download Resume
-              </a>
-
-              <button
-                onClick={() => setShowModal(true)}
-                style={{
-                  padding: 'clamp(14px, 3vw, 18px) clamp(24px, 5vw, 40px)',
-                  borderRadius: '16px',
-                  background: 'rgba(255,255,255,0.08)',
-                  backdropFilter: 'blur(20px)',
-                  border: '2px solid rgba(255,255,255,0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  color: '#fff',
-                  fontWeight: '800',
-                  fontSize: 'clamp(1rem, 2.2vw, 1.2rem)',
-                  cursor: 'pointer',
-                  transition: 'all 0.4s ease'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
-                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(168,85,247,0.3)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <Eye size={22} />
-                View Fullscreen
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column - Resume Preview */}
-          <div style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s'
-          }}>
-            <div style={{ position: 'relative' }}>
-              {/* Animated Glow Border */}
+              {/* Core Skills */}
               <div style={{
-                position: 'absolute',
-                inset: '-6px',
-                borderRadius: '28px',
-                background: 'conic-gradient(from 0deg, #3b82f6, #a855f7, #ec4899, #3b82f6)',
-                animation: 'rotate 8s linear infinite',
-                opacity: 0.4,
-                filter: 'blur(25px)'
-              }} />
-
-              <div style={{
-                position: 'relative',
-                borderRadius: '24px',
-                overflow: 'hidden',
-                border: '2px solid rgba(255,255,255,0.15)',
-                background: '#000',
-                boxShadow: '0 30px 80px -10px rgba(0,0,0,0.7)'
+                padding: '2.2rem',
+                background: 'rgba(0,0,0,0.65)',
+                border: '2px solid rgba(0,255,255,0.3)',
+                borderRadius: '20px'
               }}>
-                {/* Status Indicators */}
-                <div style={{
-                  position: 'absolute',
-                  top: '16px',
-                  left: '16px',
-                  zIndex: 20,
-                  padding: '8px 20px',
-                  borderRadius: '999px',
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                <h3 style={{
+                  fontSize: '1.8rem',
+                  fontWeight: 800,
+                  color: '#00ffff',
+                  marginBottom: '1.8rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  fontSize: 'clamp(13px, 2vw, 15px)',
-                  fontWeight: '800',
-                  color: '#fff',
-                  boxShadow: '0 4px 20px rgba(16,185,129,0.4)'
+                  gap: '1rem'
                 }}>
-                  <CheckCircle size={16} />
-                  ATS Optimized • 92%
-                </div>
+                  <Brain size={28} />
+                  Core Stack
+                </h3>
 
                 <div style={{
-                  position: 'absolute',
-                  top: '16px',
-                  right: '16px',
-                  zIndex: 20,
-                  padding: '8px 20px',
-                  borderRadius: '999px',
-                  background: 'rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.2)',
                   display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  fontSize: 'clamp(13px, 2vw, 15px)',
-                  fontWeight: '800',
-                  color: '#fff'
-                }}>
-                  <div style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: '#10b981',
-                    animation: 'pulse 2s infinite',
-                    boxShadow: '0 0 12px #10b981'
-                  }} />
-                  LIVE PREVIEW
-                </div>
-
-                {/* Resume iframe */}
-                <div style={{
-                  position: 'relative',
-                  aspectRatio: '8.5 / 11',
-                  background: 'linear-gradient(135deg, #111827, #000)'
-                }}>
-                  <iframe
-                    src={RESUME_URL}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      background: '#fff'
-                    }}
-                    title="Professional Resume"
-                    allowFullScreen
-                  />
-
-                  {/* Subtle Scan Effect */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(180deg, transparent, rgba(59,130,246,0.08), transparent)',
-                    height: '120px',
-                    animation: 'scan 5s ease-in-out infinite',
-                    pointerEvents: 'none'
-                  }} />
-                </div>
-
-                {/* Bottom Info Bar */}
-                <div style={{
-                  padding: '16px 24px',
-                  background: 'rgba(255,255,255,0.04)',
-                  backdropFilter: 'blur(12px)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
                   flexWrap: 'wrap',
-                  gap: '16px'
+                  gap: '0.8rem'
                 }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    flexWrap: 'wrap'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontSize: 'clamp(13px, 2vw, 15px)'
-                    }}>
-                      <Calendar size={16} style={{ color: '#3b82f6' }} />
-                      Updated Jan 2026
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontSize: 'clamp(13px, 2vw, 15px)'
-                    }}>
-                      <MapPin size={16} style={{ color: '#ec4899' }} />
-                      Vijayawada, India
-                    </div>
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    gap: '16px'
-                  }}>
-                    <a
-                      href="https://linkedin.com/in/bhagavan"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {coreSkills.map((skill, i) => (
+                    <span
+                      key={i}
                       style={{
-                        color: '#0a66c2',
-                        transition: 'transform 0.3s'
+                        padding: '0.7rem 1.4rem',
+                        background: 'rgba(0,0,0,0.55)',
+                        border: `1.5px solid ${skill.color}50`,
+                        borderRadius: '999px',
+                        fontSize: '0.95rem',
+                        fontWeight: 600,
+                        color: '#e0e0ff'
                       }}
-                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
-                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                     >
-                      <Linkedin size={20} />
-                    </a>
-                    <a
-                      href="https://github.com/bhagavan444"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: '#ffffff',
-                        transition: 'transform 0.3s'
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
-                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                    >
-                      <Github size={20} />
-                    </a>
-                  </div>
+                      {skill.name}
+                    </span>
+                  ))}
                 </div>
               </div>
+
+              {/* Action Buttons - bigger on mobile */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem'
+              }}>
+                <a
+                  href={RESUME_DOWNLOAD}
+                  style={{
+                    padding: '1.4rem',
+                    background: 'linear-gradient(90deg, #00ffff, #8a2be2)',
+                    borderRadius: '999px',
+                    color: '#000',
+                    fontWeight: 900,
+                    fontSize: '1.25rem',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                    boxShadow: '0 0 50px #00ffff60',
+                    transition: 'all 0.4s'
+                  }}
+                >
+                  <Download size={28} />
+                  Download Resume
+                </a>
+
+                <button
+                  onClick={() => setShowModal(true)}
+                  style={{
+                    padding: '1.4rem',
+                    background: 'rgba(0,255,255,0.14)',
+                    border: '2.5px solid #00ffff80',
+                    borderRadius: '999px',
+                    color: '#00ffff',
+                    fontWeight: 700,
+                    fontSize: '1.25rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Eye size={28} />
+                  View Fullscreen
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column - Resume Preview (full width on mobile) */}
+            <div style={{
+              borderRadius: '24px',
+              overflow: 'hidden',
+              border: '2px solid rgba(0,255,255,0.3)',
+              background: '#000',
+              boxShadow: '0 0 80px rgba(0,255,255,0.3)',
+              position: 'relative'
+            }}>
+              {/* Status Bar */}
+              <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0,
+                padding: '1rem 2rem',
+                background: 'rgba(0,0,0,0.7)',
+                backdropFilter: 'blur(12px)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                zIndex: 20,
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  fontSize: '1rem'
+                }}>
+                  <CheckCircle2 size={20} style={{ color: '#00ffff' }} />
+                  ATS Score: 92%
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1.5rem'
+                }}>
+                  <a href="https://linkedin.com/in/your-profile" target="_blank" style={{ color: '#00ffff' }}>
+                    <Linkedin size={22} />
+                  </a>
+                  <a href="https://github.com/bhagavan444" target="_blank" style={{ color: '#ffffff' }}>
+                    <Github size={22} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Resume iframe */}
+              <iframe
+                src={RESUME_URL}
+                style={{
+                  width: '100%',
+                  height: 'clamp(800px, 85vh, 1200px)',
+                  border: 'none',
+                  background: '#fff'
+                }}
+                title="Professional Resume 2026"
+                allowFullScreen
+              />
+
+              {/* Scanline overlay */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                background: 'linear-gradient(to bottom, transparent, rgba(0,255,255,0.08), transparent)',
+                height: '120px',
+                animation: 'scan 6s linear infinite'
+              }} />
             </div>
           </div>
         </div>
+
+        {/* Floating CTA on mobile */}
+        <div style={{
+          position: 'fixed',
+          bottom: '2rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '1.5rem',
+          zIndex: 100,
+          '@media (min-width: 768px)': { display: 'none' }
+        }}>
+          <button
+            onClick={() => setShowModal(true)}
+            style={{
+              padding: '1rem 1.8rem',
+              background: 'rgba(0,255,255,0.2)',
+              border: '2px solid #00ffff',
+              borderRadius: '999px',
+              color: '#00ffff',
+              fontWeight: 700,
+              backdropFilter: 'blur(12px)'
+            }}
+          >
+            <Eye size={24} />
+          </button>
+
+          <a
+            href={RESUME_DOWNLOAD}
+            style={{
+              padding: '1rem 2rem',
+              background: 'linear-gradient(90deg, #00ffff, #8a2be2)',
+              borderRadius: '999px',
+              color: '#000',
+              fontWeight: 900,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.8rem',
+              boxShadow: '0 0 30px #00ffff60'
+            }}
+          >
+            <Download size={24} />
+            Download
+          </a>
+        </div>
       </div>
 
-      {/* Fullscreen Modal */}
+      {/* ─── FULLSCREEN MODAL ────────────────────────────────────────────────── */}
       {showModal && (
         <div
           onClick={() => setShowModal(false)}
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: 1000,
-            background: 'rgba(0,0,0,0.97)',
-            backdropFilter: 'blur(40px)',
+            background: 'rgba(0,0,0,0.96)',
+            backdropFilter: 'blur(16px)',
+            zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: 'clamp(20px, 5vw, 40px)'
+            justifyContent: 'center'
           }}
         >
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              position: 'relative',
               width: '100%',
-              maxWidth: '1200px',
-              height: '90vh',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              border: '3px solid rgba(255,255,255,0.2)',
-              boxShadow: '0 50px 100px rgba(0,0,0,0.8)',
+              height: '100vh',
+              position: 'relative',
               background: '#000'
             }}
           >
@@ -620,7 +482,7 @@ export default function FuturisticResume() {
                 height: '100%',
                 border: 'none'
               }}
-              title="Professional Resume - Fullscreen"
+              title="Resume - Fullscreen View"
               allowFullScreen
             />
 
@@ -628,29 +490,26 @@ export default function FuturisticResume() {
               onClick={() => setShowModal(false)}
               style={{
                 position: 'absolute',
-                top: '20px',
-                right: '20px',
-                width: '56px',
-                height: '56px',
-                background: 'rgba(239,68,68,0.9)',
+                top: '1.5rem',
+                right: '1.5rem',
+                width: '60px',
+                height: '60px',
+                background: 'rgba(255,80,80,0.9)',
                 borderRadius: '50%',
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                boxShadow: '0 10px 30px rgba(239,68,68,0.5)',
-                transition: 'all 0.3s ease',
+                boxShadow: '0 0 30px rgba(255,80,80,0.6)',
                 zIndex: 10
               }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
-              <X size={28} color="#fff" />
+              <X size={32} color="#fff" />
             </button>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

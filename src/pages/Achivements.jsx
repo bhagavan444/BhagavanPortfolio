@@ -1,597 +1,464 @@
-// Achievements.jsx
 import { useState, useEffect, useRef } from "react";
 import {
-  Trophy,
-  Award,
-  Users,
-  Target,
-  TrendingUp,
-  Zap,
-  Star,
-  Medal,
-  Sparkles,
+  Trophy, Award, Users, Target, TrendingUp, Zap, Star, Medal,
+  Sparkles, X, CheckCircle2, Rocket, Brain, Code2, Flame
 } from "lucide-react";
 
 const achievements = [
   {
+    id: 1,
     icon: Trophy,
-    title: "National Hackathon Experience",
+    title: "National Hackathon Champion",
     highlight: "24-Hour High-Pressure Build",
     description:
       "Selected as a core full-stack developer in a national-level 24-hour hackathon. Designed system architecture, implemented authentication flows, built REST APIs, and developed responsive React interfaces for a MERN-based electronics marketplace...",
-    color: "linear-gradient(135deg, #eab308, #f97316)",
-    glowColor: "#ff9500",
+    color: "#00ffff",
   },
   {
+    id: 2,
     icon: Award,
     title: "Industry Certifications",
     highlight: "15+ Professional Credentials",
     description:
       "Earned 15+ industry-recognized certifications spanning Generative AI, Machine Learning, Cloud Computing, MERN Stack, DevOps, Data Science, and Software Engineering fundamentals...",
-    color: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-    glowColor: "#00bfff",
+    color: "#8a2be2",
   },
   {
+    id: 3,
     icon: Users,
-    title: "Hands-On Technical Workshops",
-    highlight: "Applied Learning",
+    title: "Technical Workshop Participation",
+    highlight: "Applied Learning & Collaboration",
     description:
       "Actively participated in hands-on technical workshops focused on Machine Learning, Deep Learning, Full-Stack Web Development, and Mobile Application Development...",
-    color: "linear-gradient(135deg, #a855f7, #ec4899)",
-    glowColor: "#c44ce8",
+    color: "#00ffff",
   },
   {
+    id: 4,
     icon: Target,
-    title: "Project Delivery",
-    highlight: "Production-Style Systems",
+    title: "Production-Grade Project Delivery",
+    highlight: "End-to-End Execution",
     description:
       "Successfully designed, developed, and delivered 8+ end-to-end projects across AI/ML and full-stack domains. Implemented JWT-secured APIs, OAuth-based authentication...",
-    color: "linear-gradient(135deg, #10b981, #14b8a6)",
-    glowColor: "#00d9a6",
-  },
+    color: "#8a2be2",
+  }
 ];
 
 const metrics = [
-  { label: "Production Projects", value: "5+", icon: Zap, color: "#ffaa00" },
-  { label: "Technologies Used", value: "30+", icon: Star, color: "#ff00ff" },
-  { label: "Lines of Code", value: "10K+", icon: TrendingUp, color: "#00ffff" },
-  { label: "Problem-Solving", value: "4★", icon: Medal, color: "#00ff88" },
+  { label: "Production Projects", value: "5+", icon: Rocket, color: "#00ffff" },
+  { label: "Technologies Mastered", value: "30+", icon: Zap, color: "#8a2be2" },
+  { label: "Total Lines of Code", value: "10K+", icon: Code2, color: "#00ffff" },
+  { label: "Problem-Solving Rating", value: "4★", icon: Medal, color: "#8a2be2" }
 ];
 
-export default function Achievements() {
-  const [inView, setInView] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [hoveredMetric, setHoveredMetric] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const sectionRef = useRef(null);
+export default function CyberpunkAchievements() {
+  const [hoveredId, setHoveredId] = useState(null);
+  const [activeMetric, setActiveMetric] = useState(null);
+  const canvasRef = useRef(null);
 
+  // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
-      },
-      { threshold: 0.05, rootMargin: "50px" }
-    );
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    const particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 2.8 + 1.2
+    }));
+
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
+        gradient.addColorStop(0, 'rgba(0, 255, 255, 0.38)');
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+    window.addEventListener('resize', resize);
 
     return () => {
-      window.removeEventListener("resize", checkMobile);
-      observer.disconnect();
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      style={{
-        position: "relative",
-        padding: "80px 24px",
-        background: "linear-gradient(135deg, #020617, #0f172a, #020617)",
-        overflow: "hidden",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Background Effects */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        {/* Twinkling stars */}
-        {[...Array(isMobile ? 25 : 50)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: "absolute",
-              width: "2px",
-              height: "2px",
-              backgroundColor: "white",
-              borderRadius: "50%",
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.3 + Math.random() * 0.5,
-              animation: `twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
-          />
-        ))}
-
-        {/* Energy orbs */}
-        <div
-          style={{
-            position: "absolute",
-            top: "25%",
-            right: "25%",
-            width: isMobile ? "160px" : "384px",
-            height: isMobile ? "160px" : "384px",
-            borderRadius: "50%",
-            backgroundColor: "rgba(34,211,238,0.2)",
-            filter: "blur(48px)",
-            animation: "energy-pulse 7s ease-in-out infinite",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "25%",
-            left: "25%",
-            width: isMobile ? "160px" : "384px",
-            height: isMobile ? "160px" : "384px",
-            borderRadius: "50%",
-            backgroundColor: "rgba(168,85,247,0.2)",
-            filter: "blur(48px)",
-            animation: "energy-pulse-delayed 7s ease-in-out infinite",
-          }}
-        />
-
-        {/* Subtle grid (desktop only) */}
-        {!isMobile && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage:
-                "linear-gradient(to right, rgba(0,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,255,255,0.03) 1px, transparent 1px)",
-              backgroundSize: "50px 50px",
-              maskImage: "radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent)",
-            }}
-          />
-        )}
-      </div>
-
-      <div style={{ position: "relative", maxWidth: "1280px", margin: "0 auto", zIndex: 10 }}>
-        {/* Header */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "96px",
-            opacity: inView ? 1 : 0,
-            transform: inView ? "translateY(0)" : "translateY(32px)",
-            transition: "all 0.7s ease-out",
-          }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "12px 32px",
-              borderRadius: "9999px",
-              border: "2px solid rgba(34,211,238,0.3)",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              backdropFilter: "blur(16px)",
-              marginBottom: "32px",
-              animation: "badge-glow 2.5s ease-in-out infinite",
-            }}
-          >
-            <Sparkles
-              size={20}
-              color="#22d3ee"
-              style={{ animation: "sparkle-rotate 2.5s linear infinite" }}
-            />
-            <span
-              style={{
-                fontSize: "14px",
-                fontWeight: "bold",
-                letterSpacing: "0.2em",
-                background: "linear-gradient(90deg, #22d3ee, #a855f7, #ec4899)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                animation: "text-shimmer 3.5s linear infinite",
-                backgroundSize: "200% auto",
-              }}
-            >
-              TALENT SHOWCASE
-            </span>
-            <Sparkles
-              size={20}
-              color="#ec4899"
-              style={{ animation: "sparkle-rotate-reverse 2.5s linear infinite" }}
-            />
-          </div>
-
-          <h2 style={{ fontSize: "4.5rem", fontWeight: "900", lineHeight: 1.1, marginBottom: "24px" }}>
-            <span
-              style={{
-                display: "block",
-                color: "white",
-                textShadow: "0 0 20px rgba(255,255,255,0.3)",
-                animation: "title-pulse 2.5s ease-in-out infinite",
-              }}
-            >
-              Proof of
-            </span>
-            <span
-              style={{
-                background: "linear-gradient(90deg, #22d3ee, #a855f7, #ec4899)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundSize: "300% auto",
-                animation: "gradient-mega 5s linear infinite",
-                textShadow: "0 0 30px rgba(0,255,255,0.4)",
-              }}
-            >
-              execution & impact
-            </span>
-          </h2>
-
-          <p
-            style={{
-              fontSize: "1.25rem",
-              color: "#9ca3af",
-              maxWidth: "48rem",
-              margin: "0 auto",
-              lineHeight: "1.6",
-            }}
-          >
-            Real outcomes achieved through{" "}
-            <span style={{ color: "#22d3ee", fontWeight: "600", animation: "word-glow 1.8s ease-in-out infinite" }}>
-              learning velocity
-            </span>
-            ,{" "}
-            <span
-              style={{
-                color: "#a855f7",
-                fontWeight: "600",
-                animation: "word-glow 1.8s ease-in-out infinite 0.5s",
-              }}
-            >
-              execution under pressure
-            </span>
-            , and{" "}
-            <span
-              style={{
-                color: "#ec4899",
-                fontWeight: "600",
-                animation: "word-glow 1.8s ease-in-out infinite 1s",
-              }}
-            >
-              production-style thinking
-            </span>
-          </p>
-        </div>
-
-        {/* Metrics Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: "16px",
-            marginBottom: "96px",
-          }}
-        >
-          {metrics.map((m, i) => {
-            const Icon = m.icon;
-            const isHovered = hoveredMetric === i;
-
-            return (
-              <div
-                key={i}
-                onMouseEnter={() => !isMobile && setHoveredMetric(i)}
-                onMouseLeave={() => !isMobile && setHoveredMetric(null)}
-                onTouchStart={() => !isMobile && setHoveredMetric(i)}
-                style={{
-                  position: "relative",
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? "translateY(0)" : "translateY(48px)",
-                  transition: `all 0.6s ease-out ${i * 80}ms`,
-                  cursor: "pointer",
-                }}
-              >
-                {isHovered && !isMobile && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: "-16px",
-                      borderRadius: "16px",
-                      background: `radial-gradient(circle, ${m.color}60, transparent)`,
-                      filter: "blur(24px)",
-                    }}
-                  />
-                )}
-
-                <div
-                  style={{
-                    position: "relative",
-                    padding: "20px",
-                    background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))",
-                    backdropFilter: "blur(24px)",
-                    border: isHovered ? "1px solid rgba(255,255,255,0.4)" : "1px solid rgba(255,255,255,0.2)",
-                    borderRadius: "16px",
-                    transition: "all 0.4s",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "56px",
-                      height: "56px",
-                      margin: "0 auto 16px",
-                      borderRadius: "12px",
-                      background: `linear-gradient(135deg, ${m.color}30, transparent)`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: isHovered ? `0 0 20px ${m.color}80` : "none",
-                      transform: isHovered ? "scale(1.1) rotate(12deg)" : "scale(1)",
-                      transition: "all 0.4s",
-                    }}
-                  >
-                    <Icon size={28} color={m.color} style={{ animation: "icon-float 1.8s ease-in-out infinite" }} />
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: "2.25rem",
-                      fontWeight: "900",
-                      textAlign: "center",
-                      color: isHovered ? m.color : "white",
-                      textShadow: isHovered ? `0 0 12px ${m.color}` : "none",
-                      transition: "all 0.3s",
-                    }}
-                  >
-                    {m.value}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: "14px",
-                      color: "#94a3b8",
-                      textAlign: "center",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {m.label}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Achievements Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-            gap: "32px",
-          }}
-        >
-          {achievements.map((ach, i) => {
-            const Icon = ach.icon;
-            const isHovered = hoveredIndex === i;
-
-            return (
-              <div
-                key={i}
-                onMouseEnter={() => !isMobile && setHoveredIndex(i)}
-                onMouseLeave={() => !isMobile && setHoveredIndex(null)}
-                onTouchStart={() => !isMobile && setHoveredIndex(i)}
-                style={{
-                  position: "relative",
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? "translateY(0)" : "translateY(48px)",
-                  transition: `all 0.7s ease-out ${350 + i * 120}ms`,
-                }}
-              >
-                {isHovered && !isMobile && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: "-32px",
-                      borderRadius: "24px",
-                      background: `radial-gradient(circle, ${ach.glowColor}60, transparent 70%)`,
-                      filter: "blur(32px)",
-                      transition: "all 0.5s",
-                    }}
-                  />
-                )}
-
-                <div
-                  style={{
-                    position: "relative",
-                    padding: "32px",
-                    background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))",
-                    backdropFilter: "blur(24px)",
-                    border: isHovered ? "1px solid rgba(255,255,255,0.4)" : "1px solid rgba(255,255,255,0.2)",
-                    borderRadius: "24px",
-                    transition: "all 0.4s",
-                    overflow: "hidden",
-                  }}
-                >
-                  {/* Icon container */}
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "80px",
-                      height: "80px",
-                      marginBottom: "24px",
-                      borderRadius: "16px",
-                      background: ach.color,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: isHovered ? `0 15px 45px ${ach.glowColor}` : `0 8px 25px ${ach.glowColor}40`,
-                      transform: isHovered ? "scale(1.1) rotate(360deg)" : "scale(1)",
-                      transition: "all 0.6s",
-                    }}
-                  >
-                    <Icon size={40} color="white" style={{ animation: "icon-bounce 1.8s ease-in-out infinite" }} />
-                  </div>
-
-                  {/* Title */}
-                  <h3
-                    style={{
-                      fontSize: "1.75rem",
-                      fontWeight: "bold",
-                      marginBottom: "16px",
-                      color: isHovered ? "white" : "#f3f4f6",
-                      textShadow: isHovered ? `0 0 15px ${ach.glowColor}40` : "none",
-                      transition: "all 0.3s",
-                    }}
-                  >
-                    {ach.title}
-                  </h3>
-
-                  {/* Highlight badge */}
-                  <div
-                    style={{
-                      display: "inline-block",
-                      padding: "8px 20px",
-                      marginBottom: "16px",
-                      borderRadius: "12px",
-                      background: ach.color,
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      border: isHovered ? "1px solid rgba(255,255,255,0.4)" : "1px solid rgba(255,255,255,0.2)",
-                      fontSize: "13px",
-                      fontWeight: "bold",
-                      transition: "all 0.3s",
-                    }}
-                  >
-                    {ach.highlight}
-                  </div>
-
-                  {/* Description */}
-                  <p style={{ fontSize: "15px", color: "#9ca3af", lineHeight: "1.6" }}>
-                    {ach.description}
-                  </p>
-
-                  {/* Corner decorations */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "12px",
-                      right: "12px",
-                      width: "40px",
-                      height: "40px",
-                      borderTop: `2px solid ${isHovered ? ach.glowColor : "rgba(255,255,255,0.1)"}`,
-                      borderRight: `2px solid ${isHovered ? ach.glowColor : "rgba(255,255,255,0.1)"}`,
-                      borderTopRightRadius: "12px",
-                      animation: isHovered ? "corner-1 1.8s ease-in-out infinite" : "none",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "12px",
-                      left: "12px",
-                      width: "40px",
-                      height: "40px",
-                      borderBottom: `2px solid ${isHovered ? ach.glowColor : "rgba(255,255,255,0.1)"}`,
-                      borderLeft: `2px solid ${isHovered ? ach.glowColor : "rgba(255,255,255,0.1)"}`,
-                      borderBottomLeftRadius: "12px",
-                      animation: isHovered ? "corner-2 1.8s ease-in-out infinite 0.4s" : "none",
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* CTA */}
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "96px",
-            opacity: inView ? 1 : 0,
-            transform: inView ? "translateY(0)" : "translateY(24px)",
-            transition: "all 0.7s ease-out 900ms",
-          }}
-        >
-          <a
-            href="#projects"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "16px 32px",
-              borderRadius: "9999px",
-              background: "linear-gradient(135deg, #06b6d4, #a855f7)",
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "1.125rem",
-              transition: "all 0.3s",
-            }}
-          >
-            <span>Explore Real Projects</span>
-            <TrendingUp size={24} />
-          </a>
-        </div>
-      </div>
-
+    <>
       <style>{`
-        @keyframes twinkle {
-          0%,100% { opacity: 0.2; }
-          50%     { opacity: 1; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+        @keyframes slideIn { from { opacity:0; transform:translateY(60px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+
+        .achieve-card {
+          position: relative;
+          background: rgba(8,8,22,0.84);
+          border: 2px solid rgba(0,255,255,0.24);
+          border-radius: 24px;
+          overflow: hidden;
+          transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
         }
-        @keyframes energy-pulse {
-          0%,100% { transform: scale(1); opacity: 0.2; }
-          50%     { transform: scale(1.15); opacity: 0.35; }
+
+        .achieve-card:hover {
+          transform: translateY(-20px) scale(1.04);
+          border-color: currentColor;
+          box-shadow: 0 0 80px currentColor;
         }
-        @keyframes badge-glow {
-          0%,100% { box-shadow: 0 0 12px rgba(0,255,255,0.25); }
-          50%     { box-shadow: 0 0 25px rgba(0,255,255,0.5), 0 0 40px rgba(255,0,255,0.25); }
+
+        .achieve-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, transparent 35%, rgba(0,255,255,0.15) 50%, transparent 65%);
+          animation: scan 6s linear infinite;
+          pointer-events: none;
+          z-index: 1;
         }
-        @keyframes sparkle-rotate {
-          0%   { transform: rotate(0deg) scale(1); }
-          50%  { transform: rotate(180deg) scale(1.15); }
-          100% { transform: rotate(360deg) scale(1); }
+
+        .metric-pill {
+          background: rgba(0,0,0,0.72);
+          border: 1.5px solid currentColor;
+          padding: 0.55rem 1.15rem;
+          border-radius: 999px;
+          font-family: 'Fira Code',monospace;
+          font-size: 0.9rem;
+          transition: all 0.3s;
         }
-        @keyframes text-shimmer {
-          0%   { background-position: 0% 50%; }
-          100% { background-position: 200% 50%; }
+
+        .metric-pill:hover {
+          transform: scale(1.08);
+          box-shadow: 0 0 28px currentColor;
         }
-        @keyframes title-pulse {
-          0%,100% { filter: drop-shadow(0 0 25px rgba(255,255,255,0.3)); }
-          50%     { filter: drop-shadow(0 0 40px rgba(255,255,255,0.5)); }
-        }
-        @keyframes gradient-mega {
-          0%,100% { background-position: 0% 50%; }
-          50%     { background-position: 300% 50%; }
-        }
-        @keyframes word-glow {
-          0%,100% { text-shadow: 0 0 8px currentColor; }
-          50%     { text-shadow: 0 0 16px currentColor; }
-        }
-        @keyframes icon-float {
-          0%,100% { transform: translateY(0); }
-          50%     { transform: translateY(-4px); }
-        }
-        @keyframes icon-bounce {
-          0%,100% { transform: scale(1); }
-          50%     { transform: scale(1.08); }
-        }
-        @keyframes corner-1 {
-          0%,100% { opacity: 0.4; box-shadow: 0 0 0; }
-          50%     { opacity: 0.9; box-shadow: 0 0 12px currentColor; }
-        }
-        @keyframes corner-2 {
-          0%,100% { opacity: 0.4; box-shadow: 0 0 0; }
-          50%     { opacity: 0.9; box-shadow: 0 0 12px currentColor; }
+
+        .neon-title {
+          text-shadow: 0 0 14px currentColor, 0 0 32px currentColor, 0 0 60px currentColor;
         }
       `}</style>
-    </section>
+
+      <div style={{
+        minHeight: '100vh',
+        background: '#000000',
+        color: '#e0e0ff',
+        position: 'relative',
+        overflow: 'hidden',
+        padding: '8rem 3rem 6rem',
+        fontFamily: "'Outfit', sans-serif"
+      }}>
+        {/* Grid overlay */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(0,255,255,0.09) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,255,0.09) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+          opacity: 0.22,
+          pointerEvents: 'none'
+        }} />
+
+        {/* Particles */}
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 1
+          }}
+        />
+
+        <div style={{
+          position: 'relative',
+          zIndex: 10,
+          maxWidth: '1680px',
+          margin: '0 auto'
+        }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '7rem' }}>
+            <div style={{
+              display: 'inline-block',
+              fontFamily: "'Fira Code', monospace",
+              color: '#00ffff',
+              fontSize: '1.15rem',
+              padding: '0.9rem 2rem',
+              border: '2.5px solid rgba(0,255,255,0.4)',
+              borderRadius: '999px',
+              marginBottom: '1.8rem',
+              animation: 'pulse 3.5s infinite'
+            }}>
+              {'>'} achievements.unlock()
+            </div>
+
+            <h1 className="neon-title" style={{
+              fontSize: 'clamp(4rem, 9vw, 7rem)',
+              fontWeight: 900,
+              color: '#00ffff',
+              letterSpacing: '5px',
+              textTransform: 'uppercase',
+              marginBottom: '1.8rem'
+            }}>
+              PROOF OF IMPACT
+            </h1>
+
+            <p style={{
+              fontSize: 'clamp(1.25rem, 2.8vw, 1.6rem)',
+              color: '#a0a0c8',
+              maxWidth: '820px',
+              margin: '0 auto',
+              fontFamily: "'Fira Code', monospace",
+              lineHeight: 1.8
+            }}>
+              [ National wins • certifications • production delivery ]<br/>
+              Execution velocity logged — 2026 edition
+            </p>
+          </div>
+
+          {/* Metrics Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '2rem',
+            marginBottom: '7rem'
+          }}>
+            {metrics.map((metric, i) => {
+              const isHovered = activeMetric === i;
+              const color = metric.color;
+
+              return (
+                <div
+                  key={i}
+                  onMouseEnter={() => setActiveMetric(i)}
+                  onMouseLeave={() => setActiveMetric(null)}
+                  style={{
+                    padding: '2rem',
+                    background: 'rgba(0,0,0,0.65)',
+                    border: `2px solid ${color}40`,
+                    borderRadius: '20px',
+                    textAlign: 'center',
+                    boxShadow: isHovered ? `0 0 60px ${color}60` : 'none',
+                    transition: 'all 0.4s'
+                  }}
+                >
+                  <metric.icon size={44} style={{ color, marginBottom: '1.2rem' }} />
+                  <div style={{
+                    fontSize: '2.4rem',
+                    fontWeight: 900,
+                    color,
+                    marginBottom: '0.6rem'
+                  }}>
+                    {metric.value}
+                  </div>
+                  <div style={{ color: '#b0b0d0', fontSize: '1.1rem' }}>
+                    {metric.label}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Achievements Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+            gap: '3rem',
+            marginBottom: '7rem'
+          }}>
+            {achievements.map((ach, i) => {
+              const isHovered = hoveredId === ach.id;
+              const color = ach.color;
+
+              return (
+                <div
+                  key={ach.id}
+                  className="achieve-card"
+                  onMouseEnter={() => setHoveredId(ach.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  style={{
+                    color,
+                    animation: `slideIn ${0.6 + i * 0.15}s ease-out`,
+                    opacity: 0,
+                    animationFillMode: 'forwards',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {/* Top glowing scan */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0,
+                    height: '5px',
+                    background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+                    opacity: isHovered ? 0.95 : 0.45,
+                    transition: 'opacity 0.5s'
+                  }} />
+
+                  {/* Icon showcase */}
+                  <div style={{
+                    height: '260px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: `linear-gradient(135deg, ${color}15, transparent)`
+                  }}>
+                    <div style={{
+                      width: '140px',
+                      height: '140px',
+                      border: `3px solid ${color}`,
+                      borderRadius: '32px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      animation: isHovered ? 'float 3s ease-in-out infinite' : 'none',
+                      boxShadow: isHovered ? `0 0 60px ${color}80` : 'none',
+                      transform: isHovered ? 'scale(1.15) rotate(6deg)' : 'scale(1)'
+                    }}>
+                      <ach.icon size={72} />
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '2.4rem 2.6rem' }}>
+                    <h3 style={{
+                      fontSize: '1.9rem',
+                      fontWeight: 800,
+                      color: '#ffffff',
+                      marginBottom: '1rem',
+                      textAlign: 'center'
+                    }}>
+                      {ach.title}
+                    </h3>
+
+                    <div style={{
+                      fontSize: '1.3rem',
+                      fontWeight: 700,
+                      color,
+                      textAlign: 'center',
+                      marginBottom: '1.5rem'
+                    }}>
+                      {ach.highlight}
+                    </div>
+
+                    <p style={{
+                      fontSize: '1rem',
+                      color: '#b0b0d0',
+                      lineHeight: 1.7,
+                      textAlign: 'center',
+                      marginBottom: '2rem',
+                      fontFamily: "'Fira Code', monospace"
+                    }}>
+                      {ach.description}
+                    </p>
+
+                    {/* Action button */}
+                    <button
+                      style={{
+                        width: '100%',
+                        padding: '1.2rem',
+                        background: `linear-gradient(90deg, ${color}, #ffffff)`,
+                        color: '#000',
+                        fontWeight: 800,
+                        borderRadius: '999px',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '1rem',
+                        boxShadow: `0 0 40px ${color}60`,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Sparkles size={22} />
+                      View Full Achievement
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CTA Bar */}
+          <div style={{
+            padding: '4rem',
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,255,255,0.3)',
+            borderRadius: '28px',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(3rem, 7vw, 4.8rem)',
+              fontWeight: 900,
+              color: '#00ffff',
+              marginBottom: '2.5rem',
+              textShadow: '0 0 40px #00ffff90'
+            }}>
+              CONTINUE EXECUTING?
+            </h2>
+
+            <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="#projects" style={{
+                padding: '1.4rem 3.2rem',
+                background: 'rgba(0,255,255,0.14)',
+                border: '2.5px solid #00ffff80',
+                borderRadius: '999px',
+                color: '#00ffff',
+                fontWeight: 700,
+                fontSize: '1.25rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.2rem'
+              }}>
+                <Rocket size={32} />
+                SEE LIVE PROJECTS
+              </a>
+
+              <a href="mailto:g.sivasatyasaibhagavan@gmail.com" style={{
+                padding: '1.4rem 3.2rem',
+                background: 'linear-gradient(90deg, #00ffff, #8a2be2)',
+                borderRadius: '999px',
+                color: '#000',
+                fontWeight: 900,
+                fontSize: '1.25rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.2rem'
+              }}>
+                <Brain size={32} />
+                LET'S COLLABORATE
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

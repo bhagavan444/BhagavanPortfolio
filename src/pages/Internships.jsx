@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink, Code, Database, Brain, Sparkles, Award, Zap, Eye, X, CheckCircle2, Layers, Terminal, GitBranch } from 'lucide-react';
+import {
+  Code, Brain, Database, Terminal, Award, ExternalLink, X,
+  CheckCircle2, Layers, Sparkles, Zap, Github
+} from 'lucide-react';
 
 const internships = [
   {
     id: 1,
     title: "MERN Stack Intern",
     company: "StudyOwl Education Pvt Ltd",
-    period: "May–July 2025",
+    period: "May – July 2025",
     badge: "Full-Stack Pro",
     certId: "1bwbNlc9mdPYQOIyUpoiBIOhpyxaMBvbC",
-    color: "#06b6d4",
-    gradientStart: "#06b6d4",
-    gradientEnd: "#3b82f6",
+    color: "#00ffff",
     tech: ["MongoDB", "Express", "React", "Node.js", "JWT"],
     achievements: ["Built 3+ Apps", "JWT Auth", "REST APIs", "Cloud Deploy"],
     icon: Code
@@ -20,12 +21,10 @@ const internships = [
     id: 2,
     title: "AI/ML Intern",
     company: "SmartBridge (Remote)",
-    period: "May–June 2025",
+    period: "May – June 2025",
     badge: "AI Engineer",
     certId: "1-_8ZI8uZ3DcrFpfZ3pts7VSYrAqPN5Zw",
-    color: "#a855f7",
-    gradientStart: "#a855f7",
-    gradientEnd: "#ec4899",
+    color: "#8a2be2",
     tech: ["Python", "TensorFlow", "Scikit-learn", "CNN", "Flask"],
     achievements: ["5+ Models", "CNNs", "85%+ Accuracy", "Deployment"],
     icon: Brain
@@ -34,921 +33,555 @@ const internships = [
     id: 3,
     title: "ML & Data Science Intern",
     company: "Blackbucks (Remote)",
-    period: "May–June 2024",
+    period: "May – June 2024",
     badge: "Data Specialist",
     certId: "1yQQqBf32o8d3sYlheDCdaLTKj5_hepfY",
-    color: "#10b981",
-    gradientStart: "#10b981",
-    gradientEnd: "#06b6d4",
+    color: "#00ffff",
     tech: ["Python", "Pandas", "Scikit-learn", "Data Analysis"],
     achievements: ["ML Models", "Data Preprocessing", "Feature Engineering", "Model Evaluation"],
     icon: Database
   }
 ];
 
-const Internships = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [activeCard, setActiveCard] = useState(0);
-  const [modalOpen, setModalOpen] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const containerRef = useRef(null);
-  const sectionRef = useRef(null);
+export default function CyberpunkInternships() {
+  const [hoveredId, setHoveredId] = useState(null);
+  const [activeCert, setActiveCert] = useState(null);
   const canvasRef = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-
-    const handleMouseMove = (e) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setMousePos({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        });
-      }
-    };
-
-    const handleScroll = () => setScrollY(window.scrollY);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // Particle Canvas Animation
+  // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = [];
-    const particleCount = 60;
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 1,
-        color: internships[i % 3].color
-      });
-    }
-
     let animationId;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+
+    const particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 2.8 + 1.2
+    }));
+
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p, i) => {
+      particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
-
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
+        gradient.addColorStop(0, 'rgba(0, 255, 255, 0.38)');
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + '60';
+        ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
         ctx.fill();
-
-        particles.forEach((p2, j) => {
-          if (i !== j) {
-            const dx = p.x - p2.x;
-            const dy = p.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 120) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = p.color + Math.floor((1 - dist / 120) * 30).toString(16);
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          }
-        });
       });
 
       animationId = requestAnimationFrame(animate);
     };
 
     animate();
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', resize);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
-  const getDriveThumbnail = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+  const getCertificateUrl = (id) =>
+    `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+
+  const getViewUrl = (id) =>
+    `https://drive.google.com/file/d/${id}/view`;
 
   return (
-    <div ref={sectionRef} style={{
-      position: 'relative',
-      minHeight: '100vh',
-      width: '100%',
-      background: '#000000',
-      padding: '40px 20px 80px',
-      overflow: 'hidden'
-    }}>
+    <>
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+        @keyframes slideIn { from { opacity:0; transform:translateY(60px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+        @keyframes glitch   { 0%,100% { transform:translate(0); } 20% { transform:translate(-2px,2px); } 40% { transform:translate(2px,-2px); } }
+
+        .intern-card {
+          position: relative;
+          background: rgba(8,8,22,0.84);
+          border: 2px solid rgba(0,255,255,0.24);
+          border-radius: 24px;
+          overflow: hidden;
+          transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
         }
-        @keyframes rotate360 {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+
+        .intern-card:hover {
+          transform: translateY(-20px) scale(1.04);
+          border-color: currentColor;
+          box-shadow: 0 0 80px currentColor;
         }
-        @keyframes slideInLeft {
-          from { transform: translateX(-100px); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
+
+        .intern-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, transparent 35%, rgba(0,255,255,0.15) 50%, transparent 65%);
+          animation: scan 6s linear infinite;
+          pointer-events: none;
+          z-index: 1;
         }
-        @keyframes slideInRight {
-          from { transform: translateX(100px); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
+
+        .tech-pill {
+          background: rgba(0,0,0,0.72);
+          border: 1.5px solid currentColor;
+          padding: 0.55rem 1.15rem;
+          border-radius: 999px;
+          font-family: 'Fira Code',monospace;
+          font-size: 0.9rem;
+          transition: all 0.3s;
         }
-        @keyframes scaleIn {
-          from { transform: scale(0.8); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+
+        .tech-pill:hover {
+          transform: scale(1.08);
+          box-shadow: 0 0 28px currentColor;
         }
-        @keyframes glowPulse {
-          0%, 100% { filter: drop-shadow(0 0 20px currentColor); }
-          50% { filter: drop-shadow(0 0 40px currentColor); }
-        }
-        @keyframes borderRotate {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-          100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+
+        .neon-title {
+          text-shadow: 0 0 14px currentColor, 0 0 32px currentColor, 0 0 60px currentColor;
         }
       `}</style>
 
-      {/* Particle Canvas */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-          zIndex: 1,
-          opacity: 0.4
-        }}
-      />
-
-      {/* Dynamic Background */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        overflow: 'hidden'
+        minHeight: '100vh',
+        background: '#000000',
+        color: '#e0e0ff',
+        position: 'relative',
+        overflow: 'hidden',
+        padding: '8rem 3rem 6rem',
+        fontFamily: "'Outfit', sans-serif"
       }}>
-        {/* Mesh Gradient */}
-        <div style={{
-          position: 'absolute',
-          top: '20%',
-          left: '50%',
-          width: '80%',
-          height: '60%',
-          background: `radial-gradient(circle at center, ${internships[activeCard].color}25 0%, transparent 70%)`,
-          transform: `translate(-50%, -50%) translate(${mousePos.x * 0.03}px, ${mousePos.y * 0.03}px)`,
-          transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
-          filter: 'blur(100px)',
-          borderRadius: '50%'
-        }} />
-
-        {/* Floating Code Symbols */}
-        {['<>', '/>', '{}', '[]', '()', '===', '=>', '!='].map((symbol, i) => (
-          <div key={`symbol-${i}`} style={{
-            position: 'absolute',
-            left: `${10 + (i * 12) % 80}%`,
-            top: `${10 + (i * 15) % 80}%`,
-            fontSize: `${24 + i * 4}px`,
-            fontWeight: '900',
-            color: internships[i % 3].color,
-            opacity: 0.15,
-            fontFamily: 'monospace',
-            animation: `float ${4 + i * 0.5}s ease-in-out ${i * 0.3}s infinite`,
-            userSelect: 'none'
-          }}>
-            {symbol}
-          </div>
-        ))}
-
-        {/* Animated Grid Lines */}
+        {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(${internships[activeCard].color}15 2px, transparent 2px),
-            linear-gradient(90deg, ${internships[activeCard].color}15 2px, transparent 2px)
+            linear-gradient(rgba(0,255,255,0.09) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,255,0.09) 1px, transparent 1px)
           `,
-          backgroundSize: '100px 100px',
-          opacity: 0.3,
-          transition: 'all 0.6s ease'
+          backgroundSize: '60px 60px',
+          opacity: 0.22,
+          pointerEvents: 'none'
         }} />
-      </div>
 
-      <div ref={containerRef} style={{
-        position: 'relative',
-        maxWidth: '1400px',
-        margin: '0 auto',
-        zIndex: 10
-      }}>
-        {/* Hero Header */}
+        {/* Particles */}
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 1
+          }}
+        />
+
         <div style={{
-          textAlign: 'center',
-          marginBottom: '80px',
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(-50px)',
-          transition: 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          position: 'relative',
+          zIndex: 10,
+          maxWidth: '1680px',
+          margin: '0 auto'
         }}>
-          {/* Animated Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '12px 28px',
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(20px)',
-            border: '2px solid rgba(255,255,255,0.1)',
-            borderRadius: '9999px',
-            marginBottom: '32px',
-            animation: 'scaleIn 0.8s ease-out 0.2s backwards',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '7rem' }}>
             <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: `linear-gradient(90deg, ${internships[0].color}, ${internships[1].color}, ${internships[2].color}, ${internships[0].color})`,
-              backgroundSize: '200% 100%',
-              opacity: 0.15,
-              animation: 'borderRotate 3s linear infinite'
-            }} />
-            <Terminal style={{width: '20px', height: '20px', color: '#06b6d4', animation: 'glowPulse 2s ease-in-out infinite'}} />
-            <span style={{
-              fontSize: '11px',
-              fontWeight: '900',
-              letterSpacing: '0.15em',
-              background: `linear-gradient(90deg, ${internships[0].color}, ${internships[1].color}, ${internships[2].color})`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              position: 'relative',
-              zIndex: 1
+              display: 'inline-block',
+              fontFamily: "'Fira Code', monospace",
+              color: '#00ffff',
+              fontSize: '1.15rem',
+              padding: '0.9rem 2rem',
+              border: '2.5px solid rgba(0,255,255,0.4)',
+              borderRadius: '999px',
+              marginBottom: '1.8rem',
+              animation: 'pulse 3.5s infinite'
             }}>
-              MERN STACK DEVELOPER
-            </span>
-            <Sparkles style={{width: '20px', height: '20px', color: '#a855f7', animation: 'rotate360 4s linear infinite'}} />
-          </div>
-
-          {/* Main Title with Split Animation */}
-          <div style={{
-            fontSize: 'clamp(3rem, 10vw, 7rem)',
-            fontWeight: '900',
-            lineHeight: 0.95,
-            marginBottom: '24px',
-            letterSpacing: '-0.03em'
-          }}>
-            <div style={{
-              overflow: 'hidden',
-              marginBottom: '8px'
-            }}>
-              <div style={{
-                color: '#fff',
-                animation: 'slideInLeft 1s ease-out 0.4s backwards'
-              }}>
-                Professional
-              </div>
+              {'>'} experience.load()
             </div>
-            <div style={{
-              overflow: 'hidden',
-              position: 'relative'
+
+            <h1 className="neon-title" style={{
+              fontSize: 'clamp(4rem, 9vw, 7rem)',
+              fontWeight: 900,
+              color: '#00ffff',
+              letterSpacing: '5px',
+              textTransform: 'uppercase',
+              marginBottom: '1.8rem'
             }}>
-              <div style={{
-                background: `linear-gradient(135deg, ${internships[0].color}, ${internships[1].color}, ${internships[2].color})`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                animation: 'slideInRight 1s ease-out 0.6s backwards',
-                position: 'relative'
-              }}>
-                Internships
-                {/* Shimmer Effect */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                  animation: 'shimmer 3s infinite',
-                  pointerEvents: 'none'
-                }} />
-              </div>
-            </div>
+              INTERNSHIP LOG
+            </h1>
+
+            <p style={{
+              fontSize: 'clamp(1.25rem, 2.8vw, 1.6rem)',
+              color: '#a0a0c8',
+              maxWidth: '820px',
+              margin: '0 auto',
+              fontFamily: "'Fira Code', monospace",
+              lineHeight: 1.8
+            }}>
+              [ Real-world deployment logs • Production-grade training ]<br/>
+              Forged in industry — 20XX–2025 protocol
+            </p>
           </div>
 
-          <p style={{
-            fontSize: '18px',
-            color: '#9ca3af',
-            maxWidth: '650px',
-            margin: '0 auto 32px',
-            animation: 'fadeInUp 1s ease-out 0.8s backwards',
-            lineHeight: 1.6
-          }}>
-            Transforming ideas into production-ready applications through{' '}
-            <span style={{
-              color: internships[activeCard].color,
-              fontWeight: '700',
-              transition: 'color 0.6s ease'
-            }}>
-              hands-on industry experience
-            </span>
-          </p>
-
-          {/* Tech Stack Pills */}
+          {/* Cards */}
           <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '12px',
-            flexWrap: 'wrap',
-            animation: 'fadeInUp 1s ease-out 1s backwards'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))',
+            gap: '3rem',
+            marginBottom: '7rem'
           }}>
-            {['MongoDB', 'Express', 'React', 'Node.js', 'Python', 'TensorFlow'].map((tech, i) => (
-              <div
-                key={tech}
-                style={{
-                  padding: '8px 16px',
-                  background: 'rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(10px)',
-                  border: `1px solid ${internships[i % 3].color}40`,
-                  borderRadius: '20px',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  color: '#e0e0e0',
-                  animation: `bounce ${2 + i * 0.2}s ease-in-out ${i * 0.1}s infinite`
-                }}
-              >
-                {tech}
-              </div>
-            ))}
-          </div>
-        </div>
+            {internships.map((intern, i) => {
+              const isHovered = hoveredId === intern.id;
+              const color = intern.color;
 
-        {/* Internship Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-          gap: '32px',
-          marginBottom: '80px'
-        }}>
-          {internships.map((internship, index) => {
-            const Icon = internship.icon;
-            const isActive = activeCard === index;
-            const isHovered = hoveredCard === internship.id;
-
-            return (
-              <div
-                key={internship.id}
-                onMouseEnter={() => setHoveredCard(internship.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-                onClick={() => setActiveCard(index)}
-                style={{
-                  position: 'relative',
-                  cursor: 'pointer',
-                  transition: 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  transform: (isActive || isHovered) ? 'translateY(-16px) scale(1.02)' : 'translateY(0) scale(1)',
-                  opacity: isVisible ? 1 : 0,
-                  animation: `scaleIn 0.8s ease-out ${0.2 + index * 0.15}s backwards`
-                }}
-              >
-                {/* Holographic Glow */}
-                <div style={{
-                  position: 'absolute',
-                  inset: '-40px',
-                  borderRadius: '40px',
-                  background: `radial-gradient(circle at 50% 50%, ${internship.gradientStart}40, ${internship.gradientEnd}20, transparent)`,
-                  filter: 'blur(60px)',
-                  opacity: (isActive || isHovered) ? 0.8 : 0,
-                  transition: 'opacity 0.6s',
-                  animation: isActive ? 'glowPulse 3s ease-in-out infinite' : 'none'
-                }} />
-
-                <div style={{
-                  position: 'relative',
-                  background: 'rgba(10,10,10,0.9)',
-                  borderRadius: '32px',
-                  border: `2px solid ${(isActive || isHovered) ? internship.color : 'rgba(255,255,255,0.1)'}`,
-                  backdropFilter: 'blur(30px)',
-                  overflow: 'hidden',
-                  transition: 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  boxShadow: (isActive || isHovered) 
-                    ? `0 40px 100px ${internship.color}50, inset 0 0 100px ${internship.color}10` 
-                    : '0 10px 40px rgba(0,0,0,0.5)'
-                }}>
-                  {/* Animated Border */}
-                  {isActive && (
-                    <div style={{
-                      position: 'absolute',
-                      inset: '-2px',
-                      background: `linear-gradient(45deg, ${internship.gradientStart}, ${internship.gradientEnd}, ${internship.gradientStart})`,
-                      backgroundSize: '200% 200%',
-                      animation: 'borderRotate 3s linear infinite',
-                      borderRadius: '32px',
-                      zIndex: 0,
-                      opacity: 0.6
-                    }} />
-                  )}
-
-                  {/* Background Gradient */}
+              return (
+                <div
+                  key={intern.id}
+                  className="intern-card"
+                  onMouseEnter={() => setHoveredId(intern.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  style={{
+                    color,
+                    animation: `slideIn ${0.6 + i * 0.15}s ease-out`,
+                    opacity: 0,
+                    animationFillMode: 'forwards',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {/* Top scan */}
                   <div style={{
                     position: 'absolute',
-                    inset: 0,
-                    background: `linear-gradient(135deg, ${internship.gradientStart}15, ${internship.gradientEnd}08)`,
-                    opacity: isHovered ? 1 : 0.5,
-                    transition: 'opacity 0.6s',
-                    zIndex: 1
+                    top: 0, left: 0, right: 0,
+                    height: '5px',
+                    background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+                    opacity: isHovered ? 0.95 : 0.45,
+                    transition: 'opacity 0.5s'
                   }} />
 
-                  {/* Icon Badge */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '24px',
-                    right: '24px',
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '20px',
-                    background: `linear-gradient(135deg, ${internship.gradientStart}, ${internship.gradientEnd})`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: `0 10px 40px ${internship.color}60`,
-                    zIndex: 10,
-                    animation: isActive ? 'rotate360 8s linear infinite' : 'none'
-                  }}>
-                    <Icon style={{width: '32px', height: '32px', color: '#fff'}} />
-                  </div>
-
-                  {/* Certificate Preview */}
+                  {/* Certificate preview */}
                   <div
-                    onClick={(e) => { e.stopPropagation(); setModalOpen(internship); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveCert(intern);
+                    }}
                     style={{
+                      height: '260px',
                       position: 'relative',
-                      height: '220px',
                       overflow: 'hidden',
-                      cursor: 'pointer',
-                      zIndex: 2
+                      cursor: 'pointer'
                     }}
                   >
                     <img
-                      src={getDriveThumbnail(internship.certId)}
-                      alt={internship.title}
+                      src={`https://drive.google.com/thumbnail?id=${intern.certId}&sz=w1000`}
+                      alt={`${intern.title} Certificate`}
                       style={{
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        transition: 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                        transform: (isActive || isHovered) ? 'scale(1.1) rotate(1deg)' : 'scale(1)'
+                        transition: 'transform 0.7s',
+                        transform: isHovered ? 'scale(1.12)' : 'scale(1.04)'
                       }}
-                      loading="lazy"
                     />
-
-                    {/* Overlay */}
                     <div style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, transparent)',
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 60%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      opacity: (isActive || isHovered) ? 1 : 0,
+                      opacity: isHovered ? 1 : 0.3,
                       transition: 'opacity 0.5s'
                     }}>
                       <div style={{
+                        padding: '1rem 2.2rem',
+                        background: 'rgba(0,0,0,0.75)',
+                        backdropFilter: 'blur(12px)',
+                        border: `2px solid ${color}`,
+                        borderRadius: '999px',
+                        color: '#fff',
+                        fontWeight: 700,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '10px',
-                        padding: '14px 32px',
-                        background: 'rgba(0,0,0,0.7)',
-                        backdropFilter: 'blur(20px)',
-                        borderRadius: '24px',
-                        border: `2px solid ${internship.color}`,
-                        fontSize: '14px',
-                        fontWeight: '700',
-                        color: '#fff',
-                        transform: (isActive || isHovered) ? 'scale(1)' : 'scale(0.8)',
-                        transition: 'transform 0.3s'
+                        gap: '0.8rem'
                       }}>
-                        <Eye style={{width: '20px', height: '20px', color: internship.color}} />
-                        <span>View Certificate</span>
+                        <Award size={20} />
+                        View Certificate
                       </div>
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div style={{
-                    padding: '32px',
-                    position: 'relative',
-                    zIndex: 3
-                  }}>
-                    {/* Status Badge */}
+                  <div style={{ padding: '2.4rem 2.6rem' }}>
+                    {/* Icon + Badge */}
                     <div style={{
-                      display: 'inline-block',
-                      padding: '6px 14px',
-                      borderRadius: '20px',
-                      fontSize: '10px',
-                      fontWeight: '900',
-                      color: '#000',
-                      background: internship.color,
-                      marginBottom: '16px',
-                      letterSpacing: '0.08em'
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '1.8rem'
                     }}>
-                      {internship.badge}
+                      <div style={{
+                        width: '80px',
+                        height: '80px',
+                        border: `3px solid ${color}`,
+                        borderRadius: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '2.8rem',
+                        animation: isHovered ? 'float 3s ease-in-out infinite' : 'none',
+                        boxShadow: isHovered ? `0 0 44px ${color}90` : 'none'
+                      }}>
+                        <intern.icon size={40} />
+                      </div>
+
+                      <div style={{
+                        padding: '0.6rem 1.4rem',
+                        background: `${color}20`,
+                        border: `2px solid ${color}70`,
+                        borderRadius: '999px',
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
+                        color
+                      }}>
+                        {intern.badge}
+                      </div>
                     </div>
 
                     <h3 style={{
-                      fontSize: '28px',
-                      fontWeight: '900',
-                      color: '#fff',
-                      marginBottom: '10px',
-                      lineHeight: 1.2
+                      fontSize: '1.9rem',
+                      fontWeight: 800,
+                      color: '#ffffff',
+                      marginBottom: '0.8rem'
                     }}>
-                      {internship.title}
+                      {intern.title}
                     </h3>
-                    
+
                     <div style={{
-                      fontSize: '15px',
-                      color: '#9ca3af',
-                      marginBottom: '6px',
-                      fontWeight: '500'
+                      fontSize: '1.1rem',
+                      color: '#b0b0d8',
+                      marginBottom: '0.4rem',
+                      fontFamily: "'Fira Code', monospace"
                     }}>
-                      {internship.company}
-                    </div>
-                    
-                    <div style={{
-                      fontSize: '13px',
-                      fontWeight: '700',
-                      color: internship.color,
-                      marginBottom: '24px'
-                    }}>
-                      {internship.period}
+                      {intern.company}
                     </div>
 
-                    {/* Tech Stack */}
+                    <div style={{
+                      fontSize: '1rem',
+                      color,
+                      fontWeight: 600,
+                      marginBottom: '2rem'
+                    }}>
+                      {intern.period}
+                    </div>
+
+                    {/* Tech pills */}
                     <div style={{
                       display: 'flex',
                       flexWrap: 'wrap',
-                      gap: '8px',
-                      marginBottom: '24px'
+                      gap: '0.7rem',
+                      marginBottom: '2.2rem'
                     }}>
-                      {internship.tech.map((tech, i) => (
-                        <div
-                          key={i}
+                      {intern.tech.map(t => (
+                        <span
+                          key={t}
+                          className="tech-pill"
                           style={{
-                            padding: '6px 12px',
-                            fontSize: '11px',
-                            fontWeight: '700',
-                            border: `1.5px solid ${internship.color}50`,
-                            background: `${internship.color}15`,
-                            borderRadius: '12px',
-                            color: '#e5e5e5',
-                            transition: 'all 0.3s',
-                            transform: isActive ? 'translateY(0)' : 'translateY(5px)',
-                            opacity: isActive ? 1 : 0.7,
-                            transitionDelay: `${i * 0.05}s`
+                            color: isHovered ? color : '#8888bb',
+                            borderColor: isHovered ? color : '#555577'
                           }}
                         >
-                          {tech}
-                        </div>
+                          {t}
+                        </span>
                       ))}
                     </div>
 
-                    {/* Achievements Grid */}
+                    {/* Achievements */}
                     <div style={{
                       display: 'grid',
                       gridTemplateColumns: '1fr 1fr',
-                      gap: '10px',
-                      marginBottom: '28px'
+                      gap: '1rem',
+                      marginBottom: '2.4rem'
                     }}>
-                      {internship.achievements.map((achievement, i) => (
+                      {intern.achievements.map((ach, idx) => (
                         <div
-                          key={i}
+                          key={idx}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '8px',
-                            padding: '12px',
-                            background: 'rgba(255,255,255,0.05)',
+                            gap: '0.9rem',
+                            padding: '0.9rem',
+                            background: 'rgba(255,255,255,0.04)',
                             borderRadius: '14px',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            color: '#d5d5d5',
-                            border: `1px solid rgba(255,255,255,0.08)`,
-                            transition: 'all 0.3s',
-                            transform: isActive ? 'translateX(0)' : 'translateX(-10px)',
-                            opacity: isActive ? 1 : 0.6,
-                            transitionDelay: `${i * 0.08}s`
+                            border: `1px solid ${color}30`,
+                            fontSize: '0.98rem'
                           }}
                         >
-                          <CheckCircle2 style={{width: '16px', height: '16px', color: internship.color, flexShrink: 0}} />
-                          <span>{achievement}</span>
+                          <CheckCircle2 size={18} style={{ color }} />
+                          {ach}
                         </div>
                       ))}
                     </div>
 
-                    {/* CTA Button */}
+                    {/* View Certificate Button */}
                     <a
-                      href={`https://drive.google.com/file/d/${internship.certId}/view`}
+                      href={getViewUrl(intern.certId)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '12px',
-                        width: '100%',
-                        padding: '18px',
-                        borderRadius: '18px',
-                        border: 'none',
-                        background: `linear-gradient(135deg, ${internship.gradientStart}, ${internship.gradientEnd})`,
-                        fontSize: '14px',
-                        fontWeight: '800',
-                        color: '#fff',
+                        gap: '1rem',
+                        padding: '1.2rem',
+                        background: `linear-gradient(90deg, ${color}, #ffffff)`,
+                        color: '#000',
+                        fontWeight: 800,
+                        borderRadius: '999px',
                         textDecoration: 'none',
-                        transition: 'all 0.3s',
-                        cursor: 'pointer',
-                        boxShadow: `0 10px 40px ${internship.color}50`,
-                        position: 'relative',
-                        overflow: 'hidden'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = `0 15px 50px ${internship.color}70`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = `0 10px 40px ${internship.color}50`;
+                        boxShadow: `0 0 40px ${color}60`,
+                        transition: 'all 0.4s'
                       }}
                     >
-                      <Award style={{width: '20px', height: '20px'}} />
-                      <span>View Full Certificate</span>
-                      <ExternalLink style={{width: '18px', height: '18px'}} />
+                      <Award size={22} />
+                      View Certificate
+                      <ExternalLink size={20} />
                     </a>
                   </div>
-
-                  {/* Decorative Corners */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '16px',
-                    left: '16px',
-                    width: '40px',
-                    height: '40px',
-                    borderTop: `3px solid ${internship.color}`,
-                    borderLeft: `3px solid ${internship.color}`,
-                    borderTopLeftRadius: '16px',
-                    opacity: isActive ? 1 : 0.3,
-                    transition: 'opacity 0.5s',
-                    zIndex: 5
-                  }} />
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '16px',
-                    right: '16px',
-                    width: '40px',
-                    height: '40px',
-                    borderBottom: `3px solid ${internship.color}`,
-                    borderRight: `3px solid ${internship.color}`,
-                    borderBottomRightRadius: '16px',
-                    opacity: isActive ? 1 : 0.3,
-                    transition: 'opacity 0.5s',
-                    zIndex: 5
-                  }} />
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        {/* Stats Section */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '24px',
-          opacity: isVisible ? 1 : 0,
-          transition: 'opacity 1.2s',
-          animation: 'fadeInUp 1s ease-out 1.2s backwards'
-        }}>
-          {[
-            { icon: Layers, label: "Total Internships", value: "3", color: "#06b6d4", gradient: "linear-gradient(135deg, #06b6d4, #3b82f6)" },
-            { icon: GitBranch, label: "Tech Stacks", value: "15+", color: "#a855f7", gradient: "linear-gradient(135deg, #a855f7, #ec4899)" },
-            { icon: Zap, label: "Projects Built", value: "8+", color: "#10b981", gradient: "linear-gradient(135deg, #10b981, #06b6d4)" }
-          ].map((stat, i) => {
-            const StatIcon = stat.icon;
-            return (
-              <div key={i} style={{
-                position: 'relative',
-                padding: '32px 24px',
-                background: 'rgba(255,255,255,0.04)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '24px',
-                textAlign: 'center',
-                overflow: 'hidden',
-                transition: 'all 0.4s',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.borderColor = stat.color;
-                e.currentTarget.style.boxShadow = `0 20px 60px ${stat.color}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: stat.gradient,
-                  opacity: 0.08,
-                  transition: 'opacity 0.4s'
-                }} />
-                
-                <div style={{
-                  position: 'relative',
-                  zIndex: 1
-                }}>
-                  <div style={{
-                    width: '56px',
-                    height: '56px',
-                    margin: '0 auto 16px',
-                    borderRadius: '18px',
-                    background: stat.gradient,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: `0 10px 30px ${stat.color}40`
-                  }}>
-                    <StatIcon style={{width: '28px', height: '28px', color: '#fff'}} />
-                  </div>
-                  
-                  <div style={{
-                    fontSize: '42px',
-                    fontWeight: '900',
-                    background: stat.gradient,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    marginBottom: '8px',
-                    filter: 'drop-shadow(0 0 20px currentColor)'
-                  }}>
-                    {stat.value}
-                  </div>
-                  
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#9ca3af',
-                    fontWeight: '700',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em'
-                  }}>
-                    {stat.label}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {/* CTA */}
+          <div style={{
+            padding: '4rem',
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,255,255,0.3)',
+            borderRadius: '28px',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(3rem, 7vw, 4.8rem)',
+              fontWeight: 900,
+              color: '#00ffff',
+              marginBottom: '2.5rem',
+              textShadow: '0 0 40px #00ffff90'
+            }}>
+              READY FOR NEXT DEPLOYMENT?
+            </h2>
+
+            <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="https://github.com/bhagavan444" target="_blank" style={{
+                padding: '1.4rem 3.2rem',
+                background: 'rgba(0,255,255,0.14)',
+                border: '2.5px solid #00ffff80',
+                borderRadius: '999px',
+                color: '#00ffff',
+                fontWeight: 700,
+                fontSize: '1.25rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.2rem'
+              }}>
+                <Github size={32} />
+                VIEW REPOSITORIES
+              </a>
+
+              <a href="mailto:g.sivasatyasaibhagavan@gmail.com" style={{
+                padding: '1.4rem 3.2rem',
+                background: 'linear-gradient(90deg, #00ffff, #8a2be2)',
+                borderRadius: '999px',
+                color: '#000',
+                fontWeight: 900,
+                fontSize: '1.25rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1.2rem'
+              }}>
+                <Sparkles size={32} />
+                LET'S COLLABORATE
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Certificate Modal */}
-      {modalOpen && (
+      {/* ─── CERTIFICATE MODAL ────────────────────────────────────────────── */}
+      {activeCert && (
         <div
-          onClick={() => setModalOpen(null)}
+          onClick={() => setActiveCert(null)}
           style={{
             position: 'fixed',
             inset: 0,
+            background: 'rgba(0,0,0,0.96)',
+            backdropFilter: 'blur(16px)',
             zIndex: 9999,
-            background: 'rgba(0,0,0,0.97)',
-            backdropFilter: 'blur(40px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '24px',
-            animation: 'fadeInUp 0.3s ease-out'
+            padding: '2rem'
           }}
         >
           <div
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
             style={{
-              position: 'relative',
-              maxWidth: '1200px',
-              width: '100%',
+              background: 'rgba(6,6,28,0.97)',
+              border: `4px solid ${activeCert.color}aa`,
               borderRadius: '32px',
+              maxWidth: '1200px',
+              width: '94%',
+              maxHeight: '94vh',
               overflow: 'hidden',
-              border: `4px solid ${modalOpen.color}`,
-              boxShadow: `0 60px 140px ${modalOpen.color}60`,
-              animation: 'scaleIn 0.4s ease-out'
+              boxShadow: `0 0 160px ${activeCert.color}70`,
+              position: 'relative'
             }}
           >
-            {/* Animated Glow */}
-            <div style={{
-              position: 'absolute',
-              inset: '-100px',
-              background: `radial-gradient(circle, ${modalOpen.color}60, transparent 70%)`,
-              filter: 'blur(100px)',
-              animation: 'glowPulse 3s ease-in-out infinite',
-              pointerEvents: 'none'
-            }} />
-
-            <img
-              src={getDriveThumbnail(modalOpen.certId)}
-              alt={modalOpen.title}
-              style={{
-                width: '100%',
-                display: 'block',
-                position: 'relative',
-                zIndex: 2
-              }}
-              loading="eager"
-            />
-
-            {/* Close Button */}
             <button
-              onClick={() => setModalOpen(null)}
+              onClick={() => setActiveCert(null)}
               style={{
                 position: 'absolute',
-                top: '24px',
-                right: '24px',
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                background: 'rgba(239,68,68,0.95)',
-                border: '3px solid rgba(255,255,255,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                top: '2rem',
+                right: '2.5rem',
+                background: 'none',
+                border: 'none',
+                color: '#ff6666',
                 cursor: 'pointer',
-                boxShadow: '0 12px 40px rgba(239,68,68,0.6)',
-                transition: 'all 0.3s',
                 zIndex: 10
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)';
-                e.currentTarget.style.background = 'rgba(239,68,68,1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-                e.currentTarget.style.background = 'rgba(239,68,68,0.95)';
-              }}
             >
-              <X style={{width: '28px', height: '28px', color: '#fff'}} />
+              <X size={56} strokeWidth={2.8} />
             </button>
+
+            <img
+              src={getCertificateUrl(activeCert.certId)}
+              alt={`${activeCert.title} Certificate`}
+              style={{
+                width: '100%',
+                display: 'block'
+              }}
+            />
           </div>
         </div>
       )}
-    </div>
+    </>
   );
-};
-
-export default Internships
+}
