@@ -11,87 +11,183 @@ const workshops = [
     title: "Mobile App Development",
     icon: Smartphone,
     color: "var(--neon-primary)",
-    desc: "Build production-grade cross-platform apps with React Native & Flutter.",
-    fullDesc: "Master mobile development with industry-standard frameworks. Build real-world apps from scratch, implement complex UI patterns, integrate cloud services, and deploy to both App Store and Google Play...",
-    skills: ["React Native", "Flutter", "Firebase", "App Store Deploy", "Native Modules", "Performance Tuning"],
-    slots: 25,
-    enrolled: 489,
+
+    desc: "Hands-on workshop focused on building cross-platform mobile applications using modern frameworks.",
+
+    fullDesc:
+      "Learned end-to-end mobile app development by building real-world cross-platform applications. Covered UI design, state management, backend integration, authentication, performance optimization, and deployment workflows.",
+
+    skills: [
+      "React Native",
+      "Flutter",
+      "Firebase",
+      "REST API Integration",
+      "State Management",
+      "Performance Optimization"
+    ],
+
+    whatILearned: [
+      "Building cross-platform mobile apps from scratch",
+      "Designing responsive and adaptive mobile UIs",
+      "Integrating backend APIs and Firebase services",
+      "Handling authentication and data persistence",
+      "Optimizing performance for mobile devices"
+    ],
+
+    howIUsed: [
+      "Applied UI and state management concepts in web projects",
+      "Improved frontend performance optimization skills",
+      "Gained understanding of mobile-first design principles"
+    ],
+
+    outcomes: [
+      "Built multiple functional mobile app prototypes",
+      "Strengthened understanding of client-side architecture",
+      "Improved confidence in frontend engineering"
+    ],
+
     duration: "8 Weeks",
     level: "Intermediate",
-    featured: true,
-    projects: 6
+    projects: 6,
+    featured: true
   },
+
   {
     title: "Full-Stack Engineering",
     icon: Code,
     color: "var(--neon-primary)",
-    desc: "Master Next.js 14, TypeScript, GraphQL & cloud-native backends.",
-    fullDesc: "Become a complete full-stack engineer. Build scalable web applications using the latest technologies...",
-    skills: ["Next.js 14", "TypeScript", "GraphQL", "PostgreSQL", "Docker", "AWS/Vercel"],
-    slots: 30,
-    enrolled: 642,
+
+    desc: "Comprehensive full-stack training covering frontend, backend, databases, and cloud deployment.",
+
+    fullDesc:
+      "Developed strong full-stack engineering fundamentals by building scalable web applications using modern frontend frameworks, backend APIs, databases, and cloud deployment platforms.",
+
+    skills: [
+      "Next.js",
+      "TypeScript",
+      "REST APIs",
+      "PostgreSQL",
+      "Docker",
+      "Cloud Deployment"
+    ],
+
+    whatILearned: [
+      "Building scalable frontend applications",
+      "Designing RESTful backend services",
+      "Working with relational databases",
+      "Containerizing applications using Docker",
+      "Deploying applications to cloud platforms"
+    ],
+
+    howIUsed: [
+      "Applied full-stack principles in MERN projects",
+      "Improved backend API design and security",
+      "Used deployment concepts in hackathons and projects"
+    ],
+
+    outcomes: [
+      "Built multiple full-stack web applications",
+      "Improved system design understanding",
+      "Strengthened backend and deployment skills"
+    ],
+
     duration: "12 Weeks",
-    level: "Beginner → Expert",
-    featured: false,
-    projects: 8
+    level: "Beginner → Advanced",
+    projects: 8,
+    featured: false
   },
+
   {
     title: "Machine Learning Pro",
     icon: Brain,
     color: "var(--neon-primary)",
-    desc: "Real-world ML pipelines, MLOps & production model deployment.",
-    fullDesc: "Transform into an ML engineer capable of building production systems...",
-    skills: ["Python ML", "MLOps", "Feature Engineering", "Time Series", "Model Deployment", "A/B Testing"],
-    slots: 20,
-    enrolled: 573,
+
+    desc: "Practical machine learning workshop focused on real-world ML pipelines and deployment.",
+
+    fullDesc:
+      "Focused on building end-to-end machine learning pipelines including data preprocessing, feature engineering, model training, evaluation, and deployment into real-world applications.",
+
+    skills: [
+      "Python",
+      "Scikit-learn",
+      "Feature Engineering",
+      "Model Evaluation",
+      "ML Pipelines",
+      "Model Deployment"
+    ],
+
+    whatILearned: [
+      "Preparing real-world datasets for ML models",
+      "Training and evaluating ML algorithms",
+      "Avoiding overfitting and improving generalization",
+      "Deploying ML models into applications",
+      "Understanding ML lifecycle and workflows"
+    ],
+
+    howIUsed: [
+      "Built ML-based prediction systems",
+      "Applied feature engineering in academic projects",
+      "Improved ML model performance and reliability"
+    ],
+
+    outcomes: [
+      "Built multiple machine learning models",
+      "Improved understanding of ML workflows",
+      "Prepared for AI/ML internships and projects"
+    ],
+
     duration: "10 Weeks",
     level: "Intermediate",
-    featured: false,
-    projects: 7
+    projects: 7,
+    featured: false
   },
+
   {
-    title: "Deep Learning & Gen AI",
+    title: "Deep Learning & Advanced AI",
     icon: Cpu,
     color: "var(--neon-primary)",
-    desc: "Transformers, Diffusion Models, LLM fine-tuning & RAG systems.",
-    fullDesc: "Dive deep into cutting-edge AI technologies...",
-    skills: ["PyTorch", "Transformers", "Stable Diffusion", "RAG Systems", "LangChain", "Vector DBs"],
-    slots: 18,
-    enrolled: 521,
+
+    desc: "Advanced deep learning workshop covering modern AI architectures and generative models.",
+
+    fullDesc:
+      "Explored advanced AI concepts including deep neural networks, transformers, generative models, and real-world AI system design with hands-on implementations.",
+
+    skills: [
+      "PyTorch",
+      "Deep Neural Networks",
+      "Transformers",
+      "Computer Vision",
+      "NLP",
+      "Model Optimization"
+    ],
+
+    whatILearned: [
+      "Designing and training deep neural networks",
+      "Understanding transformer architectures",
+      "Working with advanced AI models",
+      "Optimizing deep learning performance",
+      "Deploying deep learning models"
+    ],
+
+    howIUsed: [
+      "Applied DL concepts in AI projects",
+      "Improved model accuracy and performance",
+      "Built AI-powered applications"
+    ],
+
+    outcomes: [
+      "Built advanced deep learning models",
+      "Strengthened AI system design skills",
+      "Prepared for AI Engineer roles"
+    ],
+
     duration: "12 Weeks",
     level: "Advanced",
-    featured: true,
-    projects: 5
-  },
-  {
-    title: "Cloud & DevOps Mastery",
-    icon: Shield,
-    color: "var(--neon-primary)",
-    desc: "Kubernetes, Terraform, CI/CD pipelines & cloud-native architecture.",
-    fullDesc: "Master cloud infrastructure and DevOps practices...",
-    skills: ["Kubernetes", "Terraform", "CI/CD", "AWS", "Monitoring", "Security"],
-    slots: 22,
-    enrolled: 438,
-    duration: "10 Weeks",
-    level: "Intermediate",
-    featured: false,
-    projects: 6
-  },
-  {
-    title: "Blockchain Engineering",
-    icon: GitBranch,
-    color: "var(--neon-primary)",
-    desc: "Smart contracts, Web3, DeFi protocols & decentralized applications.",
-    fullDesc: "Enter the world of Web3 development...",
-    skills: ["Solidity", "Web3.js", "Ethereum", "Smart Contracts", "DeFi", "NFT Development"],
-    slots: 15,
-    enrolled: 367,
-    duration: "8 Weeks",
-    level: "Advanced",
-    featured: false,
-    projects: 4
+    projects: 5,
+    featured: true
   }
 ];
+
 
 export default function CyberpunkWorkshops() {
   const [selected, setSelected] = useState(null);

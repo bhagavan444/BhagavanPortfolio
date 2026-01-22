@@ -1,5 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+
 import profileImg from "../assets/profile.jpeg";
+import resumePdf from "../assets/bhagavanresume.pdf"; // <-- Added import for resume PDF
 
 import { 
   Terminal, 
@@ -12,7 +17,13 @@ import {
   Cpu,
   Database,
   Globe,
-  Star
+  Star,
+  Brain,
+  Code,
+  Zap,
+  Cloud,
+  Layers,
+  Server
 } from "lucide-react";
 
 export default function ModernPortfolio() {
@@ -33,20 +44,38 @@ export default function ModernPortfolio() {
   }, []);
 
   const techStack = [
-    { name: "TensorFlow", category: "AI/ML", color: "#FF6F00" },
-    { name: "PyTorch", category: "AI/ML", color: "#EE4C2C" },
-    { name: "React", category: "Frontend", color: "#61DAFB" },
-    { name: "Node.js", category: "Backend", color: "#339933" },
-    { name: "MongoDB", category: "Database", color: "#47A248" },
-    { name: "AWS", category: "Cloud", color: "#FF9900" },
-    { name: "Docker", category: "DevOps", color: "#2496ED" },
-    { name: "Kubernetes", category: "DevOps", color: "#326CE5" },
+    { name: "TensorFlow", icon: Brain, color: "#FF6F00", desc: "Deep Learning & Model Training" },
+    { name: "PyTorch", icon: Cpu, color: "#EE4C2C", desc: "Neural Networks & Research Models" },
+    { name: "React", icon: Code, color: "#61DAFB", desc: "Modern Frontend Interfaces" },
+    { name: "Node.js", icon: Server, color: "#339933", desc: "Backend APIs & Authentication" },
+    { name: "MongoDB", icon: Database, color: "#47A248", desc: "NoSQL Database Design" },
+    { name: "AWS", icon: Cloud, color: "#FF9900", desc: "Cloud Deployment & Hosting" },
+    { name: "Docker", icon: Layers, color: "#2496ED", desc: "Containerized Applications" },
+    { name: "Kubernetes", icon: Zap, color: "#326CE5", desc: "Scalable Orchestration" },
   ];
 
   const milestones = [
-    { year: "2024", title: "3 Production Internships", icon: Star },
-    { year: "2025", title: "15+ Certifications", icon: Star },
-    { year: "2026", title: "Ready for Innovation", icon: Star },
+    {
+      year: "2024",
+      title: "3 Industry Internships",
+      subtitle: "AI • ML • MERN Stack",
+      icon: Star,
+      color: "#FFD700"
+    },
+    {
+      year: "2025",
+      title: "15+ Professional Certifications",
+      subtitle: "AI, Cloud & Full-Stack",
+      icon: Star,
+      color: "#00E5FF"
+    },
+    {
+      year: "2026",
+      title: "Ready for Full-Time Roles",
+      subtitle: "AI Engineer • Full-Stack Developer",
+      icon: Star,
+      color: "#7C4DFF"
+    }
   ];
 
   return (
@@ -81,6 +110,11 @@ export default function ModernPortfolio() {
         @keyframes scan {
           0% { transform: translateY(-100%); }
           100% { transform: translateY(100%); }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-12px) rotate(3deg); }
         }
 
         .fade-in {
@@ -170,9 +204,64 @@ export default function ModernPortfolio() {
           box-shadow: 0 5px 20px currentColor;
         }
 
+        .tech-orbit {
+          position: absolute;
+          width: 64px;
+          height: 64px;
+          background: rgba(0,0,0,0.65);
+          border: 2.5px solid;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 0 25px currentColor;
+          animation: float 7s ease-in-out infinite;
+          z-index: 2;
+          transition: all 0.4s;
+        }
+
+        .tech-orbit:hover {
+          transform: scale(1.25) !important;
+          box-shadow: 0 0 45px currentColor !important;
+        }
+
+        .badge-2026 {
+          position: absolute;
+          top: -25px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #00ffff, #8a2be2);
+          color: #000;
+          font-weight: 900;
+          font-size: 1.2rem;
+          padding: 0.7rem 1.6rem;
+          border-radius: 40px;
+          box-shadow: 0 0 35px rgba(0,255,255,0.8);
+          border: 2.5px solid #fff;
+          letter-spacing: 2px;
+          z-index: 10;
+          animation: pulse 2s infinite;
+          white-space: nowrap;
+        }
+
+        .hire-badge {
+          color: #00ffff;
+          text-decoration: none;
+          font-weight: 700;
+        }
+
+        .hire-badge:hover {
+          color: #ffffff;
+          text-shadow: 0 0 15px #00ffff;
+        }
+
         @media (max-width: 768px) {
           .hero-layout { flex-direction: column !important; }
           .tech-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .profile-container { width: 320px !important; height: 400px !important; }
+          .tech-orbit { width: 54px !important; height: 54px !important; }
+          .badge-2026 { font-size: 1rem !important; padding: 0.6rem 1.2rem !important; top: -20px !important; }
         }
       `}</style>
 
@@ -250,13 +339,16 @@ export default function ModernPortfolio() {
                   SIVA SATYA SAI<br />BHAGAVAN
                 </h1>
 
-                <div className="fade-in d3" style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 600,
-                  marginBottom: "2rem",
-                  color: "#00ffff",
-                  fontFamily: "'Fira Code', monospace"
-                }}>
+                <div
+                  className="fade-in d3 role-glow"
+                  style={{
+                    fontSize: "clamp(1.2rem, 3vw, 1.6rem)",
+                    fontWeight: 600,
+                    marginBottom: "2rem",
+                    fontFamily: "'Fira Code', monospace",
+                    letterSpacing: "0.12em"
+                  }}
+                >
                   [ AI Engineer × Full-Stack Developer ]
                 </div>
 
@@ -267,38 +359,57 @@ export default function ModernPortfolio() {
                   maxWidth: "600px",
                   marginBottom: "3rem"
                 }}>
-                  Engineering the future with intelligent systems. Specialized in production-grade AI/ML pipelines, 
-                  scalable cloud architectures, and seamless full-stack experiences.
+                  Engineering the future with intelligent systems. Specialized in building
+                  production-grade AI/ML pipelines, scalable cloud architectures, and seamless
+                  full-stack experiences.
                 </p>
 
                 <div className="fade-in d5" style={{ display: "flex", gap: "1.5rem", marginBottom: "3rem", flexWrap: "wrap" }}>
-                  <button className="cyber-btn" style={{
-                    padding: "1.2rem 3rem",
-                    fontSize: "1rem"
-                  }}>
-                    <Terminal size={20} style={{ display: "inline", marginRight: "0.5rem" }} />
+                  {/* Projects Button - Links to /projects */}
+                  <a 
+                    href="/projects" 
+                    className="cyber-btn" 
+                    style={{
+                      padding: "1.2rem 3rem",
+                      fontSize: "1rem",
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.6rem"
+                    }}
+                  >
+                    <Terminal size={20} />
                     View Projects
-                  </button>
+                  </a>
 
-                  <button style={{
-                    padding: "1.2rem 3rem",
-                    background: "transparent",
-                    border: "2px solid #00ffff",
-                    color: "#00ffff",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "all 0.3s",
-                    fontSize: "1rem"
-                  }}>
-                    <Download size={20} style={{ display: "inline", marginRight: "0.5rem" }} />
+                  {/* Resume Button - Direct PDF Download */}
+                  <a 
+                    href={resumePdf} 
+                    download="Bhagavan_Resume.pdf"
+                    style={{
+                      padding: "1.2rem 3rem",
+                      background: "transparent",
+                      border: "2px solid #00ffff",
+                      color: "#00ffff",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                      fontSize: "1rem",
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.6rem"
+                    }}
+                  >
+                    <Download size={20} />
                     Get Résumé
-                  </button>
+                  </a>
                 </div>
 
                 <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                   {[
                     { icon: Github, href: "https://github.com/bhagavan444", color: "#ffffff" },
-                    { icon: Linkedin, href: "https://linkedin.com/in/bhagavan", color: "#00ffff" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/", color: "#00ffff" },
                     { icon: Mail, href: "mailto:g.sivasatyasaibhagavan@gmail.com", color: "#8a2be2" },
                     { icon: Phone, href: "tel:+917569205626", color: "#00ffff" }
                   ].map((link, i) => (
@@ -327,9 +438,15 @@ export default function ModernPortfolio() {
                 </div>
               </div>
 
-              {/* Animated Profile Image */}
+              {/* Animated Profile Image - Rectangle Shape */}
               <div className="fade-in d4" style={{ flex: 1, maxWidth: "450px", display: "flex", justifyContent: "center" }}>
-                <div style={{ position: "relative", width: "400px", height: "400px" }}>
+                <div className="profile-container" style={{ position: "relative", width: "400px", height: "480px" }}>
+                  {/* 2026 Badge - Top Center */}
+                  <div className="ready-badge">
+  2026 READY
+</div>
+
+
                   {/* Rotating Ring 1 */}
                   <div style={{
                     position: "absolute",
@@ -410,39 +527,38 @@ export default function ModernPortfolio() {
                     animationDelay: "1.5s"
                   }} />
 
-                  {/* Image Container */}
+                  {/* Image Container - Rectangle Shape */}
                   <div style={{
                     position: "relative",
                     width: "100%",
                     height: "100%",
                     borderRadius: "20px",
                     overflow: "hidden",
-                    border: "3px solid rgba(0,255,255,0.3)",
+                    border: "4px solid rgba(0,255,255,0.4)",
                     boxShadow: `
-                      0 0 30px rgba(0,255,255,0.4),
-                      0 0 60px rgba(138,43,226,0.3),
-                      inset 0 0 30px rgba(0,0,0,0.5)
+                      0 0 40px rgba(0,255,255,0.5),
+                      0 0 80px rgba(138,43,226,0.4),
+                      inset 0 0 40px rgba(0,0,0,0.6)
                     `
                   }}>
                     <img
-  src={profileImg}
-  alt="Siva Satya Sai Bhagavan"
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    display: "block"
-  }}
-/>
+                      src={profileImg}
+                      alt="Siva Satya Sai Bhagavan"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block"
+                      }}
+                    />
 
-                    
                     {/* Hologram Scan Effect */}
                     <div style={{
                       position: "absolute",
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: "100px",
+                      height: "120px",
                       background: "linear-gradient(to bottom, transparent, rgba(0,255,255,0.3), transparent)",
                       animation: "scan 3s ease-in-out infinite",
                       pointerEvents: "none"
@@ -452,10 +568,42 @@ export default function ModernPortfolio() {
                     <div style={{
                       position: "absolute",
                       inset: 0,
-                      background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%)",
+                      background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%)",
                       pointerEvents: "none"
                     }} />
                   </div>
+
+                  {/* Orbiting Tech Icons - Positioned around rectangle edges */}
+                  {techStack.map((tech, index) => {
+                    const positions = [
+                      { top: "-10%", left: "50%", transform: "translate(-50%, -50%)" },     // Top center
+                      { top: "20%", right: "-10%", transform: "translate(50%, -50%)" },     // Top-right
+                      { top: "50%", right: "-10%", transform: "translate(50%, -50%)" },     // Middle-right
+                      { bottom: "20%", right: "-10%", transform: "translate(50%, 50%)" },   // Bottom-right
+                      { bottom: "-10%", left: "50%", transform: "translate(-50%, 50%)" },   // Bottom center
+                      { bottom: "20%", left: "-10%", transform: "translate(-50%, 50%)" },   // Bottom-left
+                      { top: "50%", left: "-10%", transform: "translate(-50%, -50%)" },     // Middle-left
+                      { top: "20%", left: "-10%", transform: "translate(-50%, -50%)" },     // Top-left
+                    ];
+
+                    const pos = positions[index % positions.length];
+                    const delay = index * 0.5;
+
+                    return (
+                      <div
+                        key={index}
+                        className="tech-orbit"
+                        style={{
+                          ...pos,
+                          borderColor: tech.color,
+                          color: tech.color,
+                          animationDelay: `${delay}s`,
+                        }}
+                      >
+                        <tech.icon size={32} />
+                      </div>
+                    );
+                  })}
 
                   {/* Floating Status Badge */}
                   <div style={{
@@ -475,7 +623,12 @@ export default function ModernPortfolio() {
                     animation: "pulse 2s ease-in-out infinite",
                     whiteSpace: "nowrap"
                   }}>
-                    ● AVAILABLE FOR HIRE
+                    <a
+                      href="mailto:g.sivasatyasaibhagavan@gmail.com"
+                      className="hire-badge"
+                    >
+                      AVAILABLE FOR HIRE
+                    </a>
                   </div>
                 </div>
               </div>
@@ -493,7 +646,7 @@ export default function ModernPortfolio() {
               textTransform: "uppercase",
               letterSpacing: "2px"
             }}>
-              Technology Arsenal
+              Technology Stack
             </h2>
 
             <div className="tech-grid" style={{
@@ -514,7 +667,7 @@ export default function ModernPortfolio() {
                   }}
                 >
                   <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>{tech.name}</div>
-                  <div style={{ fontSize: "0.75rem", opacity: 0.7 }}>{tech.category}</div>
+                  <div style={{ fontSize: "0.75rem", opacity: 0.7 }}>{tech.desc}</div>
                 </div>
               ))}
             </div>
@@ -531,12 +684,15 @@ export default function ModernPortfolio() {
                   minWidth: "250px",
                   animationDelay: `${i * 0.15}s`
                 }}>
-                  <milestone.icon size={40} style={{ color: "#00ffff", marginBottom: "1rem" }} />
+                  <milestone.icon size={40} style={{ color: milestone.color, marginBottom: "1rem" }} />
                   <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "#8a2be2", marginBottom: "0.5rem" }}>
                     {milestone.year}
                   </div>
                   <div style={{ fontSize: "1.1rem", color: "#a0a0a0" }}>
                     {milestone.title}
+                  </div>
+                  <div style={{ fontSize: "0.95rem", color: "#b0b0ff", marginTop: "0.5rem" }}>
+                    {milestone.subtitle}
                   </div>
                 </div>
               ))}

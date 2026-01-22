@@ -9,37 +9,128 @@ const internships = [
     id: 1,
     title: "MERN Stack Intern",
     company: "StudyOwl Education Pvt Ltd",
+    location: "Hybrid",
     period: "May – July 2025",
     badge: "Full-Stack Pro",
     certId: "1bwbNlc9mdPYQOIyUpoiBIOhpyxaMBvbC",
     color: "var(--neon-primary)",
-    tech: ["MongoDB", "Express", "React", "Node.js", "JWT"],
-    achievements: ["Built 3+ Apps", "JWT Auth", "REST APIs", "Cloud Deploy"],
-    icon: Code
+    icon: Code,
+
+    tech: [
+      "React",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "JWT",
+      "REST APIs",
+      "Git",
+      "Cloud Deployment"
+    ],
+
+    responsibilities: [
+      "Developed responsive UI components using React",
+      "Built secure RESTful APIs with Node.js and Express",
+      "Implemented JWT-based authentication and authorization",
+      "Integrated frontend with backend services",
+      "Collaborated with team using Git and Agile workflows"
+    ],
+
+    achievements: [
+      "Built 3+ full-stack web applications",
+      "Implemented secure login & role-based access",
+      "Optimized API performance and database queries",
+      "Deployed applications to cloud environments"
+    ],
+
+    impact: [
+      "Improved application usability and performance",
+      "Reduced authentication-related issues",
+      "Delivered production-ready features under deadlines"
+    ]
   },
+
   {
     id: 2,
-    title: "AI/ML Intern",
-    company: "SmartBridge (Remote)",
+    title: "AI / ML Intern",
+    company: "SmartBridge",
+    location: "Remote",
     period: "May – June 2025",
     badge: "AI Engineer",
     certId: "1-_8ZI8uZ3DcrFpfZ3pts7VSYrAqPN5Zw",
     color: "var(--neon-primary)",
-    tech: ["Python", "TensorFlow", "Scikit-learn", "CNN", "Flask"],
-    achievements: ["5+ Models", "CNNs", "85%+ Accuracy", "Deployment"],
-    icon: Brain
+    icon: Brain,
+
+    tech: [
+      "Python",
+      "TensorFlow",
+      "Scikit-learn",
+      "CNN",
+      "OpenCV",
+      "Flask"
+    ],
+
+    responsibilities: [
+      "Designed and trained CNN models for image classification",
+      "Preprocessed and augmented image datasets",
+      "Evaluated models using accuracy and loss metrics",
+      "Integrated trained models into Flask web applications",
+      "Deployed ML models for real-time inference"
+    ],
+
+    achievements: [
+      "Built and evaluated 5+ ML/DL models",
+      "Achieved 85%+ accuracy on image classification tasks",
+      "Implemented end-to-end ML pipelines",
+      "Delivered working AI demos within deadlines"
+    ],
+
+    impact: [
+      "Enabled automated image-based decision systems",
+      "Improved model reliability through tuning",
+      "Gained real-world experience in ML deployment"
+    ]
   },
+
   {
     id: 3,
-    title: "ML & Data Science Intern",
-    company: "Blackbucks (Remote)",
+    title: "Machine Learning & Data Science Intern",
+    company: "Blackbucks",
+    location: "Remote",
     period: "May – June 2024",
     badge: "Data Specialist",
     certId: "1yQQqBf32o8d3sYlheDCdaLTKj5_hepfY",
     color: "var(--neon-primary)",
-    tech: ["Python", "Pandas", "Scikit-learn", "Data Analysis"],
-    achievements: ["ML Models", "Data Preprocessing", "Feature Engineering", "Model Evaluation"],
-    icon: Database
+    icon: Database,
+
+    tech: [
+      "Python",
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "Data Analysis",
+      "Feature Engineering"
+    ],
+
+    responsibilities: [
+      "Cleaned and preprocessed real-world datasets",
+      "Performed exploratory data analysis (EDA)",
+      "Built ML models for classification and prediction",
+      "Evaluated models using standard ML metrics",
+      "Documented findings and model performance"
+    ],
+
+    achievements: [
+      "Built multiple ML models from scratch",
+      "Implemented feature engineering pipelines",
+      "Improved data quality and model accuracy",
+      "Strengthened foundation in data science workflows"
+    ],
+
+    impact: [
+      "Delivered reliable ML prototypes",
+      "Enhanced understanding of data-driven decision making",
+      "Prepared for advanced AI and ML projects"
+    ]
   }
 ];
 
@@ -314,7 +405,7 @@ export default function CyberpunkInternships() {
               fontFamily: "'Fira Code', monospace",
               lineHeight: 1.7
             }}>
-              [ Real-world deployment logs • Production-grade training ]<br/>
+              [ Hands-on industry experience across Full-Stack, AI, and Data Science roles. ]<br/>
               Forged in industry — 2024–2025 protocol
             </p>
           </div>

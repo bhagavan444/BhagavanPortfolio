@@ -12,61 +12,106 @@ export default function CyberpunkHackathon() {
   const [activePhase, setActivePhase] = useState(0);
   const [hoveredId, setHoveredId] = useState(null);
   const canvasRef = useRef(null);
+const phases = [
+  {
+    id: 1,
+    hour: "0–6h",
+    icon: Terminal,
+    title: "Foundation Sprint",
+    desc: "Designed overall system architecture, finalized use-cases, modeled MongoDB schemas, implemented JWT authentication core, and scaffolded backend & frontend projects.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "System Architecture Blueprint",
+      "MongoDB Schema Design",
+      "JWT Authentication Core",
+      "Backend & Frontend Setup"
+    ]
+  },
+  {
+    id: 2,
+    hour: "6–14h",
+    icon: Code,
+    title: "Core Development",
+    desc: "Implemented RESTful APIs, developed reusable React components, set up state management, routing, and integrated core application workflows.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "15+ REST API Endpoints",
+      "Reusable UI Component Library",
+      "State Management Architecture",
+      "Client-Side Routing"
+    ]
+  },
+  {
+    id: 3,
+    hour: "14–20h",
+    icon: Zap,
+    title: "Integration & Security",
+    desc: "Integrated real-time features using Socket.io, implemented role-based access control, added validation layers, middleware, and centralized error handling.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "Real-Time Chat System",
+      "Role-Based Authorization",
+      "Security Hardening",
+      "Robust Error Handling"
+    ]
+  },
+  {
+    id: 4,
+    hour: "20–24h",
+    icon: Rocket,
+    title: "Launch & Demo",
+    desc: "Optimized performance, tested core flows, prepared live demo, deployed to cloud, and documented system for presentation and evaluation.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "Production Deployment",
+      "Performance Optimization",
+      "Live Demo Preparation",
+      "Technical Documentation"
+    ]
+  }
+];
 
-  const phases = [
-    {
-      id: 1,
-      hour: "0-6h",
-      icon: Terminal,
-      title: "Foundation Sprint",
-      desc: "System architecture design, MongoDB schema modeling, JWT authentication core, project scaffolding, RESTful API structure planning",
-      color: "var(--neon-primary)",
-      achievements: ["Database Schema Design", "Auth System Core", "API Architecture", "Environment Setup"]
-    },
-    {
-      id: 2,
-      hour: "6-14h",
-      icon: Code,
-      title: "Core Development",
-      desc: "RESTful API endpoints implementation, React component library, state management architecture, routing system, real-time features integration foundation",
-      color: "var(--neon-primary)",
-      achievements: ["15+ API Endpoints", "UI Component Library", "State Management", "Routing System"]
-    },
-    {
-      id: 3,
-      hour: "14-20h",
-      icon: Zap,
-      title: "Integration Phase",
-      desc: "Socket.io real-time chat implementation, security hardening, comprehensive error handling, data validation layers, middleware integration",
-      color: "var(--neon-primary)",
-      achievements: ["Real-time Chat System", "Security Hardening", "Error Handling", "Data Validation"]
-    },
-    {
-      id: 4,
-      hour: "20-24h",
-      icon: Rocket,
-      title: "Launch Sequence",
-      desc: "Production optimization, comprehensive testing suite, performance tuning, demo preparation, cloud deployment pipeline, final documentation",
-      color: "var(--neon-primary)",
-      achievements: ["Testing Suite", "Cloud Deployment", "Performance Optimization", "Documentation"]
-    }
-  ];
 
-  const techStack = [
-    { icon: Database, name: "MongoDB", desc: "NoSQL Database", color: "#10b981" },
-    { icon: Server, name: "Express.js", desc: "Backend Framework", color: "var(--neon-primary)" },
-    { icon: Sparkles, name: "React", desc: "UI Library", color: "#8b5cf6" },
-    { icon: Layers, name: "Node.js", desc: "Runtime Environment", color: "#ec4899" },
-    { icon: Lock, name: "JWT", desc: "Authentication", color: "#f59e0b" },
-    { icon: Zap, name: "Socket.io", desc: "Real-time Engine", color: "#3b82f6" }
-  ];
+ const techStack = [
+  { icon: Database, name: "MongoDB", desc: "NoSQL database for scalable data storage", color: "#10b981" },
+  { icon: Server, name: "Express.js", desc: "Backend framework for REST APIs", color: "var(--neon-primary)" },
+  { icon: Sparkles, name: "React", desc: "Frontend UI library for dynamic components", color: "#8b5cf6" },
+  { icon: Layers, name: "Node.js", desc: "JavaScript runtime for backend services", color: "#ec4899" },
+  { icon: Lock, name: "JWT", desc: "Secure authentication & authorization", color: "#f59e0b" },
+  { icon: Zap, name: "Socket.io", desc: "Real-time communication engine", color: "#3b82f6" }
+];
 
-  const stats = [
-    { label: "Duration", value: "24", unit: "hours", icon: Clock, color: "var(--neon-primary)" },
-    { label: "Team Size", value: "4", unit: "members", icon: Users, color: "var(--neon-primary)" },
-    { label: "Code Lines", value: "5000+", unit: "lines", icon: Code, color: "var(--neon-primary)" },
-    { label: "Rank", value: "1st", unit: "place", icon: Trophy, color: "var(--neon-primary)" }
-  ];
+const stats = [
+  {
+    label: "Duration",
+    value: "24",
+    unit: "hours",
+    icon: Clock,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Team Size",
+    value: "4",
+    unit: "members",
+    icon: Users,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Code Written",
+    value: "5000+",
+    unit: "lines",
+    icon: Code,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Achievement",
+    value: "1st",
+    unit: "place",
+    icon: Trophy,
+    color: "var(--neon-primary)"
+  }
+];
+
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -348,8 +393,11 @@ export default function CyberpunkHackathon() {
               fontWeight: 800,
               marginBottom: '3rem'
             }}>
-              <Trophy size={32} />
-              1ST PLACE • NATIONAL CHAMPION
+              <div className="certificate-badge">
+  <Trophy size={32} />
+  <span>CERTIFIED</span>
+</div>
+
             </div>
 
             <p style={{

@@ -12,50 +12,153 @@ import monteImage from "../assets/Monte.jpg";
 const education = [
   {
     id: 1,
-    title: "B.Tech AI & Data Science",
+    title: "B.Tech – Artificial Intelligence & Data Science",
     school: "Ramachandra College of Engineering (JNTUK)",
     year: "2022 – 2026",
     score: "8.5 CGPA",
-    desc: "Focused on designing intelligent systems using Machine Learning, Deep Learning, and Data Science. Gained hands-on experience with Python, TensorFlow, MERN stack, and real-world AI applications.",
+    desc: "Specialized in building intelligent, data-driven systems using Machine Learning, Deep Learning, and Full-Stack Development. Actively worked on real-world AI projects, hackathons, and production-ready web applications.",
     color: "var(--neon-primary)",
     image: rceeImage,
     location: "Eluru, Andhra Pradesh",
-    skills: ["Machine Learning", "Deep Learning", "MERN Stack", "Computer Vision", "MLOps", "Neural Networks"],
-    achievements: ["AI Specialist", "Full-Stack Developer", "Top 10% Academic Performance", "Multiple AI Projects"],
+
+    coreSubjects: [
+      "Machine Learning",
+      "Deep Learning",
+      "Artificial Intelligence",
+      "Data Structures & Algorithms",
+      "Big Data Analytics",
+      "Computer Vision",
+      "Natural Language Processing",
+      "Database Management Systems"
+    ],
+
+    tools: [
+      "Python",
+      "TensorFlow",
+      "PyTorch",
+      "Scikit-learn",
+      "React",
+      "Node.js",
+      "MongoDB",
+      "Flask",
+      "Docker",
+      "Git & GitHub"
+    ],
+
+    skills: [
+      "Machine Learning",
+      "Deep Learning",
+      "MERN Stack",
+      "Computer Vision",
+      "MLOps",
+      "Neural Networks",
+      "Model Deployment"
+    ],
+
+    achievements: [
+      "AI & ML Internship Experience",
+      "Top 10% Academic Performer",
+      "Multiple Full-Stack AI Projects",
+      "24-Hour Hackathon Participant",
+      "Built Production-Ready ML Web Apps"
+    ],
+
+    highlights: [
+      "Developed AI-based Resume Builder with ATS scoring",
+      "Built Deep Learning models for image classification",
+      "Created end-to-end MERN stack applications",
+      "Hands-on experience with model deployment & APIs"
+    ],
+
+    leadership: [
+      "Team Lead in Academic & Hackathon Projects",
+      "Mentored juniors in Python & ML basics"
+    ],
+
     badge: "CURRENT",
     icon: Brain
   },
+
   {
     id: 2,
-    title: "Intermediate (MPC)",
+    title: "Intermediate – MPC (Maths, Physics, Chemistry)",
     school: "Srividhya Junior College",
     year: "2020 – 2022",
     score: "78%",
-    desc: "Completed intensive coursework in Mathematics, Physics, and Chemistry with strong emphasis on analytical problem-solving and logical reasoning.",
+    desc: "Completed intensive pre-engineering curriculum with strong focus on analytical thinking, mathematical reasoning, and problem-solving skills.",
     color: "var(--neon-primary)",
     image: sriImage,
     location: "Vijayawada, Andhra Pradesh",
-    skills: ["Advanced Mathematics", "Physics", "Chemistry", "Analytical Thinking", "Scientific Method"],
-    achievements: ["Science Excellence", "Top Performer", "Strong Analytical Foundation"],
+
+    coreSubjects: [
+      "Advanced Mathematics",
+      "Physics",
+      "Chemistry"
+    ],
+
+    skills: [
+      "Problem Solving",
+      "Logical Reasoning",
+      "Analytical Thinking",
+      "Time Management"
+    ],
+
+    achievements: [
+      "Strong Academic Consistency",
+      "Top Performer in Mathematics",
+      "Built strong foundation for Engineering & AI studies"
+    ],
+
+    highlights: [
+      "Developed strong numerical and analytical skills",
+      "Prepared for competitive engineering education"
+    ],
+
     badge: "FOUNDATION",
     icon: Code
   },
+
   {
     id: 3,
-    title: "Secondary School (10th Class)",
+    title: "Secondary School (10th Standard)",
     school: "Montessori English Medium High School",
     year: "2019 – 2020",
     score: "95% • 10.0 GPA",
-    desc: "Established strong academic foundation with excellence in Mathematics and Science. Demonstrated consistent top-tier performance and disciplined study habits.",
+    desc: "Achieved academic excellence with exceptional performance in Mathematics and Science. Demonstrated discipline, leadership, and consistency throughout schooling.",
     color: "var(--neon-primary)",
     image: monteImage,
     location: "Vijayawada, Andhra Pradesh",
-    skills: ["Mathematics Mastery", "Scientific Method", "Critical Thinking", "Discipline", "Leadership"],
-    achievements: ["School Topper", "Perfect Score", "Top 5% State Rank"],
+
+    coreSubjects: [
+      "Mathematics",
+      "Science",
+      "English",
+      "Social Studies"
+    ],
+
+    skills: [
+      "Discipline",
+      "Critical Thinking",
+      "Leadership",
+      "Communication"
+    ],
+
+    achievements: [
+      "School Topper",
+      "Perfect GPA",
+      "Top 5% Academic Rank"
+    ],
+
+    highlights: [
+      "Strong academic discipline",
+      "Early excellence in Mathematics & Science"
+    ],
+
     badge: "EXCELLENCE",
     icon: Trophy
   }
 ];
+
 
 export default function CyberpunkEducation() {
   const [hoveredId, setHoveredId] = useState(null);

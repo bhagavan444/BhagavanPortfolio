@@ -7,83 +7,167 @@ import {
 
 const hobbiesData = [
   { 
-    title: "Reading", 
-    desc: "Deep diving into software architecture and system design",
-    icon: BookOpen, 
+    title: "Reading",
+    icon: BookOpen,
     color: "var(--neon-primary)",
+
+    desc: "Deep dives into software architecture, system design, and emerging technologies.",
+
+    whyItMatters:
+      "Strengthens system-level thinking and helps design scalable, maintainable software.",
+
+    learnings: [
+      "System design patterns",
+      "Clean architecture principles",
+      "Engineering best practices"
+    ],
+
     stats: [
-      { label: "Books/Year", value: "24+", icon: BookOpen },
-      { label: "Topics", value: "Tech", icon: Target },
+      { label: "Books / Year", value: "24+", icon: BookOpen },
+      { label: "Focus Areas", value: "Tech & Design", icon: Target },
       { label: "Impact", value: "High", icon: Award }
     ]
   },
+
   { 
-    title: "Music", 
-    desc: "Enhancing focus and creativity through rhythm",
-    icon: Music, 
+    title: "Music",
+    icon: Music,
     color: "var(--neon-primary)",
+
+    desc: "Using music to enhance focus, creativity, and flow during deep work sessions.",
+
+    whyItMatters:
+      "Improves concentration during long coding and problem-solving sessions.",
+
+    learnings: [
+      "Sustained focus",
+      "Creative thinking",
+      "Stress management"
+    ],
+
     stats: [
-      { label: "Daily Hours", value: "4+", icon: Timer },
-      { label: "Genres", value: "Various", icon: Volume2 },
-      { label: "Boost", value: "200%", icon: Activity }
+      { label: "Daily Listening", value: "4+ hrs", icon: Timer },
+      { label: "Genres", value: "Multi-Genre", icon: Volume2 },
+      { label: "Productivity Boost", value: "200%", icon: Activity }
     ]
   },
+
   { 
-    title: "Coffee", 
-    desc: "Fueling late-night coding marathons",
-    icon: Coffee, 
+    title: "Coffee",
+    icon: Coffee,
     color: "var(--neon-primary)",
+
+    desc: "Fuel for late-night coding, debugging, and hackathon sprints.",
+
+    whyItMatters:
+      "Supports sustained energy during high-pressure development cycles.",
+
+    learnings: [
+      "Endurance under pressure",
+      "Time-boxed productivity",
+      "Night-shift efficiency"
+    ],
+
     stats: [
-      { label: "Cups/Day", value: "3+", icon: Coffee },
-      { label: "Type", value: "Espresso", icon: Zap },
-      { label: "Energy", value: "∞", icon: Rocket }
+      { label: "Cups / Day", value: "3+", icon: Coffee },
+      { label: "Preferred", value: "Espresso", icon: Zap },
+      { label: "Energy Level", value: "∞", icon: Rocket }
     ]
   },
+
   { 
-    title: "Gaming", 
-    desc: "Sharpening strategic thinking and reflexes",
-    icon: Gamepad2, 
+    title: "Gaming",
+    icon: Gamepad2,
     color: "var(--neon-primary)",
+
+    desc: "Strategic and competitive gaming to sharpen decision-making and reflexes.",
+
+    whyItMatters:
+      "Enhances real-time problem solving, strategic planning, and adaptability.",
+
+    learnings: [
+      "Strategic thinking",
+      "Fast decision-making",
+      "Focus under pressure"
+    ],
+
     stats: [
-      { label: "Strategy", value: "95%", icon: Brain },
-      { label: "Reflexes", value: "88%", icon: Zap },
-      { label: "Focus", value: "92%", icon: Target }
+      { label: "Strategy Skill", value: "95%", icon: Brain },
+      { label: "Reflex Speed", value: "88%", icon: Zap },
+      { label: "Focus Level", value: "92%", icon: Target }
     ]
   },
+
   { 
-    title: "Movies", 
-    desc: "Learning storytelling and user experience",
-    icon: Film, 
+    title: "Movies",
+    icon: Film,
     color: "var(--neon-primary)",
+
+    desc: "Analyzing storytelling, pacing, and visual experience.",
+
+    whyItMatters:
+      "Improves understanding of user experience, narrative flow, and product storytelling.",
+
+    learnings: [
+      "User-centric thinking",
+      "Storytelling techniques",
+      "Visual communication"
+    ],
+
     stats: [
       { label: "Weekly", value: "5+", icon: Film },
       { label: "Genres", value: "All", icon: Star },
-      { label: "Learning", value: "UX", icon: Brain }
+      { label: "Key Learning", value: "UX", icon: Brain }
     ]
   },
+
   { 
-    title: "Fitness", 
-    desc: "Building mental clarity through physical strength",
-    icon: Dumbbell, 
+    title: "Fitness",
+    icon: Dumbbell,
     color: "var(--neon-primary)",
+
+    desc: "Maintaining physical fitness to support mental clarity and discipline.",
+
+    whyItMatters:
+      "Boosts focus, reduces burnout, and improves consistency in long-term projects.",
+
+    learnings: [
+      "Discipline",
+      "Consistency",
+      "Mental resilience"
+    ],
+
     stats: [
-      { label: "Weekly", value: "5x", icon: Dumbbell },
+      { label: "Workouts / Week", value: "5×", icon: Dumbbell },
       { label: "Strength", value: "90%", icon: TrendingUp },
-      { label: "Clarity", value: "100%", icon: Brain }
+      { label: "Mental Clarity", value: "100%", icon: Brain }
     ]
   },
+
   { 
-    title: "Photography", 
-    desc: "Capturing moments and visual composition",
-    icon: Camera, 
+    title: "Photography",
+    icon: Camera,
     color: "var(--neon-primary)",
+
+    desc: "Capturing moments with focus on composition and visual balance.",
+
+    whyItMatters:
+      "Sharpens visual design sense and attention to detail for UI/UX work.",
+
+    learnings: [
+      "Visual composition",
+      "Attention to detail",
+      "Creative framing"
+    ],
+
     stats: [
-      { label: "Photos", value: "500+", icon: Camera },
+      { label: "Photos Taken", value: "500+", icon: Camera },
       { label: "Style", value: "Urban", icon: Star },
-      { label: "Skill", value: "Pro", icon: Award }
+      { label: "Skill Level", value: "Advanced", icon: Award }
     ]
-  },
+  }
 ];
+
 
 export default function CyberpunkBeyondCoding() {
   const [activeHobby, setActiveHobby] = useState(null);

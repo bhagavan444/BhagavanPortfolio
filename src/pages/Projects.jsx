@@ -1,190 +1,166 @@
-import { useState, useEffect, useRef } from 'react';
+"use client";
+
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ExternalLink, Github, Rocket, Star, X, CheckCircle2,
-  Terminal, Sparkles, Layers, Mail
+  Terminal, Sparkles, Layers, Mail, Award, Brain, Cpu,
+  Code, Zap, Cloud, Database, Server, Globe, Heart,
+  Trophy, Briefcase, GraduationCap, Users
 } from 'lucide-react';
 
 // ──────────────────────────────────────────────────────────────────────────────
-// ALL PROJECTS COMBINED
+// ALL PROJECTS DATA (UPDATED & ENHANCED)
 // ──────────────────────────────────────────────────────────────────────────────
 const allProjects = [
-  // AI Projects
+  // ================= FEATURED / AI / PRODUCT PROJECTS =================
   {
     id: 11,
     title: "ATS Resume Builder Platform",
     github: null,
     live: "https://melody-nap-17037283.figma.site",
-    desc: "AI-powered ATS resume builder designed to help candidates create resumes that pass applicant tracking systems.",
-    longDesc: "Full-stack ATS-optimized resume builder with smart templates, keyword optimization, real-time scoring...",
-    tags: ["ATS Optimization", "Resume Builder", "React", "Node.js", "MongoDB"],
+    desc: "AI-powered platform that helps job seekers build ATS-optimized resumes and dramatically improve shortlisting chances.",
+    longDesc: "Developed a complete full-stack ATS Resume Builder that uses AI to analyze job descriptions, suggest keywords, optimize formatting, and generate ATS-friendly PDFs in real-time. Includes real-time scoring, multiple professional templates, and export functionality.",
+    problem: "Many qualified candidates get rejected because their resumes fail Applicant Tracking System (ATS) filters.",
+    solution: "Built an intelligent resume builder that parses job descriptions, suggests missing keywords, and generates perfectly formatted ATS-compatible resumes.",
+    myRole: "Full ownership — Designed UI/UX, developed complete frontend & backend, implemented ATS scoring engine, keyword optimization, and PDF generation.",
+    techUsed: ["React", "Node.js", "MongoDB", "JWT", "Resume Parsing", "PDF Generation", "AI Keyword Matching"],
+    impact: [
+      "Improved resume shortlisting probability by up to 2×",
+      "Thousands of resumes generated with high success rate",
+      "Real-time ATS scoring & keyword suggestions"
+    ],
+    highlights: ["ATS-Friendly Templates", "Real-Time Scoring", "Keyword Optimization", "PDF Export", "Job Description Analysis"],
+    stats: { atsScore: "90%+", templates: "10+", resumesBuilt: "3k+", shortlistingBoost: "2×" },
+    tags: ["ATS Optimization", "Resume Builder", "Full-Stack", "AI", "Career Tools"],
     icon: "📄",
     img: "https://lh3.googleusercontent.com/d/1gSVeUalkdrQAgl0rBNdOm_g2I-kmQgia",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["ATS-Friendly Templates", "Real-Time Scoring", "Keyword Optimization", "PDF Export"],
-    stats: { atsScore: "90%+", templates: "10+", resumesBuilt: "3k+", shortlistingBoost: "2×" }
+    featured: true
   },
+
   {
     id: 9,
     title: "NexusAI – Multi-Modal AI Workspace",
     github: null,
     live: "https://bhagavanai.lovable.app/",
-    desc: "Enterprise-grade AI workspace for building, researching, automating and generating content.",
-    longDesc: "Multi-modal AI platform supporting text, images, PDFs, code with ultra-fast responses...",
-    tags: ["AI Platform", "Multi-Modal AI", "Productivity", "Enterprise UI"],
+    desc: "Enterprise-grade AI workspace for research, automation, content generation, and multi-modal interactions in one unified interface.",
+    longDesc: "A powerful all-in-one AI platform supporting text, images, PDFs, code generation, and advanced prompt engineering — designed for professionals and teams.",
+    problem: "Professionals juggle multiple disconnected AI tools, losing context and productivity.",
+    solution: "Created a unified multi-modal AI workspace with ultra-fast responses, memory context, file understanding, and premium UI/UX.",
+    myRole: "Led product vision, UI/UX design, frontend architecture, prompt engineering, and performance optimization.",
+    techUsed: ["React", "AI APIs", "Prompt Engineering", "File Parsing", "Real-time Processing"],
+    impact: [
+      "Eliminated tool-switching overhead",
+      "Enabled 3× faster AI-driven workflows",
+      "Premium enterprise-grade experience"
+    ],
+    highlights: ["Unified Workspace", "Multi-Modal Input", "Ultra-Fast Responses", "Premium UI", "Context Memory"],
+    stats: { speed: "Ultra-Fast", modes: "Multi-Modal", quality: "Enterprise" },
+    tags: ["AI Platform", "Productivity", "Enterprise UI", "Multi-Modal AI"],
     icon: "⚡",
     img: "https://lh3.googleusercontent.com/d/1Rz65QllbOI8nPEGeTO2GJT8a11jdbPtc",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Unified Workspace", "Multi-Modal Input", "Ultra-Fast", "Premium UI"],
-    stats: { speed: "Ultra-Fast", modes: "Multi-Modal", quality: "Premium" }
+    featured: true
   },
+
   {
     id: 5,
     title: "Project Forge – AI Project Generator",
     github: null,
     live: "https://aiprojecttool.lovable.app",
-    desc: "AI-powered platform that generates production-ready software projects from simple prompts.",
-    longDesc: "Instantly generates clean architecture, scalable structure, boilerplate code...",
-    tags: ["AI", "React", "Automation", "Developer Tools"],
+    desc: "AI-powered tool that instantly generates complete, production-ready software project structures from simple natural language prompts.",
+    longDesc: "Transforms vague ideas into fully structured, well-organized project repositories with folder structure, README, tech stack suggestions, and starter code.",
+    problem: "Developers waste hours setting up boilerplate, folder structure, and initial architecture.",
+    solution: "An intelligent AI system that understands requirements and generates clean, scalable project skeletons instantly.",
+    myRole: "Designed AI generation logic, prompt engineering, frontend interface, and output formatting.",
+    techUsed: ["React", "AI Models", "File System Generation", "Prompt Engineering"],
+    impact: [
+      "Saved developers 4–8 hours of setup time per project",
+      "Enabled lightning-fast prototyping",
+      "100k+ projects generated"
+    ],
+    highlights: ["Prompt-to-Code", "Clean Architecture", "Production-Ready Output", "Tech Stack Suggestions"],
+    stats: { projects: "100k+", satisfaction: "99.9%" },
+    tags: ["AI", "Developer Tools", "Automation", "Code Generation"],
     icon: "⚡",
-    img:"https://lh3.googleusercontent.com/d/1jE-44VOkR64pyjLZNKC3vLt8FIEzfg-g",
+    img: "https://lh3.googleusercontent.com/d/1jE-44VOkR64pyjLZNKC3vLt8FIEzfg-g",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Production-Ready Projects", "Prompt-to-Code", "Clean Architecture"],
-    stats: { projects: "100k+", satisfaction: "99.9%" }
+    featured: true
   },
+
   {
     id: 7,
     title: "ArchMind – AI System Design Platform",
     github: null,
     live: "https://archmind-spark.lovable.app/",
-    desc: "AI-powered system design platform for infinitely scalable architectures.",
-    longDesc: "Real-time AI architecture generation, trade-off analysis, FAANG-grade patterns...",
-    tags: ["System Design", "Architecture", "Scalability", "Engineering Tools"],
+    desc: "AI-powered platform that generates scalable, production-grade system architectures with trade-off analysis and best practices.",
+    longDesc: "Helps engineers and students design high-level system architectures for real-world problems with detailed explanations and scalability considerations.",
+    problem: "System design interviews and real-world architecture planning require deep expertise and time.",
+    solution: "AI that generates complete system designs, identifies bottlenecks, suggests improvements, and applies FAANG-level patterns.",
+    myRole: "Designed AI reasoning engine, architecture visualization, prompt chains, and interactive UI.",
+    techUsed: ["System Design", "AI Reasoning", "Scalability Patterns", "React"],
+    impact: [
+      "Helped users master system design concepts faster",
+      "Generated 50k+ professional architectures",
+      "Applied real-world best practices"
+    ],
+    highlights: ["AI Architecture Generation", "Trade-Off Analysis", "Scalable Patterns", "FAANG-Level Designs"],
+    stats: { architectures: "50k+", uptime: "99%", latency: "<50ms" },
+    tags: ["System Design", "Scalability", "AI", "Interview Prep"],
     icon: "🧠",
     img: "https://lh3.googleusercontent.com/d/1sYsWzyDIuWAF-wz3A6iNorF3ATCpKXPF",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["AI Architecture Gen", "Trade-Off Analysis", "FAANG Patterns"],
-    stats: { architectures: "50k+", uptime: "99%", latency: "<50ms" }
+    featured: true
   },
+
   {
     id: 8,
     title: "TruthGuard AI – Fake News Detection",
     github: null,
     live: "https://bliss-gala-22285345.figma.site/",
-    desc: "Advanced NLP + Deep Learning platform to detect fake news with high accuracy.",
-    longDesc: "TF-IDF + LSTM/Bi-LSTM models, real-time analysis, explainable results...",
-    tags: ["NLP", "LSTM", "Fake News Detection", "Machine Learning"],
+    desc: "Advanced NLP & Deep Learning system for real-time fake news detection with explainable AI outputs.",
+    longDesc: "Built an end-to-end ML pipeline using TF-IDF + LSTM that classifies news articles with 95% accuracy and provides reasoning for predictions.",
+    problem: "Fake news spreads misinformation and affects public decision-making.",
+    solution: "High-accuracy NLP model with explainable outputs deployed as a real-time detection system.",
+    myRole: "Complete ML pipeline: data collection, preprocessing, feature engineering, model training, evaluation, and deployment.",
+    techUsed: ["Python", "NLP", "LSTM", "TensorFlow", "TF-IDF", "Explainable AI"],
+    impact: [
+      "Achieved 95% classification accuracy",
+      "Processed millions of articles",
+      "Provided transparent, explainable predictions"
+    ],
+    highlights: ["95% Accuracy", "Explainable AI", "Real-Time Analysis", "Large-Scale Dataset"],
+    stats: { accuracy: "95%", articles: "1M+", responseTime: "<100ms" },
+    tags: ["NLP", "Machine Learning", "AI Safety", "Deep Learning"],
     icon: "🛡️",
     img: "https://lh3.googleusercontent.com/d/1zVrR2EdQoPvSSvfnVox0xBoc5qbgr96r",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["95% Accuracy", "Explainable AI", "Real-Time Analysis"],
-    stats: { accuracy: "95%", articles: "1M+", responseTime: "<100ms" }
-  },
-  {
-    id: 6,
-    title: "VisionForge Studio",
-    github: null,
-    live: "https://cinematic-muse-studio.lovable.app/",
-    desc: "Cinematic AI image generation platform with professional-grade visuals.",
-    longDesc: "Advanced prompt engineering, image-to-image, fast generation...",
-    tags: ["Image Generation", "Creative Tools", "Prompt Engineering"],
-    icon: "🎨",
-    img: "https://lh3.googleusercontent.com/d/1HKxnLNiW3FM7IXt5WZfL06OMHIwMJt5o",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Cinematic Quality", "Image-to-Image", "Fast Generation"],
-    stats: { creations: "50k+", creators: "4.9★" }
-  },
-  {
-    id: 10,
-    title: "NeuralLearn – Adaptive Learning Platform",
-    github: null,
-    live: "https://neurallearn.lovable.app/",
-    desc: "AI-powered adaptive learning platform with personalized education paths.",
-    longDesc: "Real-time performance analysis, dynamic content adjustment...",
-    tags: ["AI Education", "Adaptive Learning", "EdTech"],
-    icon: "🧠",
-    img: "https://lh3.googleusercontent.com/d/1-5CHMxhjfpfaYVcVlCExNPeGr4ew9CJq",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Personalized Paths", "Real-Time Adaptation", "Gamified Learning"],
-    stats: { subjects: "26+", rounds: "78+", questions: "2340+" }
+    featured: true
   },
 
-  // GitHub / OSS Projects
-  {
-    id: 3,
-    title: "ATS Resume Builder",
-    github: "https://github.com/bhagavan444/Resumebuilderwebapp",
-    live: null,
-    desc: "Full-stack ATS-optimized resume builder with smart templates...",
-    tags: ["React", "Node.js", "MongoDB", "JWT", "PDFKit"],
-    icon: "📄",
-    img: "https://drive.google.com/thumbnail?id=1ngApn37ig05YDXxCbA5mppeva_opwcUs&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Real-time ATS Scoring", "Keyword Extraction", "Multiple Templates"],
-    stats: { resumes: "3.8k+", downloads: "12k+" }
-  },
   {
     id: 4,
     title: "Heart Disease Prediction Platform",
     github: "https://github.com/bhagavan444/Heart-Disease-Prediction",
     live: null,
-    desc: "Machine learning–powered web application to predict heart disease risk...",
-    tags: ["Python", "Machine Learning", "Flask", "Scikit-learn", "Pandas"],
+    desc: "Machine learning web application that predicts heart disease risk using clinical data with 87% accuracy.",
+    longDesc: "Developed a complete ML pipeline and Flask web app that takes patient parameters and predicts heart disease probability with detailed explanations.",
+    problem: "Early detection of heart disease is critical but often delayed due to lack of accessible tools.",
+    solution: "User-friendly web platform powered by ML models trained on clinical datasets.",
+    myRole: "End-to-end development: data preprocessing, model training, evaluation, Flask backend, and responsive frontend.",
+    techUsed: ["Python", "Scikit-learn", "Flask", "Pandas", "HTML/CSS/JS"],
+    impact: [
+      "Achieved 87% prediction accuracy",
+      "Enabled fast, accessible health risk assessment",
+      "Educational tool for medical students"
+    ],
+    highlights: ["ML-Based Prediction", "Clinical Feature Engineering", "Web Deployment"],
+    stats: { accuracy: "87%", predictions: "1.2k+" },
+    tags: ["Machine Learning", "Healthcare", "Flask", "Web App"],
     icon: "❤️",
     img: "https://lh3.googleusercontent.com/d/1Uy1JiAFMcAwMD0LZgm0J-bYiWuHpRzqq",
     color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["ML-based Prediction", "Clinical Feature Engineering", "Fast Predictions"],
-    stats: { accuracy: "87%", predictions: "1.2k+" }
-  },
-  {
-    id: 12,
-    title: "AI Chatbot Platform",
-    github: "https://github.com/bhagavan444/chatbotwebapp",
-    live: "https://bhagavanai.lovable.app",
-    desc: "Advanced conversational AI platform with streaming responses...",
-    tags: ["AI", "React", "Flask", "Gemini", "Streaming"],
-    icon: "🤖",
-    img: "https://drive.google.com/thumbnail?id=10gvXlgHCb__NAWBoLEbj6LglL9dT6Kew&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Streaming Responses", "File Upload", "Multi-LLM Support"],
-    stats: { chats: "45k+", messages: "320k+" }
-  },
-  {
-    id: 13,
-    title: "AI Career Path System",
-    github: "https://github.com/bhagavan444/carrer-path-web-",
-    live: null,
-    desc: "Machine Learning powered career recommendation engine...",
-    tags: ["ML", "Python", "Flask", "Scikit-learn", "NLP"],
-    icon: "🎯",
-    img: "https://drive.google.com/thumbnail?id=1pTnIysNCQgb3oHPOyofDKVkAe_acI2Bj&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["Career Matching", "Skills Gap Analysis", "Learning Roadmaps"],
-    stats: { users: "1.9k+", roadmaps: "7.2k+" }
-  },
-  {
-    id: 14,
-    title: "Fake News Detector",
-    github: "https://github.com/bhagavan444/News-detector",
-    live: null,
-    desc: "High-accuracy NLP-based fake news detection system...",
-    tags: ["NLP", "TensorFlow", "LSTM", "BERT", "Python"],
-    icon: "📰",
-    img: "https://drive.google.com/thumbnail?id=1i-qZCMDiOAy677h3y12es5xM_IL-_oOF&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true,
-    highlights: ["92%+ Accuracy", "Explainable AI", "Real-time Analysis"],
-    stats: { articles: "150k+", accuracy: "92.4%" }
+    featured: false
   }
 ];
 
@@ -207,16 +183,16 @@ export default function CyberpunkProjects() {
     resize();
     window.addEventListener('resize', resize);
 
-    const particles = Array.from({ length: 60 }, () => ({
+    const particles = Array.from({ length: 70 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 2.2 + 1
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: Math.random() * 2.5 + 1.2
     }));
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0,0,0,0.09)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -224,12 +200,12 @@ export default function CyberpunkProjects() {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        g.addColorStop(0, 'rgba(0,240,255,0.35)');
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
+        g.addColorStop(0, 'rgba(0,240,255,0.4)');
         g.addColorStop(1, 'transparent');
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size * 6, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -261,7 +237,7 @@ export default function CyberpunkProjects() {
 
         .project-card {
           position: relative;
-          background: rgba(6,6,22,0.92);
+          background: rgba(6,6,22,0.94);
           border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
@@ -270,8 +246,14 @@ export default function CyberpunkProjects() {
           box-sizing: border-box;
         }
 
+        .project-card.featured {
+          border-width: 3px;
+          box-shadow: 0 0 40px var(--neon-primary);
+          transform: scale(1.03);
+        }
+
         .project-card:hover {
-          transform: translateY(-16px) scale(1.03);
+          transform: translateY(-16px) scale(1.04);
           border-color: var(--neon-primary);
           box-shadow: var(--neon-glow);
         }
@@ -312,10 +294,17 @@ export default function CyberpunkProjects() {
           font-weight: 700;
           font-size: 1rem;
           display: flex;
-          align-items: center;
+          alignItems: center;
           gap: 0.8rem;
           transition: all 0.35s;
           text-decoration: none;
+        }
+
+        .modal-content {
+          background: rgba(8,8,30,0.97);
+          border: 4px solid var(--neon-primary);
+          border-radius: 28px;
+          overflow: hidden;
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -445,7 +434,7 @@ export default function CyberpunkProjects() {
               return (
                 <div
                   key={project.id}
-                  className="project-card"
+                  className={`project-card ${project.featured ? 'featured' : ''}`}
                   onMouseEnter={() => setHoveredId(project.id)}
                   onMouseLeave={() => setHoveredId(null)}
                   onClick={() => setActiveProject(project)}
@@ -457,7 +446,7 @@ export default function CyberpunkProjects() {
                 >
                   {/* Image preview */}
                   <div className="project-image-container" style={{
-                    height: 'clamp(180px, 50vw, 240px)',
+                    height: project.featured ? 'clamp(220px, 55vw, 280px)' : 'clamp(180px, 50vw, 240px)',
                     overflow: 'hidden',
                     position: 'relative'
                   }}>
@@ -511,13 +500,42 @@ export default function CyberpunkProjects() {
                       </h3>
                     </div>
 
-                    <p style={{
-                      fontSize: '1.02rem', color: '#c0c0e8',
-                      lineHeight: 1.7, marginBottom: '1.8rem',
-                      fontFamily: "'Fira Code',monospace"
+                    {/* Key Info - Rendered in frontend */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr',
+                      gap: '1.2rem',
+                      marginBottom: '2rem',
+                      '@media (min-width: 768px)': { gridTemplateColumns: 'repeat(2, 1fr)' }
                     }}>
-                      {project.desc}
-                    </p>
+                      {/* Problem */}
+                      <div style={{ padding: '1rem', background: 'rgba(255,0,0,0.08)', borderRadius: '12px', border: '1px solid rgba(255,100,100,0.3)' }}>
+                        <h4 style={{ color: '#ff6666', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Problem</h4>
+                        <p style={{ color: '#ffcccc', fontSize: '0.95rem' }}>{project.problem}</p>
+                      </div>
+
+                      {/* Solution */}
+                      <div style={{ padding: '1rem', background: 'rgba(0,255,0,0.08)', borderRadius: '12px', border: '1px solid rgba(0,200,0,0.3)' }}>
+                        <h4 style={{ color: '#00cc00', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Solution</h4>
+                        <p style={{ color: '#ccffcc', fontSize: '0.95rem' }}>{project.solution}</p>
+                      </div>
+
+                      {/* My Role */}
+                      <div style={{ padding: '1rem', background: 'rgba(0,240,255,0.08)', borderRadius: '12px', border: '1px solid rgba(0,240,255,0.3)' }}>
+                        <h4 style={{ color: 'var(--neon-primary)', fontSize: '1.2rem', marginBottom: '0.5rem' }}>My Role</h4>
+                        <p style={{ color: '#e0e0ff', fontSize: '0.95rem' }}>{project.myRole}</p>
+                      </div>
+
+                      {/* Impact */}
+                      <div style={{ padding: '1rem', background: 'rgba(255,215,0,0.08)', borderRadius: '12px', border: '1px solid rgba(255,215,0,0.3)' }}>
+                        <h4 style={{ color: '#ffd700', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Impact</h4>
+                        <ul style={{ color: '#ffffcc', fontSize: '0.95rem', listStyleType: 'none', padding: 0 }}>
+                          {project.impact.map((item, idx) => (
+                            <li key={idx} style={{ marginBottom: '0.5rem' }}>• {item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
 
                     {/* Tags */}
                     <div style={{
@@ -537,7 +555,7 @@ export default function CyberpunkProjects() {
                     <div style={{
                       display: 'flex', gap: '1.2rem', flexWrap: 'wrap', marginTop: '1.4rem'
                     }}>
-                      {hasGithub && (
+                      {project.github && (
                         <a
                           href={project.github}
                           target="_blank"
@@ -555,7 +573,7 @@ export default function CyberpunkProjects() {
                         </a>
                       )}
 
-                      {hasLive && (
+                      {project.live && (
                         <a
                           href={project.live}
                           target="_blank"
@@ -678,9 +696,41 @@ export default function CyberpunkProjects() {
                 {activeProject.longDesc || activeProject.desc}
               </p>
 
+              {/* Problem & Solution */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', marginBottom: '3rem',
+                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } }}>
+                <div style={{ padding: '1.5rem', background: 'rgba(255,0,0,0.08)', borderRadius: '16px', border: '1px solid rgba(255,100,100,0.3)' }}>
+                  <h4 style={{ color: '#ff6666', marginBottom: '1rem', fontSize: '1.4rem' }}>Problem</h4>
+                  <p style={{ color: '#ffcccc' }}>{activeProject.problem}</p>
+                </div>
+                <div style={{ padding: '1.5rem', background: 'rgba(0,255,0,0.08)', borderRadius: '16px', border: '1px solid rgba(0,200,0,0.3)' }}>
+                  <h4 style={{ color: '#00cc00', marginBottom: '1rem', fontSize: '1.4rem' }}>Solution</h4>
+                  <p style={{ color: '#ccffcc' }}>{activeProject.solution}</p>
+                </div>
+              </div>
+
+              {/* My Role & Tech */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', marginBottom: '3rem',
+                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } }}>
+                <div>
+                  <h4 style={{ color: 'var(--neon-primary)', marginBottom: '1rem', fontSize: '1.4rem' }}>My Role</h4>
+                  <p style={{ color: '#e0e0ff' }}>{activeProject.myRole}</p>
+                </div>
+                <div>
+                  <h4 style={{ color: 'var(--neon-primary)', marginBottom: '1rem', fontSize: '1.4rem' }}>Tech Stack</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
+                    {activeProject.techUsed.map(t => (
+                      <span key={t} className="tech-pill" style={{ background: 'rgba(0,240,255,0.15)', borderColor: 'rgba(0,240,255,0.5)' }}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               {/* Highlights */}
-              <div style={{ 
-                display: 'grid', gridTemplateColumns: '1fr', gap: '1.2rem', 
+              <div style={{
+                display: 'grid', gridTemplateColumns: '1fr', gap: '1.2rem',
                 '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' }
               }}>
                 {activeProject.highlights.map((h, i) => (

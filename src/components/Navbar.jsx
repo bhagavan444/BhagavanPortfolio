@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  FaBars, FaTimes, FaGithub, FaLinkedin, FaHome, FaGraduationCap,
+  FaBars, FaTimes, FaHome, FaGraduationCap,
   FaBriefcase, FaCode, FaEllipsisH, FaTrophy, FaLaptopCode, FaFileAlt,
   FaCertificate, FaHeart, FaAward, FaEnvelope, FaChevronDown
 } from "react-icons/fa";
@@ -163,6 +163,14 @@ const Navbar = () => {
         .logo-glow {
           text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
         }
+
+        .blink {
+          animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+          50% { opacity: 0; }
+        }
       `}</style>
 
       <motion.nav
@@ -253,7 +261,7 @@ const Navbar = () => {
               color: "transparent",
               fontSize: isMobile ? "1.8rem" : "2.2rem",
             }}>
-              SSSB
+              Bhagavan 
             </span>
           </motion.button>
 
@@ -407,38 +415,8 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Right Side - Social + Hamburger */}
-          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "28px" }}>
-            <motion.a
-              href="https://github.com/bhagavan444"
-              target="_blank"
-              rel="noreferrer"
-              whileHover={{ scale: 1.3, rotate: 12 }}
-              whileTap={{ scale: 0.88 }}
-              style={{
-                color: "#00ffff",
-                fontSize: isMobile ? "1.5rem" : "1.8rem",
-                filter: "drop-shadow(0 0 12px rgba(0,255,255,0.6))",
-              }}
-            >
-              <FaGithub />
-            </motion.a>
-
-            <motion.a
-              href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/"
-              target="_blank"
-              rel="noreferrer"
-              whileHover={{ scale: 1.3, rotate: -12 }}
-              whileTap={{ scale: 0.88 }}
-              style={{
-                color: "#00ffff",
-                fontSize: isMobile ? "1.5rem" : "1.8rem",
-                filter: "drop-shadow(0 0 12px rgba(0,255,255,0.6))",
-              }}
-            >
-              <FaLinkedin />
-            </motion.a>
-
+          {/* Right Side - Hamburger (only) */}
+          <div style={{ display: "flex", alignItems: "center" }}>
             {isMobile && (
               <motion.button
                 onClick={() => setMenuOpen(!menuOpen)}
