@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Award, ExternalLink, Code, Cloud, Database, Terminal, Brain, Rocket, Zap, Star, Sparkles, Circle, Hexagon, Triangle } from 'lucide-react';
+import { Award, ExternalLink, Code, Cloud, Database, Terminal, Brain, Rocket, Zap, Star, Sparkles } from 'lucide-react';
 
 const certificationsData = [
   { title: "Full Stack Web Development", image: "https://lh3.googleusercontent.com/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog", link: "https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view", category: "Web", level: "Advanced", skills: ["React", "Node.js", "MongoDB"], power: 95 },
@@ -32,13 +32,12 @@ const categoryConfig = {
   DevOps: { icon: Rocket, color: '#ff6b35', bg: 'from-orange-500/20 to-red-500/20' }
 };
 
-export default function TalentHuntShowcase() {
-  const [selectedCert, setSelectedCert] = useState(null);
+export default function CertificationsShowcase() {
   const [filter, setFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [particles, setParticles] = useState([]);
   const canvasRef = useRef(null);
-  const [time, setTime] = useState(0);
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   // Animated particles
   useEffect(() => {
@@ -54,7 +53,6 @@ export default function TalentHuntShowcase() {
     setParticles(newParticles);
 
     const interval = setInterval(() => {
-      setTime(t => t + 1);
       setParticles(prev => prev.map(p => ({
         ...p,
         x: (p.x + p.speedX + 100) % 100,
@@ -125,8 +123,6 @@ export default function TalentHuntShowcase() {
 
   const avgPower = Math.round(filteredCerts.reduce((sum, c) => sum + c.power, 0) / filteredCerts.length);
 
-  const [hoveredCard, setHoveredCard] = useState(null);
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -137,13 +133,6 @@ export default function TalentHuntShowcase() {
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       <style>{`
-        @keyframes glitch {
-          0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-          20% { clip-path: inset(20% 0 30% 0); transform: translate(-5px, 5px); }
-          40% { clip-path: inset(60% 0 10% 0); transform: translate(5px, -5px); }
-          60% { clip-path: inset(10% 0 60% 0); transform: translate(-3px, 3px); }
-          80% { clip-path: inset(40% 0 20% 0); transform: translate(3px, -3px); }
-        }
         @keyframes dataStream {
           0% { transform: translateY(-100%); opacity: 0; }
           10% { opacity: 1; }
@@ -197,11 +186,21 @@ export default function TalentHuntShowcase() {
         />
       ))}
 
-      <div style={{ position: 'relative', zIndex: 20, maxWidth: '1280px', margin: '0 auto', padding: '2rem 1rem' }}>
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 20, 
+        maxWidth: '1280px', 
+        margin: '0 auto', 
+        padding: 'clamp(2rem, 5vh, 3rem) clamp(1rem, 3vw, 2rem)' 
+      }}>
         
         {/* Hero Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
-          <div style={{ display: 'inline-block', marginBottom: '1.5rem', position: 'relative' }}>
+        <div style={{ 
+          textAlign: 'center', 
+          marginBottom: 'clamp(2rem, 6vh, 3rem)', 
+          position: 'relative' 
+        }}>
+          <div style={{ display: 'inline-block', marginBottom: 'clamp(1rem, 3vh, 1.5rem)', position: 'relative' }}>
             <div style={{
               position: 'absolute',
               inset: 0,
@@ -211,27 +210,34 @@ export default function TalentHuntShowcase() {
               animation: 'pulse3d 3s ease-in-out infinite'
             }} />
             <h1 style={{
-              fontSize: 'clamp(3rem, 15vw, 7rem)',
+              fontSize: 'clamp(2.5rem, 10vw, 7rem)',
               fontWeight: 900,
               position: 'relative',
-              background: 'linear-gradient(to right, #22d3ee, #a78bfa, #f472b6)',
+              background: 'linear-gradient(to right, #ff10f0, #a78bfa, #22d3ee)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              animation: 'glitch 0.3s infinite',
-              letterSpacing: '0.05em'
+              letterSpacing: 'clamp(2px, 0.5vw, 5px)',
+              padding: '0 clamp(0.5rem, 2vw, 1rem)'
             }}>
-              My Certifications
+              CERTIFICATIONS
             </h1>
           </div>
           
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 'clamp(0.5rem, 2vw, 1rem)', 
+            marginBottom: 'clamp(1.5rem, 4vh, 2rem)', 
+            flexWrap: 'wrap',
+            padding: '0 1rem'
+          }}>
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
                 style={{
-                  width: '12px',
-                  height: '12px',
+                  width: 'clamp(8px, 2vw, 12px)',
+                  height: 'clamp(8px, 2vw, 12px)',
                   borderRadius: '50%',
                   background: ['#00ff9f', '#ff0080', '#00d4ff', '#ffd700', '#a855f7', '#ff6b35'][i],
                   boxShadow: `0 0 20px ${['#00ff9f', '#ff0080', '#00d4ff', '#ffd700', '#a855f7', '#ff6b35'][i]}`,
@@ -245,8 +251,8 @@ export default function TalentHuntShowcase() {
           {/* Live Stats Dashboard */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            gap: '1rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
+            gap: 'clamp(0.75rem, 2vw, 1rem)',
             maxWidth: '56rem',
             margin: '0 auto'
           }}>
@@ -262,16 +268,18 @@ export default function TalentHuntShowcase() {
                   position: 'relative',
                   background: 'linear-gradient(135deg, #111827, #000)',
                   border: '2px solid #1f2937',
-                  borderRadius: '1rem',
-                  padding: '1rem',
+                  borderRadius: 'clamp(0.75rem, 2vw, 1rem)',
+                  padding: 'clamp(0.75rem, 2vw, 1rem)',
                   perspective: '1000px',
                   transformStyle: 'preserve-3d',
                   transition: 'all 0.3s ease',
                   cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'rotateY(5deg) rotateX(5deg) scale(1.05)';
-                  e.currentTarget.style.borderColor = stat.color;
+                  if (window.innerWidth >= 768) {
+                    e.currentTarget.style.transform = 'rotateY(5deg) rotateX(5deg) scale(1.05)';
+                    e.currentTarget.style.borderColor = stat.color;
+                  }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'none';
@@ -279,8 +287,8 @@ export default function TalentHuntShowcase() {
                 }}
               >
                 <div style={{
-                  width: '3rem',
-                  height: '3rem',
+                  width: 'clamp(2.5rem, 6vw, 3rem)',
+                  height: 'clamp(2.5rem, 6vw, 3rem)',
                   margin: '0 auto 0.5rem',
                   borderRadius: '50%',
                   background: `linear-gradient(135deg, ${stat.color}, ${stat.color}80)`,
@@ -289,12 +297,22 @@ export default function TalentHuntShowcase() {
                   justifyContent: 'center',
                   boxShadow: `0 0 30px ${stat.color}60`
                 }}>
-                  <stat.icon style={{ width: '1.5rem', height: '1.5rem', color: '#fff' }} />
+                  <stat.icon style={{ width: 'clamp(1.25rem, 3vw, 1.5rem)', height: 'clamp(1.25rem, 3vw, 1.5rem)', color: '#fff' }} />
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: stat.color, marginBottom: '0.25rem' }}>
+                <div style={{ 
+                  fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                  fontWeight: 'bold', 
+                  color: stat.color, 
+                  marginBottom: '0.25rem' 
+                }}>
                   {stat.value}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af', letterSpacing: '0.1em', fontWeight: 600 }}>
+                <div style={{ 
+                  fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', 
+                  color: '#9ca3af', 
+                  letterSpacing: '0.1em', 
+                  fontWeight: 600 
+                }}>
                   {stat.label}
                 </div>
               </div>
@@ -303,8 +321,8 @@ export default function TalentHuntShowcase() {
         </div>
 
         {/* Search & Filter */}
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ position: 'relative', marginBottom: '1rem' }}>
+        <div style={{ marginBottom: 'clamp(1.5rem, 4vh, 2rem)' }}>
+          <div style={{ position: 'relative', marginBottom: 'clamp(0.75rem, 2vh, 1rem)' }}>
             <input
               type="text"
               placeholder="Search skills, technologies..."
@@ -314,9 +332,9 @@ export default function TalentHuntShowcase() {
                 width: '100%',
                 background: 'rgba(17, 24, 39, 0.5)',
                 border: '2px solid rgba(6, 182, 212, 0.3)',
-                borderRadius: '0.75rem',
-                padding: '1rem 1.5rem',
-                fontSize: '1.125rem',
+                borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+                padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)',
+                fontSize: 'clamp(0.95rem, 2.5vw, 1.125rem)',
                 outline: 'none',
                 color: '#fff',
                 transition: 'all 0.3s ease',
@@ -334,7 +352,12 @@ export default function TalentHuntShowcase() {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', 
+            flexWrap: 'wrap', 
+            justifyContent: 'center' 
+          }}>
             {['All', ...Object.keys(categoryConfig)].map(cat => {
               const config = categoryConfig[cat];
               const Icon = config?.icon || Code;
@@ -345,13 +368,13 @@ export default function TalentHuntShowcase() {
                   key={cat}
                   onClick={() => setFilter(cat)}
                   style={{
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '0.75rem',
+                    padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2.5vw, 1.5rem)',
+                    borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)',
                     fontWeight: 700,
-                    fontSize: '0.875rem',
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
+                    gap: 'clamp(0.35rem, 1vw, 0.5rem)',
                     transition: 'all 0.3s ease',
                     border: `2px solid ${isActive ? config?.color : '#374151'}`,
                     background: isActive 
@@ -359,17 +382,17 @@ export default function TalentHuntShowcase() {
                       : 'rgba(17, 24, 39, 0.3)',
                     color: isActive ? config?.color : '#fff',
                     boxShadow: isActive ? `0 0 30px ${config?.color}40` : 'none',
-                    transform: isActive ? 'scale(1.1)' : 'scale(1)',
+                    transform: isActive && window.innerWidth >= 768 ? 'scale(1.1)' : 'scale(1)',
                     cursor: 'pointer'
                   }}
                   onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.borderColor = '#6b7280';
+                    if (!isActive && window.innerWidth >= 768) e.currentTarget.style.borderColor = '#6b7280';
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) e.currentTarget.style.borderColor = '#374151';
                   }}
                 >
-                  {cat !== 'All' && <Icon style={{ width: '1rem', height: '1rem' }} />}
+                  {cat !== 'All' && <Icon style={{ width: 'clamp(0.85rem, 2vw, 1rem)', height: 'clamp(0.85rem, 2vw, 1rem)' }} />}
                   {cat}
                 </button>
               );
@@ -380,8 +403,8 @@ export default function TalentHuntShowcase() {
         {/* Certification Cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
-          gap: '1.5rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+          gap: 'clamp(1rem, 3vw, 1.5rem)'
         }}>
           {filteredCerts.map((cert, idx) => {
             const config = categoryConfig[cert.category];
@@ -403,11 +426,11 @@ export default function TalentHuntShowcase() {
                 <div style={{
                   position: 'relative',
                   background: 'linear-gradient(135deg, #111827, #000)',
-                  borderRadius: '1rem',
+                  borderRadius: 'clamp(0.75rem, 2vw, 1rem)',
                   overflow: 'hidden',
                   border: `2px solid ${isHovered ? config.color + '80' : '#1f2937'}`,
                   transition: 'all 0.3s ease',
-                  transform: isHovered ? 'rotateY(5deg) rotateX(2deg) scale(1.03)' : 'none',
+                  transform: isHovered && window.innerWidth >= 768 ? 'rotateY(5deg) rotateX(2deg) scale(1.03)' : 'none',
                   transformStyle: 'preserve-3d'
                 }}>
                   {/* Power Bar */}
@@ -430,7 +453,11 @@ export default function TalentHuntShowcase() {
                   </div>
 
                   {/* Image */}
-                  <div style={{ position: 'relative', height: '12rem', overflow: 'hidden' }}>
+                  <div style={{ 
+                    position: 'relative', 
+                    height: 'clamp(10rem, 25vw, 12rem)', 
+                    overflow: 'hidden' 
+                  }}>
                     <div style={{
                       position: 'absolute',
                       inset: 0,
@@ -445,37 +472,37 @@ export default function TalentHuntShowcase() {
                         height: '100%',
                         objectFit: 'cover',
                         transition: 'transform 0.5s ease',
-                        transform: isHovered ? 'scale(1.1)' : 'scale(1)'
+                        transform: isHovered && window.innerWidth >= 768 ? 'scale(1.1)' : 'scale(1)'
                       }}
                     />
                     
                     {/* Category Badge */}
                     <div style={{
                       position: 'absolute',
-                      top: '1rem',
-                      right: '1rem',
-                      padding: '0.5rem 0.75rem',
+                      top: 'clamp(0.75rem, 2vw, 1rem)',
+                      right: 'clamp(0.75rem, 2vw, 1rem)',
+                      padding: 'clamp(0.4rem, 1vw, 0.5rem) clamp(0.6rem, 1.5vw, 0.75rem)',
                       borderRadius: '9999px',
                       backdropFilter: 'blur(10px)',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      gap: 'clamp(0.35rem, 1vw, 0.5rem)',
                       zIndex: 20,
                       background: `${config.color}20`,
                       border: `1px solid ${config.color}`,
                       boxShadow: `0 0 20px ${config.color}40`
                     }}>
-                      <config.icon style={{ width: '1rem', height: '1rem', color: config.color }} />
-                      <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: config.color }}>
+                      <config.icon style={{ width: 'clamp(0.85rem, 2vw, 1rem)', height: 'clamp(0.85rem, 2vw, 1rem)', color: config.color }} />
+                      <span style={{ fontSize: 'clamp(0.7rem, 1.8vw, 0.75rem)', fontWeight: 'bold', color: config.color }}>
                         {cert.category}
                       </span>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div style={{ padding: '1.25rem' }}>
+                  <div style={{ padding: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
                     <h3 style={{
-                      fontSize: '1.25rem',
+                      fontSize: 'clamp(1.1rem, 2.8vw, 1.25rem)',
                       fontWeight: 'bold',
                       marginBottom: '0.5rem',
                       color: isHovered ? '#22d3ee' : '#fff',
@@ -488,14 +515,14 @@ export default function TalentHuntShowcase() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      marginBottom: '0.75rem'
+                      marginBottom: 'clamp(0.5rem, 1.5vh, 0.75rem)'
                     }}>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 600, color: config.color }}>
+                      <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', fontWeight: 600, color: config.color }}>
                         {cert.level}
                       </span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <Zap style={{ width: '1rem', height: '1rem', color: '#fbbf24' }} />
-                        <span style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#fbbf24' }}>
+                        <Zap style={{ width: 'clamp(0.9rem, 2.2vw, 1rem)', height: 'clamp(0.9rem, 2.2vw, 1rem)', color: '#fbbf24' }} />
+                        <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', fontWeight: 'bold', color: '#fbbf24' }}>
                           {cert.power}
                         </span>
                       </div>
@@ -504,15 +531,15 @@ export default function TalentHuntShowcase() {
                     <div style={{
                       display: 'flex',
                       flexWrap: 'wrap',
-                      gap: '0.5rem',
-                      marginBottom: '1rem'
+                      gap: 'clamp(0.4rem, 1vw, 0.5rem)',
+                      marginBottom: 'clamp(0.75rem, 2vh, 1rem)'
                     }}>
                       {cert.skills.map((skill, i) => (
                         <span 
                           key={i}
                           style={{
-                            fontSize: '0.75rem',
-                            padding: '0.375rem 0.625rem',
+                            fontSize: 'clamp(0.7rem, 1.8vw, 0.75rem)',
+                            padding: 'clamp(0.3rem, 0.8vw, 0.375rem) clamp(0.5rem, 1.2vw, 0.625rem)',
                             borderRadius: '0.5rem',
                             background: 'rgba(31, 41, 55, 0.5)',
                             color: '#d1d5db',
@@ -528,14 +555,14 @@ export default function TalentHuntShowcase() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'flex-end',
-                      gap: isHovered ? '0.75rem' : '0.5rem',
+                      gap: isHovered ? 'clamp(0.6rem, 1.5vw, 0.75rem)' : 'clamp(0.4rem, 1vw, 0.5rem)',
                       color: '#22d3ee',
-                      fontSize: '0.875rem',
+                      fontSize: 'clamp(0.8rem, 2vw, 0.875rem)',
                       fontWeight: 600,
                       transition: 'gap 0.3s ease'
                     }}>
                       <span>View Certificate</span>
-                      <ExternalLink style={{ width: '1rem', height: '1rem' }} />
+                      <ExternalLink style={{ width: 'clamp(0.9rem, 2.2vw, 1rem)', height: 'clamp(0.9rem, 2.2vw, 1rem)' }} />
                     </div>
                   </div>
 
@@ -555,9 +582,9 @@ export default function TalentHuntShowcase() {
         </div>
 
         {filteredCerts.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔍</div>
-            <p style={{ fontSize: '1.5rem', color: '#9ca3af' }}>No certifications found</p>
+          <div style={{ textAlign: 'center', padding: 'clamp(3rem, 8vh, 5rem) 0' }}>
+            <div style={{ fontSize: 'clamp(3rem, 8vw, 4rem)', marginBottom: '1rem' }}>🔍</div>
+            <p style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', color: '#9ca3af' }}>No certifications found</p>
           </div>
         )}
       </div>

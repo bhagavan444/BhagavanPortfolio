@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { 
   BookOpen, Music, Coffee, Dumbbell, Camera, Film, Gamepad2, 
   Sparkles, Zap, TrendingUp, Heart, Brain, Code2, Rocket, Crown, 
@@ -10,7 +10,7 @@ const hobbiesData = [
     title: "Reading", 
     desc: "Deep diving into software architecture and system design",
     icon: BookOpen, 
-    color: "#00ffff",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Books/Year", value: "24+", icon: BookOpen },
       { label: "Topics", value: "Tech", icon: Target },
@@ -21,7 +21,7 @@ const hobbiesData = [
     title: "Music", 
     desc: "Enhancing focus and creativity through rhythm",
     icon: Music, 
-    color: "#8a2be2",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Daily Hours", value: "4+", icon: Timer },
       { label: "Genres", value: "Various", icon: Volume2 },
@@ -32,7 +32,7 @@ const hobbiesData = [
     title: "Coffee", 
     desc: "Fueling late-night coding marathons",
     icon: Coffee, 
-    color: "#00ffff",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Cups/Day", value: "3+", icon: Coffee },
       { label: "Type", value: "Espresso", icon: Zap },
@@ -43,7 +43,7 @@ const hobbiesData = [
     title: "Gaming", 
     desc: "Sharpening strategic thinking and reflexes",
     icon: Gamepad2, 
-    color: "#8a2be2",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Strategy", value: "95%", icon: Brain },
       { label: "Reflexes", value: "88%", icon: Zap },
@@ -54,7 +54,7 @@ const hobbiesData = [
     title: "Movies", 
     desc: "Learning storytelling and user experience",
     icon: Film, 
-    color: "#00ffff",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Weekly", value: "5+", icon: Film },
       { label: "Genres", value: "All", icon: Star },
@@ -65,7 +65,7 @@ const hobbiesData = [
     title: "Fitness", 
     desc: "Building mental clarity through physical strength",
     icon: Dumbbell, 
-    color: "#8a2be2",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Weekly", value: "5x", icon: Dumbbell },
       { label: "Strength", value: "90%", icon: TrendingUp },
@@ -76,7 +76,7 @@ const hobbiesData = [
     title: "Photography", 
     desc: "Capturing moments and visual composition",
     icon: Camera, 
-    color: "#00ffff",
+    color: "var(--neon-primary)",
     stats: [
       { label: "Photos", value: "500+", icon: Camera },
       { label: "Style", value: "Urban", icon: Star },
@@ -103,16 +103,16 @@ export default function CyberpunkBeyondCoding() {
     };
     resize();
 
-    const particles = Array.from({ length: 70 }, () => ({
+    const particles = Array.from({ length: 50 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 2.8 + 1.2
+      size: Math.random() * 2 + 1
     }));
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -122,7 +122,7 @@ export default function CyberpunkBeyondCoding() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, 'rgba(0, 255, 255, 0.38)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -147,53 +147,127 @@ export default function CyberpunkBeyondCoding() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
-        @keyframes slideIn { from { opacity:0; transform:translateY(60px); } to { opacity:1; transform:translateY(0); } }
+        :root {
+          --neon-primary: #00f0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
+        }
+
+        @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
         @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
-        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
-        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
 
         .hobby-card {
           position: relative;
-          background: rgba(8,8,22,0.84);
-          border: 2px solid rgba(0,255,255,0.24);
-          border-radius: 24px;
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
+          border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+          max-width: 100%;
+          box-sizing: border-box;
         }
 
         .hobby-card:hover {
-          transform: translateY(-20px) scale(1.04);
-          border-color: currentColor;
-          box-shadow: 0 0 80px currentColor;
+          transform: translateY(-16px) scale(1.03);
+          border-color: var(--neon-primary);
+          box-shadow: var(--neon-glow);
         }
 
         .hobby-card::before {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(0,255,255,0.15) 50%, transparent 65%);
-          animation: scan 6s linear infinite;
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
+          animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .stat-pill {
-          background: rgba(0,0,0,0.72);
-          border: 1.5px solid currentColor;
-          padding: 0.55rem 1.15rem;
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
+          padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
-          font-size: 0.9rem;
+          font-size: 0.86rem;
           transition: all 0.3s;
+          color: #e0f7ff;
         }
 
         .stat-pill:hover {
-          transform: scale(1.08);
-          box-shadow: 0 0 28px currentColor;
+          transform: scale(1.06);
+          box-shadow: 0 0 20px var(--neon-primary);
         }
 
         .neon-title {
-          text-shadow: 0 0 14px currentColor, 0 0 32px currentColor, 0 0 60px currentColor;
+          background: var(--neon-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
+        }
+
+        /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
+        @media (max-width: 1024px) {
+          .hobby-grid {
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+            gap: 2.5rem !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hobby-grid {
+            grid-template-columns: 1fr !important;
+            gap: 3rem !important;
+          }
+          .icon-showcase {
+            height: 220px !important;
+          }
+          .card-padding {
+            padding: 1.8rem 1.5rem !important;
+          }
+          h1.neon-title {
+            font-size: clamp(3.4rem, 11vw, 5.5rem) !important;
+            letter-spacing: 3px !important;
+          }
+          .modal-content {
+            padding: 2.2rem 1.6rem !important;
+            width: 98% !important;
+            max-width: 98% !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .icon-showcase {
+            height: 200px !important;
+          }
+          .card-padding {
+            padding: 1.5rem 1.3rem !important;
+          }
+          h3 {
+            font-size: 1.65rem !important;
+          }
+          .stat-pill {
+            padding: 0.45rem 0.9rem;
+            font-size: 0.82rem;
+          }
+          .cta-buttons {
+            flex-direction: column !important;
+            gap: 1.5rem !important;
+          }
+          .modal-content {
+            padding: 2rem 1.4rem !important;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .icon-showcase {
+            height: 180px !important;
+          }
+          .card-padding {
+            padding: 1.4rem 1.2rem !important;
+          }
         }
       `}</style>
 
@@ -203,7 +277,7 @@ export default function CyberpunkBeyondCoding() {
         color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
-        padding: '8rem 3rem 6rem',
+        padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
         fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
@@ -211,15 +285,15 @@ export default function CyberpunkBeyondCoding() {
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(0,255,255,0.09) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,255,255,0.09) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px',
+          backgroundSize: '50px 50px',
           opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
-        {/* Particles canvas */}
+        {/* Particles */}
         <canvas
           ref={canvasRef}
           style={{
@@ -233,38 +307,39 @@ export default function CyberpunkBeyondCoding() {
         <div style={{
           position: 'relative',
           zIndex: 10,
-          maxWidth: '1680px',
-          margin: '0 auto'
+          maxWidth: '1600px',
+          margin: '0 auto',
+          width: '100%'
         }}>
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '7rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(4rem, 10vw, 7rem)' }}>
             <div style={{
               display: 'inline-block',
               fontFamily: "'Fira Code', monospace",
-              color: '#00ffff',
-              fontSize: '1.15rem',
-              padding: '0.9rem 2rem',
-              border: '2.5px solid rgba(0,255,255,0.4)',
+              color: 'var(--neon-primary)',
+              fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
+              padding: '0.8rem 1.8rem',
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
-              marginBottom: '1.8rem',
+              marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
             }}>
               {'>'} life.balance.display()
             </div>
 
             <h1 className="neon-title" style={{
-              fontSize: 'clamp(4rem, 9vw, 7rem)',
+              fontSize: 'clamp(3.8rem, 11vw, 7rem)',
               fontWeight: 900,
-              color: '#00ffff',
-              letterSpacing: '5px',
+              letterSpacing: '4px',
               textTransform: 'uppercase',
-              marginBottom: '1.8rem'
+              marginBottom: '1.4rem',
+              lineHeight: 1.1
             }}>
               BEYOND THE CODE
             </h1>
 
             <p style={{
-              fontSize: 'clamp(1.25rem, 2.8vw, 1.6rem)',
+              fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
               color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto',
@@ -277,15 +352,17 @@ export default function CyberpunkBeyondCoding() {
           </div>
 
           {/* Hobbies Grid */}
-          <div style={{
+          <div className="hobby-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
-            gap: '2.5rem',
-            marginBottom: '7rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: 'clamp(2rem, 5vw, 3.2rem)',
+            marginBottom: '7rem',
+            width: '100%',
+            maxWidth: '100%'
           }}>
             {hobbiesData.map((hobby, i) => {
               const isHovered = hoveredId === i;
-              const color = hobby.color || '#00ffff';
+              const color = hobby.color || 'var(--neon-primary)';
 
               return (
                 <div
@@ -306,15 +383,15 @@ export default function CyberpunkBeyondCoding() {
                   <div style={{
                     position: 'absolute',
                     top: 0, left: 0, right: 0,
-                    height: '5px',
-                    background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
-                    opacity: isHovered ? 0.95 : 0.45,
+                    height: '4px',
+                    background: `linear-gradient(90deg, transparent, var(--neon-primary), transparent)`,
+                    opacity: isHovered ? 0.9 : 0.4,
                     transition: 'opacity 0.5s'
                   }} />
 
                   {/* Icon showcase */}
-                  <div style={{
-                    height: '260px',
+                  <div className="icon-showcase" style={{
+                    height: 'clamp(180px, 50vw, 240px)',
                     position: 'relative',
                     overflow: 'hidden',
                     display: 'flex',
@@ -338,9 +415,11 @@ export default function CyberpunkBeyondCoding() {
                     </div>
                   </div>
 
-                  <div style={{ padding: '2.4rem 2.6rem' }}>
+                  <div className="card-padding" style={{ 
+                    padding: 'clamp(1.8rem, 4vw, 2.4rem) clamp(1.6rem, 3.5vw, 2.2rem)' 
+                  }}>
                     <h3 style={{
-                      fontSize: '1.9rem',
+                      fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
                       fontWeight: 800,
                       color: '#ffffff',
                       marginBottom: '1rem',
@@ -416,29 +495,36 @@ export default function CyberpunkBeyondCoding() {
 
           {/* CTA Bar */}
           <div style={{
-            padding: '4rem',
+            padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
             background: 'rgba(0,0,0,0.75)',
-            border: '2.5px solid rgba(0,255,255,0.3)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
             <h2 style={{
-              fontSize: 'clamp(3rem, 7vw, 4.8rem)',
+              fontSize: 'clamp(2.8rem, 6vw, 4.5rem)',
               fontWeight: 900,
-              color: '#00ffff',
+              background: 'var(--neon-gradient)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px #00ffff90'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               READY TO RECHARGE?
             </h2>
 
-            <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="https://github.com/bhagavan444" target="_blank" style={{
+            <div className="cta-buttons" style={{ 
+              display: 'flex', 
+              gap: '2.5rem', 
+              justifyContent: 'center', 
+              flexWrap: 'wrap' 
+            }}>
+              <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
                 padding: '1.4rem 3.2rem',
-                background: 'rgba(0,255,255,0.14)',
-                border: '2.5px solid #00ffff80',
+                background: 'rgba(0,240,255,0.14)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
-                color: '#00ffff',
+                color: 'var(--neon-primary)',
                 fontWeight: 700,
                 fontSize: '1.25rem',
                 textDecoration: 'none',
@@ -452,7 +538,7 @@ export default function CyberpunkBeyondCoding() {
 
               <a href="mailto:g.sivasatyasaibhagavan@gmail.com" style={{
                 padding: '1.4rem 3.2rem',
-                background: 'linear-gradient(90deg, #00ffff, #8a2be2)',
+                background: 'var(--neon-gradient)',
                 borderRadius: '999px',
                 color: '#000',
                 fontWeight: 900,
@@ -470,7 +556,7 @@ export default function CyberpunkBeyondCoding() {
         </div>
       </div>
 
-      {/* ─── HOBBY DETAIL MODAL (optional - can expand later) ────────────────── */}
+      {/* ─── HOBBY DETAIL MODAL ──────────────────────────────────────────────── */}
       {activeHobby && (
         <div
           onClick={() => setActiveHobby(null)}
@@ -483,20 +569,21 @@ export default function CyberpunkBeyondCoding() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem'
+            padding: '1.5rem'
           }}
         >
           <div
             onClick={e => e.stopPropagation()}
+            className="modal-content"
             style={{
-              background: 'rgba(6,6,28,0.97)',
-              border: `4px solid ${activeHobby.color || '#00ffff'}aa`,
-              borderRadius: '32px',
+              background: 'rgba(6,6,28,0.98)',
+              border: `4px solid ${activeHobby.color || 'var(--neon-primary)'}aa`,
+              borderRadius: '28px',
               maxWidth: '1100px',
-              width: '94%',
+              width: '96%',
               maxHeight: '92vh',
               overflowY: 'auto',
-              boxShadow: `0 0 160px ${(activeHobby.color || '#00ffff')}70`,
+              boxShadow: `0 0 160px ${(activeHobby.color || 'var(--neon-primary)')}70`,
               position: 'relative'
             }}
           >
@@ -504,8 +591,8 @@ export default function CyberpunkBeyondCoding() {
               onClick={() => setActiveHobby(null)}
               style={{
                 position: 'absolute',
-                top: '2rem',
-                right: '2.5rem',
+                top: '1.5rem',
+                right: '1.8rem',
                 background: 'none',
                 border: 'none',
                 color: '#ff6666',
@@ -513,39 +600,41 @@ export default function CyberpunkBeyondCoding() {
                 zIndex: 10
               }}
             >
-              <X size={56} strokeWidth={2.8} />
+              <X size={48} strokeWidth={2.8} />
             </button>
 
             <div style={{
-              padding: '5rem 4rem 6rem',
+              padding: 'clamp(3rem, 7vw, 5rem) clamp(2rem, 6vw, 4rem) 6rem',
               textAlign: 'center'
             }}>
               <div style={{
                 width: '160px',
                 height: '160px',
                 margin: '0 auto 2rem',
-                border: `4px solid ${activeHobby.color || '#00ffff'}`,
+                border: `4px solid ${activeHobby.color || 'var(--neon-primary)'}`,
                 borderRadius: '40px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: `0 0 80px ${(activeHobby.color || '#00ffff')}90`
+                boxShadow: `0 0 80px ${(activeHobby.color || 'var(--neon-primary)')}90`
               }}>
-                <activeHobby.icon size={80} style={{ color: activeHobby.color || '#00ffff' }} />
+                <activeHobby.icon size={80} style={{ color: activeHobby.color || 'var(--neon-primary)' }} />
               </div>
 
               <h2 style={{
-                fontSize: 'clamp(2.8rem, 6vw, 4.5rem)',
+                fontSize: 'clamp(2.8rem, 7vw, 4.5rem)',
                 fontWeight: 900,
-                color: activeHobby.color || '#00ffff',
-                textShadow: `0 0 40px ${(activeHobby.color || '#00ffff')}90`,
+                background: 'var(--neon-gradient)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: `0 0 40px ${(activeHobby.color || 'var(--neon-primary)')}90`,
                 marginBottom: '1.5rem'
               }}>
                 {activeHobby.title}
               </h2>
 
               <p style={{
-                fontSize: '1.35rem',
+                fontSize: 'clamp(1.25rem, 3.5vw, 1.45rem)',
                 lineHeight: 1.8,
                 color: '#c8d0ff',
                 marginBottom: '3rem'
@@ -563,14 +652,14 @@ export default function CyberpunkBeyondCoding() {
                     padding: '2rem',
                     background: 'rgba(255,255,255,0.05)',
                     borderRadius: '20px',
-                    border: `2px solid ${(activeHobby.color || '#00ffff')}40`,
+                    border: `2px solid ${(activeHobby.color || 'var(--neon-primary)')}40`,
                     textAlign: 'center'
                   }}>
-                    <stat.icon size={40} style={{ color: activeHobby.color || '#00ffff', marginBottom: '1rem' }} />
+                    <stat.icon size={40} style={{ color: activeHobby.color || 'var(--neon-primary)', marginBottom: '1rem' }} />
                     <div style={{
                       fontSize: '2.2rem',
                       fontWeight: 900,
-                      color: activeHobby.color || '#00ffff'
+                      color: activeHobby.color || 'var(--neon-primary)'
                     }}>
                       {stat.value}
                     </div>
