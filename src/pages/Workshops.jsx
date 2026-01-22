@@ -1,12 +1,9 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Smartphone, Code, Brain, Cpu, Shield, GitBranch,
   Calendar, Users, Sparkles, Zap, Star, Award,
   Rocket, BookOpen, X, CheckCircle2, ArrowRight,
-  GraduationCap, Layers, Terminal, Database, Server, Lock,
-  Sun, Moon
+  GraduationCap, Layers, Terminal, Database, Server, Lock
 } from "lucide-react";
 
 const workshops = [
@@ -14,9 +11,12 @@ const workshops = [
     title: "Mobile App Development",
     icon: Smartphone,
     color: "var(--neon-primary)",
+
     desc: "Hands-on workshop focused on building cross-platform mobile applications using modern frameworks.",
+
     fullDesc:
       "Learned end-to-end mobile app development by building real-world cross-platform applications. Covered UI design, state management, backend integration, authentication, performance optimization, and deployment workflows.",
+
     skills: [
       "React Native",
       "Flutter",
@@ -25,6 +25,7 @@ const workshops = [
       "State Management",
       "Performance Optimization"
     ],
+
     whatILearned: [
       "Building cross-platform mobile apps from scratch",
       "Designing responsive and adaptive mobile UIs",
@@ -32,29 +33,35 @@ const workshops = [
       "Handling authentication and data persistence",
       "Optimizing performance for mobile devices"
     ],
+
     howIUsed: [
       "Applied UI and state management concepts in web projects",
       "Improved frontend performance optimization skills",
       "Gained understanding of mobile-first design principles"
     ],
+
     outcomes: [
       "Built multiple functional mobile app prototypes",
       "Strengthened understanding of client-side architecture",
       "Improved confidence in frontend engineering"
     ],
+
     duration: "8 Weeks",
     level: "Intermediate",
     projects: 6,
-    enrolled: 450,
     featured: true
   },
+
   {
     title: "Full-Stack Engineering",
     icon: Code,
     color: "var(--neon-primary)",
+
     desc: "Comprehensive full-stack training covering frontend, backend, databases, and cloud deployment.",
+
     fullDesc:
       "Developed strong full-stack engineering fundamentals by building scalable web applications using modern frontend frameworks, backend APIs, databases, and cloud deployment platforms.",
+
     skills: [
       "Next.js",
       "TypeScript",
@@ -63,6 +70,7 @@ const workshops = [
       "Docker",
       "Cloud Deployment"
     ],
+
     whatILearned: [
       "Building scalable frontend applications",
       "Designing RESTful backend services",
@@ -70,29 +78,35 @@ const workshops = [
       "Containerizing applications using Docker",
       "Deploying applications to cloud platforms"
     ],
+
     howIUsed: [
       "Applied full-stack principles in MERN projects",
       "Improved backend API design and security",
       "Used deployment concepts in hackathons and projects"
     ],
+
     outcomes: [
       "Built multiple full-stack web applications",
       "Improved system design understanding",
       "Strengthened backend and deployment skills"
     ],
+
     duration: "12 Weeks",
     level: "Beginner → Advanced",
     projects: 8,
-    enrolled: 620,
     featured: false
   },
+
   {
     title: "Machine Learning Pro",
     icon: Brain,
     color: "var(--neon-primary)",
+
     desc: "Practical machine learning workshop focused on real-world ML pipelines and deployment.",
+
     fullDesc:
       "Focused on building end-to-end machine learning pipelines including data preprocessing, feature engineering, model training, evaluation, and deployment into real-world applications.",
+
     skills: [
       "Python",
       "Scikit-learn",
@@ -101,6 +115,7 @@ const workshops = [
       "ML Pipelines",
       "Model Deployment"
     ],
+
     whatILearned: [
       "Preparing real-world datasets for ML models",
       "Training and evaluating ML algorithms",
@@ -108,29 +123,35 @@ const workshops = [
       "Deploying ML models into applications",
       "Understanding ML lifecycle and workflows"
     ],
+
     howIUsed: [
       "Built ML-based prediction systems",
       "Applied feature engineering in academic projects",
       "Improved ML model performance and reliability"
     ],
+
     outcomes: [
       "Built multiple machine learning models",
       "Improved understanding of ML workflows",
       "Prepared for AI/ML internships and projects"
     ],
+
     duration: "10 Weeks",
     level: "Intermediate",
     projects: 7,
-    enrolled: 380,
     featured: false
   },
+
   {
     title: "Deep Learning & Advanced AI",
     icon: Cpu,
     color: "var(--neon-primary)",
+
     desc: "Advanced deep learning workshop covering modern AI architectures and generative models.",
+
     fullDesc:
       "Explored advanced AI concepts including deep neural networks, transformers, generative models, and real-world AI system design with hands-on implementations.",
+
     skills: [
       "PyTorch",
       "Deep Neural Networks",
@@ -139,6 +160,7 @@ const workshops = [
       "NLP",
       "Model Optimization"
     ],
+
     whatILearned: [
       "Designing and training deep neural networks",
       "Understanding transformer architectures",
@@ -146,48 +168,31 @@ const workshops = [
       "Optimizing deep learning performance",
       "Deploying deep learning models"
     ],
+
     howIUsed: [
       "Applied DL concepts in AI projects",
       "Improved model accuracy and performance",
       "Built AI-powered applications"
     ],
+
     outcomes: [
       "Built advanced deep learning models",
       "Strengthened AI system design skills",
       "Prepared for AI Engineer roles"
     ],
+
     duration: "12 Weeks",
     level: "Advanced",
     projects: 5,
-    enrolled: 290,
     featured: true
   }
 ];
 
+
 export default function CyberpunkWorkshops() {
   const [selected, setSelected] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("workshops-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("workshops-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -211,7 +216,7 @@ export default function CyberpunkWorkshops() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -221,7 +226,7 @@ export default function CyberpunkWorkshops() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -239,7 +244,7 @@ export default function CyberpunkWorkshops() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   const Counter = ({ target }) => {
     const [count, setCount] = useState(0);
@@ -267,37 +272,9 @@ export default function CyberpunkWorkshops() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --tech-bg: rgba(255,255,255,0.92);
-          --tech-text: #1e40af;
-          --tech-border: rgba(0,183,235,0.4);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --tech-bg: rgba(0,0,0,0.78);
-          --tech-text: #e0f7ff;
-          --tech-border: rgba(0,240,255,0.45);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -307,8 +284,8 @@ export default function CyberpunkWorkshops() {
 
         .workshop-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -326,21 +303,21 @@ export default function CyberpunkWorkshops() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .tech-pill {
-          background: var(--tech-bg);
-          border: 1.6px solid var(--tech-border);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: var(--tech-text);
+          color: #e0f7ff;
         }
 
         .tech-pill:hover {
@@ -352,31 +329,7 @@ export default function CyberpunkWorkshops() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -406,12 +359,6 @@ export default function CyberpunkWorkshops() {
             padding: 2.2rem 1.6rem !important;
             width: 98% !important;
             max-width: 98% !important;
-          }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
           }
         }
 
@@ -448,39 +395,25 @@ export default function CyberpunkWorkshops() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -510,7 +443,7 @@ export default function CyberpunkWorkshops() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -531,7 +464,7 @@ export default function CyberpunkWorkshops() {
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto',
               fontFamily: "'Fira Code', monospace",
@@ -611,17 +544,17 @@ export default function CyberpunkWorkshops() {
                         top: '1.5rem',
                         right: '1.5rem',
                         padding: '0.6rem 1.4rem',
-                        background: theme === "dark" ? 'rgba(255,215,0,0.18)' : 'rgba(234,179,8,0.15)',
-                        border: `2px solid ${theme === "dark" ? '#ffea8090' : '#d97706'}`,
+                        background: 'rgba(255,215,0,0.18)',
+                        border: '2px solid #ffea8090',
                         borderRadius: '999px',
                         fontSize: '0.95rem',
                         fontWeight: 700,
-                        color: theme === "dark" ? '#ffea80' : '#d97706',
+                        color: '#ffea80',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.6rem'
                       }}>
-                        <Star size={16} fill={theme === "dark" ? "#ffea80" : "#d97706"} /> FEATURED
+                        <Star size={16} fill="#ffea80" /> FEATURED
                       </div>
                     )}
                   </div>
@@ -632,7 +565,7 @@ export default function CyberpunkWorkshops() {
                     <h3 style={{
                       fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: '#ffffff',
                       marginBottom: '1rem',
                       textAlign: 'center'
                     }}>
@@ -641,7 +574,7 @@ export default function CyberpunkWorkshops() {
 
                     <p style={{
                       fontSize: '1rem',
-                      color: theme === "dark" ? '#b0b0d0' : '#555555',
+                      color: '#b0b0d0',
                       lineHeight: 1.7,
                       textAlign: 'center',
                       marginBottom: '2rem',
@@ -663,7 +596,7 @@ export default function CyberpunkWorkshops() {
                         alignItems: 'center',
                         gap: '0.8rem',
                         padding: '0.8rem 1.4rem',
-                        background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                        background: 'rgba(0,0,0,0.55)',
                         borderRadius: '999px',
                         border: `1px solid ${color}40`
                       }}>
@@ -676,7 +609,7 @@ export default function CyberpunkWorkshops() {
                         alignItems: 'center',
                         gap: '0.8rem',
                         padding: '0.8rem 1.4rem',
-                        background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                        background: 'rgba(0,0,0,0.55)',
                         borderRadius: '999px',
                         border: `1px solid ${color}40`
                       }}>
@@ -689,7 +622,7 @@ export default function CyberpunkWorkshops() {
                         alignItems: 'center',
                         gap: '0.8rem',
                         padding: '0.8rem 1.4rem',
-                        background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                        background: 'rgba(0,0,0,0.55)',
                         borderRadius: '999px',
                         border: `1px solid ${color}40`
                       }}>
@@ -732,8 +665,8 @@ export default function CyberpunkWorkshops() {
           {/* CTA Bar */}
           <div style={{
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.92)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,183,235,0.25)'}`,
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -744,7 +677,7 @@ export default function CyberpunkWorkshops() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               READY TO LEVEL UP?
             </h2>
@@ -757,8 +690,8 @@ export default function CyberpunkWorkshops() {
             }}>
               <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
                 padding: '1.4rem 3.2rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                background: 'rgba(0,240,255,0.14)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
                 color: 'var(--neon-primary)',
                 fontWeight: 700,
@@ -799,7 +732,7 @@ export default function CyberpunkWorkshops() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)',
+            background: 'rgba(0,0,0,0.96)',
             backdropFilter: 'blur(16px)',
             zIndex: 9999,
             display: 'flex',
@@ -812,7 +745,7 @@ export default function CyberpunkWorkshops() {
             onClick={e => e.stopPropagation()}
             className="modal-content"
             style={{
-              background: theme === "dark" ? 'rgba(6,6,28,0.98)' : 'rgba(255,255,255,0.98)',
+              background: 'rgba(6,6,28,0.98)',
               border: `4px solid ${selected.color}aa`,
               borderRadius: '28px',
               maxWidth: '1300px',
@@ -879,7 +812,7 @@ export default function CyberpunkWorkshops() {
               <p style={{
                 fontSize: 'clamp(1.25rem, 3.5vw, 1.45rem)',
                 lineHeight: 1.8,
-                color: theme === "dark" ? '#c8d0ff' : '#374151',
+                color: '#c8d0ff',
                 textAlign: 'center',
                 marginBottom: '3.5rem'
               }}>
@@ -914,13 +847,12 @@ export default function CyberpunkWorkshops() {
                     {selected.skills.map(s => (
                       <span key={s} style={{
                         padding: '0.9rem 1.8rem',
-                        background: theme === "dark" ? `${selected.color}20` : `${selected.color}15`,
+                        background: `${selected.color}20`,
                         border: `2px solid ${selected.color}50`,
                         borderRadius: '999px',
                         fontFamily: "'Fira Code', monospace",
                         fontWeight: 600,
-                        fontSize: '0.95rem',
-                        color: theme === "dark" ? '#e0f7ff' : '#1a1a1a'
+                        fontSize: '0.95rem'
                       }}>
                         {s}
                       </span>
@@ -947,19 +879,19 @@ export default function CyberpunkWorkshops() {
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem' }}>
                       <span>Duration:</span>
-                      <span style={{ color: theme === "dark" ? '#ffffff' : '#1a1a1a', fontWeight: 700 }}>{selected.duration}</span>
+                      <span style={{ color: '#ffffff', fontWeight: 700 }}>{selected.duration}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem' }}>
                       <span>Enrolled:</span>
-                      <span style={{ color: theme === "dark" ? '#ffffff' : '#1a1a1a', fontWeight: 700 }}><Counter target={selected.enrolled} />+</span>
+                      <span style={{ color: '#ffffff', fontWeight: 700 }}><Counter target={selected.enrolled} />+</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem' }}>
                       <span>Projects:</span>
-                      <span style={{ color: theme === "dark" ? '#ffffff' : '#1a1a1a', fontWeight: 700 }}>{selected.projects}</span>
+                      <span style={{ color: '#ffffff', fontWeight: 700 }}>{selected.projects}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem' }}>
                       <span>Level:</span>
-                      <span style={{ color: theme === "dark" ? '#ffffff' : '#1a1a1a', fontWeight: 700 }}>{selected.level}</span>
+                      <span style={{ color: '#ffffff', fontWeight: 700 }}>{selected.level}</span>
                     </div>
                   </div>
                 </div>

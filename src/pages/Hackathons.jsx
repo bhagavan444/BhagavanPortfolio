@@ -1,11 +1,9 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Trophy, Award, X, Code, Database, Shield, Rocket, Crown,
   Clock, Users, Sparkles, Zap, Star, Flame, Target, Cpu, GitBranch,
   Download, TrendingUp, Layers, CheckCircle2, ArrowRight, Terminal,
-  Server, Lock, Sun, Moon
+  Server, Lock
 } from "lucide-react";
 import certificateImage from "../assets/images/Brainovision-certificate.jpg";
 
@@ -13,102 +11,107 @@ export default function CyberpunkHackathon() {
   const [modalOpen, setModalOpen] = useState(false);
   const [activePhase, setActivePhase] = useState(0);
   const [hoveredId, setHoveredId] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
+const phases = [
+  {
+    id: 1,
+    hour: "0–6h",
+    icon: Terminal,
+    title: "Foundation Sprint",
+    desc: "Designed overall system architecture, finalized use-cases, modeled MongoDB schemas, implemented JWT authentication core, and scaffolded backend & frontend projects.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "System Architecture Blueprint",
+      "MongoDB Schema Design",
+      "JWT Authentication Core",
+      "Backend & Frontend Setup"
+    ]
+  },
+  {
+    id: 2,
+    hour: "6–14h",
+    icon: Code,
+    title: "Core Development",
+    desc: "Implemented RESTful APIs, developed reusable React components, set up state management, routing, and integrated core application workflows.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "15+ REST API Endpoints",
+      "Reusable UI Component Library",
+      "State Management Architecture",
+      "Client-Side Routing"
+    ]
+  },
+  {
+    id: 3,
+    hour: "14–20h",
+    icon: Zap,
+    title: "Integration & Security",
+    desc: "Integrated real-time features using Socket.io, implemented role-based access control, added validation layers, middleware, and centralized error handling.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "Real-Time Chat System",
+      "Role-Based Authorization",
+      "Security Hardening",
+      "Robust Error Handling"
+    ]
+  },
+  {
+    id: 4,
+    hour: "20–24h",
+    icon: Rocket,
+    title: "Launch & Demo",
+    desc: "Optimized performance, tested core flows, prepared live demo, deployed to cloud, and documented system for presentation and evaluation.",
+    color: "var(--neon-primary)",
+    achievements: [
+      "Production Deployment",
+      "Performance Optimization",
+      "Live Demo Preparation",
+      "Technical Documentation"
+    ]
+  }
+];
 
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("hackathon-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
 
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("hackathon-theme", theme);
-  }, [theme]);
+ const techStack = [
+  { icon: Database, name: "MongoDB", desc: "NoSQL database for scalable data storage", color: "#10b981" },
+  { icon: Server, name: "Express.js", desc: "Backend framework for REST APIs", color: "var(--neon-primary)" },
+  { icon: Sparkles, name: "React", desc: "Frontend UI library for dynamic components", color: "#8b5cf6" },
+  { icon: Layers, name: "Node.js", desc: "JavaScript runtime for backend services", color: "#ec4899" },
+  { icon: Lock, name: "JWT", desc: "Secure authentication & authorization", color: "#f59e0b" },
+  { icon: Zap, name: "Socket.io", desc: "Real-time communication engine", color: "#3b82f6" }
+];
 
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
+const stats = [
+  {
+    label: "Duration",
+    value: "24",
+    unit: "hours",
+    icon: Clock,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Team Size",
+    value: "4",
+    unit: "members",
+    icon: Users,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Code Written",
+    value: "5000+",
+    unit: "lines",
+    icon: Code,
+    color: "var(--neon-primary)"
+  },
+  {
+    label: "Achievement",
+    value: "1st",
+    unit: "place",
+    icon: Trophy,
+    color: "var(--neon-primary)"
+  }
+];
 
-  const phases = [
-    {
-      id: 1,
-      hour: "0–6h",
-      icon: Terminal,
-      title: "Foundation Sprint",
-      desc: "Designed overall system architecture, finalized use-cases, modeled MongoDB schemas, implemented JWT authentication core, and scaffolded backend & frontend projects.",
-      color: "var(--neon-primary)",
-      achievements: [
-        "System Architecture Blueprint",
-        "MongoDB Schema Design",
-        "JWT Authentication Core",
-        "Backend & Frontend Setup"
-      ]
-    },
-    {
-      id: 2,
-      hour: "6–14h",
-      icon: Code,
-      title: "Core Development",
-      desc: "Implemented RESTful APIs, developed reusable React components, set up state management, routing, and integrated core application workflows.",
-      color: "var(--neon-primary)",
-      achievements: [
-        "15+ REST API Endpoints",
-        "Reusable UI Component Library",
-        "State Management Architecture",
-        "Client-Side Routing"
-      ]
-    },
-    {
-      id: 3,
-      hour: "14–20h",
-      icon: Zap,
-      title: "Integration & Security",
-      desc: "Integrated real-time features using Socket.io, implemented role-based access control, added validation layers, middleware, and centralized error handling.",
-      color: "var(--neon-primary)",
-      achievements: [
-        "Real-Time Chat System",
-        "Role-Based Authorization",
-        "Security Hardening",
-        "Robust Error Handling"
-      ]
-    },
-    {
-      id: 4,
-      hour: "20–24h",
-      icon: Rocket,
-      title: "Launch & Demo",
-      desc: "Optimized performance, tested core flows, prepared live demo, deployed to cloud, and documented system for presentation and evaluation.",
-      color: "var(--neon-primary)",
-      achievements: [
-        "Production Deployment",
-        "Performance Optimization",
-        "Live Demo Preparation",
-        "Technical Documentation"
-      ]
-    }
-  ];
-
-  const techStack = [
-    { icon: Database, name: "MongoDB", desc: "NoSQL database for scalable data storage", color: "#10b981" },
-    { icon: Server, name: "Express.js", desc: "Backend framework for REST APIs", color: "var(--neon-primary)" },
-    { icon: Sparkles, name: "React", desc: "Frontend UI library for dynamic components", color: "#8b5cf6" },
-    { icon: Layers, name: "Node.js", desc: "JavaScript runtime for backend services", color: "#ec4899" },
-    { icon: Lock, name: "JWT", desc: "Secure authentication & authorization", color: "#f59e0b" },
-    { icon: Zap, name: "Socket.io", desc: "Real-time communication engine", color: "#3b82f6" }
-  ];
-
-  const stats = [
-    { label: "Duration", value: "24", unit: "hours", icon: Clock, color: "var(--neon-primary)" },
-    { label: "Team Size", value: "4", unit: "members", icon: Users, color: "var(--neon-primary)" },
-    { label: "Code Written", value: "5000+", unit: "lines", icon: Code, color: "var(--neon-primary)" },
-    { label: "Achievement", value: "1st", unit: "place", icon: Trophy, color: "var(--neon-primary)" }
-  ];
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -132,7 +135,7 @@ export default function CyberpunkHackathon() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -142,7 +145,7 @@ export default function CyberpunkHackathon() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -160,7 +163,7 @@ export default function CyberpunkHackathon() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -177,37 +180,9 @@ export default function CyberpunkHackathon() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --tech-bg: rgba(255,255,255,0.92);
-          --tech-text: #1e40af;
-          --tech-border: rgba(0,183,235,0.4);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --tech-bg: rgba(0,0,0,0.78);
-          --tech-text: #e0f7ff;
-          --tech-border: rgba(0,240,255,0.45);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -217,8 +192,8 @@ export default function CyberpunkHackathon() {
 
         .hack-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -236,21 +211,21 @@ export default function CyberpunkHackathon() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .tech-pill {
-          background: var(--tech-bg);
-          border: 1.6px solid var(--tech-border);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: var(--tech-text);
+          color: #e0f7ff;
         }
 
         .tech-pill:hover {
@@ -262,31 +237,7 @@ export default function CyberpunkHackathon() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -316,12 +267,6 @@ export default function CyberpunkHackathon() {
             padding: 2.2rem 1.6rem !important;
             width: 98% !important;
             max-width: 98% !important;
-          }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
           }
         }
 
@@ -356,39 +301,25 @@ export default function CyberpunkHackathon() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -418,7 +349,7 @@ export default function CyberpunkHackathon() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -454,21 +385,24 @@ export default function CyberpunkHackathon() {
               alignItems: 'center',
               gap: '1rem',
               padding: '1rem 2.5rem',
-              background: theme === "dark" ? 'rgba(0,240,255,0.12)' : 'rgba(0,183,235,0.12)',
-              border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.6)' : 'rgba(0,183,235,0.4)'}`,
+              background: 'rgba(0,240,255,0.12)',
+              border: '2.5px solid rgba(0,240,255,0.6)',
               borderRadius: '999px',
               color: 'var(--neon-primary)',
               fontSize: '1.3rem',
               fontWeight: 800,
               marginBottom: '3rem'
             }}>
-              <Trophy size={32} />
-              <span>CERTIFIED</span>
+              <div className="certificate-badge">
+  <Trophy size={32} />
+  <span>CERTIFIED</span>
+</div>
+
             </div>
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto 4rem',
               fontFamily: "'Fira Code', monospace",
@@ -488,7 +422,7 @@ export default function CyberpunkHackathon() {
               {stats.map((stat, i) => (
                 <div key={i} style={{
                   padding: '2rem',
-                  background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.9)',
+                  background: 'rgba(0,0,0,0.65)',
                   border: `2px solid ${stat.color}40`,
                   borderRadius: '20px',
                   textAlign: 'center'
@@ -502,10 +436,7 @@ export default function CyberpunkHackathon() {
                   }}>
                     {stat.value}{stat.unit && <span style={{ fontSize: '1.2rem' }}> {stat.unit}</span>}
                   </div>
-                  <div style={{ 
-                    color: theme === "dark" ? '#b0b0d0' : '#555555', 
-                    fontSize: '1.05rem' 
-                  }}>
+                  <div style={{ color: '#b0b0d0', fontSize: '1.05rem' }}>
                     {stat.label}
                   </div>
                 </div>
@@ -520,12 +451,12 @@ export default function CyberpunkHackathon() {
             borderRadius: '28px',
             overflow: 'hidden',
             position: 'relative',
-            boxShadow: '0 0 100px rgba(var(--neon-primary-rgb),0.3)'
+            boxShadow: '0 0 100px rgba(0,240,255,0.3)'
           }}>
             <div style={{
               position: 'absolute',
               inset: '-4px',
-              background: 'conic-gradient(from 0deg at 50% 50%, #00b7eb, #7c3aed, #00b7eb)',
+              background: 'conic-gradient(from 0deg at 50% 50%, #00f0ff, #a78bfa, #00f0ff)',
               borderRadius: '32px',
               animation: 'rotate 20s linear infinite',
               zIndex: -1,
@@ -606,7 +537,7 @@ export default function CyberpunkHackathon() {
                       <div style={{
                         fontSize: '1.4rem',
                         fontWeight: 800,
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                        color: '#ffffff',
                         textAlign: 'center',
                         marginBottom: '1rem'
                       }}>
@@ -617,15 +548,14 @@ export default function CyberpunkHackathon() {
                         fontSize: 'clamp(1.6rem, 4.2vw, 1.9rem)',
                         fontWeight: 800,
                         marginBottom: '1.2rem',
-                        textAlign: 'center',
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a'
+                        textAlign: 'center'
                       }}>
                         {phase.title}
                       </h3>
 
                       <p style={{
                         fontSize: '1rem',
-                        color: theme === "dark" ? '#b0b0d0' : '#555555',
+                        color: '#b0b0d0',
                         lineHeight: 1.7,
                         textAlign: 'center',
                         marginBottom: '2rem',
@@ -645,7 +575,7 @@ export default function CyberpunkHackathon() {
                             alignItems: 'center',
                             gap: '1rem',
                             padding: '1rem',
-                            background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                            background: 'rgba(0,0,0,0.55)',
                             borderRadius: '14px',
                             border: `1px solid ${color}30`
                           }}>
@@ -681,7 +611,7 @@ export default function CyberpunkHackathon() {
               {techStack.map((tech, i) => (
                 <div key={i} style={{
                   padding: '2.2rem',
-                  background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.9)',
+                  background: 'rgba(0,0,0,0.65)',
                   border: `2px solid ${tech.color}40`,
                   borderRadius: '20px',
                   textAlign: 'center'
@@ -690,15 +620,12 @@ export default function CyberpunkHackathon() {
                   <div style={{
                     fontSize: '1.6rem',
                     fontWeight: 800,
-                    color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                    color: '#ffffff',
                     marginBottom: '0.6rem'
                   }}>
                     {tech.name}
                   </div>
-                  <div style={{ 
-                    color: theme === "dark" ? '#a0a0c0' : '#555555', 
-                    fontSize: '1.1rem' 
-                  }}>
+                  <div style={{ color: '#a0a0c0', fontSize: '1.1rem' }}>
                     {tech.desc}
                   </div>
                 </div>
@@ -709,8 +636,8 @@ export default function CyberpunkHackathon() {
           {/* CTA */}
           <div style={{
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.92)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,183,235,0.25)'}`,
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -721,7 +648,7 @@ export default function CyberpunkHackathon() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               READY FOR NEXT HACK?
             </h2>
@@ -736,8 +663,8 @@ export default function CyberpunkHackathon() {
                 onClick={() => setModalOpen(true)}
                 style={{
                   padding: '1.4rem 3.2rem',
-                  background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                  border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                  background: 'rgba(0,240,255,0.14)',
+                  border: '2.5px solid rgba(0,240,255,0.7)',
                   borderRadius: '999px',
                   color: 'var(--neon-primary)',
                   fontWeight: 700,
@@ -783,7 +710,7 @@ export default function CyberpunkHackathon() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.97)' : 'rgba(255,255,255,0.97)',
+            background: 'rgba(0,0,0,0.97)',
             backdropFilter: 'blur(16px)',
             zIndex: 9999,
             display: 'flex',
@@ -796,14 +723,14 @@ export default function CyberpunkHackathon() {
             onClick={e => e.stopPropagation()}
             className="modal-content"
             style={{
-              background: theme === "dark" ? 'rgba(6,6,28,0.98)' : 'rgba(255,255,255,0.98)',
+              background: 'rgba(6,6,28,0.98)',
               border: `4px solid var(--neon-primary)aa`,
               borderRadius: '28px',
               maxWidth: '1300px',
               width: '96%',
               maxHeight: '92vh',
               overflowY: 'auto',
-              boxShadow: '0 0 160px rgba(var(--neon-primary-rgb),0.7)',
+              boxShadow: '0 0 160px rgba(0,240,255,0.7)',
               position: 'relative'
             }}
           >
@@ -832,7 +759,7 @@ export default function CyberpunkHackathon() {
                 WebkitTextFillColor: 'transparent',
                 textAlign: 'center',
                 marginBottom: '4rem',
-                textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+                textShadow: '0 0 40px rgba(0,240,255,0.7)'
               }}>
                 24-HOUR FULL TIMELINE
               </h2>
@@ -844,7 +771,7 @@ export default function CyberpunkHackathon() {
                   gap: '2rem',
                   marginBottom: '3.5rem',
                   padding: '2.5rem',
-                  background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                  background: 'rgba(0,0,0,0.55)',
                   borderRadius: '24px',
                   border: `2px solid ${phase.color}40`
                 }}>
@@ -866,7 +793,7 @@ export default function CyberpunkHackathon() {
                     <div style={{
                       fontSize: '1.5rem',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: phase.color,
                       marginBottom: '1rem'
                     }}>
                       {phase.hour}
@@ -875,7 +802,7 @@ export default function CyberpunkHackathon() {
                     <h3 style={{
                       fontSize: 'clamp(1.9rem, 5vw, 2.3rem)',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: '#ffffff',
                       marginBottom: '1.5rem'
                     }}>
                       {phase.title}
@@ -883,7 +810,7 @@ export default function CyberpunkHackathon() {
 
                     <p style={{
                       fontSize: 'clamp(1.1rem, 3vw, 1.3rem)',
-                      color: theme === "dark" ? '#d0d0ff' : '#555555',
+                      color: '#d0d0ff',
                       lineHeight: 1.7,
                       marginBottom: '2rem'
                     }}>
@@ -902,7 +829,7 @@ export default function CyberpunkHackathon() {
                           alignItems: 'center',
                           gap: '1rem',
                           padding: '1.2rem',
-                          background: theme === "dark" ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                          background: 'rgba(255,255,255,0.04)',
                           borderRadius: '16px',
                           border: `1px solid ${phase.color}30`
                         }}>
@@ -919,5 +846,6 @@ export default function CyberpunkHackathon() {
         </div>
       )}
     </>
-  );
-}
+  ); 
+ 
+} 

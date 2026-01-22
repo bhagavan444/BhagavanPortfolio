@@ -1,12 +1,10 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Download, Eye, FileText, Award, Code, Rocket, Star, Sparkles,
+import { useState, useEffect, useRef } from "react";
+import { 
+  Download, Eye, FileText, Award, Code, Rocket, Star, Sparkles, 
   X, CheckCircle2, TrendingUp, Zap, Target, Brain, Trophy,
   GraduationCap, Calendar, MapPin, Linkedin, Github, Mail,
   Briefcase, Terminal, Database, Server, Code2, GitBranch,
-  ExternalLink, Users, Cpu, Cloud, Sun, Moon
+  ExternalLink, Users, Cpu, Cloud
 } from 'lucide-react';
 
 const RESUME_URL = "https://drive.google.com/file/d/1BfrC-GloabR5mOXuPb8mjkKQmya5luDE/preview";
@@ -15,27 +13,7 @@ const RESUME_DOWNLOAD = "https://drive.google.com/uc?export=download&id=1BfrC-Gl
 export default function CyberpunkResume() {
   const [showModal, setShowModal] = useState(false);
   const [hoveredStat, setHoveredStat] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("resume-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("resume-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -59,7 +37,7 @@ export default function CyberpunkResume() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -69,7 +47,7 @@ export default function CyberpunkResume() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -87,7 +65,7 @@ export default function CyberpunkResume() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   const stats = [
     { icon: GraduationCap, value: '8.5+', label: 'CGPA', color: 'var(--neon-primary)' },
@@ -113,33 +91,9 @@ export default function CyberpunkResume() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --stat-bg: rgba(255,255,255,0.92);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --stat-bg: rgba(0,0,0,0.78);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -160,31 +114,7 @@ export default function CyberpunkResume() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -210,12 +140,6 @@ export default function CyberpunkResume() {
           .floating-cta {
             display: flex !important;
           }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
-          }
         }
 
         @media (max-width: 480px) {
@@ -231,39 +155,25 @@ export default function CyberpunkResume() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -293,7 +203,7 @@ export default function CyberpunkResume() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -314,7 +224,7 @@ export default function CyberpunkResume() {
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto 3rem',
               fontFamily: "'Fira Code', monospace",
@@ -339,7 +249,7 @@ export default function CyberpunkResume() {
                   onMouseLeave={() => setHoveredStat(null)}
                   style={{
                     padding: '1.8rem',
-                    background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
+                    background: 'rgba(0,0,0,0.65)',
                     border: `2px solid ${stat.color}40`,
                     borderRadius: '16px',
                     textAlign: 'center',
@@ -354,10 +264,7 @@ export default function CyberpunkResume() {
                   }}>
                     {stat.value}
                   </div>
-                  <div style={{ 
-                    color: theme === "dark" ? '#b0b0d0' : '#555555', 
-                    fontSize: '1.1rem' 
-                  }}>
+                  <div style={{ color: '#b0b0d0', fontSize: '1.1rem' }}>
                     {stat.label}
                   </div>
                 </div>
@@ -365,7 +272,7 @@ export default function CyberpunkResume() {
             </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content - Mobile: stacked, Desktop: side-by-side */}
           <div className="main-grid" style={{
             display: 'grid',
             gridTemplateColumns: '1fr 2fr',
@@ -374,7 +281,7 @@ export default function CyberpunkResume() {
               gridTemplateColumns: '1fr'
             }
           }}>
-            {/* Left Column - Info & Actions */}
+            {/* Left Column - Info & Actions (stacks first on mobile) */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
@@ -383,8 +290,8 @@ export default function CyberpunkResume() {
               {/* Core Skills */}
               <div style={{
                 padding: '2.2rem',
-                background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-                border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
+                background: 'rgba(0,0,0,0.65)',
+                border: '2px solid rgba(0,240,255,0.3)',
                 borderRadius: '20px'
               }}>
                 <h3 style={{
@@ -410,12 +317,12 @@ export default function CyberpunkResume() {
                       key={i}
                       style={{
                         padding: '0.7rem 1.4rem',
-                        background: theme === "dark" ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.85)',
+                        background: 'rgba(0,0,0,0.55)',
                         border: `1.5px solid ${skill.color}50`,
                         borderRadius: '999px',
                         fontSize: '0.95rem',
                         fontWeight: 600,
-                        color: theme === "dark" ? '#e0e0ff' : '#1a1a1a'
+                        color: '#e0e0ff'
                       }}
                     >
                       {skill.name}
@@ -444,7 +351,7 @@ export default function CyberpunkResume() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '1rem',
-                    boxShadow: '0 0 50px rgba(var(--neon-primary-rgb),0.6)',
+                    boxShadow: '0 0 50px rgba(0,240,255,0.6)',
                     transition: 'all 0.4s'
                   }}
                 >
@@ -456,8 +363,8 @@ export default function CyberpunkResume() {
                   onClick={() => setShowModal(true)}
                   style={{
                     padding: '1.4rem',
-                    background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                    border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                    background: 'rgba(0,240,255,0.14)',
+                    border: '2.5px solid rgba(0,240,255,0.7)',
                     borderRadius: '999px',
                     color: 'var(--neon-primary)',
                     fontWeight: 700,
@@ -475,13 +382,13 @@ export default function CyberpunkResume() {
               </div>
             </div>
 
-            {/* Right Column - Resume Preview */}
+            {/* Right Column - Resume Preview (full width on mobile) */}
             <div className="resume-preview" style={{
               borderRadius: '24px',
               overflow: 'hidden',
-              border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
+              border: '2px solid rgba(0,240,255,0.3)',
               background: '#000',
-              boxShadow: '0 0 80px rgba(var(--neon-primary-rgb),0.3)',
+              boxShadow: '0 0 80px rgba(0,240,255,0.3)',
               position: 'relative',
               height: 'clamp(700px, 85vh, 1200px)'
             }}>
@@ -490,7 +397,7 @@ export default function CyberpunkResume() {
                 position: 'absolute',
                 top: 0, left: 0, right: 0,
                 padding: '1rem 2rem',
-                background: theme === "dark" ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)',
+                background: 'rgba(0,0,0,0.7)',
                 backdropFilter: 'blur(12px)',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -503,8 +410,7 @@ export default function CyberpunkResume() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '1rem',
-                  fontSize: '1rem',
-                  color: theme === "dark" ? '#e0e0ff' : '#1a1a1a'
+                  fontSize: '1rem'
                 }}>
                   <CheckCircle2 size={20} style={{ color: 'var(--neon-primary)' }} />
                   ATS Score: 92%
@@ -518,7 +424,7 @@ export default function CyberpunkResume() {
                   <a href="https://linkedin.com/in/your-profile" target="_blank" style={{ color: 'var(--neon-primary)' }}>
                     <Linkedin size={22} />
                   </a>
-                  <a href="https://github.com/bhagavan444" target="_blank" style={{ color: theme === "dark" ? '#ffffff' : '#1a1a1a' }}>
+                  <a href="https://github.com/bhagavan444" target="_blank" style={{ color: '#ffffff' }}>
                     <Github size={22} />
                   </a>
                 </div>
@@ -542,7 +448,7 @@ export default function CyberpunkResume() {
                 position: 'absolute',
                 inset: 0,
                 pointerEvents: 'none',
-                background: 'linear-gradient(to bottom, transparent, rgba(var(--neon-primary-rgb),0.08), transparent)',
+                background: 'linear-gradient(to bottom, transparent, rgba(0,240,255,0.08), transparent)',
                 height: '120px',
                 animation: 'scan 6s linear infinite'
               }} />
@@ -564,8 +470,8 @@ export default function CyberpunkResume() {
             onClick={() => setShowModal(true)}
             style={{
               padding: '1rem 1.8rem',
-              background: theme === "dark" ? 'rgba(0,240,255,0.2)' : 'rgba(0,183,235,0.15)',
-              border: `2px solid var(--neon-primary)`,
+              background: 'rgba(0,240,255,0.2)',
+              border: '2px solid var(--neon-primary)',
               borderRadius: '999px',
               color: 'var(--neon-primary)',
               fontWeight: 700,
@@ -586,7 +492,7 @@ export default function CyberpunkResume() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.8rem',
-              boxShadow: '0 0 30px rgba(var(--neon-primary-rgb),0.6)'
+              boxShadow: '0 0 30px rgba(0,240,255,0.6)'
             }}
           >
             <Download size={24} />
@@ -602,7 +508,7 @@ export default function CyberpunkResume() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)',
+            background: 'rgba(0,0,0,0.96)',
             backdropFilter: 'blur(16px)',
             zIndex: 9999,
             display: 'flex',

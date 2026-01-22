@@ -1,11 +1,8 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   BookOpen, Music, Coffee, Dumbbell, Camera, Film, Gamepad2, 
   Sparkles, Zap, TrendingUp, Heart, Brain, Code2, Rocket, Crown, 
-  Flame, Star, Target, Award, Volume2, Timer, Activity, X, CheckCircle2,
-  Sun, Moon
+  Flame, Star, Target, Award, Volume2, Timer, Activity, X, CheckCircle2 
 } from "lucide-react";
 
 const hobbiesData = [
@@ -13,115 +10,156 @@ const hobbiesData = [
     title: "Reading",
     icon: BookOpen,
     color: "var(--neon-primary)",
+
     desc: "Deep dives into software architecture, system design, and emerging technologies.",
-    whyItMatters: "Strengthens system-level thinking and helps design scalable, maintainable software.",
+
+    whyItMatters:
+      "Strengthens system-level thinking and helps design scalable, maintainable software.",
+
     learnings: [
       "System design patterns",
       "Clean architecture principles",
       "Engineering best practices"
     ],
+
     stats: [
       { label: "Books / Year", value: "24+", icon: BookOpen },
       { label: "Focus Areas", value: "Tech & Design", icon: Target },
       { label: "Impact", value: "High", icon: Award }
     ]
   },
+
   { 
     title: "Music",
     icon: Music,
     color: "var(--neon-primary)",
+
     desc: "Using music to enhance focus, creativity, and flow during deep work sessions.",
-    whyItMatters: "Improves concentration during long coding and problem-solving sessions.",
+
+    whyItMatters:
+      "Improves concentration during long coding and problem-solving sessions.",
+
     learnings: [
       "Sustained focus",
       "Creative thinking",
       "Stress management"
     ],
+
     stats: [
       { label: "Daily Listening", value: "4+ hrs", icon: Timer },
       { label: "Genres", value: "Multi-Genre", icon: Volume2 },
       { label: "Productivity Boost", value: "200%", icon: Activity }
     ]
   },
+
   { 
     title: "Coffee",
     icon: Coffee,
     color: "var(--neon-primary)",
+
     desc: "Fuel for late-night coding, debugging, and hackathon sprints.",
-    whyItMatters: "Supports sustained energy during high-pressure development cycles.",
+
+    whyItMatters:
+      "Supports sustained energy during high-pressure development cycles.",
+
     learnings: [
       "Endurance under pressure",
       "Time-boxed productivity",
       "Night-shift efficiency"
     ],
+
     stats: [
       { label: "Cups / Day", value: "3+", icon: Coffee },
       { label: "Preferred", value: "Espresso", icon: Zap },
       { label: "Energy Level", value: "∞", icon: Rocket }
     ]
   },
+
   { 
     title: "Gaming",
     icon: Gamepad2,
     color: "var(--neon-primary)",
+
     desc: "Strategic and competitive gaming to sharpen decision-making and reflexes.",
-    whyItMatters: "Enhances real-time problem solving, strategic planning, and adaptability.",
+
+    whyItMatters:
+      "Enhances real-time problem solving, strategic planning, and adaptability.",
+
     learnings: [
       "Strategic thinking",
       "Fast decision-making",
       "Focus under pressure"
     ],
+
     stats: [
       { label: "Strategy Skill", value: "95%", icon: Brain },
       { label: "Reflex Speed", value: "88%", icon: Zap },
       { label: "Focus Level", value: "92%", icon: Target }
     ]
   },
+
   { 
     title: "Movies",
     icon: Film,
     color: "var(--neon-primary)",
+
     desc: "Analyzing storytelling, pacing, and visual experience.",
-    whyItMatters: "Improves understanding of user experience, narrative flow, and product storytelling.",
+
+    whyItMatters:
+      "Improves understanding of user experience, narrative flow, and product storytelling.",
+
     learnings: [
       "User-centric thinking",
       "Storytelling techniques",
       "Visual communication"
     ],
+
     stats: [
       { label: "Weekly", value: "5+", icon: Film },
       { label: "Genres", value: "All", icon: Star },
       { label: "Key Learning", value: "UX", icon: Brain }
     ]
   },
+
   { 
     title: "Fitness",
     icon: Dumbbell,
     color: "var(--neon-primary)",
+
     desc: "Maintaining physical fitness to support mental clarity and discipline.",
-    whyItMatters: "Boosts focus, reduces burnout, and improves consistency in long-term projects.",
+
+    whyItMatters:
+      "Boosts focus, reduces burnout, and improves consistency in long-term projects.",
+
     learnings: [
       "Discipline",
       "Consistency",
       "Mental resilience"
     ],
+
     stats: [
       { label: "Workouts / Week", value: "5×", icon: Dumbbell },
       { label: "Strength", value: "90%", icon: TrendingUp },
       { label: "Mental Clarity", value: "100%", icon: Brain }
     ]
   },
+
   { 
     title: "Photography",
     icon: Camera,
     color: "var(--neon-primary)",
+
     desc: "Capturing moments with focus on composition and visual balance.",
-    whyItMatters: "Sharpens visual design sense and attention to detail for UI/UX work.",
+
+    whyItMatters:
+      "Sharpens visual design sense and attention to detail for UI/UX work.",
+
     learnings: [
       "Visual composition",
       "Attention to detail",
       "Creative framing"
     ],
+
     stats: [
       { label: "Photos Taken", value: "500+", icon: Camera },
       { label: "Style", value: "Urban", icon: Star },
@@ -130,30 +168,11 @@ const hobbiesData = [
   }
 ];
 
+
 export default function CyberpunkBeyondCoding() {
   const [activeHobby, setActiveHobby] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("hobbies-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("hobbies-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -177,7 +196,7 @@ export default function CyberpunkBeyondCoding() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -187,7 +206,7 @@ export default function CyberpunkBeyondCoding() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -205,7 +224,7 @@ export default function CyberpunkBeyondCoding() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <>
@@ -213,33 +232,9 @@ export default function CyberpunkBeyondCoding() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --stat-bg: rgba(255,255,255,0.92);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --stat-bg: rgba(0,0,0,0.78);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -249,8 +244,8 @@ export default function CyberpunkBeyondCoding() {
 
         .hobby-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -268,21 +263,21 @@ export default function CyberpunkBeyondCoding() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .stat-pill {
-          background: var(--stat-bg);
-          border: 1.6px solid var(--border-glow);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: theme === "dark" ? '#e0f7ff' : '#1e40af';
+          color: #e0f7ff;
         }
 
         .stat-pill:hover {
@@ -294,31 +289,7 @@ export default function CyberpunkBeyondCoding() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -348,12 +319,6 @@ export default function CyberpunkBeyondCoding() {
             padding: 2.2rem 1.6rem !important;
             width: 98% !important;
             max-width: 98% !important;
-          }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
           }
         }
 
@@ -390,39 +355,25 @@ export default function CyberpunkBeyondCoding() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -452,7 +403,7 @@ export default function CyberpunkBeyondCoding() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -473,7 +424,7 @@ export default function CyberpunkBeyondCoding() {
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto',
               fontFamily: "'Fira Code', monospace",
@@ -554,7 +505,7 @@ export default function CyberpunkBeyondCoding() {
                     <h3 style={{
                       fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: '#ffffff',
                       marginBottom: '1rem',
                       textAlign: 'center'
                     }}>
@@ -563,7 +514,7 @@ export default function CyberpunkBeyondCoding() {
 
                     <p style={{
                       fontSize: '1rem',
-                      color: theme === "dark" ? '#b0b0d0' : '#555555',
+                      color: '#b0b0d0',
                       lineHeight: 1.7,
                       textAlign: 'center',
                       marginBottom: '2rem',
@@ -585,8 +536,8 @@ export default function CyberpunkBeyondCoding() {
                           key={idx}
                           className="stat-pill"
                           style={{
-                            color: isHovered ? color : theme === "dark" ? '#8888bb' : '#4b5563',
-                            borderColor: isHovered ? color : theme === "dark" ? '#555577' : '#d1d5db'
+                            color: isHovered ? color : '#8888bb',
+                            borderColor: isHovered ? color : '#555577'
                           }}
                         >
                           <stat.icon size={16} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
@@ -629,8 +580,8 @@ export default function CyberpunkBeyondCoding() {
           {/* CTA Bar */}
           <div style={{
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.92)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,183,235,0.25)'}`,
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -641,7 +592,7 @@ export default function CyberpunkBeyondCoding() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               READY TO RECHARGE?
             </h2>
@@ -654,8 +605,8 @@ export default function CyberpunkBeyondCoding() {
             }}>
               <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
                 padding: '1.4rem 3.2rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                background: 'rgba(0,240,255,0.14)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
                 color: 'var(--neon-primary)',
                 fontWeight: 700,
@@ -696,7 +647,7 @@ export default function CyberpunkBeyondCoding() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)',
+            background: 'rgba(0,0,0,0.96)',
             backdropFilter: 'blur(16px)',
             zIndex: 9999,
             display: 'flex',
@@ -709,7 +660,7 @@ export default function CyberpunkBeyondCoding() {
             onClick={e => e.stopPropagation()}
             className="modal-content"
             style={{
-              background: theme === "dark" ? 'rgba(6,6,28,0.98)' : 'rgba(255,255,255,0.98)',
+              background: 'rgba(6,6,28,0.98)',
               border: `4px solid ${activeHobby.color || 'var(--neon-primary)'}aa`,
               borderRadius: '28px',
               maxWidth: '1100px',
@@ -769,7 +720,7 @@ export default function CyberpunkBeyondCoding() {
               <p style={{
                 fontSize: 'clamp(1.25rem, 3.5vw, 1.45rem)',
                 lineHeight: 1.8,
-                color: theme === "dark" ? '#c8d0ff' : '#374151',
+                color: '#c8d0ff',
                 marginBottom: '3rem'
               }}>
                 {activeHobby.desc}
@@ -783,7 +734,7 @@ export default function CyberpunkBeyondCoding() {
                 {activeHobby.stats.map((stat, idx) => (
                   <div key={idx} style={{
                     padding: '2rem',
-                    background: theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    background: 'rgba(255,255,255,0.05)',
                     borderRadius: '20px',
                     border: `2px solid ${(activeHobby.color || 'var(--neon-primary)')}40`,
                     textAlign: 'center'
@@ -796,11 +747,7 @@ export default function CyberpunkBeyondCoding() {
                     }}>
                       {stat.value}
                     </div>
-                    <div style={{ 
-                      color: theme === "dark" ? '#b0b0ff' : '#555555', 
-                      fontSize: '1.1rem', 
-                      marginTop: '0.5rem' 
-                    }}>
+                    <div style={{ color: '#b0b0ff', fontSize: '1.1rem', marginTop: '0.5rem' }}>
                       {stat.label}
                     </div>
                   </div>

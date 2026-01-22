@@ -1,13 +1,5 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Download, Eye, FileText, Award, Code, Rocket, Star, Sparkles, 
-  X, CheckCircle2, TrendingUp, Zap, Target, Brain, Trophy,
-  GraduationCap, Calendar, MapPin, Linkedin, Github, Mail,
-  Briefcase, Terminal, Database, Server, Code2, GitBranch,
-  ExternalLink, Users, Cpu, Cloud, Sun, Moon
-} from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Award, ExternalLink, Code, Cloud, Database, Terminal, Brain, Rocket, Zap, Star, Sparkles } from 'lucide-react';
 
 const certificationsData = [
   {
@@ -16,7 +8,7 @@ const certificationsData = [
     link: "https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view",
     category: "Web",
     level: "Advanced",
-    skills: ["React", "Node.js", "MongoDB"],
+    skills: ["React", "Node.js", "MongoDB"],  
     power: 95,
     desc: "Advanced full-stack certification focused on building complete web applications.",
     detailedDesc: "Covered frontend development, backend API creation, database design, authentication, and deployment.",
@@ -323,38 +315,46 @@ const certificationsData = [
 
 
 const categoryConfig = {
-  Web: { icon: Code, color: '#00b7eb', bg: 'from-cyan-500/15 to-blue-500/10' },
-  Programming: { icon: Terminal, color: '#7c3aed', bg: 'from-purple-500/15 to-indigo-500/10' },
-  Cloud: { icon: Cloud, color: '#0ea5e9', bg: 'from-sky-500/15 to-cyan-500/10' },
-  Data: { icon: Database, color: '#f59e0b', bg: 'from-amber-500/15 to-yellow-500/10' },
-  "AI/ML": { icon: Brain, color: '#a855f7', bg: 'from-violet-500/15 to-purple-500/10' },
-  DevOps: { icon: Rocket, color: '#f97316', bg: 'from-orange-500/15 to-amber-500/10' }
+  Web: { icon: Code, color: '#00ff9f', bg: 'from-emerald-500/20 to-green-500/20' },
+  Programming: { icon: Terminal, color: '#ff0080', bg: 'from-pink-500/20 to-rose-500/20' },
+  Cloud: { icon: Cloud, color: '#00d4ff', bg: 'from-cyan-500/20 to-blue-500/20' },
+  Data: { icon: Database, color: '#ffd700', bg: 'from-yellow-500/20 to-amber-500/20' },
+  "AI/ML": { icon: Brain, color: '#a855f7', bg: 'from-purple-500/20 to-violet-500/20' },
+  DevOps: { icon: Rocket, color: '#ff6b35', bg: 'from-orange-500/20 to-red-500/20' }
 };
 
 export default function CertificationsShowcase() {
   const [filter, setFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
+  const [particles, setParticles] = useState([]);
   const canvasRef = useRef(null);
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  // Load saved theme
+  // Animated particles
   useEffect(() => {
-    const saved = localStorage.getItem("certifications-theme");
-    if (saved) setTheme(saved);
+    const newParticles = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.5 + 0.3,
+    }));
+    setParticles(newParticles);
+
+    const interval = setInterval(() => {
+      setParticles(prev => prev.map(p => ({
+        ...p,
+        x: (p.x + p.speedX + 100) % 100,
+        y: (p.y + p.speedY + 100) % 100,
+      })));
+    }, 50);
+
+    return () => clearInterval(interval);
   }, []);
 
-  // Save theme
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("certifications-theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
-
-  // DNA Helix + Particles (now theme-aware)
+  // DNA Helix Canvas Animation
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -371,7 +371,7 @@ export default function CertificationsShowcase() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // DNA Helix - softer in light mode
+      // DNA Helix
       for (let i = 0; i < 100; i++) {
         const x = canvas.width / 2 + Math.sin(i * 0.1 + frame * 0.02) * 200;
         const y = i * (canvas.height / 100);
@@ -379,23 +379,19 @@ export default function CertificationsShowcase() {
         
         ctx.beginPath();
         ctx.arc(x, y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = theme === "dark" 
-          ? `rgba(0, 240, 255, ${0.3 + Math.sin(frame * 0.05 + i * 0.1) * 0.2})`
-          : `rgba(0, 183, 235, ${0.25 + Math.sin(frame * 0.05 + i * 0.1) * 0.15})`;
+        ctx.fillStyle = `rgba(0, 255, 159, ${0.3 + Math.sin(frame * 0.05 + i * 0.1) * 0.2})`;
         ctx.fill();
         
         ctx.beginPath();
         ctx.arc(x2, y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = theme === "dark" 
-          ? `rgba(124, 58, 237, ${0.3 + Math.cos(frame * 0.05 + i * 0.1) * 0.2})`
-          : `rgba(124, 58, 237, ${0.25 + Math.cos(frame * 0.05 + i * 0.1) * 0.15})`;
+        ctx.fillStyle = `rgba(255, 0, 128, ${0.3 + Math.cos(frame * 0.05 + i * 0.1) * 0.2})`;
         ctx.fill();
         
         if (i % 10 === 0) {
           ctx.beginPath();
           ctx.moveTo(x, y);
           ctx.lineTo(x2, y);
-          ctx.strokeStyle = theme === "dark" ? 'rgba(0, 212, 255, 0.18)' : 'rgba(0, 183, 235, 0.15)';
+          ctx.strokeStyle = 'rgba(0, 212, 255, 0.2)';
           ctx.lineWidth = 2;
           ctx.stroke();
         }
@@ -407,7 +403,7 @@ export default function CertificationsShowcase() {
     animate();
 
     return () => window.removeEventListener('resize', resize);
-  }, [theme]);
+  }, []);
 
   const filteredCerts = certificationsData.filter(cert => {
     const matchesFilter = filter === "All" || cert.category === filter;
@@ -416,235 +412,349 @@ export default function CertificationsShowcase() {
     return matchesFilter && matchesSearch;
   });
 
-  const avgPower = Math.round(
-    filteredCerts.reduce((sum, c) => sum + c.power, 0) / (filteredCerts.length || 1)
-  );
+  const avgPower = Math.round(filteredCerts.reduce((sum, c) => sum + c.power, 0) / filteredCerts.length);
 
   return (
-    <>
+    <div style={{
+      minHeight: '100vh',
+      background: '#000',
+      color: '#fff',
+      overflow: 'hidden',
+      position: 'relative',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
-
-        :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --stat-bg: rgba(255,255,255,0.92);
-          --modal-bg: rgba(255,255,255,0.98);
+        @keyframes dataStream {
+          0% { transform: translateY(-100%); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(100vh); opacity: 0; }
         }
-
-        body.dark {
-          --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --stat-bg: rgba(0,0,0,0.78);
-          --modal-bg: rgba(6,6,28,0.98);
-        }
-
         @keyframes pulse3d {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+          50% { transform: scale(1.1); }
         }
       `}</style>
 
-      {/* Theme Toggle */}
-      <button
-        onClick={toggleTheme}
-        className="theme-toggle"
-        style={{
-          position: 'fixed',
-          top: '20px',
-          right: '30px',
-          zIndex: 1000,
-          background: 'var(--card-bg)',
-          border: '2px solid var(--neon-primary)',
-          borderRadius: '50%',
-          width: '55px',
-          height: '55px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          backdropFilter: 'blur(12px)',
-          boxShadow: '0 0 20px var(--neon-glow)',
-          transition: 'all 0.4s ease'
-        }}
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
+      {/* DNA Helix Canvas */}
+      <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, opacity: 0.2, pointerEvents: 'none', zIndex: 0 }} />
 
-      <div style={{
-        minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
-        position: 'relative',
-        overflow: 'hidden'
+      {/* Floating Particles */}
+      {particles.map(p => (
+        <div
+          key={p.id}
+          style={{
+            position: 'fixed',
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            borderRadius: '50%',
+            background: `rgba(0, 212, 255, ${p.opacity})`,
+            boxShadow: `0 0 ${p.size * 3}px rgba(0, 212, 255, ${p.opacity})`,
+            pointerEvents: 'none',
+            zIndex: 10,
+            transition: 'all 0.05s linear'
+          }}
+        />
+      ))}
+
+      {/* Data Stream Lines */}
+      {[...Array(5)].map((_, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'fixed',
+            left: `${20 + i * 15}%`,
+            width: '2px',
+            height: '80px',
+            zIndex: 10,
+            pointerEvents: 'none',
+            background: 'linear-gradient(to bottom, transparent, #00ff9f, transparent)',
+            animation: 'dataStream 3s linear infinite',
+            animationDelay: `${i * 0.6}s`
+          }}
+        />
+      ))}
+
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 20, 
+        maxWidth: '1280px', 
+        margin: '0 auto', 
+        padding: 'clamp(2rem, 5vh, 3rem) clamp(1rem, 3vw, 2rem)' 
       }}>
-        {/* DNA Helix Canvas */}
-        <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, opacity: 0.18, pointerEvents: 'none', zIndex: 0 }} />
-
+        
+        {/* Hero Header */}
         <div style={{ 
-          position: 'relative', 
-          zIndex: 20, 
-          maxWidth: '1280px', 
-          margin: '0 auto', 
-          padding: 'clamp(2rem, 5vh, 3rem) clamp(1rem, 3vw, 2rem)' 
+          textAlign: 'center', 
+          marginBottom: 'clamp(2rem, 6vh, 3rem)', 
+          position: 'relative' 
         }}>
-          {/* Hero Header */}
-          <div style={{ 
-            textAlign: 'center', 
-            marginBottom: 'clamp(2rem, 6vh, 3rem)', 
-            position: 'relative' 
-          }}>
+          <div style={{ display: 'inline-block', marginBottom: 'clamp(1rem, 3vh, 1.5rem)', position: 'relative' }}>
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to right, #06b6d4, #a855f7, #ec4899)',
+              filter: 'blur(60px)',
+              opacity: 0.5,
+              animation: 'pulse3d 3s ease-in-out infinite'
+            }} />
             <h1 style={{
               fontSize: 'clamp(2.5rem, 10vw, 7rem)',
               fontWeight: 900,
-              background: 'var(--neon-gradient)',
+              position: 'relative',
+              background: 'linear-gradient(to right, #ff10f0, #a78bfa, #22d3ee)',
               WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              color: 'transparent',
-              letterSpacing: 'clamp(2px, 0.5vw, 5px)'
+              letterSpacing: 'clamp(2px, 0.5vw, 5px)',
+              padding: '0 clamp(0.5rem, 2vw, 1rem)'
             }}>
               CERTIFICATIONS
             </h1>
-
-            {/* Live Stats Dashboard */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
-              gap: 'clamp(0.75rem, 2vw, 1rem)',
-              maxWidth: '56rem',
-              margin: '2rem auto 0'
-            }}>
-              {[
-                { label: 'Total Power', value: avgPower, icon: Zap, color: '#ffd700' },
-                { label: 'Certifications', value: filteredCerts.length, icon: Award, color: '#00b7eb' },
-                { label: 'Categories', value: Object.keys(categoryConfig).length, icon: Sparkles, color: '#7c3aed' },
-                { label: 'Skill Level', value: 'Expert', icon: Star, color: '#00f0ff' },
-              ].map((stat, i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-                    border: `2px solid ${stat.color}40`,
-                    borderRadius: 'clamp(0.75rem, 2vw, 1rem)',
-                    padding: 'clamp(0.75rem, 2vw, 1rem)',
-                    textAlign: 'center'
-                  }}
-                >
-                  <stat.icon style={{ width: 'clamp(1.8rem, 4vw, 2.5rem)', height: 'auto', color: stat.color, marginBottom: '0.5rem' }} />
-                  <div style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 'bold', color: stat.color }}>
-                    {stat.value}
-                  </div>
-                  <div style={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)', color: theme === "dark" ? '#94a3b8' : '#6b7280' }}>
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+          </div>
+          
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 'clamp(0.5rem, 2vw, 1rem)', 
+            marginBottom: 'clamp(1.5rem, 4vh, 2rem)', 
+            flexWrap: 'wrap',
+            padding: '0 1rem'
+          }}>
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 'clamp(8px, 2vw, 12px)',
+                  height: 'clamp(8px, 2vw, 12px)',
+                  borderRadius: '50%',
+                  background: ['#00ff9f', '#ff0080', '#00d4ff', '#ffd700', '#a855f7', '#ff6b35'][i],
+                  boxShadow: `0 0 20px ${['#00ff9f', '#ff0080', '#00d4ff', '#ffd700', '#a855f7', '#ff6b35'][i]}`,
+                  animation: 'pulse3d 2s ease-in-out infinite',
+                  animationDelay: `${i * 0.2}s`
+                }}
+              />
+            ))}
           </div>
 
-          {/* Filter & Search */}
-          <div style={{ margin: '2rem 0 3rem' }}>
-            <input
-              type="text"
-              placeholder="Search certifications..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                maxWidth: '420px',
-                padding: '0.9rem 1.4rem',
-                borderRadius: '999px',
-                border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.3)'}`,
-                background: theme === "dark" ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.9)',
-                color: theme === "dark" ? '#fff' : '#000',
-                fontSize: '1rem',
-                outline: 'none',
-                boxShadow: '0 0 20px rgba(var(--neon-primary-rgb),0.12)'
-              }}
-            />
-
-            <div style={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              gap: '0.8rem', 
-              marginTop: '1.5rem',
-              justifyContent: 'center' 
-            }}>
-              {['All', ...Object.keys(categoryConfig)].map(cat => {
-                const cfg = categoryConfig[cat] || {};
-                const active = filter === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setFilter(cat)}
-                    style={{
-                      padding: '0.6rem 1.4rem',
-                      borderRadius: '999px',
-                      fontSize: '0.9rem',
-                      fontWeight: 600,
-                      border: `2px solid ${active ? cfg.color : theme === "dark" ? '#374151' : '#d1d5db'}`,
-                      background: active ? `${cfg.color}15` : theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                      color: active ? cfg.color : theme === "dark" ? '#e0e0ff' : '#1a1a1a',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Certifications Grid */}
+          {/* Live Stats Dashboard */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 2rem)'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
+            gap: 'clamp(0.75rem, 2vw, 1rem)',
+            maxWidth: '56rem',
+            margin: '0 auto'
           }}>
-            {filteredCerts.map((cert, idx) => {
-              const cfg = categoryConfig[cert.category] || {};
-              const isHovered = hoveredCard === idx;
+            {[
+              { label: 'Total Power', value: avgPower, icon: Zap, color: '#ffd700' },
+              { label: 'Certifications', value: filteredCerts.length, icon: Award, color: '#00ff9f' },
+              { label: 'Categories', value: Object.keys(categoryConfig).length, icon: Sparkles, color: '#ff0080' },
+              { label: 'Skill Level', value: 'Expert', icon: Star, color: '#00d4ff' },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'relative',
+                  background: 'linear-gradient(135deg, #111827, #000)',
+                  border: '2px solid #1f2937',
+                  borderRadius: 'clamp(0.75rem, 2vw, 1rem)',
+                  padding: 'clamp(0.75rem, 2vw, 1rem)',
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  if (window.innerWidth >= 768) {
+                    e.currentTarget.style.transform = 'rotateY(5deg) rotateX(5deg) scale(1.05)';
+                    e.currentTarget.style.borderColor = stat.color;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.borderColor = '#1f2937';
+                }}
+              >
+                <div style={{
+                  width: 'clamp(2.5rem, 6vw, 3rem)',
+                  height: 'clamp(2.5rem, 6vw, 3rem)',
+                  margin: '0 auto 0.5rem',
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${stat.color}, ${stat.color}80)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: `0 0 30px ${stat.color}60`
+                }}>
+                  <stat.icon style={{ width: 'clamp(1.25rem, 3vw, 1.5rem)', height: 'clamp(1.25rem, 3vw, 1.5rem)', color: '#fff' }} />
+                </div>
+                <div style={{ 
+                  fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                  fontWeight: 'bold', 
+                  color: stat.color, 
+                  marginBottom: '0.25rem' 
+                }}>
+                  {stat.value}
+                </div>
+                <div style={{ 
+                  fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', 
+                  color: '#9ca3af', 
+                  letterSpacing: '0.1em', 
+                  fontWeight: 600 
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
+        {/* Search & Filter */}
+        <div style={{ marginBottom: 'clamp(1.5rem, 4vh, 2rem)' }}>
+          <div style={{ position: 'relative', marginBottom: 'clamp(0.75rem, 2vh, 1rem)' }}>
+            <input
+              type="text"
+              placeholder="Search skills, technologies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%',
+                background: 'rgba(17, 24, 39, 0.5)',
+                border: '2px solid rgba(6, 182, 212, 0.3)',
+                borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+                padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)',
+                fontSize: 'clamp(0.95rem, 2.5vw, 1.125rem)',
+                outline: 'none',
+                color: '#fff',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 0 30px rgba(0, 212, 255, 0.1)'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#06b6d4';
+                e.target.style.boxShadow = '0 0 40px rgba(6, 182, 212, 0.3)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'rgba(6, 182, 212, 0.3)';
+                e.target.style.boxShadow = '0 0 30px rgba(0, 212, 255, 0.1)';
+              }}
+            />
+          </div>
+
+          <div style={{ 
+            display: 'flex', 
+            gap: 'clamp(0.5rem, 1.5vw, 0.75rem)', 
+            flexWrap: 'wrap', 
+            justifyContent: 'center' 
+          }}>
+            {['All', ...Object.keys(categoryConfig)].map(cat => {
+              const config = categoryConfig[cat];
+              const Icon = config?.icon || Code;
+              const isActive = filter === cat;
+              
               return (
-                <div
-                  key={idx}
-                  onClick={() => window.open(cert.link, '_blank')}
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
                   style={{
-                    position: 'relative',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-                    border: `2px solid ${isHovered ? cfg.color : theme === "dark" ? '#374151' : '#d1d5db'}`,
+                    padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2.5vw, 1.5rem)',
+                    borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+                    fontWeight: 700,
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'clamp(0.35rem, 1vw, 0.5rem)',
                     transition: 'all 0.3s ease',
-                    transform: isHovered ? 'translateY(-8px) scale(1.02)' : 'none',
+                    border: `2px solid ${isActive ? config?.color : '#374151'}`,
+                    background: isActive 
+                      ? `linear-gradient(135deg, ${config?.color}20, ${config?.color}10)`
+                      : 'rgba(17, 24, 39, 0.3)',
+                    color: isActive ? config?.color : '#fff',
+                    boxShadow: isActive ? `0 0 30px ${config?.color}40` : 'none',
+                    transform: isActive && window.innerWidth >= 768 ? 'scale(1.1)' : 'scale(1)',
                     cursor: 'pointer'
                   }}
-                  onMouseEnter={() => setHoveredCard(idx)}
-                  onMouseLeave={() => setHoveredCard(null)}
+                  onMouseEnter={(e) => {
+                    if (!isActive && window.innerWidth >= 768) e.currentTarget.style.borderColor = '#6b7280';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.borderColor = '#374151';
+                  }}
                 >
+                  {cat !== 'All' && <Icon style={{ width: 'clamp(0.85rem, 2vw, 1rem)', height: 'clamp(0.85rem, 2vw, 1rem)' }} />}
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Certification Cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+          gap: 'clamp(1rem, 3vw, 1.5rem)'
+        }}>
+          {filteredCerts.map((cert, idx) => {
+            const config = categoryConfig[cert.category];
+            const isHovered = hoveredCard === idx;
+            
+            return (
+              <div
+                key={idx}
+                style={{
+                  position: 'relative',
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
+                onClick={() => window.open(cert.link, '_blank')}
+              >
+                <div style={{
+                  position: 'relative',
+                  background: 'linear-gradient(135deg, #111827, #000)',
+                  borderRadius: 'clamp(0.75rem, 2vw, 1rem)',
+                  overflow: 'hidden',
+                  border: `2px solid ${isHovered ? config.color + '80' : '#1f2937'}`,
+                  transition: 'all 0.3s ease',
+                  transform: isHovered && window.innerWidth >= 768 ? 'rotateY(5deg) rotateX(2deg) scale(1.03)' : 'none',
+                  transformStyle: 'preserve-3d'
+                }}>
+                  {/* Power Bar */}
                   <div style={{
-                    height: '180px',
-                    position: 'relative',
-                    overflow: 'hidden'
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '4px',
+                    background: '#1f2937',
+                    zIndex: 20
                   }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${cert.power}%`,
+                      background: `linear-gradient(90deg, ${config.color}, ${config.color}80)`,
+                      boxShadow: `0 0 10px ${config.color}`,
+                      transition: 'width 1s ease'
+                    }} />
+                  </div>
+
+                  {/* Image */}
+                  <div style={{ 
+                    position: 'relative', 
+                    height: 'clamp(10rem, 25vw, 12rem)', 
+                    overflow: 'hidden' 
+                  }}>
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, #000, transparent)',
+                      zIndex: 10
+                    }} />
                     <img 
                       src={cert.image} 
                       alt={cert.title}
@@ -653,104 +763,122 @@ export default function CertificationsShowcase() {
                         height: '100%',
                         objectFit: 'cover',
                         transition: 'transform 0.5s ease',
-                        transform: isHovered ? 'scale(1.08)' : 'scale(1.03)'
+                        transform: isHovered && window.innerWidth >= 768 ? 'scale(1.1)' : 'scale(1)'
                       }}
                     />
+                    
+                    {/* Category Badge */}
                     <div style={{
                       position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%)'
-                    }} />
+                      top: 'clamp(0.75rem, 2vw, 1rem)',
+                      right: 'clamp(0.75rem, 2vw, 1rem)',
+                      padding: 'clamp(0.4rem, 1vw, 0.5rem) clamp(0.6rem, 1.5vw, 0.75rem)',
+                      borderRadius: '9999px',
+                      backdropFilter: 'blur(10px)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'clamp(0.35rem, 1vw, 0.5rem)',
+                      zIndex: 20,
+                      background: `${config.color}20`,
+                      border: `1px solid ${config.color}`,
+                      boxShadow: `0 0 20px ${config.color}40`
+                    }}>
+                      <config.icon style={{ width: 'clamp(0.85rem, 2vw, 1rem)', height: 'clamp(0.85rem, 2vw, 1rem)', color: config.color }} />
+                      <span style={{ fontSize: 'clamp(0.7rem, 1.8vw, 0.75rem)', fontWeight: 'bold', color: config.color }}>
+                        {cert.category}
+                      </span>
+                    </div>
                   </div>
 
-                  <div style={{ padding: '1.5rem' }}>
+                  {/* Content */}
+                  <div style={{ padding: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
                     <h3 style={{
-                      fontSize: '1.35rem',
-                      fontWeight: 700,
-                      marginBottom: '0.75rem',
-                      color: theme === "dark" ? '#e0e0ff' : '#1a1a1a'
+                      fontSize: 'clamp(1.1rem, 2.8vw, 1.25rem)',
+                      fontWeight: 'bold',
+                      marginBottom: '0.5rem',
+                      color: isHovered ? '#22d3ee' : '#fff',
+                      transition: 'color 0.3s ease'
                     }}>
                       {cert.title}
                     </h3>
-
+                    
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginBottom: '1rem'
+                      justifyContent: 'space-between',
+                      marginBottom: 'clamp(0.5rem, 1.5vh, 0.75rem)'
                     }}>
-                      <span style={{
-                        padding: '0.35rem 0.9rem',
-                        background: `${cfg.color}20`,
-                        borderRadius: '999px',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        color: cfg.color
-                      }}>
+                      <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', fontWeight: 600, color: config.color }}>
                         {cert.level}
                       </span>
-
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        color: cfg.color
-                      }}>
-                        <Zap size={18} />
-                        <strong>{cert.power}%</strong>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        <Zap style={{ width: 'clamp(0.9rem, 2.2vw, 1rem)', height: 'clamp(0.9rem, 2.2vw, 1rem)', color: '#fbbf24' }} />
+                        <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', fontWeight: 'bold', color: '#fbbf24' }}>
+                          {cert.power}
+                        </span>
                       </div>
                     </div>
 
                     <div style={{
                       display: 'flex',
                       flexWrap: 'wrap',
-                      gap: '0.6rem',
-                      marginBottom: '1.2rem'
+                      gap: 'clamp(0.4rem, 1vw, 0.5rem)',
+                      marginBottom: 'clamp(0.75rem, 2vh, 1rem)'
                     }}>
-                      {cert.skills.map(s => (
-                        <span key={s} style={{
-                          padding: '0.4rem 0.9rem',
-                          background: theme === "dark" ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
-                          borderRadius: '999px',
-                          fontSize: '0.82rem',
-                          color: theme === "dark" ? '#cbd5e1' : '#374151'
-                        }}>
-                          {s}
+                      {cert.skills.map((skill, i) => (
+                        <span 
+                          key={i}
+                          style={{
+                            fontSize: 'clamp(0.7rem, 1.8vw, 0.75rem)',
+                            padding: 'clamp(0.3rem, 0.8vw, 0.375rem) clamp(0.5rem, 1.2vw, 0.625rem)',
+                            borderRadius: '0.5rem',
+                            background: 'rgba(31, 41, 55, 0.5)',
+                            color: '#d1d5db',
+                            border: '1px solid #374151'
+                          }}
+                        >
+                          {skill}
                         </span>
                       ))}
                     </div>
 
-                    <a
-                      href={cert.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.6rem',
-                        color: cfg.color,
-                        fontWeight: 600,
-                        fontSize: '0.95rem'
-                      }}
-                    >
-                      View Certificate <ExternalLink size={16} />
-                    </a>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      gap: isHovered ? 'clamp(0.6rem, 1.5vw, 0.75rem)' : 'clamp(0.4rem, 1vw, 0.5rem)',
+                      color: '#22d3ee',
+                      fontSize: 'clamp(0.8rem, 2vw, 0.875rem)',
+                      fontWeight: 600,
+                      transition: 'gap 0.3s ease'
+                    }}>
+                      <span>View Certificate</span>
+                      <ExternalLink style={{ width: 'clamp(0.9rem, 2.2vw, 1rem)', height: 'clamp(0.9rem, 2.2vw, 1rem)' }} />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
 
-          {filteredCerts.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '5rem 1rem' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔍</div>
-              <p style={{ fontSize: '1.4rem', color: theme === "dark" ? '#94a3b8' : '#6b7280' }}>
-                No certifications found matching your search
-              </p>
-            </div>
-          )}
+                  {/* Glow Effect */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `radial-gradient(circle at center, ${config.color}15, transparent 70%)`,
+                    opacity: isHovered ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                    pointerEvents: 'none'
+                  }} />
+                </div>
+              </div>
+            );
+          })}
         </div>
+
+        {filteredCerts.length === 0 && (
+          <div style={{ textAlign: 'center', padding: 'clamp(3rem, 8vh, 5rem) 0' }}>
+            <div style={{ fontSize: 'clamp(3rem, 8vw, 4rem)', marginBottom: '1rem' }}>🔍</div>
+            <p style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', color: '#9ca3af' }}>No certifications found</p>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

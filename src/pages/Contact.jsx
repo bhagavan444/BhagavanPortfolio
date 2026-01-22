@@ -1,10 +1,8 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   Mail, Phone, Send, CheckCircle2, Linkedin, Github, Twitter,
   Code, Zap, MessageCircle, User, ArrowRight, Sparkles, Award,
-  Target, X, ExternalLink, Terminal, Sun, Moon
+  Target, X, ExternalLink, Terminal
 } from "lucide-react";
 
 export default function CyberpunkContact() {
@@ -17,27 +15,7 @@ export default function CyberpunkContact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("idle");
   const [focusedField, setFocusedField] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("contact-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("contact-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // Typing animation
   const [currentText, setCurrentText] = useState("");
@@ -90,7 +68,7 @@ export default function CyberpunkContact() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -100,7 +78,7 @@ export default function CyberpunkContact() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -118,7 +96,7 @@ export default function CyberpunkContact() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -131,7 +109,7 @@ export default function CyberpunkContact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate submission (replace with real API call if needed)
+    // Simulate submission (replace with real API call)
     await new Promise(resolve => setTimeout(resolve, 1800));
     setSubmitStatus("success");
     setFormData({ name: "", email: "", subject: "", message: "" });
@@ -179,41 +157,15 @@ export default function CyberpunkContact() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --input-bg: rgba(255,255,255,0.08);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --input-bg: rgba(255,255,255,0.05);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
         @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
         @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
         @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
-        @keyframes spin     { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes blink    { 0%,100% { opacity:1; } 50% { opacity:0; } }
 
         .contact-card {
           transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
@@ -226,38 +178,14 @@ export default function CyberpunkContact() {
 
         .input-focus {
           border-color: var(--neon-primary) !important;
-          box-shadow: 0 0 20px rgba(var(--neon-primary-rgb),0.4) !important;
+          box-shadow: 0 0 20px rgba(0,240,255,0.4) !important;
         }
 
         .neon-title {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          alignItems: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -283,12 +211,6 @@ export default function CyberpunkContact() {
           .floating-cta {
             display: flex !important;
           }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
-          }
         }
 
         @media (max-width: 480px) {
@@ -302,39 +224,25 @@ export default function CyberpunkContact() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -364,7 +272,7 @@ export default function CyberpunkContact() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -386,7 +294,7 @@ export default function CyberpunkContact() {
             <div style={{
               fontSize: 'clamp(1.6rem, 4vw, 2.4rem)',
               fontWeight: 800,
-              color: theme === "dark" ? '#b0b0ff' : '#374151',
+              color: '#b0b0ff',
               marginBottom: '2rem',
               minHeight: '3.2rem'
             }}>
@@ -404,7 +312,7 @@ export default function CyberpunkContact() {
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto',
               fontFamily: "'Fira Code', monospace",
@@ -425,11 +333,11 @@ export default function CyberpunkContact() {
           }}>
             {/* Contact Form */}
             <div style={{
-              background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-              border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
+              background: 'rgba(0,0,0,0.65)',
+              border: '2px solid rgba(0,240,255,0.3)',
               borderRadius: '24px',
               padding: 'clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)',
-              boxShadow: '0 0 60px rgba(var(--neon-primary-rgb),0.2)'
+              boxShadow: '0 0 60px rgba(0,240,255,0.2)'
             }}>
               {submitStatus === "success" ? (
                 <div style={{
@@ -445,7 +353,7 @@ export default function CyberpunkContact() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 0 60px rgba(var(--neon-primary-rgb),0.8)'
+                    boxShadow: '0 0 60px rgba(0,240,255,0.8)'
                   }}>
                     <CheckCircle2 size={60} color="#000" />
                   </div>
@@ -461,7 +369,7 @@ export default function CyberpunkContact() {
 
                   <p style={{
                     fontSize: '1.3rem',
-                    color: theme === "dark" ? '#b0b0ff' : '#374151'
+                    color: '#b0b0ff'
                   }}>
                     I'll respond within 24 hours. Let's build something epic.
                   </p>
@@ -481,7 +389,7 @@ export default function CyberpunkContact() {
                           display: 'block',
                           marginBottom: '0.8rem',
                           fontSize: '1.1rem',
-                          color: theme === "dark" ? '#b0b0ff' : '#555555'
+                          color: '#b0b0ff'
                         }}>
                           Name
                         </label>
@@ -495,10 +403,10 @@ export default function CyberpunkContact() {
                           style={{
                             width: '100%',
                             padding: '1.2rem',
-                            background: theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                            border: `2px solid ${focusedField === 'name' ? 'var(--neon-primary)' : theme === "dark" ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`,
+                            background: 'rgba(255,255,255,0.05)',
+                            border: `2px solid ${focusedField === 'name' ? 'var(--neon-primary)' : 'rgba(255,255,255,0.15)'}`,
                             borderRadius: '12px',
-                            color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                            color: '#ffffff',
                             fontSize: '1.1rem',
                             outline: 'none',
                             transition: 'all 0.3s'
@@ -513,7 +421,7 @@ export default function CyberpunkContact() {
                           display: 'block',
                           marginBottom: '0.8rem',
                           fontSize: '1.1rem',
-                          color: theme === "dark" ? '#b0b0ff' : '#555555'
+                          color: '#b0b0ff'
                         }}>
                           Email
                         </label>
@@ -527,10 +435,10 @@ export default function CyberpunkContact() {
                           style={{
                             width: '100%',
                             padding: '1.2rem',
-                            background: theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                            border: `2px solid ${focusedField === 'email' ? 'var(--neon-primary)' : theme === "dark" ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`,
+                            background: 'rgba(255,255,255,0.05)',
+                            border: `2px solid ${focusedField === 'email' ? 'var(--neon-primary)' : 'rgba(255,255,255,0.15)'}`,
                             borderRadius: '12px',
-                            color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                            color: '#ffffff',
                             fontSize: '1.1rem',
                             outline: 'none',
                             transition: 'all 0.3s'
@@ -547,7 +455,7 @@ export default function CyberpunkContact() {
                         display: 'block',
                         marginBottom: '0.8rem',
                         fontSize: '1.1rem',
-                        color: theme === "dark" ? '#b0b0ff' : '#555555'
+                        color: '#b0b0ff'
                       }}>
                         Subject
                       </label>
@@ -561,10 +469,10 @@ export default function CyberpunkContact() {
                         style={{
                           width: '100%',
                           padding: '1.2rem',
-                          background: theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                          border: `2px solid ${focusedField === 'subject' ? 'var(--neon-primary)' : theme === "dark" ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`,
+                          background: 'rgba(255,255,255,0.05)',
+                          border: `2px solid ${focusedField === 'subject' ? 'var(--neon-primary)' : 'rgba(255,255,255,0.15)'}`,
                           borderRadius: '12px',
-                          color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                          color: '#ffffff',
                           fontSize: '1.1rem',
                           outline: 'none',
                           transition: 'all 0.3s'
@@ -580,7 +488,7 @@ export default function CyberpunkContact() {
                         display: 'block',
                         marginBottom: '0.8rem',
                         fontSize: '1.1rem',
-                        color: theme === "dark" ? '#b0b0ff' : '#555555'
+                        color: '#b0b0ff'
                       }}>
                         Message
                       </label>
@@ -594,10 +502,10 @@ export default function CyberpunkContact() {
                         style={{
                           width: '100%',
                           padding: '1.2rem',
-                          background: theme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                          border: `2px solid ${focusedField === 'message' ? 'var(--neon-primary)' : theme === "dark" ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`,
+                          background: 'rgba(255,255,255,0.05)',
+                          border: `2px solid ${focusedField === 'message' ? 'var(--neon-primary)' : 'rgba(255,255,255,0.15)'}`,
                           borderRadius: '12px',
-                          color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                          color: '#ffffff',
                           fontSize: '1.1rem',
                           resize: 'vertical',
                           minHeight: '140px',
@@ -625,7 +533,7 @@ export default function CyberpunkContact() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '1rem',
-                        boxShadow: '0 0 50px rgba(var(--neon-primary-rgb),0.6)',
+                        boxShadow: '0 0 50px rgba(0,240,255,0.6)',
                         cursor: isSubmitting ? 'not-allowed' : 'pointer',
                         opacity: isSubmitting ? 0.7 : 1,
                         transition: 'all 0.4s'
@@ -663,8 +571,8 @@ export default function CyberpunkContact() {
             }}>
               {/* Quick Contact Cards */}
               <div className="contact-card" style={{
-                background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-                border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
+                background: 'rgba(0,0,0,0.65)',
+                border: '2px solid rgba(0,240,255,0.3)',
                 borderRadius: '24px',
                 padding: 'clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)'
               }}>
@@ -690,10 +598,10 @@ export default function CyberpunkContact() {
                       alignItems: 'center',
                       gap: '1.5rem',
                       padding: '1.5rem',
-                      background: theme === "dark" ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                      background: 'rgba(255,255,255,0.04)',
                       borderRadius: '16px',
-                      border: `1px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      border: '1px solid rgba(0,240,255,0.3)',
+                      color: '#ffffff',
                       textDecoration: 'none',
                       transition: 'all 0.4s'
                     }}
@@ -714,10 +622,7 @@ export default function CyberpunkContact() {
                       <div style={{ fontSize: '1.3rem', fontWeight: 700 }}>
                         Email
                       </div>
-                      <div style={{ 
-                        color: theme === "dark" ? '#b0b0ff' : '#555555', 
-                        wordBreak: 'break-all' 
-                      }}>
+                      <div style={{ color: '#b0b0ff', wordBreak: 'break-all' }}>
                         g.sivasatyasaibhagavan@gmail.com
                       </div>
                     </div>
@@ -732,10 +637,10 @@ export default function CyberpunkContact() {
                       href="tel:+917569205626"
                       style={{
                         padding: '1.5rem',
-                        background: theme === "dark" ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                        background: 'rgba(255,255,255,0.04)',
                         borderRadius: '16px',
-                        border: `1px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                        border: '1px solid rgba(0,240,255,0.3)',
+                        color: '#ffffff',
                         textDecoration: 'none',
                         textAlign: 'center',
                         transition: 'all 0.4s'
@@ -749,10 +654,10 @@ export default function CyberpunkContact() {
                       href="tel:+919032230626"
                       style={{
                         padding: '1.5rem',
-                        background: theme === "dark" ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                        background: 'rgba(255,255,255,0.04)',
                         borderRadius: '16px',
-                        border: `1px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                        border: '1px solid rgba(0,240,255,0.3)',
+                        color: '#ffffff',
                         textDecoration: 'none',
                         textAlign: 'center',
                         transition: 'all 0.4s'
@@ -767,8 +672,8 @@ export default function CyberpunkContact() {
 
               {/* Social Links */}
               <div className="contact-card" style={{
-                background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
-                border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.25)'}`,
+                background: 'rgba(0,0,0,0.65)',
+                border: '2px solid rgba(0,240,255,0.3)',
                 borderRadius: '24px',
                 padding: 'clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)'
               }}>
@@ -799,10 +704,10 @@ export default function CyberpunkContact() {
                         alignItems: 'center',
                         gap: '1rem',
                         padding: '1.5rem',
-                        background: theme === "dark" ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                        background: 'rgba(255,255,255,0.04)',
                         borderRadius: '16px',
                         border: `1px solid ${link.color}40`,
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                        color: '#ffffff',
                         textDecoration: 'none',
                         transition: 'all 0.4s',
                         textAlign: 'center'
@@ -812,20 +717,17 @@ export default function CyberpunkContact() {
                         width: '60px',
                         height: '60px',
                         borderRadius: '20px',
-                        background: link.color === '#ffffff' ? (theme === "dark" ? '#333' : '#ddd') : link.color,
+                        background: link.color === '#ffffff' ? '#333' : link.color,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}>
-                        <link.icon size={32} color={link.color === '#ffffff' ? (theme === "dark" ? '#fff' : '#000') : '#000'} />
+                        <link.icon size={32} color={link.color === '#ffffff' ? '#fff' : '#000'} />
                       </div>
                       <div style={{ fontWeight: 700 }}>
                         {link.label}
                       </div>
-                      <div style={{ 
-                        fontSize: '0.9rem', 
-                        color: theme === "dark" ? '#b0b0ff' : '#555555' 
-                      }}>
+                      <div style={{ fontSize: '0.9rem', color: '#b0b0ff' }}>
                         {link.stats}
                       </div>
                     </a>
@@ -839,8 +741,8 @@ export default function CyberpunkContact() {
           <div style={{
             marginTop: '8rem',
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.92)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,183,235,0.25)'}`,
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -851,7 +753,7 @@ export default function CyberpunkContact() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               TRANSMISSION READY?
             </h2>
@@ -864,8 +766,8 @@ export default function CyberpunkContact() {
             }}>
               <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
                 padding: '1.4rem 3.2rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                background: 'rgba(0,240,255,0.14)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
                 color: 'var(--neon-primary)',
                 fontWeight: 700,
@@ -913,8 +815,8 @@ export default function CyberpunkContact() {
             onClick={() => {/* Add WhatsApp or call action */}}
             style={{
               padding: '1rem 1.8rem',
-              background: theme === "dark" ? 'rgba(0,240,255,0.2)' : 'rgba(0,183,235,0.15)',
-              border: `2px solid var(--neon-primary)`,
+              background: 'rgba(0,240,255,0.2)',
+              border: '2px solid var(--neon-primary)',
               borderRadius: '999px',
               color: 'var(--neon-primary)',
               fontWeight: 700,
@@ -935,7 +837,7 @@ export default function CyberpunkContact() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.8rem',
-              boxShadow: '0 0 30px rgba(var(--neon-primary-rgb),0.6)'
+              boxShadow: '0 0 30px rgba(0,240,255,0.6)'
             }}
           >
             <Mail size={24} />

@@ -1,10 +1,7 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 import { 
   Trophy, Award, Users, Target, TrendingUp, Zap, Star, Medal,
-  Sparkles, X, CheckCircle2, Rocket, Brain, Code2, Flame,
-  Sun, Moon
+  Sparkles, X, CheckCircle2, Rocket, Brain, Code2, Flame
 } from "lucide-react";
 
 const achievements = [
@@ -56,27 +53,7 @@ const metrics = [
 export default function CyberpunkAchievements() {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeMetric, setActiveMetric] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("achievements-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("achievements-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
@@ -100,7 +77,7 @@ export default function CyberpunkAchievements() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.05)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -110,7 +87,7 @@ export default function CyberpunkAchievements() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(0, theme === "dark" ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 102, 204, 0.35)');
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -128,7 +105,7 @@ export default function CyberpunkAchievements() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <>
@@ -136,33 +113,9 @@ export default function CyberpunkAchievements() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --stat-bg: rgba(255,255,255,0.92);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --stat-bg: rgba(0,0,0,0.78);
-          --modal-bg: rgba(6,6,28,0.98);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -172,8 +125,8 @@ export default function CyberpunkAchievements() {
 
         .achieve-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -191,21 +144,21 @@ export default function CyberpunkAchievements() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .metric-pill {
-          background: var(--stat-bg);
-          border: 1.6px solid var(--border-glow);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: theme === "dark" ? '#e0f7ff' : '#1e40af';
+          color: #e0f7ff;
         }
 
         .metric-pill:hover {
@@ -217,31 +170,7 @@ export default function CyberpunkAchievements() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -275,12 +204,6 @@ export default function CyberpunkAchievements() {
             padding: 2.2rem 1.6rem !important;
             width: 98% !important;
             max-width: 98% !important;
-          }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
           }
         }
 
@@ -317,39 +240,25 @@ export default function CyberpunkAchievements() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -379,7 +288,7 @@ export default function CyberpunkAchievements() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -400,7 +309,7 @@ export default function CyberpunkAchievements() {
 
             <p style={{
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '820px',
               margin: '0 auto',
               fontFamily: "'Fira Code', monospace",
@@ -429,7 +338,7 @@ export default function CyberpunkAchievements() {
                   onMouseLeave={() => setActiveMetric(null)}
                   style={{
                     padding: '1.8rem',
-                    background: theme === "dark" ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.92)',
+                    background: 'rgba(0,0,0,0.65)',
                     border: `2px solid ${color}40`,
                     borderRadius: '16px',
                     textAlign: 'center',
@@ -446,10 +355,7 @@ export default function CyberpunkAchievements() {
                   }}>
                     {metric.value}
                   </div>
-                  <div style={{ 
-                    color: theme === "dark" ? '#b0b0d0' : '#555555', 
-                    fontSize: '1.05rem' 
-                  }}>
+                  <div style={{ color: '#b0b0d0', fontSize: '1.05rem' }}>
                     {metric.label}
                   </div>
                 </div>
@@ -526,7 +432,7 @@ export default function CyberpunkAchievements() {
                     <h3 style={{
                       fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: '#ffffff',
                       marginBottom: '1rem',
                       textAlign: 'center'
                     }}>
@@ -545,7 +451,7 @@ export default function CyberpunkAchievements() {
 
                     <p style={{
                       fontSize: '1rem',
-                      color: theme === "dark" ? '#b0b0d0' : '#555555',
+                      color: '#b0b0d0',
                       lineHeight: 1.7,
                       textAlign: 'center',
                       marginBottom: '2rem',
@@ -584,8 +490,8 @@ export default function CyberpunkAchievements() {
           {/* CTA Bar */}
           <div style={{
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.92)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,183,235,0.25)'}`,
+            background: 'rgba(0,0,0,0.75)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -596,7 +502,7 @@ export default function CyberpunkAchievements() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 40px rgba(var(--neon-primary-rgb),0.7)'
+              textShadow: '0 0 40px rgba(0,240,255,0.7)'
             }}>
               CONTINUE EXECUTING?
             </h2>
@@ -609,8 +515,8 @@ export default function CyberpunkAchievements() {
             }}>
               <a href="#projects" style={{
                 padding: '1.4rem 3.2rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.14)' : 'rgba(0,183,235,0.12)',
-                border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                background: 'rgba(0,240,255,0.14)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
                 color: 'var(--neon-primary)',
                 fontWeight: 700,

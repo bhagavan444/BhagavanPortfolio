@@ -4,23 +4,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  FaBars,
-  FaTimes,
-  FaHome,
-  FaGraduationCap,
-  FaBriefcase,
-  FaCode,
-  FaEllipsisH,
-  FaTrophy,
-  FaLaptopCode,
-  FaFileAlt,
-  FaCertificate,
-  FaHeart,
-  FaAward,
-  FaEnvelope,
-  FaChevronDown,
-  FaSun,
-  FaMoon
+  FaBars, FaTimes, FaHome, FaGraduationCap,
+  FaBriefcase, FaCode, FaEllipsisH, FaTrophy, FaLaptopCode, FaFileAlt,
+  FaCertificate, FaHeart, FaAward, FaEnvelope, FaChevronDown
 } from "react-icons/fa";
 
 const Navbar = () => {
@@ -31,7 +17,6 @@ const Navbar = () => {
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
-  const [theme, setTheme] = useState("dark"); // Default theme: dark
   const navRef = useRef(null);
 
   // Mouse-following subtle glow
@@ -42,28 +27,6 @@ const Navbar = () => {
 
   const currentPath = location.pathname === "/" ? "/home" : location.pathname;
 
-  // Theme toggle function
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    // Save preference to localStorage
-    localStorage.setItem("portfolio-theme", newTheme);
-  };
-
-  // Load saved theme preference on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("portfolio-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Apply theme class to body
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
-
-  // Handle resize and scroll
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 1024;
@@ -133,31 +96,8 @@ const Navbar = () => {
           --neon-cyan: #00ffff;
           --neon-purple: #8a2be2;
           --bg-dark: #000000;
-          --bg-light: #f8f9fa;
-          --text-dark: #ffffff;
-          --text-light: #1a1a1a;
-          --glass-dark: rgba(8,8,22,0.84);
-          --glass-light: rgba(255,255,255,0.85);
-          --border-glow-dark: rgba(0,255,255,0.24);
-          --border-glow-light: rgba(0,102,204,0.3);
-          --nav-bg-dark: rgba(0,0,0,0.92);
-          --nav-bg-light: rgba(255,255,255,0.92);
-        }
-
-        body.light {
-          --bg-primary: var(--bg-light);
-          --text-primary: var(--text-light);
-          --glass: var(--glass-light);
-          --border-glow: var(--border-glow-light);
-          --nav-bg: var(--nav-bg-light);
-        }
-
-        body.dark {
-          --bg-primary: var(--bg-dark);
-          --text-primary: var(--text-dark);
-          --glass: var(--glass-dark);
-          --border-glow: var(--border-glow-dark);
-          --nav-bg: var(--nav-bg-dark);
+          --glass: rgba(8,8,22,0.84);
+          --border-glow: rgba(0,255,255,0.24);
         }
 
         @keyframes scan {
@@ -189,7 +129,7 @@ const Navbar = () => {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-cyan-rgb),0.18) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,255,255,0.18) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
@@ -203,7 +143,7 @@ const Navbar = () => {
         }
 
         .nav-active {
-          background: rgba(var(--neon-cyan-rgb),0.18) !important;
+          background: rgba(0,255,255,0.18) !important;
           border-color: var(--neon-cyan) !important;
           box-shadow: 0 0 40px var(--neon-cyan) !important;
           color: var(--neon-cyan) !important;
@@ -215,9 +155,9 @@ const Navbar = () => {
         }
 
         .mobile-menu {
-          background: var(--glass);
+          background: rgba(0,0,0,0.92);
           backdrop-filter: blur(16px);
-          border-top: 2px solid var(--border-glow);
+          border-top: 2px solid rgba(0,255,255,0.3);
         }
 
         .logo-glow {
@@ -231,26 +171,6 @@ const Navbar = () => {
         @keyframes blink {
           50% { opacity: 0; }
         }
-
-        .theme-toggle {
-          background: var(--glass);
-          border: 2px solid var(--neon-cyan);
-          backdrop-filter: blur(12px);
-          transition: all 0.4s ease;
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-cyan);
-        }
-
-        body.light .theme-toggle {
-          border-color: #0066cc;
-        }
-
-        body.light .theme-toggle svg {
-          color: #0066cc;
-        }
       `}</style>
 
       <motion.nav
@@ -263,13 +183,13 @@ const Navbar = () => {
           right: 0,
           zIndex: 1000,
           height: "88px",
-          background: "var(--glass)",
+          background: 'var(--bg-dark)',
           backdropFilter: isScrolled ? "blur(32px) saturate(180%)" : "blur(24px) saturate(160%)",
           borderBottom: isScrolled
-            ? `2px solid ${theme === "dark" ? "rgba(0,255,255,0.35)" : "rgba(0,102,204,0.35)"}`
-            : `1px solid ${theme === "dark" ? "rgba(0,255,255,0.18)" : "rgba(0,102,204,0.18)"}`,
+            ? "2px solid rgba(0,255,255,0.35)"
+            : "1px solid rgba(0,255,255,0.18)",
           boxShadow: isScrolled
-            ? "0 16px 60px rgba(0,0,0,0.9), 0 0 100px var(--neon-glow)"
+            ? "0 16px 60px rgba(0,0,0,0.9), 0 0 100px rgba(0,255,255,0.22)"
             : "0 10px 40px rgba(0,0,0,0.75)",
           transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
@@ -280,7 +200,7 @@ const Navbar = () => {
             style={{
               position: "absolute",
               inset: 0,
-              background: `radial-gradient(circle 600px at ${springX}px ${springY}px, rgba(var(--neon-cyan-rgb),0.12), transparent 60%)`,
+              background: `radial-gradient(circle 600px at ${springX}px ${springY}px, rgba(0,255,255,0.12), transparent 60%)`,
               pointerEvents: "none",
               opacity: 0.7,
             }}
@@ -330,18 +250,18 @@ const Navbar = () => {
                 ease: "easeInOut",
               }}
               className="logo-glow"
-              style={{ color: "var(--neon-cyan)" }}
+              style={{ color: "#00ffff" }}
             >
               ⚡
             </motion.span>
             <span style={{
-              background: `linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-cyan))`,
+              background: "linear-gradient(90deg, #00ffff, #8a2be2, #00ffff)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
               fontSize: isMobile ? "1.8rem" : "2.2rem",
             }}>
-              Bhagavan
+              Bhagavan 
             </span>
           </motion.button>
 
@@ -367,14 +287,14 @@ const Navbar = () => {
                       alignItems: "center",
                       gap: "10px",
                       padding: "12px 22px",
-                      color: "var(--text-primary)",
+                      color: "#ffffff",
                       fontSize: "0.98rem",
                       fontWeight: isActive ? "700" : "500",
                       borderRadius: "14px",
-                      background: isActive ? "rgba(var(--neon-cyan-rgb),0.16)" : "rgba(255,255,255,0.04)",
+                      background: isActive ? "rgba(0,255,255,0.16)" : "rgba(255,255,255,0.04)",
                       border: isActive
-                        ? `1.5px solid rgba(var(--neon-cyan-rgb),0.5)`
-                        : `1px solid ${theme === "dark" ? "rgba(0,255,255,0.18)" : "rgba(0,102,204,0.18)"}`,
+                        ? "1.5px solid rgba(0,255,255,0.5)"
+                        : "1px solid rgba(0,255,255,0.18)",
                       backdropFilter: "blur(12px)",
                       cursor: "pointer",
                       whiteSpace: "nowrap",
@@ -385,11 +305,11 @@ const Navbar = () => {
                     <motion.span
                       animate={isActive ? { rotate: [0, 12, -12, 0], scale: [1, 1.15, 1] } : {}}
                       transition={{ duration: 0.7 }}
-                      style={{ fontSize: "1.2rem", color: isActive ? "var(--neon-cyan)" : "var(--text-primary)" }}
+                      style={{ fontSize: "1.2rem", color: isActive ? "#00ffff" : "#e0e0ff" }}
                     >
                       {item.icon}
                     </motion.span>
-                    <span style={{ color: isActive ? "var(--neon-cyan)" : "var(--text-primary)" }}>
+                    <span style={{ color: isActive ? "#00ffff" : "#e0e0ff" }}>
                       {item.label}
                     </span>
                   </motion.button>
@@ -408,14 +328,14 @@ const Navbar = () => {
                     alignItems: "center",
                     gap: "10px",
                     padding: "12px 22px",
-                    color: "var(--text-primary)",
+                    color: "#ffffff",
                     fontSize: "0.98rem",
                     fontWeight: moreDropdownOpen ? "700" : "500",
                     borderRadius: "14px",
-                    background: moreDropdownOpen ? "rgba(var(--neon-cyan-rgb),0.16)" : "rgba(255,255,255,0.04)",
+                    background: moreDropdownOpen ? "rgba(0,255,255,0.16)" : "rgba(255,255,255,0.04)",
                     border: moreDropdownOpen
-                      ? `1.5px solid rgba(var(--neon-cyan-rgb),0.5)`
-                      : `1px solid ${theme === "dark" ? "rgba(0,255,255,0.18)" : "rgba(0,102,204,0.18)"}`,
+                      ? "1.5px solid rgba(0,255,255,0.5)"
+                      : "1px solid rgba(0,255,255,0.18)",
                     backdropFilter: "blur(12px)",
                     cursor: "pointer",
                   }}
@@ -423,11 +343,11 @@ const Navbar = () => {
                   <motion.span
                     animate={{ rotate: moreDropdownOpen ? 180 : 0 }}
                     transition={{ duration: 0.4 }}
-                    style={{ color: moreDropdownOpen ? "var(--neon-cyan)" : "var(--text-primary)" }}
+                    style={{ color: moreDropdownOpen ? "#00ffff" : "#e0e0ff" }}
                   >
                     <FaEllipsisH />
                   </motion.span>
-                  <span style={{ color: moreDropdownOpen ? "var(--neon-cyan)" : "var(--text-primary)" }}>
+                  <span style={{ color: moreDropdownOpen ? "#00ffff" : "#e0e0ff" }}>
                     More
                   </span>
                   <FaChevronDown style={{ fontSize: "0.8rem" }} />
@@ -445,11 +365,11 @@ const Navbar = () => {
                         top: "calc(100% + 16px)",
                         right: 0,
                         minWidth: "280px",
-                        background: "var(--glass)",
+                        background: "rgba(8,8,22,0.94)",
                         backdropFilter: "blur(20px)",
-                        border: `2px solid ${theme === "dark" ? "rgba(0,255,255,0.4)" : "rgba(0,102,204,0.4)"}`,
+                        border: "2px solid rgba(0,255,255,0.4)",
                         borderRadius: "16px",
-                        boxShadow: "0 20px 80px rgba(0,0,0,0.9), 0 0 60px var(--neon-glow)",
+                        boxShadow: "0 20px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,255,0.25)",
                         padding: "1rem",
                         zIndex: 1001,
                       }}
@@ -470,7 +390,7 @@ const Navbar = () => {
                               alignItems: "center",
                               gap: "16px",
                               padding: "14px 20px",
-                              color: isActive ? "var(--neon-cyan)" : "var(--text-primary)",
+                              color: isActive ? "#00ffff" : "#e0e0ff",
                               fontSize: "0.98rem",
                               fontWeight: isActive ? "700" : "500",
                               borderRadius: "12px",
@@ -481,7 +401,7 @@ const Navbar = () => {
                               marginBottom: "6px",
                             }}
                           >
-                            <motion.span style={{ fontSize: "1.3rem", color: isActive ? "var(--neon-cyan)" : "var(--text-primary)" }}>
+                            <motion.span style={{ fontSize: "1.3rem", color: isActive ? "#00ffff" : "#e0e0ff" }}>
                               {item.icon}
                             </motion.span>
                             <span>{item.label}</span>
@@ -495,54 +415,8 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Right Side - Theme Toggle + Hamburger */}
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            {/* Theme Toggle Button */}
-            <motion.button
-              onClick={toggleTheme}
-              whileHover={{ scale: 1.15, rotate: 15 }}
-              whileTap={{ scale: 0.9 }}
-              aria-label="Toggle theme"
-              style={{
-                background: "var(--glass)",
-                border: `2px solid ${theme === "dark" ? "var(--neon-cyan)" : "#0066cc"}`,
-                borderRadius: "50%",
-                width: "48px",
-                height: "48px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                backdropFilter: "blur(12px)",
-                boxShadow: `0 0 20px ${theme === "dark" ? "rgba(0,255,255,0.5)" : "rgba(0,102,204,0.5)"}`,
-              }}
-            >
-              <AnimatePresence mode="wait">
-                {theme === "dark" ? (
-                  <motion.div
-                    key="sun"
-                    initial={{ rotate: -180, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 180, opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <FaSun size={22} color="#00ffff" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="moon"
-                    initial={{ rotate: 180, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -180, opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <FaMoon size={22} color="#0066cc" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
-
-            {/* Hamburger Menu (Mobile Only) */}
+          {/* Right Side - Hamburger (only) */}
+          <div style={{ display: "flex", alignItems: "center" }}>
             {isMobile && (
               <motion.button
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -550,18 +424,18 @@ const Navbar = () => {
                 whileTap={{ scale: 0.9 }}
                 style={{
                   background: menuOpen
-                    ? "linear-gradient(135deg, rgba(var(--neon-cyan-rgb),0.35), rgba(var(--neon-purple-rgb),0.3))"
+                    ? "linear-gradient(135deg, rgba(0,255,255,0.35), rgba(138,43,226,0.3))"
                     : "rgba(255,255,255,0.08)",
                   border: menuOpen
-                    ? `2px solid ${theme === "dark" ? "rgba(0,255,255,0.6)" : "rgba(0,102,204,0.6)"}`
-                    : `1.5px solid ${theme === "dark" ? "rgba(0,255,255,0.3)" : "rgba(0,102,204,0.3)"}`,
-                  color: "var(--neon-cyan)",
+                    ? "2px solid rgba(0,255,255,0.6)"
+                    : "1.5px solid rgba(0,255,255,0.3)",
+                  color: "#00ffff",
                   fontSize: "1.8rem",
                   padding: "14px",
                   borderRadius: "14px",
                   cursor: "pointer",
                   boxShadow: menuOpen
-                    ? "0 0 50px rgba(var(--neon-cyan-rgb),0.5)"
+                    ? "0 0 50px rgba(0,255,255,0.5)"
                     : "0 6px 20px rgba(0,0,0,0.4)",
                 }}
                 aria-label="Toggle menu"
@@ -606,12 +480,12 @@ const Navbar = () => {
             style={{
               position: "fixed",
               inset: "88px 0 0 0",
-              background: "var(--glass)",
+              background: "rgba(0,0,0,0.94)",
               backdropFilter: "blur(20px)",
               zIndex: 999,
               overflowY: "auto",
               padding: "2.5rem 1.8rem",
-              borderTop: `2px solid ${theme === "dark" ? "rgba(0,255,255,0.4)" : "rgba(0,102,204,0.4)"}`,
+              borderTop: "2px solid rgba(0,255,255,0.4)",
             }}
             onClick={(e) => e.target === e.currentTarget && setMenuOpen(false)}
           >
@@ -643,23 +517,21 @@ const Navbar = () => {
                       alignItems: "center",
                       gap: "18px",
                       padding: "22px 28px",
-                      background: isActive
-                        ? "rgba(var(--neon-cyan-rgb),0.22)"
-                        : "rgba(255,255,255,0.06)",
+                      background: isActive ? "rgba(0,255,255,0.22)" : "rgba(255,255,255,0.06)",
                       borderRadius: "18px",
-                      color: isActive ? "var(--neon-cyan)" : "var(--text-primary)",
+                      color: isActive ? "#00ffff" : "#e0e0ff",
                       fontSize: "1.15rem",
                       fontWeight: isActive ? "700" : "500",
                       border: isActive
-                        ? `1.5px solid ${theme === "dark" ? "rgba(0,255,255,0.6)" : "rgba(0,102,204,0.6)"}`
-                        : `1px solid ${theme === "dark" ? "rgba(0,255,255,0.22)" : "rgba(0,102,204,0.22)"}`,
+                        ? "1.5px solid rgba(0,255,255,0.6)"
+                        : "1px solid rgba(0,255,255,0.22)",
                       backdropFilter: "blur(12px)",
                       cursor: "pointer",
                       width: "100%",
                       textAlign: "left",
                     }}
                   >
-                    <motion.span style={{ fontSize: "1.7rem", color: isActive ? "var(--neon-cyan)" : "var(--text-primary)" }}>
+                    <motion.span style={{ fontSize: "1.7rem", color: isActive ? "#00ffff" : "#e0e0ff" }}>
                       {item.icon}
                     </motion.span>
                     <span>{item.label}</span>
@@ -674,4 +546,4 @@ const Navbar = () => {
   );
 }
 
-export default Navbar;
+export default Navbar; 

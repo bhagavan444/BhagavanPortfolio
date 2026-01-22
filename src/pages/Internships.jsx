@@ -1,27 +1,8 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Code,
-  Brain,
-  Database,
-  Terminal,
-  Award,
-  ExternalLink,
-  X,
-  CheckCircle2,
-  Layers,
-  Sparkles,
-  Zap,
-  Github,
-  Sun,
-  Moon
-} from "lucide-react";
-
-// Replace with your actual image paths
-import rceeImage from "../assets/Rcee.jpg";
-import sriImage from "../assets/SRI.jpg";
-import monteImage from "../assets/Monte.jpg";
+  Code, Brain, Database, Terminal, Award, ExternalLink, X,
+  CheckCircle2, Layers, Sparkles, Zap, Github
+} from 'lucide-react';
 
 const internships = [
   {
@@ -156,33 +137,13 @@ const internships = [
 export default function CyberpunkInternships() {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeCert, setActiveCert] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("internships-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("internships-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
 
   // ─── BACKGROUND PARTICLES ────────────────────────────────────────────────
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     let animationId;
 
     const resize = () => {
@@ -196,25 +157,22 @@ export default function CyberpunkInternships() {
       y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 2 + 1,
+      size: Math.random() * 2 + 1
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.06)";
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p) => {
+      particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
-        gradient.addColorStop(
-          0,
-          theme === "dark" ? "rgba(0, 240, 255, 0.35)" : "rgba(0, 102, 204, 0.35)"
-        );
-        gradient.addColorStop(1, "transparent");
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.35)');
+        gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
@@ -225,13 +183,13 @@ export default function CyberpunkInternships() {
     };
 
     animate();
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   const getCertificateUrl = (id) =>
     `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
@@ -245,44 +203,20 @@ export default function CyberpunkInternships() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 25px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --card-bg: rgba(255,255,255,0.92);
-          --border-glow: rgba(0,183,235,0.32);
-          --skill-bg: rgba(255,255,255,0.9);
-          --skill-text: #1e40af;
-          --skill-border: rgba(0,183,235,0.4);
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
           --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --text-primary: #e0e0ff;
-          --text-secondary: #a0a0c8;
-          --card-bg: rgba(8,8,22,0.92);
-          --border-glow: rgba(0,240,255,0.32);
-          --skill-bg: rgba(0,0,0,0.78);
-          --skill-text: #e0f7ff;
-          --skill-border: rgba(0,240,255,0.45);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes scan { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
-        @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
-        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+        @keyframes scan     { 0% { transform:translateY(-100%); } 100% { transform:translateY(100%); } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+        @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
 
         .intern-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(8,8,22,0.92);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -300,21 +234,21 @@ export default function CyberpunkInternships() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .tech-pill {
-          background: var(--skill-bg);
-          border: 1.6px solid var(--skill-border);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: var(--skill-text);
+          color: #e0f7ff;
         }
 
         .tech-pill:hover {
@@ -326,31 +260,7 @@ export default function CyberpunkInternships() {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
-        }
-
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         /* ─── RESPONSIVE FIXES ──────────────────────────────────────── */
@@ -384,12 +294,6 @@ export default function CyberpunkInternships() {
           .modal-image {
             max-height: 45vh !important;
             object-fit: contain !important;
-          }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
           }
         }
 
@@ -426,39 +330,25 @@ export default function CyberpunkInternships() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000000',
+        color: '#e0e0ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         {/* Grid overlay */}
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(var(--neon-primary-rgb),0.08) 1px, transparent 1px)
+            linear-gradient(rgba(0,240,255,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,240,255,0.08) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
+          opacity: 0.22,
           pointerEvents: 'none'
         }} />
 
@@ -488,7 +378,7 @@ export default function CyberpunkInternships() {
               color: 'var(--neon-primary)',
               fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
               padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
+              border: '2px solid rgba(0,240,255,0.45)',
               borderRadius: '999px',
               marginBottom: '1.6rem',
               animation: 'pulse 3.5s infinite'
@@ -509,7 +399,7 @@ export default function CyberpunkInternships() {
 
             <p style={{
               fontSize: 'clamp(1.1rem, 3vw, 1.35rem)',
-              color: theme === "dark" ? '#a0a0c8' : '#555555',
+              color: '#a0a0c8',
               maxWidth: '800px',
               margin: '0 auto',
               fontFamily: "'Fira Code', monospace",
@@ -631,15 +521,15 @@ export default function CyberpunkInternships() {
                         justifyContent: 'center',
                         fontSize: '2.4rem',
                         animation: isHovered ? 'float 3.2s ease-in-out infinite' : 'none',
-                        boxShadow: isHovered ? '0 0 40px var(--neon-glow)' : 'none'
+                        boxShadow: isHovered ? '0 0 40px rgba(0,240,255,0.5)' : 'none'
                       }}>
                         <intern.icon size={36} />
                       </div>
 
                       <div style={{
                         padding: '0.5rem 1.2rem',
-                        background: `rgba(var(--neon-primary-rgb),0.15)`,
-                        border: `2px solid rgba(var(--neon-primary-rgb),0.6)`,
+                        background: `rgba(0,240,255,0.15)`,
+                        border: `2px solid rgba(0,240,255,0.6)`,
                         borderRadius: '999px',
                         fontSize: '0.9rem',
                         fontWeight: 700,
@@ -652,7 +542,7 @@ export default function CyberpunkInternships() {
                     <h3 style={{
                       fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
                       fontWeight: 800,
-                      color: theme === "dark" ? '#ffffff' : '#1a1a1a',
+                      color: '#ffffff',
                       marginBottom: '0.7rem'
                     }}>
                       {intern.title}
@@ -660,7 +550,7 @@ export default function CyberpunkInternships() {
 
                     <div style={{
                       fontSize: '1.05rem',
-                      color: theme === "dark" ? '#b0b0d8' : '#555555',
+                      color: '#b0b0d8',
                       marginBottom: '0.4rem',
                       fontFamily: "'Fira Code', monospace"
                     }}>
@@ -688,8 +578,8 @@ export default function CyberpunkInternships() {
                           key={t}
                           className="tech-pill"
                           style={{
-                            color: isHovered ? 'var(--neon-primary)' : theme === "dark" ? '#b0e0ff' : '#333333',
-                            borderColor: isHovered ? 'var(--neon-primary)' : theme === "dark" ? 'rgba(0,240,255,0.45)' : 'rgba(0,102,204,0.45)'
+                            color: isHovered ? 'var(--neon-primary)' : '#b0e0ff',
+                            borderColor: isHovered ? 'var(--neon-primary)' : 'rgba(0,240,255,0.45)'
                           }}
                         >
                           {t}
@@ -711,8 +601,7 @@ export default function CyberpunkInternships() {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.8rem',
-                            fontSize: '0.98rem',
-                            color: theme === "dark" ? '#e0f7ff' : '#333333'
+                            fontSize: '0.98rem'
                           }}
                         >
                           <CheckCircle2 size={17} style={{ color: 'var(--neon-primary)' }} />
@@ -737,7 +626,7 @@ export default function CyberpunkInternships() {
                         fontWeight: 800,
                         borderRadius: '999px',
                         textDecoration: 'none',
-                        boxShadow: '0 0 35px var(--neon-glow)',
+                        boxShadow: '0 0 35px rgba(0,240,255,0.5)',
                         transition: 'all 0.4s',
                         fontSize: '1.05rem'
                       }}
@@ -755,8 +644,8 @@ export default function CyberpunkInternships() {
           {/* CTA */}
           <div style={{
             padding: 'clamp(3rem, 8vw, 4.5rem) 2rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)',
-            border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.38)' : 'rgba(0,102,204,0.38)'}`,
+            background: 'rgba(0,0,0,0.8)',
+            border: '2.5px solid rgba(0,240,255,0.38)',
             borderRadius: '28px',
             textAlign: 'center'
           }}>
@@ -767,7 +656,7 @@ export default function CyberpunkInternships() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.5rem',
-              textShadow: '0 0 35px var(--neon-glow)'
+              textShadow: '0 0 35px rgba(0,240,255,0.7)'
             }}>
               READY FOR NEXT DEPLOYMENT?
             </h2>
@@ -780,8 +669,8 @@ export default function CyberpunkInternships() {
             }}>
               <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
                 padding: '1.2rem 2.8rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.16)' : 'rgba(0,102,204,0.16)',
-                border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,102,204,0.7)'}`,
+                background: 'rgba(0,240,255,0.16)',
+                border: '2.5px solid rgba(0,240,255,0.7)',
                 borderRadius: '999px',
                 color: 'var(--neon-primary)',
                 fontWeight: 700,
@@ -822,7 +711,7 @@ export default function CyberpunkInternships() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.97)' : 'rgba(255,255,255,0.97)',
+            background: 'rgba(0,0,0,0.97)',
             backdropFilter: 'blur(16px)',
             zIndex: 9999,
             display: 'flex',
@@ -835,7 +724,7 @@ export default function CyberpunkInternships() {
             onClick={e => e.stopPropagation()}
             className="modal-content"
             style={{
-              background: theme === "dark" ? 'rgba(6,6,28,0.98)' : 'rgba(255,255,255,0.98)',
+              background: 'rgba(6,6,28,0.98)',
               border: `4px solid ${activeCert.color}aa`,
               borderRadius: '28px',
               maxWidth: '1300px',
@@ -893,7 +782,7 @@ export default function CyberpunkInternships() {
                 gap: '1.5rem',
                 marginBottom: '2rem',
                 fontSize: 'clamp(1.1rem, 3vw, 1.3rem)',
-                color: theme === "dark" ? '#d0d0ff' : '#333333'
+                color: '#d0d0ff'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                   <Code size={24} />
@@ -914,13 +803,12 @@ export default function CyberpunkInternships() {
                 {activeCert.tech.map(t => (
                   <span key={t} style={{
                     padding: '0.7rem 1.4rem',
-                    background: theme === "dark" ? `rgba(0,240,255,0.18)` : `rgba(0,183,235,0.18)`,
-                    border: `2px solid ${theme === "dark" ? "rgba(0,240,255,0.5)" : "rgba(0,183,235,0.5)"}`,
+                    background: `rgba(0,240,255,0.18)`,
+                    border: `2px solid rgba(0,240,255,0.5)`,
                     borderRadius: '999px',
                     fontFamily: "'Fira Code', monospace",
                     fontSize: '0.95rem',
-                    fontWeight: 600,
-                    color: theme === "dark" ? "#e0f7ff" : "#1a1a1a"
+                    fontWeight: 600
                   }}>
                     {t}
                   </span>
@@ -937,8 +825,7 @@ export default function CyberpunkInternships() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '1rem',
-                    fontSize: '1.05rem',
-                    color: theme === "dark" ? "#e0f7ff" : "#333333"
+                    fontSize: '1.05rem'
                   }}>
                     <CheckCircle2 size={20} style={{ color: 'var(--neon-primary)' }} />
                     {ach}

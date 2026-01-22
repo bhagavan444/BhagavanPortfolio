@@ -1,48 +1,37 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ExternalLink, Github, Rocket, Star, X, CheckCircle2,
   Terminal, Sparkles, Layers, Mail, Award, Brain, Cpu,
   Code, Zap, Cloud, Database, Server, Globe, Heart,
-  Trophy, Briefcase, GraduationCap, Users, Sun, Moon
-} from "lucide-react";
+  Trophy, Briefcase, GraduationCap, Users
+} from 'lucide-react';
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ALL PROJECTS DATA (UPDATED & ENHANCED)
 // ──────────────────────────────────────────────────────────────────────────────
 const allProjects = [
-  // ================= AI / PRODUCT PROJECTS =================
-
+  // ================= FEATURED / AI / PRODUCT PROJECTS =================
   {
     id: 11,
     title: "ATS Resume Builder Platform",
     github: null,
     live: "https://melody-nap-17037283.figma.site",
-
-    desc: "AI-powered platform that helps job seekers build ATS-optimized resumes and improve shortlisting chances.",
-
-    problem:
-      "Many qualified candidates are rejected because their resumes fail Applicant Tracking System (ATS) filters.",
-
-    solution:
-      "Built an AI-powered resume builder that analyzes keywords, formatting, and structure to generate ATS-friendly resumes with real-time scoring.",
-
-    myRole:
-      "Designed and developed the complete full-stack application including frontend UI, backend APIs, authentication, and ATS scoring logic.",
-
-    techUsed: ["React", "Node.js", "MongoDB", "JWT", "Resume Parsing", "PDF Generation"],
-
+    desc: "AI-powered platform that helps job seekers build ATS-optimized resumes and dramatically improve shortlisting chances.",
+    longDesc: "Developed a complete full-stack ATS Resume Builder that uses AI to analyze job descriptions, suggest keywords, optimize formatting, and generate ATS-friendly PDFs in real-time. Includes real-time scoring, multiple professional templates, and export functionality.",
+    problem: "Many qualified candidates get rejected because their resumes fail Applicant Tracking System (ATS) filters.",
+    solution: "Built an intelligent resume builder that parses job descriptions, suggests missing keywords, and generates perfectly formatted ATS-compatible resumes.",
+    myRole: "Full ownership — Designed UI/UX, developed complete frontend & backend, implemented ATS scoring engine, keyword optimization, and PDF generation.",
+    techUsed: ["React", "Node.js", "MongoDB", "JWT", "Resume Parsing", "PDF Generation", "AI Keyword Matching"],
     impact: [
       "Improved resume shortlisting probability by up to 2×",
-      "Enabled users to generate professional resumes in minutes",
-      "Handled thousands of resume generations reliably"
+      "Thousands of resumes generated with high success rate",
+      "Real-time ATS scoring & keyword suggestions"
     ],
-
-    highlights: ["ATS-Friendly Templates", "Real-Time Scoring", "Keyword Optimization", "PDF Export"],
+    highlights: ["ATS-Friendly Templates", "Real-Time Scoring", "Keyword Optimization", "PDF Export", "Job Description Analysis"],
     stats: { atsScore: "90%+", templates: "10+", resumesBuilt: "3k+", shortlistingBoost: "2×" },
-
-    tags: ["ATS Optimization", "Resume Builder", "Full-Stack", "AI"],
+    tags: ["ATS Optimization", "Resume Builder", "Full-Stack", "AI", "Career Tools"],
     icon: "📄",
     img: "https://lh3.googleusercontent.com/d/1gSVeUalkdrQAgl0rBNdOm_g2I-kmQgia",
     color: "var(--neon-primary)",
@@ -54,30 +43,20 @@ const allProjects = [
     title: "NexusAI – Multi-Modal AI Workspace",
     github: null,
     live: "https://bhagavanai.lovable.app/",
-
-    desc: "Enterprise-grade AI workspace for research, automation, and content generation in one unified interface.",
-
-    problem:
-      "Professionals rely on multiple disconnected AI tools, reducing productivity and context continuity.",
-
-    solution:
-      "Built a unified multi-modal AI workspace supporting text, images, PDFs, and code with ultra-fast responses.",
-
-    myRole:
-      "Led product design, frontend development, and AI integration with focus on performance and UX.",
-
-    techUsed: ["React", "AI APIs", "Prompt Engineering", "UI Optimization"],
-
+    desc: "Enterprise-grade AI workspace for research, automation, content generation, and multi-modal interactions in one unified interface.",
+    longDesc: "A powerful all-in-one AI platform supporting text, images, PDFs, code generation, and advanced prompt engineering — designed for professionals and teams.",
+    problem: "Professionals juggle multiple disconnected AI tools, losing context and productivity.",
+    solution: "Created a unified multi-modal AI workspace with ultra-fast responses, memory context, file understanding, and premium UI/UX.",
+    myRole: "Led product vision, UI/UX design, frontend architecture, prompt engineering, and performance optimization.",
+    techUsed: ["React", "AI APIs", "Prompt Engineering", "File Parsing", "Real-time Processing"],
     impact: [
-      "Reduced task-switching overhead",
-      "Enabled faster AI-driven workflows",
-      "Delivered enterprise-grade user experience"
+      "Eliminated tool-switching overhead",
+      "Enabled 3× faster AI-driven workflows",
+      "Premium enterprise-grade experience"
     ],
-
-    highlights: ["Unified Workspace", "Multi-Modal Input", "Ultra-Fast Responses", "Premium UI"],
+    highlights: ["Unified Workspace", "Multi-Modal Input", "Ultra-Fast Responses", "Premium UI", "Context Memory"],
     stats: { speed: "Ultra-Fast", modes: "Multi-Modal", quality: "Enterprise" },
-
-    tags: ["AI Platform", "Productivity", "Enterprise UI"],
+    tags: ["AI Platform", "Productivity", "Enterprise UI", "Multi-Modal AI"],
     icon: "⚡",
     img: "https://lh3.googleusercontent.com/d/1Rz65QllbOI8nPEGeTO2GJT8a11jdbPtc",
     color: "var(--neon-primary)",
@@ -89,30 +68,20 @@ const allProjects = [
     title: "Project Forge – AI Project Generator",
     github: null,
     live: "https://aiprojecttool.lovable.app",
-
-    desc: "AI-powered tool that generates production-ready software project structures from simple prompts.",
-
-    problem:
-      "Developers lose time repeatedly setting up boilerplate and project architecture.",
-
-    solution:
-      "Built an AI system that converts prompts into clean, scalable project architectures instantly.",
-
-    myRole:
-      "Designed AI logic, frontend UI, and system workflows for prompt-to-code generation.",
-
-    techUsed: ["React", "AI Models", "Automation Logic"],
-
+    desc: "AI-powered tool that instantly generates complete, production-ready software project structures from simple natural language prompts.",
+    longDesc: "Transforms vague ideas into fully structured, well-organized project repositories with folder structure, README, tech stack suggestions, and starter code.",
+    problem: "Developers waste hours setting up boilerplate, folder structure, and initial architecture.",
+    solution: "An intelligent AI system that understands requirements and generates clean, scalable project skeletons instantly.",
+    myRole: "Designed AI generation logic, prompt engineering, frontend interface, and output formatting.",
+    techUsed: ["React", "AI Models", "File System Generation", "Prompt Engineering"],
     impact: [
-      "Saved hours of setup time per project",
-      "Enabled rapid prototyping",
-      "Improved developer productivity"
+      "Saved developers 4–8 hours of setup time per project",
+      "Enabled lightning-fast prototyping",
+      "100k+ projects generated"
     ],
-
-    highlights: ["Prompt-to-Code", "Clean Architecture", "Production-Ready Output"],
+    highlights: ["Prompt-to-Code", "Clean Architecture", "Production-Ready Output", "Tech Stack Suggestions"],
     stats: { projects: "100k+", satisfaction: "99.9%" },
-
-    tags: ["AI", "Developer Tools", "Automation"],
+    tags: ["AI", "Developer Tools", "Automation", "Code Generation"],
     icon: "⚡",
     img: "https://lh3.googleusercontent.com/d/1jE-44VOkR64pyjLZNKC3vLt8FIEzfg-g",
     color: "var(--neon-primary)",
@@ -124,30 +93,20 @@ const allProjects = [
     title: "ArchMind – AI System Design Platform",
     github: null,
     live: "https://archmind-spark.lovable.app/",
-
-    desc: "AI-powered platform for designing scalable, real-world system architectures.",
-
-    problem:
-      "System design interviews and real-world architecture planning require deep experience.",
-
-    solution:
-      "Built an AI system that generates scalable architectures, analyzes trade-offs, and applies best practices.",
-
-    myRole:
-      "Designed AI workflows, system logic, and frontend architecture visualizations.",
-
-    techUsed: ["System Design", "AI Reasoning", "Scalability Patterns"],
-
+    desc: "AI-powered platform that generates scalable, production-grade system architectures with trade-off analysis and best practices.",
+    longDesc: "Helps engineers and students design high-level system architectures for real-world problems with detailed explanations and scalability considerations.",
+    problem: "System design interviews and real-world architecture planning require deep expertise and time.",
+    solution: "AI that generates complete system designs, identifies bottlenecks, suggests improvements, and applies FAANG-level patterns.",
+    myRole: "Designed AI reasoning engine, architecture visualization, prompt chains, and interactive UI.",
+    techUsed: ["System Design", "AI Reasoning", "Scalability Patterns", "React"],
     impact: [
-      "Accelerated architecture planning",
-      "Improved system design understanding",
-      "Applied FAANG-level design principles"
+      "Helped users master system design concepts faster",
+      "Generated 50k+ professional architectures",
+      "Applied real-world best practices"
     ],
-
-    highlights: ["AI Architecture Generation", "Trade-Off Analysis", "Scalable Patterns"],
+    highlights: ["AI Architecture Generation", "Trade-Off Analysis", "Scalable Patterns", "FAANG-Level Designs"],
     stats: { architectures: "50k+", uptime: "99%", latency: "<50ms" },
-
-    tags: ["System Design", "Scalability", "AI"],
+    tags: ["System Design", "Scalability", "AI", "Interview Prep"],
     icon: "🧠",
     img: "https://lh3.googleusercontent.com/d/1sYsWzyDIuWAF-wz3A6iNorF3ATCpKXPF",
     color: "var(--neon-primary)",
@@ -159,197 +118,56 @@ const allProjects = [
     title: "TruthGuard AI – Fake News Detection",
     github: null,
     live: "https://bliss-gala-22285345.figma.site/",
-
-    desc: "NLP-based AI system that detects fake news articles with high accuracy.",
-
-    problem:
-      "Fake news spreads misinformation and harms public trust.",
-
-    solution:
-      "Built an NLP and deep learning system using TF-IDF and LSTM models for real-time fake news detection.",
-
-    myRole:
-      "Handled data preprocessing, feature engineering, model training, evaluation, and integration.",
-
-    techUsed: ["Python", "NLP", "LSTM", "TensorFlow", "TF-IDF"],
-
+    desc: "Advanced NLP & Deep Learning system for real-time fake news detection with explainable AI outputs.",
+    longDesc: "Built an end-to-end ML pipeline using TF-IDF + LSTM that classifies news articles with 95% accuracy and provides reasoning for predictions.",
+    problem: "Fake news spreads misinformation and affects public decision-making.",
+    solution: "High-accuracy NLP model with explainable outputs deployed as a real-time detection system.",
+    myRole: "Complete ML pipeline: data collection, preprocessing, feature engineering, model training, evaluation, and deployment.",
+    techUsed: ["Python", "NLP", "LSTM", "TensorFlow", "TF-IDF", "Explainable AI"],
     impact: [
       "Achieved 95% classification accuracy",
-      "Processed large-scale news datasets",
-      "Delivered explainable AI predictions"
+      "Processed millions of articles",
+      "Provided transparent, explainable predictions"
     ],
-
-    highlights: ["95% Accuracy", "Explainable AI", "Real-Time Analysis"],
+    highlights: ["95% Accuracy", "Explainable AI", "Real-Time Analysis", "Large-Scale Dataset"],
     stats: { accuracy: "95%", articles: "1M+", responseTime: "<100ms" },
-
-    tags: ["NLP", "Machine Learning", "AI Safety"],
+    tags: ["NLP", "Machine Learning", "AI Safety", "Deep Learning"],
     icon: "🛡️",
     img: "https://lh3.googleusercontent.com/d/1zVrR2EdQoPvSSvfnVox0xBoc5qbgr96r",
     color: "var(--neon-primary)",
     featured: true
   },
 
-  // ================= GITHUB / ACADEMIC PROJECTS =================
-
   {
     id: 4,
     title: "Heart Disease Prediction Platform",
     github: "https://github.com/bhagavan444/Heart-Disease-Prediction",
-
-    desc: "Machine learning web application to predict heart disease risk using clinical data.",
-
-    problem:
-      "Early detection of heart disease requires accurate data-driven prediction.",
-
-    solution:
-      "Built ML models using clinical parameters and deployed them via a Flask web application.",
-
-    myRole:
-      "Handled data preprocessing, model training, evaluation, and deployment.",
-
-    techUsed: ["Python", "Scikit-learn", "Flask", "Pandas"],
-
+    live: null,
+    desc: "Machine learning web application that predicts heart disease risk using clinical data with 87% accuracy.",
+    longDesc: "Developed a complete ML pipeline and Flask web app that takes patient parameters and predicts heart disease probability with detailed explanations.",
+    problem: "Early detection of heart disease is critical but often delayed due to lack of accessible tools.",
+    solution: "User-friendly web platform powered by ML models trained on clinical datasets.",
+    myRole: "End-to-end development: data preprocessing, model training, evaluation, Flask backend, and responsive frontend.",
+    techUsed: ["Python", "Scikit-learn", "Flask", "Pandas", "HTML/CSS/JS"],
     impact: [
       "Achieved 87% prediction accuracy",
-      "Enabled fast and accessible risk assessment"
+      "Enabled fast, accessible health risk assessment",
+      "Educational tool for medical students"
     ],
-
-    highlights: ["ML-Based Prediction", "Clinical Feature Engineering"],
+    highlights: ["ML-Based Prediction", "Clinical Feature Engineering", "Web Deployment"],
     stats: { accuracy: "87%", predictions: "1.2k+" },
-
-    tags: ["Machine Learning", "Healthcare", "Flask"],
+    tags: ["Machine Learning", "Healthcare", "Flask", "Web App"],
     icon: "❤️",
     img: "https://lh3.googleusercontent.com/d/1Uy1JiAFMcAwMD0LZgm0J-bYiWuHpRzqq",
     color: "var(--neon-primary)",
-    featured: true
-  },
-
-  {
-    id: 12,
-    title: "AI Chatbot Platform",
-    github: "https://github.com/bhagavan444/chatbotwebapp",
-    live: "https://bhagavanai.lovable.app",
-
-    desc: "Conversational AI platform with real-time streaming responses.",
-
-    problem:
-      "Traditional chatbots feel slow and lack conversational flow.",
-
-    solution:
-      "Built a streaming AI chatbot supporting multi-LLM integration and file-based queries.",
-
-    myRole:
-      "Developed frontend UI, backend logic, and LLM integration.",
-
-    techUsed: ["React", "Flask", "LLMs", "Streaming APIs"],
-
-    impact: [
-      "Handled tens of thousands of chats",
-      "Improved response latency and UX"
-    ],
-
-    highlights: ["Streaming Responses", "Multi-LLM Support", "File Upload"],
-    stats: { chats: "45k+", messages: "320k+" },
-
-    tags: ["AI", "Chatbot", "LLM"],
-    icon: "🤖",
-    img: "https://drive.google.com/thumbnail?id=10gvXlgHCb__NAWBoLEbj6LglL9dT6Kew&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true
-  },
-
-  {
-    id: 13,
-    title: "AI Career Path Recommendation System",
-    github: "https://github.com/bhagavan444/carrer-path-web-",
-
-    desc: "Machine learning system that recommends career paths based on skills and interests.",
-
-    problem:
-      "Students struggle to choose career paths without data-driven guidance.",
-
-    solution:
-      "Built an ML-based recommendation engine with skill-gap analysis and personalized roadmaps.",
-
-    myRole:
-      "Designed ML models, backend logic, and recommendation workflows.",
-
-    techUsed: ["Python", "Flask", "Scikit-learn", "NLP"],
-
-    impact: [
-      "Guided thousands of users",
-      "Generated personalized learning roadmaps"
-    ],
-
-    highlights: ["Career Matching", "Skills Gap Analysis", "Learning Roadmaps"],
-    stats: { users: "1.9k+", roadmaps: "7.2k+" },
-
-    tags: ["AI", "Recommendation System", "Education"],
-    icon: "🎯",
-    img: "https://drive.google.com/thumbnail?id=1pTnIysNCQgb3oHPOyofDKVkAe_acI2Bj&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true
-  },
-
-  {
-    id: 14,
-    title: "Fake News Detector (Academic)",
-    github: "https://github.com/bhagavan444/News-detector",
-
-    desc: "Academic NLP-based fake news classification system.",
-
-    problem:
-      "Detecting misinformation at scale requires reliable NLP models.",
-
-    solution:
-      "Built and evaluated deep learning models including LSTM and BERT.",
-
-    myRole:
-      "Implemented model training, evaluation, and performance analysis.",
-
-    techUsed: ["Python", "TensorFlow", "LSTM", "BERT", "NLP"],
-
-    impact: [
-      "Achieved 92.4% accuracy",
-      "Processed large article datasets"
-    ],
-
-    highlights: ["92%+ Accuracy", "Explainable Results"],
-    stats: { articles: "150k+", accuracy: "92.4%" },
-
-    tags: ["NLP", "Deep Learning", "AI"],
-    icon: "📰",
-    img: "https://drive.google.com/thumbnail?id=1i-qZCMDiOAy677h3y12es5xM_IL-_oOF&sz=w1200",
-    color: "var(--neon-primary)",
-    featured: true
+    featured: false
   }
 ];
-
 
 export default function CyberpunkProjects() {
   const [activeProject, setActiveProject] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
-  const [theme, setTheme] = useState("light"); // DEFAULT: LIGHT theme
   const canvasRef = useRef(null);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("projects-theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Save theme & apply to body
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("projects-theme", theme);
-  }, [theme]);
-
-  // Theme toggle function
-  const toggleTheme = () => {
-    setTheme(prev => prev === "light" ? "dark" : "light");
-  };
 
   // Particle background
   useEffect(() => {
@@ -374,7 +192,7 @@ export default function CyberpunkProjects() {
     }));
 
     const animate = () => {
-      ctx.fillStyle = theme === "dark" ? 'rgba(0,0,0,0.08)' : 'rgba(240,244,255,0.04)';
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach(p => {
@@ -383,7 +201,7 @@ export default function CyberpunkProjects() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
-        g.addColorStop(0, theme === "dark" ? 'rgba(0,240,255,0.35)' : 'rgba(0,102,204,0.35)');
+        g.addColorStop(0, 'rgba(0,240,255,0.4)');
         g.addColorStop(1, 'transparent');
         ctx.fillStyle = g;
         ctx.beginPath();
@@ -399,7 +217,7 @@ export default function CyberpunkProjects() {
       cancelAnimationFrame(id);
       window.removeEventListener('resize', resize);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <>
@@ -407,41 +225,9 @@ export default function CyberpunkProjects() {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
 
         :root {
-          --neon-primary: #00b7eb;
-          --neon-secondary: #7c3aed;
-          --neon-gradient: linear-gradient(90deg, #00b7eb, #7c3aed);
-          --neon-glow: 0 0 35px rgba(0, 183, 235, 0.75);
-          --bg-primary: #f8f9fa;
-          --bg-secondary: #ffffff;
-          --text-primary: #1a1a1a;
-          --text-secondary: #4b5563;
-          --text-tertiary: #6b7280;
-          --card-bg: rgba(255,255,255,0.94);
-          --border-glow: rgba(0,183,235,0.32);
-          --tech-bg: rgba(255,255,255,0.92);
-          --tech-text: #1e40af;
-          --tech-border: rgba(0,183,235,0.4);
-          --modal-bg: rgba(255,255,255,0.98);
-          --modal-text: #1a1a1a;
-        }
-
-        body.dark {
           --neon-primary: #00f0ff;
-          --neon-secondary: #c084fc;
-          --neon-gradient: linear-gradient(90deg, #00f0ff, #c084fc);
-          --neon-glow: 0 0 35px rgba(0, 240, 255, 0.75);
-          --bg-primary: #000000;
-          --bg-secondary: #0f172a;
-          --text-primary: #f1f5f9;
-          --text-secondary: #cbd5e1;
-          --text-tertiary: #94a3b8;
-          --card-bg: rgba(15,23,42,0.94);
-          --border-glow: rgba(0,240,255,0.32);
-          --tech-bg: rgba(0,0,0,0.78);
-          --tech-text: #e0f7ff;
-          --tech-border: rgba(0,240,255,0.45);
-          --modal-bg: rgba(8,8,30,0.97);
-          --modal-text: #e0e0ff;
+          --neon-gradient: linear-gradient(90deg, #00f0ff, #a78bfa, #ff61d2);
+          --neon-glow: 0 0 25px rgba(0, 240, 255, 0.75);
         }
 
         @keyframes slideIn { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
@@ -451,8 +237,8 @@ export default function CyberpunkProjects() {
 
         .project-card {
           position: relative;
-          background: var(--card-bg);
-          border: 2px solid var(--border-glow);
+          background: rgba(6,6,22,0.94);
+          border: 2px solid rgba(0,240,255,0.32);
           border-radius: 20px;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
@@ -476,33 +262,30 @@ export default function CyberpunkProjects() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 35%, rgba(var(--neon-primary-rgb),0.15) 50%, transparent 65%);
+          background: linear-gradient(135deg, transparent 35%, rgba(0,240,255,0.15) 50%, transparent 65%);
           animation: scan 7s linear infinite;
           pointer-events: none;
           z-index: 1;
         }
 
         .tech-pill {
-          background: var(--tech-bg);
-          border: 1.6px solid var(--tech-border);
+          background: rgba(0,0,0,0.78);
+          border: 1.6px solid var(--neon-primary);
           padding: 0.5rem 1rem;
           border-radius: 999px;
           font-family: 'Fira Code',monospace;
           font-size: 0.86rem;
           transition: all 0.3s;
-          color: var(--tech-text);
+          color: #e0f7ff;
         }
 
-        .tech-pill:hover {
-          transform: scale(1.06);
-          box-shadow: 0 0 20px var(--neon-primary);
-        }
+        .tech-pill:hover { transform:scale(1.06); box-shadow:0 0 20px var(--neon-primary); }
 
         .neon-glow {
           background: var(--neon-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px var(--neon-glow);
+          text-shadow: 0 0 35px rgba(0,240,255,0.85);
         }
 
         .action-btn {
@@ -511,38 +294,14 @@ export default function CyberpunkProjects() {
           font-weight: 700;
           font-size: 1rem;
           display: flex;
-          align-items: center;
+          alignItems: center;
           gap: 0.8rem;
           transition: all 0.35s;
           text-decoration: none;
         }
 
-        .theme-toggle {
-          position: fixed;
-          top: 20px;
-          right: 30px;
-          z-index: 1000;
-          background: var(--card-bg);
-          border: 2px solid var(--neon-primary);
-          border-radius: 50%;
-          width: 55px;
-          height: 55px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.4s ease;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 20px var(--neon-glow);
-        }
-
-        .theme-toggle:hover {
-          transform: scale(1.15) rotate(15deg);
-          box-shadow: 0 0 35px var(--neon-primary);
-        }
-
         .modal-content {
-          background: var(--modal-bg);
+          background: rgba(8,8,30,0.97);
           border: 4px solid var(--neon-primary);
           border-radius: 28px;
           overflow: hidden;
@@ -580,12 +339,6 @@ export default function CyberpunkProjects() {
             max-height: 40vh !important;
             object-fit: cover !important;
           }
-          .theme-toggle {
-            top: 15px;
-            right: 15px;
-            width: 48px;
-            height: 48px;
-          }
         }
 
         @media (max-width: 480px) {
@@ -621,36 +374,19 @@ export default function CyberpunkProjects() {
         }
       `}</style>
 
-      {/* Theme Toggle Button */}
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        aria-label="Toggle between Light & Dark mode"
-      >
-        {theme === "light" ? (
-          <Moon size={26} color="#0066cc" />
-        ) : (
-          <Sun size={26} color="#00f0ff" />
-        )}
-      </button>
-
       <div style={{
         minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
+        background: '#000',
+        color: '#e8e8ff',
         position: 'relative',
         overflow: 'hidden',
         padding: 'clamp(5rem, 12vw, 10rem) 1.5rem 6rem',
-        fontFamily: "'Outfit', sans-serif",
-        transition: "background 0.5s ease, color 0.5s ease",
+        fontFamily: "'Outfit', sans-serif"
       }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: `linear-gradient(rgba(var(--neon-primary-rgb),0.08) 1px,transparent 1px),
-                            linear-gradient(90deg,rgba(var(--neon-primary-rgb),0.08) 1px,transparent 1px)`,
-          backgroundSize: '50px 50px',
-          opacity: theme === "dark" ? 0.22 : 0.12,
-          pointerEvents: 'none'
+          backgroundImage: 'linear-gradient(rgba(0,240,255,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.08) 1px,transparent 1px)',
+          backgroundSize: '50px 50px', opacity: 0.22, pointerEvents: 'none'
         }} />
 
         <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }} />
@@ -659,35 +395,22 @@ export default function CyberpunkProjects() {
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: 'clamp(4rem, 10vw, 7rem)' }}>
             <div style={{
-              display: 'inline-block',
-              fontFamily: "'Fira Code',monospace",
-              color: 'var(--neon-primary)',
-              fontSize: 'clamp(1rem, 2.6vw, 1.15rem)',
-              padding: '0.8rem 1.8rem',
-              border: `2px solid rgba(var(--neon-primary-rgb),0.45)`,
-              borderRadius: '999px',
-              marginBottom: '1.6rem',
-              animation: 'pulse 3.5s infinite'
+              display: 'inline-block', fontFamily: "'Fira Code',monospace", color: 'var(--neon-primary)',
+              fontSize: 'clamp(1rem, 2.6vw, 1.15rem)', padding: '0.8rem 1.8rem',
+              border: '2px solid rgba(0,240,255,0.45)', borderRadius: '999px',
+              marginBottom: '1.6rem', animation: 'pulse 3.5s infinite'
             }}>
               {'>'} displayActiveProjects()
             </div>
-
             <h1 className="neon-glow" style={{
-              fontSize: 'clamp(3.8rem, 11vw, 7rem)',
-              fontWeight: 900,
-              letterSpacing: '4px',
-              textTransform: 'uppercase',
-              lineHeight: 1.1
+              fontSize: 'clamp(3.8rem, 11vw, 7rem)', fontWeight: 900,
+              letterSpacing: '4px', textTransform: 'uppercase', lineHeight: 1.1
             }}>
               PROJECT MATRIX
             </h1>
-
             <p style={{
-              fontSize: 'clamp(1.1rem, 3vw, 1.35rem)',
-              color: theme === "dark" ? '#a8a8d8' : '#555555',
-              maxWidth: '860px',
-              margin: '2rem auto 0',
-              lineHeight: 1.8,
+              fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', color: '#a8a8d8',
+              maxWidth: '860px', margin: '2rem auto 0', lineHeight: 1.8,
               fontFamily: "'Fira Code',monospace"
             }}>
               [ AI engines • Full-stack realities • Deployed systems ]<br/>
@@ -732,35 +455,24 @@ export default function CyberpunkProjects() {
                       alt={project.title}
                       onError={e => e.target.src = "https://via.placeholder.com/500x300/111/00ffff?text=Project"}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
+                        width: '100%', height: '100%', objectFit: 'cover',
                         transition: 'transform 0.7s ease',
                         transform: isHovered ? 'scale(1.12)' : 'scale(1.04)'
                       }}
                     />
                     <div style={{
-                      position: 'absolute',
-                      inset: 0,
+                      position: 'absolute', inset: 0,
                       background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 60%)'
                     }} />
                     {project.featured && (
                       <div style={{
-                        position: 'absolute',
-                        top: '1.2rem',
-                        right: '1.2rem',
-                        padding: '0.6rem 1.3rem',
-                        background: theme === "dark" ? 'rgba(255,215,0,0.22)' : 'rgba(255,215,0,0.15)',
-                        border: `2px solid ${theme === "dark" ? '#ffea8090' : '#ffd700'}`,
-                        borderRadius: '999px',
-                        color: theme === "dark" ? '#ffea80' : '#d97706',
-                        fontWeight: 700,
-                        fontSize: '0.95rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.6rem'
+                        position: 'absolute', top: '1.2rem', right: '1.2rem',
+                        padding: '0.6rem 1.3rem', background: 'rgba(255,215,0,0.22)',
+                        border: '2px solid #ffea8090', borderRadius: '999px',
+                        color: '#ffea80', fontWeight: 700, fontSize: '0.95rem',
+                        display: 'flex', alignItems: 'center', gap: '0.6rem'
                       }}>
-                        <Star size={16} fill={theme === "dark" ? "#ffea80" : "#d97706"} /> FEATURED
+                        <Star size={16} fill="#ffea80" /> FEATURED
                       </div>
                     )}
                   </div>
@@ -771,30 +483,24 @@ export default function CyberpunkProjects() {
                     {/* Icon + Title */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.4rem', marginBottom: '1.4rem' }}>
                       <div style={{
-                        width: '76px',
-                        height: '76px',
+                        width: '76px', height: '76px',
                         border: `3px solid ${project.color}90`,
                         borderRadius: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '2.8rem',
-                        animation: isHovered ? 'float 3.2s infinite' : 'none',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '2.8rem', animation: isHovered ? 'float 3.2s infinite' : 'none',
                         boxShadow: isHovered ? `0 0 44px ${project.color}aa` : 'none'
                       }}>
                         {project.icon}
                       </div>
                       <h3 style={{
-                        fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)',
-                        fontWeight: 800,
-                        lineHeight: 1.2,
-                        color: theme === "dark" ? '#ffffff' : '#1a1a1a'
+                        fontSize: 'clamp(1.7rem, 4.5vw, 1.95rem)', fontWeight: 800,
+                        lineHeight: 1.2, color: '#ffffff'
                       }}>
                         {project.title}
                       </h3>
                     </div>
 
-                    {/* Key Info */}
+                    {/* Key Info - Rendered in frontend */}
                     <div style={{
                       display: 'grid',
                       gridTemplateColumns: '1fr',
@@ -802,88 +508,28 @@ export default function CyberpunkProjects() {
                       marginBottom: '2rem',
                       '@media (min-width: 768px)': { gridTemplateColumns: 'repeat(2, 1fr)' }
                     }}>
-                      <div style={{ 
-                        padding: '1rem', 
-                        background: theme === "dark" ? 'rgba(255,0,0,0.08)' : 'rgba(255,0,0,0.05)',
-                        borderRadius: '12px', 
-                        border: `1px solid ${theme === "dark" ? 'rgba(255,100,100,0.3)' : 'rgba(239,68,68,0.2)'}`
-                      }}>
-                        <h4 style={{ 
-                          color: theme === "dark" ? '#ff6666' : '#ef4444', 
-                          fontSize: '1.2rem', 
-                          marginBottom: '0.5rem' 
-                        }}>
-                          Problem
-                        </h4>
-                        <p style={{ 
-                          color: theme === "dark" ? '#ffcccc' : '#7f1d1d', 
-                          fontSize: '0.95rem' 
-                        }}>
-                          {project.problem}
-                        </p>
+                      {/* Problem */}
+                      <div style={{ padding: '1rem', background: 'rgba(255,0,0,0.08)', borderRadius: '12px', border: '1px solid rgba(255,100,100,0.3)' }}>
+                        <h4 style={{ color: '#ff6666', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Problem</h4>
+                        <p style={{ color: '#ffcccc', fontSize: '0.95rem' }}>{project.problem}</p>
                       </div>
 
-                      <div style={{ 
-                        padding: '1rem', 
-                        background: theme === "dark" ? 'rgba(0,255,0,0.08)' : 'rgba(0,255,0,0.05)',
-                        borderRadius: '12px', 
-                        border: `1px solid ${theme === "dark" ? 'rgba(0,200,0,0.3)' : 'rgba(34,197,94,0.2)'}`
-                      }}>
-                        <h4 style={{ 
-                          color: theme === "dark" ? '#00cc00' : '#16a34a', 
-                          fontSize: '1.2rem', 
-                          marginBottom: '0.5rem' 
-                        }}>
-                          Solution
-                        </h4>
-                        <p style={{ 
-                          color: theme === "dark" ? '#ccffcc' : '#166534', 
-                          fontSize: '0.95rem' 
-                        }}>
-                          {project.solution}
-                        </p>
+                      {/* Solution */}
+                      <div style={{ padding: '1rem', background: 'rgba(0,255,0,0.08)', borderRadius: '12px', border: '1px solid rgba(0,200,0,0.3)' }}>
+                        <h4 style={{ color: '#00cc00', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Solution</h4>
+                        <p style={{ color: '#ccffcc', fontSize: '0.95rem' }}>{project.solution}</p>
                       </div>
 
-                      <div style={{ 
-                        padding: '1rem', 
-                        background: theme === "dark" ? 'rgba(0,240,255,0.08)' : 'rgba(0,183,235,0.08)',
-                        borderRadius: '12px', 
-                        border: `1px solid ${theme === "dark" ? 'rgba(0,240,255,0.3)' : 'rgba(0,183,235,0.2)'}`
-                      }}>
-                        <h4 style={{ 
-                          color: 'var(--neon-primary)', 
-                          fontSize: '1.2rem', 
-                          marginBottom: '0.5rem' 
-                        }}>
-                          My Role
-                        </h4>
-                        <p style={{ 
-                          color: theme === "dark" ? '#e0e0ff' : '#1e40af', 
-                          fontSize: '0.95rem' 
-                        }}>
-                          {project.myRole}
-                        </p>
+                      {/* My Role */}
+                      <div style={{ padding: '1rem', background: 'rgba(0,240,255,0.08)', borderRadius: '12px', border: '1px solid rgba(0,240,255,0.3)' }}>
+                        <h4 style={{ color: 'var(--neon-primary)', fontSize: '1.2rem', marginBottom: '0.5rem' }}>My Role</h4>
+                        <p style={{ color: '#e0e0ff', fontSize: '0.95rem' }}>{project.myRole}</p>
                       </div>
 
-                      <div style={{ 
-                        padding: '1rem', 
-                        background: theme === "dark" ? 'rgba(255,215,0,0.08)' : 'rgba(234,179,8,0.08)',
-                        borderRadius: '12px', 
-                        border: `1px solid ${theme === "dark" ? 'rgba(255,215,0,0.3)' : 'rgba(234,179,8,0.2)'}`
-                      }}>
-                        <h4 style={{ 
-                          color: theme === "dark" ? '#ffd700' : '#d97706', 
-                          fontSize: '1.2rem', 
-                          marginBottom: '0.5rem' 
-                        }}>
-                          Impact
-                        </h4>
-                        <ul style={{ 
-                          color: theme === "dark" ? '#ffffcc' : '#92400e', 
-                          fontSize: '0.95rem', 
-                          listStyleType: 'none', 
-                          padding: 0 
-                        }}>
+                      {/* Impact */}
+                      <div style={{ padding: '1rem', background: 'rgba(255,215,0,0.08)', borderRadius: '12px', border: '1px solid rgba(255,215,0,0.3)' }}>
+                        <h4 style={{ color: '#ffd700', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Impact</h4>
+                        <ul style={{ color: '#ffffcc', fontSize: '0.95rem', listStyleType: 'none', padding: 0 }}>
                           {project.impact.map((item, idx) => (
                             <li key={idx} style={{ marginBottom: '0.5rem' }}>• {item}</li>
                           ))}
@@ -893,15 +539,12 @@ export default function CyberpunkProjects() {
 
                     {/* Tags */}
                     <div style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: '0.8rem',
-                      marginBottom: '2.2rem'
+                      display: 'flex', flexWrap: 'wrap', gap: '0.8rem', marginBottom: '2.2rem'
                     }}>
                       {project.tags.slice(0,5).map(t => (
                         <span key={t} className="tech-pill" style={{
-                          color: isHovered ? project.color : theme === "dark" ? '#9999cc' : '#4b5563',
-                          borderColor: isHovered ? project.color : theme === "dark" ? '#555588' : '#d1d5db'
+                          color: isHovered ? project.color : '#9999cc',
+                          borderColor: isHovered ? project.color : '#555588'
                         }}>
                           {t}
                         </span>
@@ -910,10 +553,7 @@ export default function CyberpunkProjects() {
 
                     {/* Buttons */}
                     <div style={{
-                      display: 'flex',
-                      gap: '1.2rem',
-                      flexWrap: 'wrap',
-                      marginTop: '1.4rem'
+                      display: 'flex', gap: '1.2rem', flexWrap: 'wrap', marginTop: '1.4rem'
                     }}>
                       {project.github && (
                         <a
@@ -923,7 +563,7 @@ export default function CyberpunkProjects() {
                           onClick={e => e.stopPropagation()}
                           className="action-btn"
                           style={{
-                            background: theme === "dark" ? 'rgba(0,240,255,0.16)' : 'rgba(0,183,235,0.12)',
+                            background: 'rgba(0,240,255,0.16)',
                             border: `2px solid ${project.color}80`,
                             color: project.color
                           }}
@@ -959,57 +599,37 @@ export default function CyberpunkProjects() {
 
           {/* CTA */}
           <div style={{
-            marginTop: '8rem',
-            padding: 'clamp(3rem, 8vw, 4.5rem) 2.5rem',
-            background: theme === "dark" ? 'rgba(0,0,0,0.78)' : 'rgba(255,255,255,0.92)',
-            border: `3px solid ${theme === "dark" ? 'rgba(0,240,255,0.35)' : 'rgba(0,183,235,0.25)'}`,
-            borderRadius: '32px',
-            textAlign: 'center',
-            position: 'relative'
+            marginTop: '8rem', padding: 'clamp(3rem, 8vw, 4.5rem) 2.5rem',
+            background: 'rgba(0,0,0,0.78)', border: '3px solid rgba(0,240,255,0.35)',
+            borderRadius: '32px', textAlign: 'center', position: 'relative'
           }}>
             <h2 style={{
-              fontSize: 'clamp(3.2rem,7vw,5rem)',
-              fontWeight: 900,
+              fontSize: 'clamp(3.2rem,7vw,5rem)', fontWeight: 900,
               background: 'var(--neon-gradient)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               marginBottom: '2.8rem',
-              textShadow: theme === "dark" ? '0 0 50px #00ffffa0' : '0 0 30px #00b7eba0'
+              textShadow: '0 0 50px #00ffffa0'
             }}>
               EXECUTE NEXT PROTOCOL?
             </h2>
 
             <div className="cta-buttons" style={{ 
-              display: 'flex', 
-              gap: '2.5rem', 
-              justifyContent: 'center', 
-              flexWrap: 'wrap' 
+              display: 'flex', gap: '2.5rem', justifyContent: 'center', flexWrap: 'wrap' 
             }}>
               <a href="https://github.com/bhagavan444" target="_blank" style={{
-                padding: '1.5rem 3.5rem',
-                background: theme === "dark" ? 'rgba(0,240,255,0.18)' : 'rgba(0,183,235,0.12)',
-                border: `2.5px solid ${theme === "dark" ? '#00ffff80' : '#00b7eb80'}`,
-                borderRadius: '999px',
-                color: 'var(--neon-primary)',
-                fontSize: '1.3rem',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.2rem'
+                padding: '1.5rem 3.5rem', background: 'rgba(0,240,255,0.18)',
+                border: '2.5px solid #00ffff80', borderRadius: '999px',
+                color: 'var(--neon-primary)', fontSize: '1.3rem', fontWeight: 700,
+                display: 'flex', alignItems: 'center', gap: '1.2rem'
               }}>
                 <Github size={34} /> VIEW ALL REPOS
               </a>
-
               <a href="mailto:g.sivasatyasaibhagavan@gmail.com" style={{
                 padding: '1.5rem 3.5rem',
                 background: 'var(--neon-gradient)',
-                borderRadius: '999px',
-                color: '#000',
-                fontSize: '1.3rem',
-                fontWeight: 900,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.2rem'
+                borderRadius: '999px', color: '#000', fontSize: '1.3rem',
+                fontWeight: 900, display: 'flex', alignItems: 'center', gap: '1.2rem'
               }}>
                 <Mail size={34} /> CONTACT
               </a>
@@ -1023,41 +643,25 @@ export default function CyberpunkProjects() {
         <div
           onClick={() => setActiveProject(null)}
           style={{
-            position: 'fixed',
-            inset: 0,
-            background: theme === "dark" ? 'rgba(0,0,0,0.96)' : 'rgba(255,255,255,0.96)',
-            backdropFilter: 'blur(16px)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1.5rem'
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.96)',
+            backdropFilter: 'blur(16px)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem'
           }}
         >
           <div
             onClick={e => e.stopPropagation()}
             className="modal-content"
             style={{
-              background: theme === "dark" ? 'rgba(8,8,30,0.97)' : 'rgba(255,255,255,0.97)',
-              border: `4px solid ${activeProject.color}aa`,
-              borderRadius: '28px',
-              maxWidth: '1300px',
-              width: '96%',
-              maxHeight: '92vh',
-              overflowY: 'auto',
-              boxShadow: `0 0 160px ${activeProject.color}70`
+              background: 'rgba(8,8,30,0.97)', border: `4px solid ${activeProject.color}aa`,
+              borderRadius: '28px', maxWidth: '1300px', width: '96%', maxHeight: '92vh',
+              overflowY: 'auto', boxShadow: `0 0 160px ${activeProject.color}70`
             }}
           >
             <button
               onClick={() => setActiveProject(null)}
               style={{ 
-                position: 'absolute', 
-                top: '1.5rem', 
-                right: '1.8rem', 
-                background: 'none', 
-                border: 'none', 
-                color: '#ff6666', 
-                cursor: 'pointer' 
+                position: 'absolute', top: '1.5rem', right: '1.8rem', 
+                background: 'none', border: 'none', color: '#ff6666', cursor: 'pointer' 
               }}
             >
               <X size={48} strokeWidth={2.8} />
@@ -1068,23 +672,18 @@ export default function CyberpunkProjects() {
               alt={activeProject.title}
               className="modal-image"
               style={{ 
-                width: '100%', 
-                borderRadius: '20px 20px 0 0', 
-                maxHeight: '40vh', 
-                objectFit: 'cover', 
-                display: 'block' 
+                width: '100%', borderRadius: '20px 20px 0 0', 
+                maxHeight: '40vh', objectFit: 'cover', display: 'block' 
               }}
             />
 
             <div style={{ padding: 'clamp(2.2rem, 6vw, 4rem) clamp(1.6rem, 5vw, 3.5rem) 5rem' }}>
               <h2 style={{
-                fontSize: 'clamp(2.6rem, 7vw, 4.2rem)',
-                fontWeight: 900,
+                fontSize: 'clamp(2.6rem, 7vw, 4.2rem)', fontWeight: 900,
                 background: 'var(--neon-gradient)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                textAlign: 'center',
-                marginBottom: '1.4rem',
+                textAlign: 'center', marginBottom: '1.4rem',
                 textShadow: `0 0 40px ${activeProject.color}b0`
               }}>
                 {activeProject.title}
@@ -1092,99 +691,36 @@ export default function CyberpunkProjects() {
 
               <p style={{ 
                 fontSize: 'clamp(1.25rem, 3.5vw, 1.45rem)', 
-                color: theme === "dark" ? '#c8c8ff' : '#374151',
-                lineHeight: 1.8,
-                marginBottom: '2.5rem' 
+                color: '#c8c8ff', lineHeight: 1.8, marginBottom: '2.5rem' 
               }}>
                 {activeProject.longDesc || activeProject.desc}
               </p>
 
               {/* Problem & Solution */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr', 
-                gap: '2rem', 
-                marginBottom: '3rem',
-                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } 
-              }}>
-                <div style={{ 
-                  padding: '1.5rem', 
-                  background: theme === "dark" ? 'rgba(255,0,0,0.08)' : 'rgba(239,68,68,0.05)',
-                  borderRadius: '16px', 
-                  border: `1px solid ${theme === "dark" ? 'rgba(255,100,100,0.3)' : 'rgba(239,68,68,0.2)'}`
-                }}>
-                  <h4 style={{ 
-                    color: theme === "dark" ? '#ff6666' : '#ef4444', 
-                    marginBottom: '1rem', 
-                    fontSize: '1.4rem' 
-                  }}>
-                    Problem
-                  </h4>
-                  <p style={{ 
-                    color: theme === "dark" ? '#ffcccc' : '#7f1d1d' 
-                  }}>
-                    {activeProject.problem}
-                  </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', marginBottom: '3rem',
+                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } }}>
+                <div style={{ padding: '1.5rem', background: 'rgba(255,0,0,0.08)', borderRadius: '16px', border: '1px solid rgba(255,100,100,0.3)' }}>
+                  <h4 style={{ color: '#ff6666', marginBottom: '1rem', fontSize: '1.4rem' }}>Problem</h4>
+                  <p style={{ color: '#ffcccc' }}>{activeProject.problem}</p>
                 </div>
-
-                <div style={{ 
-                  padding: '1.5rem', 
-                  background: theme === "dark" ? 'rgba(0,255,0,0.08)' : 'rgba(34,197,94,0.05)',
-                  borderRadius: '16px', 
-                  border: `1px solid ${theme === "dark" ? 'rgba(0,200,0,0.3)' : 'rgba(34,197,94,0.2)'}`
-                }}>
-                  <h4 style={{ 
-                    color: theme === "dark" ? '#00cc00' : '#16a34a', 
-                    marginBottom: '1rem', 
-                    fontSize: '1.4rem' 
-                  }}>
-                    Solution
-                  </h4>
-                  <p style={{ 
-                    color: theme === "dark" ? '#ccffcc' : '#166534' 
-                  }}>
-                    {activeProject.solution}
-                  </p>
+                <div style={{ padding: '1.5rem', background: 'rgba(0,255,0,0.08)', borderRadius: '16px', border: '1px solid rgba(0,200,0,0.3)' }}>
+                  <h4 style={{ color: '#00cc00', marginBottom: '1rem', fontSize: '1.4rem' }}>Solution</h4>
+                  <p style={{ color: '#ccffcc' }}>{activeProject.solution}</p>
                 </div>
               </div>
 
               {/* My Role & Tech */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr', 
-                gap: '2rem', 
-                marginBottom: '3rem',
-                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } 
-              }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', marginBottom: '3rem',
+                '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' } }}>
                 <div>
-                  <h4 style={{ 
-                    color: 'var(--neon-primary)', 
-                    marginBottom: '1rem', 
-                    fontSize: '1.4rem' 
-                  }}>
-                    My Role
-                  </h4>
-                  <p style={{ 
-                    color: theme === "dark" ? '#e0e0ff' : '#1f2937' 
-                  }}>
-                    {activeProject.myRole}
-                  </p>
+                  <h4 style={{ color: 'var(--neon-primary)', marginBottom: '1rem', fontSize: '1.4rem' }}>My Role</h4>
+                  <p style={{ color: '#e0e0ff' }}>{activeProject.myRole}</p>
                 </div>
-
                 <div>
-                  <h4 style={{ 
-                    color: 'var(--neon-primary)', 
-                    marginBottom: '1rem', 
-                    fontSize: '1.4rem' 
-                  }}>
-                    Tech Stack
-                  </h4>
+                  <h4 style={{ color: 'var(--neon-primary)', marginBottom: '1rem', fontSize: '1.4rem' }}>Tech Stack</h4>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
                     {activeProject.techUsed.map(t => (
-                      <span key={t} className="tech-pill" style={{ 
-                        background: theme === "dark" ? 'rgba(0,240,255,0.15)' : 'rgba(0,183,235,0.12)',
-                        borderColor: theme === "dark" ? 'rgba(0,240,255,0.5)' : 'rgba(0,183,235,0.4)'
-                      }}>
+                      <span key={t} className="tech-pill" style={{ background: 'rgba(0,240,255,0.15)', borderColor: 'rgba(0,240,255,0.5)' }}>
                         {t}
                       </span>
                     ))}
@@ -1194,20 +730,14 @@ export default function CyberpunkProjects() {
 
               {/* Highlights */}
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: '1.2rem',
+                display: 'grid', gridTemplateColumns: '1fr', gap: '1.2rem',
                 '@media (min-width: 768px)': { gridTemplateColumns: '1fr 1fr' }
               }}>
                 {activeProject.highlights.map((h, i) => (
                   <div key={i} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                    padding: '1rem',
-                    background: theme === "dark" ? 'rgba(0,240,255,0.08)' : 'rgba(0,183,235,0.08)',
-                    borderRadius: '12px',
-                    border: `1px solid ${activeProject.color}30`
+                    display: 'flex', alignItems: 'center', gap: '1rem',
+                    padding: '1rem', background: 'rgba(0,240,255,0.08)',
+                    borderRadius: '12px', border: `1px solid ${activeProject.color}30`
                   }}>
                     <CheckCircle2 size={20} style={{ color: 'var(--neon-primary)' }} />
                     {h}
@@ -1217,33 +747,19 @@ export default function CyberpunkProjects() {
 
               {/* Stats */}
               <div style={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                gap: '1.5rem', 
-                margin: '2.5rem 0', 
-                justifyContent: 'center' 
+                display: 'flex', flexWrap: 'wrap', gap: '1.5rem', 
+                margin: '2.5rem 0', justifyContent: 'center' 
               }}>
                 {Object.entries(activeProject.stats).map(([key, value]) => (
                   <div key={key} style={{
-                    padding: '1rem 1.8rem',
-                    background: theme === "dark" ? 'rgba(0,240,255,0.12)' : 'rgba(0,183,235,0.1)',
-                    borderRadius: '12px',
-                    border: `1px solid ${activeProject.color}40`,
-                    textAlign: 'center',
-                    minWidth: '140px'
+                    padding: '1rem 1.8rem', background: 'rgba(0,240,255,0.12)',
+                    borderRadius: '12px', border: `1px solid ${activeProject.color}40`,
+                    textAlign: 'center', minWidth: '140px'
                   }}>
-                    <div style={{ 
-                      fontSize: '1.6rem', 
-                      fontWeight: 900, 
-                      color: 'var(--neon-primary)' 
-                    }}>
+                    <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--neon-primary)' }}>
                       {value}
                     </div>
-                    <div style={{ 
-                      fontSize: '0.9rem', 
-                      color: theme === "dark" ? '#b0b0d8' : '#4b5563',
-                      marginTop: '0.3rem' 
-                    }}>
+                    <div style={{ fontSize: '0.9rem', color: '#b0b0d8', marginTop: '0.3rem' }}>
                       {key.replace(/([A-Z])/g, ' $1')}
                     </div>
                   </div>
@@ -1252,22 +768,18 @@ export default function CyberpunkProjects() {
 
               {/* Tags */}
               <div style={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                gap: '0.8rem', 
-                marginBottom: '3rem', 
-                justifyContent: 'center' 
+                display: 'flex', flexWrap: 'wrap', gap: '0.8rem', 
+                marginBottom: '3rem', justifyContent: 'center' 
               }}>
                 {activeProject.tags.map(t => (
                   <span key={t} style={{
                     padding: '0.7rem 1.4rem',
-                    background: theme === "dark" ? `rgba(0,240,255,0.15)` : `rgba(0,183,235,0.12)`,
-                    border: `2px solid ${theme === "dark" ? 'rgba(0,240,255,0.5)' : 'rgba(0,183,235,0.4)'}`,
+                    background: `rgba(0,240,255,0.15)`,
+                    border: `2px solid rgba(0,240,255,0.5)`,
                     borderRadius: '999px',
                     fontFamily: "'Fira Code', monospace",
                     fontSize: '0.95rem',
-                    fontWeight: 600,
-                    color: theme === "dark" ? '#e0f7ff' : '#1a1a1a'
+                    fontWeight: 600
                   }}>
                     {t}
                   </span>
@@ -1276,9 +788,7 @@ export default function CyberpunkProjects() {
 
               {/* Action Buttons */}
               <div style={{
-                display: 'flex',
-                gap: '1.5rem',
-                flexWrap: 'wrap',
+                display: 'flex', gap: '1.5rem', flexWrap: 'wrap',
                 justifyContent: 'center'
               }}>
                 {activeProject.github && (
@@ -1288,8 +798,8 @@ export default function CyberpunkProjects() {
                     rel="noopener noreferrer"
                     style={{
                       padding: '1.2rem 2.5rem',
-                      background: theme === "dark" ? 'rgba(0,240,255,0.16)' : 'rgba(0,183,235,0.12)',
-                      border: `2.5px solid ${theme === "dark" ? 'rgba(0,240,255,0.7)' : 'rgba(0,183,235,0.4)'}`,
+                      background: 'rgba(0,240,255,0.16)',
+                      border: `2.5px solid rgba(0,240,255,0.7)`,
                       borderRadius: '999px',
                       color: 'var(--neon-primary)',
                       fontWeight: 700,
@@ -1333,5 +843,6 @@ export default function CyberpunkProjects() {
         </div>
       )}
     </>
-  );
-}
+  ); 
+
+} 
