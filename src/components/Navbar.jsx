@@ -1,103 +1,136 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useScroll, useVelocity } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   FaBars, FaTimes, FaHome, FaGraduationCap, FaBriefcase,
   FaCode, FaLaptopCode, FaTrophy, FaFileAlt, FaCertificate,
-  FaHeart, FaAward, FaEnvelope, FaEllipsisH, FaChevronDown,
-  FaRocket, FaBrain, FaStar, FaFire, FaBolt, FaGem
+  FaHeart, FaAward, FaEnvelope, FaChevronDown,
+  FaRocket, FaBrain, FaStar, FaGem, FaAtom, FaCube
 } from "react-icons/fa";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [activeHover, setActiveHover] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const navRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Advanced mouse tracking
+  // Advanced motion values
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const glowX = useSpring(mouseX, { damping: 30, stiffness: 200 });
-  const glowY = useSpring(mouseY, { damping: 30, stiffness: 200 });
+  const smoothMouseX = useSpring(mouseX, { damping: 50, stiffness: 400 });
+  const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 400 });
   
-  const glowOpacity = useTransform(mouseY, [0, 100], [0, 1]);
+  const navOpacity = useTransform(scrollY, [0, 100], [0.95, 1]);
+  const navBlur = useTransform(scrollY, [0, 100], [20, 40]);
+  const logoRotate = useTransform(scrollY, [0, 1000], [0, 360]);
 
   const currentPath = location.pathname === "/" ? "/home" : location.pathname;
 
-  // Particle system for navbar background
+  // Elite particle system with WebGL-like effects
   useEffect(() => {
     if (isMobile || !canvasRef.current) return;
     
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     let animationId;
     let particles = [];
+    let connections = [];
+    let time = 0;
     
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+      canvas.style.width = `${canvas.offsetWidth}px`;
+      canvas.style.height = `${canvas.offsetHeight}px`;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     };
     resize();
 
-    class NavParticle {
+    class Particle {
       constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-        this.size = Math.random() * 2 + 0.5;
-        this.color = ['#00f0ff', '#c300ff', '#ff00aa'][Math.floor(Math.random() * 3)];
+        this.reset();
+        this.y = Math.random() * canvas.height / window.devicePixelRatio;
         this.opacity = Math.random() * 0.5 + 0.3;
       }
 
+      reset() {
+        this.x = Math.random() * canvas.width / window.devicePixelRatio;
+        this.y = -20;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = Math.random() * 0.3 + 0.2;
+        this.size = Math.random() * 2.5 + 0.5;
+        const colors = ['#00f5ff', '#7000ff', '#ff0080', '#00ff88', '#ffd700'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.life = 1;
+        this.decay = Math.random() * 0.002 + 0.001;
+      }
+
       update() {
-        this.x += this.vx;
+        this.x += this.vx + Math.sin(time * 0.001 + this.x * 0.01) * 0.2;
         this.y += this.vy;
+        this.life -= this.decay;
         
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        const height = canvas.height / window.devicePixelRatio;
+        if (this.y > height + 20 || this.life <= 0) {
+          this.reset();
+        }
+        
+        // Magnetic attraction to mouse
+        const dx = mousePosition.x - this.x;
+        const dy = mousePosition.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          this.vx += dx * force * 0.001;
+          this.vy += dy * force * 0.001;
+        }
       }
 
       draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.fill();
+        ctx.save();
         
-        // Glow effect
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
-        gradient.addColorStop(0, this.color + '40');
+        // Particle glow
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, this.size * 6
+        );
+        gradient.addColorStop(0, this.color + Math.floor(this.opacity * this.life * 255).toString(16).padStart(2, '0'));
+        gradient.addColorStop(0.5, this.color + '40');
         gradient.addColorStop(1, 'transparent');
+        
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.size * 6, 0, Math.PI * 2);
         ctx.fill();
+        
+        // Core particle
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.opacity * this.life;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
       }
     }
 
-    particles = Array.from({ length: 30 }, () => new NavParticle());
+    particles = Array.from({ length: 60 }, () => new Particle());
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      // Connection lines
+    const drawConnections = () => {
       ctx.globalAlpha = 0.15;
-      ctx.strokeStyle = '#00f0ff';
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 1;
       
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -105,8 +138,18 @@ const Navbar = () => {
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           
-          if (dist < 100) {
-            ctx.globalAlpha = (1 - dist / 100) * 0.2;
+          if (dist < 120) {
+            const opacity = (1 - dist / 120) * 0.3 * particles[i].life * particles[j].life;
+            ctx.globalAlpha = opacity;
+            
+            const gradient = ctx.createLinearGradient(
+              particles[i].x, particles[i].y,
+              particles[j].x, particles[j].y
+            );
+            gradient.addColorStop(0, particles[i].color);
+            gradient.addColorStop(1, particles[j].color);
+            
+            ctx.strokeStyle = gradient;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -114,8 +157,19 @@ const Navbar = () => {
           }
         }
       }
+    };
+
+    const animate = () => {
+      time++;
+      ctx.clearRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
       
-      ctx.globalAlpha = 1;
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      drawConnections();
+      
       animationId = requestAnimationFrame(animate);
     };
 
@@ -126,9 +180,9 @@ const Navbar = () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, [isMobile]);
+  }, [isMobile, mousePosition]);
 
-  // Handle resize & scroll events
+  // Handle resize & scroll
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 1024;
@@ -140,7 +194,7 @@ const Navbar = () => {
     };
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("resize", handleResize);
@@ -155,40 +209,38 @@ const Navbar = () => {
     };
   }, []);
 
-  // Mouse movement handler for glow effect
-  const handleMouseMove = useCallback(
-    (e) => {
-      if (!isMobile && navRef.current) {
-        const rect = navRef.current.getBoundingClientRect();
-        mouseX.set(e.clientX - rect.left);
-        mouseY.set(e.clientY - rect.top);
-      }
-    },
-    [isMobile, mouseX, mouseY]
-  );
+  // Mouse tracking
+  const handleMouseMove = useCallback((e) => {
+    if (!isMobile && navRef.current) {
+      const rect = navRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      mouseX.set(x);
+      mouseY.set(y);
+      setMousePosition({ x, y });
+    }
+  }, [isMobile, mouseX, mouseY]);
 
   // Navigation items
   const navItems = [
-    { label: "Home",          path: "/home",          icon: <FaHome /> },
-    { label: "Education",     path: "/education",     icon: <FaGraduationCap /> },
-    { label: "Skills",        path: "/myskills",      icon: <FaCode /> },
-    { label: "Projects",      path: "/projects",      icon: <FaLaptopCode /> },
-    { label: "Internships",   path: "/internships",   icon: <FaBriefcase /> },
-    { label: "Hackathons",    path: "/hackathons",    icon: <FaTrophy /> },
-    { label: "Certifications",path: "/certifications",icon: <FaCertificate /> },
-    { label: "Workshops",     path: "/workshops",     icon: <FaBrain /> },
-    { label: "Achievements",  path: "/achivements",   icon: <FaAward /> },
-    { label: "Beyond Coding", path: "/beyondcoding",  icon: <FaHeart /> },
-    { label: "Resume",        path: "/resume",        icon: <FaFileAlt /> },
-    { label: "Contact",       path: "/contact",       icon: <FaEnvelope /> },
+    { label: "Home", path: "/home", icon: <FaHome />, gradient: "from-cyan-400 to-blue-500" },
+    { label: "Education", path: "/education", icon: <FaGraduationCap />, gradient: "from-purple-400 to-pink-500" },
+    { label: "Skills", path: "/myskills", icon: <FaCode />, gradient: "from-green-400 to-cyan-500" },
+    { label: "Projects", path: "/projects", icon: <FaLaptopCode />, gradient: "from-orange-400 to-red-500" },
+    { label: "Internships", path: "/internships", icon: <FaBriefcase />, gradient: "from-blue-400 to-indigo-500" },
+    { label: "Hackathons", path: "/hackathons", icon: <FaTrophy />, gradient: "from-yellow-400 to-orange-500" },
+    { label: "Certifications", path: "/certifications", icon: <FaCertificate />, gradient: "from-pink-400 to-purple-500" },
+    { label: "Workshops", path: "/workshops", icon: <FaBrain />, gradient: "from-teal-400 to-green-500" },
+    { label: "Achievements", path: "/achivements", icon: <FaAward />, gradient: "from-red-400 to-pink-500" },
+    { label: "Beyond Coding", path: "/beyondcoding", icon: <FaHeart />, gradient: "from-rose-400 to-red-500" },
+    { label: "Resume", path: "/resume", icon: <FaFileAlt />, gradient: "from-indigo-400 to-purple-500" },
+    { label: "Contact", path: "/contact", icon: <FaEnvelope />, gradient: "from-cyan-400 to-teal-500" },
   ];
 
-  // Visible items on desktop
   const visibleItems = navItems.filter(item => 
     ["Home", "Education", "Skills", "Projects", "Contact"].includes(item.label)
   );
 
-  // More dropdown items
   const moreItems = navItems.filter(item => 
     !["Home", "Education", "Skills", "Projects", "Contact"].includes(item.label)
   );
@@ -203,331 +255,259 @@ const Navbar = () => {
 
   return (
     <>
-      {/* ===================== ULTIMATE HOLLYWOOD STYLES ===================== */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
-
-        :root {
-          --neon-cyan:     #00f0ff;
-          --neon-purple:   #c300ff;
-          --neon-pink:     #ff00aa;
-          --neon-gold:     #ffd700;
-          --neon-green:    #00ff88;
-          --bg-dark:       #000000;
-          --glass:         rgba(5, 5, 20, 0.85);
-          --glass-border:  rgba(0, 240, 255, 0.35);
-          --text-light:    #ffffff;
-          --text-dim:      #b0d0ff;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
         * {
           box-sizing: border-box;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         body {
           margin: 0;
-          background: var(--bg-dark);
-          font-family: 'Exo 2', sans-serif;
-          overflow-x: hidden;
+          background: #000;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        @keyframes hologramScan {
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes pulse-glow {
           0%, 100% { 
-            transform: translateY(-100%) scaleY(1);
-            opacity: 0.4;
+            filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 16px currentColor);
           }
           50% { 
-            transform: translateY(100%) scaleY(1.2);
-            opacity: 0.8;
+            filter: drop-shadow(0 0 16px currentColor) drop-shadow(0 0 32px currentColor);
           }
         }
 
-        @keyframes energyPulse {
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-12px) rotate(3deg); }
+          66% { transform: translateY(-6px) rotate(-3deg); }
+        }
+
+        @keyframes morph {
+          0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+          50% { border-radius: 50% 30% 50% 60% / 30% 50% 60% 50%; }
+          75% { border-radius: 40% 70% 60% 30% / 60% 40% 50% 70%; }
+        }
+
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        @keyframes border-dance {
           0%, 100% { 
-            box-shadow: 0 0 20px var(--neon-cyan), 
-                        0 0 40px var(--neon-cyan),
-                        inset 0 0 20px rgba(0,240,255,0.2);
+            background-position: 0% 50%;
+            transform: rotate(0deg);
           }
           50% { 
-            box-shadow: 0 0 40px var(--neon-cyan), 
-                        0 0 80px var(--neon-cyan),
-                        0 0 120px var(--neon-purple),
-                        inset 0 0 40px rgba(0,240,255,0.4);
+            background-position: 100% 50%;
+            transform: rotate(180deg);
           }
         }
 
-        @keyframes dataStream {
-          0% { 
-            transform: translateX(-100%) translateY(0);
-            opacity: 0;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% { 
-            transform: translateX(200%) translateY(-20px);
-            opacity: 0;
-          }
+        .nav-glass {
+          background: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(10, 10, 20, 0.9) 50%,
+            rgba(0, 0, 0, 0.85) 100%
+          );
+          backdrop-filter: blur(40px) saturate(180%);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes rotate3D {
-          0% { transform: rotateY(0deg) rotateX(0deg); }
-          100% { transform: rotateY(360deg) rotateX(360deg); }
-        }
-
-        @keyframes shimmerGlow {
-          0% { 
-            background-position: -200% center;
-            filter: brightness(1);
-          }
-          50% {
-            filter: brightness(1.3);
-          }
-          100% { 
-            background-position: 200% center;
-            filter: brightness(1);
-          }
-        }
-
-        @keyframes floatIcon {
-          0%, 100% { 
-            transform: translateY(0) rotate(0deg) scale(1);
-          }
-          25% {
-            transform: translateY(-8px) rotate(5deg) scale(1.1);
-          }
-          50% {
-            transform: translateY(-12px) rotate(-5deg) scale(1.15);
-          }
-          75% {
-            transform: translateY(-8px) rotate(3deg) scale(1.1);
-          }
-        }
-
-        @keyframes borderFlow {
-          0% {
-            border-image-source: linear-gradient(90deg, 
-              var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-          }
-          50% {
-            border-image-source: linear-gradient(90deg, 
-              var(--neon-pink), var(--neon-cyan), var(--neon-purple));
-          }
-          100% {
-            border-image-source: linear-gradient(90deg, 
-              var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-          }
-        }
-
-        .nav-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 1000;
-          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .nav-item {
+        .nav-item-elite {
           position: relative;
           overflow: hidden;
-          border-radius: 18px;
-          transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .nav-item::before {
+        .nav-item-elite::before {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, 
-            transparent 30%, 
-            rgba(0,240,255,0.3) 50%, 
-            transparent 70%);
-          animation: hologramScan 4s linear infinite;
-          pointer-events: none;
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.1) 100%
+          );
+          background-size: 200% 200%;
+          animation: shimmer 3s linear infinite;
           opacity: 0;
           transition: opacity 0.3s;
-          z-index: 1;
         }
 
-        .nav-item::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-            rgba(0,240,255,0.3) 0%, 
-            transparent 70%);
-          opacity: 0;
-          transition: opacity 0.3s;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        .nav-item:hover::before,
-        .nav-item:hover::after {
+        .nav-item-elite:hover::before {
           opacity: 1;
         }
 
-        .nav-item:hover {
-          transform: translateY(-6px) scale(1.08);
-          box-shadow: 0 0 40px rgba(0,240,255,0.6),
-                      0 20px 60px rgba(0,0,0,0.8);
-        }
-
-        .nav-active {
-          background: linear-gradient(135deg, 
-            rgba(0,240,255,0.25) 0%, 
-            rgba(195,0,255,0.25) 100%) !important;
-          border: 2.5px solid var(--neon-cyan) !important;
-          color: var(--neon-cyan) !important;
-          animation: energyPulse 3s ease-in-out infinite;
-          transform: translateY(-4px) scale(1.05);
-        }
-
-        .nav-active .icon {
-          animation: floatIcon 4s ease-in-out infinite;
-          filter: drop-shadow(0 0 10px var(--neon-cyan));
-        }
-
-        .nav-active::before {
-          opacity: 1 !important;
-        }
-
-        .logo-container {
-          position: relative;
-        }
-
-        .logo-glow {
-          filter: drop-shadow(0 0 30px var(--neon-cyan)) 
-                  drop-shadow(0 0 60px var(--neon-purple));
-        }
-
-        .logo-orbit {
-          position: absolute;
-          width: 60px;
-          height: 60px;
-          border: 2px solid rgba(0,240,255,0.3);
-          border-radius: 50%;
-          border-top-color: var(--neon-cyan);
-          border-right-color: var(--neon-purple);
-          animation: rotate3D 8s linear infinite;
-          pointer-events: none;
-        }
-
-        .mobile-menu {
-          background: linear-gradient(180deg, 
-            rgba(0,0,0,0.98) 0%, 
-            rgba(10,10,30,0.95) 100%);
-          backdrop-filter: blur(30px) saturate(180%);
-          border-top: 3px solid var(--neon-cyan);
-        }
-
-        .dropdown {
-          background: linear-gradient(135deg, 
-            rgba(5,5,20,0.95) 0%, 
-            rgba(15,5,30,0.95) 100%);
-          backdrop-filter: blur(25px) saturate(180%);
-          border: 2.5px solid var(--neon-cyan);
-          box-shadow: 0 30px 100px rgba(0,0,0,0.9), 
-                      0 0 80px rgba(0,240,255,0.4),
-                      inset 0 0 50px rgba(0,240,255,0.1);
-        }
-
-        .data-stream {
-          position: absolute;
-          width: 2px;
-          height: 20px;
-          background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
-          animation: dataStream 3s linear infinite;
-          pointer-events: none;
-        }
-
-        .hologram-line {
-          position: absolute;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, 
-            transparent, 
-            var(--neon-cyan), 
-            transparent);
-          opacity: 0.3;
-          animation: hologramScan 6s linear infinite;
-        }
-
-        .energy-field {
+        .nav-item-elite::after {
+          content: '';
           position: absolute;
           inset: -2px;
-          border-radius: inherit;
-          background: linear-gradient(45deg, 
-            var(--neon-cyan), 
-            var(--neon-purple), 
-            var(--neon-pink),
-            var(--neon-cyan));
+          background: linear-gradient(
+            45deg,
+            #00f5ff,
+            #7000ff,
+            #ff0080,
+            #00ff88,
+            #00f5ff
+          );
           background-size: 300% 300%;
-          animation: shimmerGlow 4s ease infinite;
+          animation: gradient-shift 4s ease infinite;
+          border-radius: inherit;
           opacity: 0;
-          transition: opacity 0.4s;
           z-index: -1;
           filter: blur(8px);
+          transition: opacity 0.4s;
         }
 
-        .nav-item:hover .energy-field {
-          opacity: 0.6;
+        .nav-item-elite:hover::after {
+          opacity: 0.5;
         }
 
-        .nav-active .energy-field {
-          opacity: 0.8;
+        .nav-item-active {
+          background: linear-gradient(
+            135deg,
+            rgba(0, 245, 255, 0.15) 0%,
+            rgba(112, 0, 255, 0.15) 100%
+          ) !important;
+          border: 1px solid rgba(0, 245, 255, 0.5) !important;
+          box-shadow: 
+            0 0 30px rgba(0, 245, 255, 0.3),
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 0 20px rgba(0, 245, 255, 0.1) !important;
+        }
+
+        .nav-item-active::after {
+          opacity: 0.7 !important;
+        }
+
+        .nav-item-active .nav-icon {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .morphing-bg {
+          animation: morph 10s ease-in-out infinite;
+        }
+
+        .gradient-text {
+          background: linear-gradient(
+            90deg,
+            #00f5ff 0%,
+            #7000ff 25%,
+            #ff0080 50%,
+            #7000ff 75%,
+            #00f5ff 100%
+          );
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradient-shift 3s linear infinite;
+        }
+
+        .elite-dropdown {
+          background: linear-gradient(
+            135deg,
+            rgba(5, 5, 15, 0.98) 0%,
+            rgba(15, 5, 25, 0.98) 100%
+          );
+          backdrop-filter: blur(40px) saturate(180%);
+          border: 1px solid rgba(0, 245, 255, 0.3);
+          box-shadow: 
+            0 32px 128px rgba(0, 0, 0, 0.8),
+            0 0 80px rgba(0, 245, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-elite {
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.98) 0%,
+            rgba(10, 5, 20, 0.98) 100%
+          );
+          backdrop-filter: blur(40px) saturate(180%);
+          border-top: 1px solid rgba(0, 245, 255, 0.3);
         }
 
         @media (max-width: 1024px) {
-          .nav-item:hover {
-            transform: translateY(-3px) scale(1.04);
+          .nav-item-elite:hover {
+            transform: scale(1.02) !important;
           }
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
-          width: 10px;
+          width: 8px;
+          height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-          background: var(--bg-dark);
+          background: rgba(0, 0, 0, 0.4);
         }
 
         ::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
-          border-radius: 10px;
+          background: linear-gradient(180deg, #00f5ff, #7000ff);
+          border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, var(--neon-purple), var(--neon-pink));
+          background: linear-gradient(180deg, #7000ff, #ff0080);
+        }
+
+        .hover-lift {
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hover-lift:hover {
+          transform: translateY(-4px);
+        }
+
+        .magnetic-effect {
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
 
-      {/* ===================== MAIN NAVBAR ===================== */}
+      {/* Main Navbar */}
       <motion.nav
         ref={navRef}
         onMouseMove={handleMouseMove}
-        className="nav-container"
+        className="nav-glass"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
         style={{
-          background: isScrolled 
-            ? "linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(10,5,20,0.95) 100%)"
-            : "linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(10,5,20,0.85) 100%)",
-          backdropFilter: isScrolled ? "blur(40px) saturate(200%)" : "blur(30px) saturate(180%)",
-          borderBottom: isScrolled
-            ? "3px solid rgba(0,240,255,0.6)"
-            : "2px solid rgba(0,240,255,0.4)",
-          boxShadow: isScrolled
-            ? "0 25px 100px rgba(0,0,0,0.95), 0 0 150px rgba(0,240,255,0.3)"
-            : "0 15px 60px rgba(0,0,0,0.9), 0 0 80px rgba(0,240,255,0.2)",
-          padding: isScrolled ? "0.8rem 0" : "1rem 0",
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          padding: isScrolled ? '0.75rem 0' : '1rem 0',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        {/* Animated particle canvas */}
+        {/* Particle Canvas */}
         {!isMobile && (
           <canvas
             ref={canvasRef}
@@ -535,164 +515,135 @@ const Navbar = () => {
               position: 'absolute',
               inset: 0,
               pointerEvents: 'none',
-              opacity: 0.6,
-              zIndex: 0
+              opacity: 0.8,
+              zIndex: 0,
             }}
           />
         )}
 
-        {/* Hologram scan lines */}
+        {/* Gradient Overlay following mouse */}
         {!isMobile && (
-          <>
-            <div className="hologram-line" style={{ top: '20%' }} />
-            <div className="hologram-line" style={{ top: '50%', animationDelay: '2s' }} />
-            <div className="hologram-line" style={{ top: '80%', animationDelay: '4s' }} />
-          </>
-        )}
-
-        {/* Mouse-following energy field */}
-        {!isMobile && isScrolled && (
           <motion.div
             style={{
-              position: "absolute",
+              position: 'absolute',
               inset: 0,
-              background: `radial-gradient(circle 1000px at ${glowX}px ${glowY}px, 
-                rgba(0,240,255,0.15) 0%, 
-                rgba(195,0,255,0.1) 40%,
-                transparent 70%)`,
-              pointerEvents: "none",
-              opacity: glowOpacity,
+              background: `radial-gradient(circle 800px at ${smoothMouseX}px ${smoothMouseY}px, 
+                rgba(0, 245, 255, 0.08) 0%, 
+                rgba(112, 0, 255, 0.05) 30%,
+                transparent 60%)`,
+              pointerEvents: 'none',
+              zIndex: 1,
               mixBlendMode: 'screen',
-              zIndex: 1
             }}
           />
         )}
-
-        {/* Data streams */}
-        {!isMobile && Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="data-stream"
-            style={{
-              left: `${10 + i * 12}%`,
-              top: 0,
-              animationDelay: `${i * 0.4}s`,
-              opacity: 0.3
-            }}
-          />
-        ))}
 
         <div
           style={{
-            maxWidth: "1800px",
-            margin: "0 auto",
-            padding: "0 3rem",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            maxWidth: '1920px',
+            margin: '0 auto',
+            padding: isMobile ? '0 1.5rem' : '0 3rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             position: 'relative',
-            zIndex: 2
+            zIndex: 2,
           }}
         >
-          {/* Logo - Hollywood Style */}
+          {/* Logo Section */}
           <motion.button
             onClick={() => handleNavClick("/home")}
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.92 }}
-            className="logo-container"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
               padding: 0,
-              marginRight: "2rem",
-              position: 'relative'
             }}
           >
-            {/* Orbiting ring */}
-            {!isMobile && <div className="logo-orbit" />}
-            
             <motion.div
-              animate={{
-                rotate: [0, 15, -15, 0],
-                scale: [1, 1.2, 1],
-                y: [0, -10, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="logo-glow"
               style={{
-                fontSize: isMobile ? "2.5rem" : "3rem",
-                color: "#00f0ff",
                 position: 'relative',
-                zIndex: 2
+                width: isMobile ? '48px' : '56px',
+                height: isMobile ? '48px' : '56px',
               }}
             >
-              <FaRocket />
-            </motion.div>
+              {/* Rotating gradient border */}
+              <motion.div
+                className="morphing-bg"
+                animate={{
+                  rotate: 360,
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{
+                  position: 'absolute',
+                  inset: -3,
+                  background: 'linear-gradient(45deg, #00f5ff, #7000ff, #ff0080, #00ff88, #00f5ff)',
+                  backgroundSize: '300% 300%',
+                  animation: 'gradient-shift 3s ease infinite',
+                  borderRadius: '50%',
+                  filter: 'blur(4px)',
+                  opacity: 0.8,
+                }}
+              />
 
-            {/* Glowing particles around logo */}
-            {!isMobile && (
-              <>
+              {/* Logo background */}
+              <motion.div
+                whileHover={{ rotate: 180 }}
+                transition={{ duration: 0.6 }}
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(112, 0, 255, 0.2))',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(0, 245, 255, 0.4)',
+                  boxShadow: '0 0 30px rgba(0, 245, 255, 0.4), inset 0 0 20px rgba(0, 245, 255, 0.1)',
+                }}
+              >
                 <motion.div
                   animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 0.7, 0.3],
+                    y: [0, -4, 0],
+                    rotate: [0, 5, -5, 0],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                   style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '80px',
-                    height: '80px',
-                    background: 'radial-gradient(circle, rgba(0,240,255,0.4) 0%, transparent 70%)',
-                    borderRadius: '50%',
-                    pointerEvents: 'none',
-                    zIndex: 1
+                    fontSize: isMobile ? '1.5rem' : '1.8rem',
+                    background: 'linear-gradient(135deg, #00f5ff, #7000ff)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    filter: 'drop-shadow(0 0 12px #00f5ff)',
                   }}
-                />
-                <FaStar 
-                  style={{
-                    position: 'absolute',
-                    top: '-5px',
-                    right: '-5px',
-                    fontSize: '1rem',
-                    color: '#ffd700',
-                    animation: 'floatIcon 3s ease-in-out infinite',
-                    filter: 'drop-shadow(0 0 8px #ffd700)'
-                  }}
-                />
-              </>
-            )}
+                >
+                  <FaRocket />
+                </motion.div>
+              </motion.div>
+            </motion.div>
 
             <motion.span
+              className="gradient-text"
               style={{
-                fontFamily: "'Orbitron', sans-serif",
-                fontSize: isMobile ? "2rem" : "2.5rem",
-                fontWeight: 900,
-                letterSpacing: "0px",
-                background: "linear-gradient(90deg, #00f0ff 0%, #c300ff 50%, #ff00aa 100%)",
-                backgroundSize: "200% 200%",
-                animation: "shimmerGlow 4s ease infinite",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-                textShadow: "0 0 40px rgba(0,240,255,0.5)",
-                position: 'relative',
-                zIndex: 2
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: isMobile ? '1.5rem' : '2rem',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                textShadow: '0 0 30px rgba(0, 245, 255, 0.5)',
               }}
             >
               Bhagavan
@@ -702,9 +653,9 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           {!isMobile && (
             <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
             }}>
               {visibleItems.map((item, index) => {
                 const isActive = currentPath === item.path;
@@ -715,75 +666,63 @@ const Navbar = () => {
                     onClick={() => handleNavClick(item.path)}
                     onMouseEnter={() => setActiveHover(item.path)}
                     onMouseLeave={() => setActiveHover(null)}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const x = ((e.clientX - rect.left) / rect.width) * 100;
-                      const y = ((e.clientY - rect.top) / rect.height) * 100;
-                      e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
-                      e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
-                    }}
-                    initial={{ opacity: 0, y: -30 }}
+                    initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    whileHover={{ scale: 1.08, y: -6 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`nav-item ${isActive ? "nav-active" : ""}`}
+                    transition={{ delay: index * 0.08, duration: 0.5 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`nav-item-elite hover-lift ${isActive ? 'nav-item-active' : ''}`}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.8rem",
-                      padding: "1rem 1.8rem",
-                      color: isActive ? "var(--neon-cyan)" : "var(--text-light)",
-                      fontSize: "1.05rem",
-                      fontWeight: isActive ? 700 : 500,
-                      border: isActive
-                        ? "2.5px solid var(--neon-cyan)"
-                        : "2px solid rgba(0,240,255,0.35)",
-                      background: isActive
-                        ? "linear-gradient(135deg, rgba(0,240,255,0.2) 0%, rgba(195,0,255,0.2) 100%)"
-                        : "rgba(255,255,255,0.05)",
-                      backdropFilter: "blur(15px)",
-                      borderRadius: "18px",
-                      cursor: "pointer",
-                      whiteSpace: "nowrap",
-                      position: "relative",
-                      fontFamily: "'Exo 2', sans-serif",
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase',
-                      overflow: 'hidden'
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.75rem 1.25rem',
+                      color: isActive ? '#00f5ff' : '#fff',
+                      fontSize: '0.9rem',
+                      fontWeight: isActive ? 600 : 500,
+                      fontFamily: "'Inter', sans-serif",
+                      letterSpacing: '0.01em',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      background: isActive 
+                        ? 'linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(112, 0, 255, 0.15))'
+                        : 'rgba(255, 255, 255, 0.03)',
+                      backdropFilter: 'blur(20px)',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      position: 'relative',
+                      boxShadow: isActive 
+                        ? '0 0 30px rgba(0, 245, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4)'
+                        : '0 4px 16px rgba(0, 0, 0, 0.2)',
                     }}
                   >
-                    <div className="energy-field" />
-                    
                     <motion.span
                       animate={isActive ? { 
-                        rotate: [0, 10, -10, 0],
-                        scale: [1, 1.2, 1],
-                        y: [0, -5, 0]
+                        rotate: [0, -10, 10, 0],
+                        scale: [1, 1.15, 1],
                       } : {}}
                       transition={{ duration: 2, repeat: Infinity }}
                       style={{ 
-                        fontSize: "1.4rem",
-                        position: 'relative',
-                        zIndex: 2,
-                        filter: isActive ? 'drop-shadow(0 0 8px currentColor)' : 'none'
+                        fontSize: '1.2rem',
+                        filter: isActive ? 'drop-shadow(0 0 8px currentColor)' : 'none',
                       }}
-                      className="icon"
+                      className="nav-icon"
                     >
                       {item.icon}
                     </motion.span>
                     
-                    <span style={{ position: 'relative', zIndex: 2 }}>{item.label}</span>
-                    
+                    <span>{item.label}</span>
+
+                    {/* Hover indicator */}
                     {activeHover === item.path && !isActive && (
                       <motion.div
                         layoutId="navHover"
                         style={{
                           position: 'absolute',
-                          inset: 0,
-                          background: 'rgba(0,240,255,0.1)',
-                          borderRadius: '18px',
-                          zIndex: 0
+                          inset: -1,
+                          background: 'linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(112, 0, 255, 0.1))',
+                          borderRadius: '12px',
+                          zIndex: -1,
                         }}
                         transition={{ duration: 0.3 }}
                       />
@@ -792,107 +731,92 @@ const Navbar = () => {
                 );
               })}
 
-              {/* More Dropdown - Hollywood Edition */}
-              <div style={{ position: "relative" }}>
+              {/* More Dropdown */}
+              <div style={{ position: 'relative' }}>
                 <motion.button
-                  initial={{ opacity: 0, y: -30 }}
+                  initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.5 }}
-                  whileHover={{ scale: 1.08, y: -6 }}
-                  whileTap={{ scale: 0.95 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
-                  className={`nav-item ${moreDropdownOpen ? "nav-active" : ""}`}
+                  className={`nav-item-elite hover-lift ${moreDropdownOpen ? 'nav-item-active' : ''}`}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.8rem",
-                    padding: "1rem 1.8rem",
-                    color: moreDropdownOpen ? "var(--neon-cyan)" : "var(--text-light)",
-                    fontSize: "1.05rem",
-                    fontWeight: moreDropdownOpen ? 700 : 500,
-                    borderRadius: "18px",
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    padding: '0.75rem 1.25rem',
+                    color: moreDropdownOpen ? '#00f5ff' : '#fff',
+                    fontSize: '0.9rem',
+                    fontWeight: moreDropdownOpen ? 600 : 500,
+                    fontFamily: "'Inter', sans-serif",
+                    borderRadius: '12px',
                     background: moreDropdownOpen
-                      ? "linear-gradient(135deg, rgba(0,240,255,0.2) 0%, rgba(195,0,255,0.2) 100%)"
-                      : "rgba(255,255,255,0.05)",
-                    border: moreDropdownOpen
-                      ? "2.5px solid var(--neon-cyan)"
-                      : "2px solid rgba(0,240,255,0.35)",
-                    backdropFilter: "blur(15px)",
-                    cursor: "pointer",
-                    fontFamily: "'Exo 2', sans-serif",
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
+                      ? 'linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(112, 0, 255, 0.15))'
+                      : 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(20px)',
+                    cursor: 'pointer',
                     position: 'relative',
-                    overflow: 'hidden'
+                    boxShadow: moreDropdownOpen
+                      ? '0 0 30px rgba(0, 245, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4)'
+                      : '0 4px 16px rgba(0, 0, 0, 0.2)',
                   }}
                 >
-                  <div className="energy-field" />
-                  
                   <motion.span
-                    animate={{ rotate: moreDropdownOpen ? 360 : 0 }}
-                    transition={{ duration: 0.6 }}
-                    style={{ 
-                      fontSize: "1.4rem",
-                      position: 'relative',
-                      zIndex: 2,
-                      filter: moreDropdownOpen ? 'drop-shadow(0 0 8px currentColor)' : 'none'
-                    }}
+                    animate={{ rotate: moreDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.4 }}
+                    style={{ fontSize: '1.2rem' }}
                   >
                     <FaGem />
                   </motion.span>
                   
-                  <span style={{ position: 'relative', zIndex: 2 }}>More</span>
+                  <span>More</span>
                   
                   <motion.div
                     animate={{ rotate: moreDropdownOpen ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    style={{ position: 'relative', zIndex: 2 }}
                   >
-                    <FaChevronDown style={{ fontSize: "0.9rem" }} />
+                    <FaChevronDown style={{ fontSize: '0.8rem' }} />
                   </motion.div>
                 </motion.button>
 
                 <AnimatePresence>
                   {moreDropdownOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -40, scale: 0.9, rotateX: -15 }}
-                      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                      exit={{ opacity: 0, y: -40, scale: 0.9, rotateX: -15 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="dropdown"
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                      className="elite-dropdown"
                       style={{
-                        position: "absolute",
-                        top: "calc(100% + 1.5rem)",
+                        position: 'absolute',
+                        top: 'calc(100% + 1rem)',
                         right: 0,
-                        minWidth: "340px",
-                        borderRadius: "22px",
-                        padding: "1.5rem",
+                        minWidth: '300px',
+                        borderRadius: '16px',
+                        padding: '1rem',
                         zIndex: 1001,
-                        transformOrigin: "top right"
                       }}
                     >
-                      {/* Dropdown header */}
                       <div style={{
-                        marginBottom: '1.2rem',
-                        paddingBottom: '1rem',
-                        borderBottom: '2px solid rgba(0,240,255,0.3)',
+                        marginBottom: '0.75rem',
+                        paddingBottom: '0.75rem',
+                        borderBottom: '1px solid rgba(0, 245, 255, 0.2)',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.8rem'
+                        gap: '0.6rem',
                       }}>
-                        <FaFire style={{ 
-                          color: 'var(--neon-pink)', 
-                          fontSize: '1.5rem',
-                          filter: 'drop-shadow(0 0 8px var(--neon-pink))'
+                        <FaAtom style={{ 
+                          color: '#00f5ff', 
+                          fontSize: '1.2rem',
+                          filter: 'drop-shadow(0 0 8px #00f5ff)',
                         }} />
                         <span style={{
-                          fontFamily: "'Orbitron', sans-serif",
-                          fontSize: '1.2rem',
-                          fontWeight: 700,
-                          background: 'linear-gradient(90deg, var(--neon-cyan), var(--neon-purple))',
-                          WebkitBackgroundClip: 'text',
-                          backgroundClip: 'text',
-                          color: 'transparent'
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: '1rem',
+                          fontWeight: 600,
+                          color: '#fff',
                         }}>
                           Explore More
                         </span>
@@ -905,55 +829,48 @@ const Navbar = () => {
                           <motion.button
                             key={item.path}
                             onClick={() => handleNavClick(item.path)}
-                            initial={{ opacity: 0, x: -30 }}
+                            initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                            whileHover={{ x: 12, scale: 1.04 }}
-                            whileTap={{ scale: 0.96 }}
-                            className={`nav-item ${isActive ? "nav-active" : ""}`}
+                            transition={{ delay: index * 0.04 }}
+                            whileHover={{ x: 8, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`nav-item-elite ${isActive ? 'nav-item-active' : ''}`}
                             style={{
-                              width: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "1rem",
-                              padding: "1rem 1.5rem",
-                              color: isActive ? "var(--neon-cyan)" : "var(--text-light)",
-                              fontSize: "1.05rem",
-                              fontWeight: isActive ? 700 : 500,
-                              borderRadius: "16px",
+                              width: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.8rem',
+                              padding: '0.75rem 1rem',
+                              color: isActive ? '#00f5ff' : '#fff',
+                              fontSize: '0.9rem',
+                              fontWeight: isActive ? 600 : 500,
+                              fontFamily: "'Inter', sans-serif",
+                              borderRadius: '10px',
                               background: isActive 
-                                ? "linear-gradient(135deg, rgba(0,240,255,0.2) 0%, rgba(195,0,255,0.2) 100%)"
-                                : "transparent",
-                              border: isActive ? '2px solid var(--neon-cyan)' : 'none',
-                              cursor: "pointer",
-                              textAlign: "left",
-                              marginBottom: "0.5rem",
-                              position: 'relative',
-                              overflow: 'hidden'
+                                ? 'linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(112, 0, 255, 0.15))'
+                                : 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              marginBottom: '0.4rem',
                             }}
                           >
-                            {isActive && <div className="energy-field" />}
-                            
                             <motion.span 
                               style={{ 
-                                fontSize: "1.5rem",
+                                fontSize: '1.2rem',
                                 filter: isActive ? 'drop-shadow(0 0 8px currentColor)' : 'none',
-                                position: 'relative',
-                                zIndex: 2
                               }}
                             >
                               {item.icon}
                             </motion.span>
-                            <span style={{ position: 'relative', zIndex: 2 }}>{item.label}</span>
+                            <span>{item.label}</span>
                             
                             {isActive && (
-                              <FaBolt style={{
+                              <FaStar style={{
                                 marginLeft: 'auto',
-                                color: 'var(--neon-gold)',
-                                fontSize: '1rem',
-                                animation: 'floatIcon 2s ease-in-out infinite',
-                                position: 'relative',
-                                zIndex: 2
+                                color: '#ffd700',
+                                fontSize: '0.9rem',
+                                filter: 'drop-shadow(0 0 8px #ffd700)',
                               }} />
                             )}
                           </motion.button>
@@ -966,56 +883,49 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* Mobile Hamburger Menu Button - Hollywood Style */}
+          {/* Mobile Menu Button */}
           {isMobile && (
             <motion.button
               onClick={() => setMenuOpen(!menuOpen)}
-              initial={{ opacity: 0, rotate: -180 }}
+              initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
-              whileHover={{ scale: 1.3, rotate: 90 }}
-              whileTap={{ scale: 0.85 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               style={{
                 background: menuOpen
-                  ? "linear-gradient(135deg, rgba(0,240,255,0.5), rgba(195,0,255,0.4))"
-                  : "rgba(255,255,255,0.1)",
-                border: menuOpen
-                  ? "3px solid var(--neon-cyan)"
-                  : "2.5px solid rgba(0,240,255,0.4)",
-                color: "var(--neon-cyan)",
-                fontSize: "2.2rem",
-                padding: "1rem 1.2rem",
-                borderRadius: "18px",
-                cursor: "pointer",
+                  ? 'linear-gradient(135deg, rgba(0, 245, 255, 0.3), rgba(112, 0, 255, 0.3))'
+                  : 'rgba(255, 255, 255, 0.05)',
+                border: `1px solid ${menuOpen ? 'rgba(0, 245, 255, 0.5)' : 'rgba(255, 255, 255, 0.1)'}`,
+                color: menuOpen ? '#00f5ff' : '#fff',
+                fontSize: '1.5rem',
+                padding: '0.75rem',
+                borderRadius: '12px',
+                cursor: 'pointer',
                 boxShadow: menuOpen
-                  ? "0 0 70px rgba(0,240,255,0.8), inset 0 0 30px rgba(0,240,255,0.3)"
-                  : "0 10px 30px rgba(0,0,0,0.6)",
+                  ? '0 0 30px rgba(0, 245, 255, 0.4)'
+                  : '0 4px 16px rgba(0, 0, 0, 0.2)',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}
-              aria-label="Toggle menu"
             >
-              {menuOpen && <div className="energy-field" style={{ opacity: 0.8 }} />}
-              
               <AnimatePresence mode="wait">
                 {menuOpen ? (
                   <motion.div
                     key="close"
-                    initial={{ rotate: -180, scale: 0 }}
+                    initial={{ rotate: -90, scale: 0 }}
                     animate={{ rotate: 0, scale: 1 }}
-                    exit={{ rotate: 180, scale: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    style={{ position: 'relative', zIndex: 2 }}
+                    exit={{ rotate: 90, scale: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <FaTimes />
                   </motion.div>
                 ) : (
                   <motion.div
                     key="open"
-                    initial={{ rotate: 180, scale: 0 }}
+                    initial={{ rotate: 90, scale: 0 }}
                     animate={{ rotate: 0, scale: 1 }}
-                    exit={{ rotate: -180, scale: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    style={{ position: 'relative', zIndex: 2 }}
+                    exit={{ rotate: -90, scale: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <FaBars />
                   </motion.div>
@@ -1026,46 +936,36 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* ===================== MOBILE FULL-SCREEN MENU - HOLLYWOOD EDITION ===================== */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {menuOpen && isMobile && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="mobile-menu"
+            transition={{ duration: 0.3 }}
+            className="mobile-menu-elite"
             style={{
-              position: "fixed",
-              inset: "auto 0 0 0",
-              top: "90px",
+              position: 'fixed',
+              inset: 'auto 0 0 0',
+              top: '80px',
               zIndex: 999,
-              overflowY: "auto",
-              padding: "2.5rem 1.5rem",
+              overflowY: 'auto',
+              padding: '2rem 1.5rem',
+              maxHeight: 'calc(100vh - 80px)',
             }}
-            onClick={(e) => e.target === e.currentTarget && setMenuOpen(false)}
           >
-            {/* Animated gradient overlay */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at 50% 0%, rgba(0,240,255,0.1) 0%, transparent 70%)',
-              pointerEvents: 'none'
-            }} />
-
             <motion.div
-              initial={{ opacity: 0, y: 80 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "1rem",
-                maxWidth: "650px",
-                margin: "0 auto",
-                paddingBottom: "8rem",
-                position: 'relative',
-                zIndex: 1
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+                maxWidth: '600px',
+                margin: '0 auto',
+                paddingBottom: '6rem',
               }}
             >
               {navItems.map((item, index) => {
@@ -1075,73 +975,60 @@ const Navbar = () => {
                   <motion.button
                     key={item.path}
                     onClick={() => handleNavClick(item.path)}
-                    initial={{ opacity: 0, x: -60 }}
+                    initial={{ opacity: 0, x: -40 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.06, x: 14 }}
-                    whileTap={{ scale: 0.94 }}
-                    className={`nav-item ${isActive ? "nav-active" : ""}`}
+                    transition={{ delay: index * 0.04 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`nav-item-elite ${isActive ? 'nav-item-active' : ''}`}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1.5rem",
-                      padding: "1.8rem 2rem",
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      padding: '1.25rem 1.5rem',
                       background: isActive
-                        ? "linear-gradient(135deg, rgba(0,240,255,0.25) 0%, rgba(195,0,255,0.25) 100%)"
-                        : "rgba(255,255,255,0.08)",
-                      borderRadius: "22px",
-                      color: isActive ? "var(--neon-cyan)" : "var(--text-light)",
-                      fontSize: "1.3rem",
-                      fontWeight: isActive ? 700 : 500,
-                      border: isActive
-                        ? "3px solid var(--neon-cyan)"
-                        : "2.5px solid rgba(0,240,255,0.35)",
-                      backdropFilter: "blur(18px)",
-                      cursor: "pointer",
-                      width: "100%",
-                      textAlign: "left",
+                        ? 'linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(112, 0, 255, 0.15))'
+                        : 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: '16px',
+                      color: isActive ? '#00f5ff' : '#fff',
+                      fontSize: '1.1rem',
+                      fontWeight: isActive ? 600 : 500,
+                      fontFamily: "'Inter', sans-serif",
+                      border: `1px solid ${isActive ? 'rgba(0, 245, 255, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                      backdropFilter: 'blur(20px)',
+                      cursor: 'pointer',
+                      width: '100%',
+                      textAlign: 'left',
                       boxShadow: isActive
-                        ? "0 0 50px rgba(0,240,255,0.6), inset 0 0 30px rgba(0,240,255,0.2)"
-                        : "0 10px 30px rgba(0,0,0,0.5)",
-                      position: 'relative',
-                      overflow: 'hidden'
+                        ? '0 0 30px rgba(0, 245, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4)'
+                        : '0 4px 16px rgba(0, 0, 0, 0.2)',
                     }}
                   >
-                    {isActive && <div className="energy-field" style={{ opacity: 0.7 }} />}
-                    
                     <motion.span 
                       style={{ 
-                        fontSize: "2rem",
+                        fontSize: '1.5rem',
                         filter: isActive ? 'drop-shadow(0 0 10px currentColor)' : 'none',
-                        position: 'relative',
-                        zIndex: 2
                       }}
                     >
                       {item.icon}
                     </motion.span>
-                    <span style={{ position: 'relative', zIndex: 2 }}>{item.label}</span>
+                    <span>{item.label}</span>
                     
                     {isActive && (
                       <motion.div
                         animate={{
+                          rotate: 360,
                           scale: [1, 1.2, 1],
-                          rotate: [0, 180, 360],
                         }}
                         transition={{
-                          duration: 3,
+                          duration: 2,
                           repeat: Infinity,
-                          ease: "linear"
                         }}
-                        style={{
-                          marginLeft: 'auto',
-                          position: 'relative',
-                          zIndex: 2
-                        }}
+                        style={{ marginLeft: 'auto' }}
                       >
                         <FaStar style={{
-                          color: 'var(--neon-gold)',
-                          fontSize: '1.2rem',
-                          filter: 'drop-shadow(0 0 8px var(--neon-gold))'
+                          color: '#ffd700',
+                          fontSize: '1rem',
+                          filter: 'drop-shadow(0 0 8px #ffd700)',
                         }} />
                       </motion.div>
                     )}

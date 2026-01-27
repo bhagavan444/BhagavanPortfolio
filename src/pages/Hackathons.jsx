@@ -8,306 +8,18 @@ import {
   Server, Lock, Brain, Eye, Heart, Coffee, Mic, Volume2, Play, Pause,
   ChevronDown, ChevronUp, Calendar, MapPin, Mail, Github, Linkedin,
   Globe, MessageSquare, Send, BarChart3, PieChart, Activity, AlertCircle,
-  Fingerprint, Boxes, Network, Webhook, Container, Shuffle
+  Fingerprint, Boxes, Network, Webhook, Container, Shuffle, ExternalLink
 } from "lucide-react";
-
-const phaseIcons = {
-  1: Terminal,
-  2: Code,
-  3: Zap,
-  4: Rocket
-};
-
-// Developer Animated Background Component
-function DeveloperBackground() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationId;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-
-    // Code snippets that scroll
-    const codeSnippets = [
-      'const app = express();',
-      'app.use(middleware);',
-      'mongoose.connect(URI);',
-      'JWT.verify(token);',
-      'socket.on("message");',
-      'async function fetch()',
-      'return response.json()',
-      'if (authenticated) {',
-      'const [state, setState]',
-      'useEffect(() => {',
-      'router.get("/api")',
-      'app.listen(PORT);',
-      'try { await axios',
-      'Redux.dispatch()',
-      'React.createElement',
-      'npm run build',
-      'docker-compose up',
-      'git commit -m',
-      'export default App',
-      'import { useState }',
-    ];
-
-    // Binary rain characters
-    const binaryChars = ['0', '1'];
-    
-    // Terminal commands
-    const terminalCommands = [
-      '$ npm install',
-      '$ node server.js',
-      '$ git push origin',
-      '$ docker build',
-      '$ kubectl apply',
-      '$ yarn start',
-    ];
-
-    class CodeLine {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height - canvas.height;
-        this.speed = Math.random() * 1 + 0.5;
-        this.text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        this.opacity = Math.random() * 0.3 + 0.1;
-        this.color = ['#00f0ff', '#a78bfa', '#ff61d2', '#10b981'][Math.floor(Math.random() * 4)];
-      }
-      update() {
-        this.y += this.speed;
-        if (this.y > canvas.height + 50) this.reset();
-      }
-      draw() {
-        ctx.font = '14px "JetBrains Mono", monospace';
-        ctx.fillStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.fillText(this.text, this.x, this.y);
-      }
-    }
-
-    class BinaryRain {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height - canvas.height;
-        this.speed = Math.random() * 3 + 2;
-        this.chars = Array(20).fill(0).map(() => 
-          binaryChars[Math.floor(Math.random() * binaryChars.length)]
-        );
-        this.opacity = Math.random() * 0.4 + 0.2;
-      }
-      update() {
-        this.y += this.speed;
-        if (this.y > canvas.height + 100) this.reset();
-      }
-      draw() {
-        ctx.font = '12px "JetBrains Mono", monospace';
-        this.chars.forEach((char, i) => {
-          const alpha = Math.max(0, this.opacity - (i * 0.02));
-          ctx.fillStyle = `rgba(0, 240, 255, ${alpha})`;
-          ctx.fillText(char, this.x, this.y - (i * 16));
-        });
-      }
-    }
-
-    class TerminalLine {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = -500;
-        this.y = Math.random() * canvas.height;
-        this.speed = Math.random() * 2 + 1;
-        this.text = terminalCommands[Math.floor(Math.random() * terminalCommands.length)];
-        this.opacity = Math.random() * 0.25 + 0.1;
-      }
-      update() {
-        this.x += this.speed;
-        if (this.x > canvas.width + 200) this.reset();
-      }
-      draw() {
-        ctx.font = '16px "JetBrains Mono", monospace';
-        ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
-        ctx.fillText(this.text, this.x, this.y);
-      }
-    }
-
-    class GeometricShape {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 100 + 50;
-        this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.01;
-        this.opacity = Math.random() * 0.1 + 0.05;
-        this.type = Math.floor(Math.random() * 3); // 0: square, 1: triangle, 2: hexagon
-        this.color = ['#00f0ff', '#a78bfa', '#ff61d2'][Math.floor(Math.random() * 3)];
-      }
-      update() {
-        this.rotation += this.rotationSpeed;
-      }
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.strokeStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        
-        if (this.type === 0) {
-          // Square
-          ctx.rect(-this.size/2, -this.size/2, this.size, this.size);
-        } else if (this.type === 1) {
-          // Triangle
-          ctx.moveTo(0, -this.size/2);
-          ctx.lineTo(this.size/2, this.size/2);
-          ctx.lineTo(-this.size/2, this.size/2);
-          ctx.closePath();
-        } else {
-          // Hexagon
-          for (let i = 0; i < 6; i++) {
-            const angle = (Math.PI / 3) * i;
-            const x = (this.size/2) * Math.cos(angle);
-            const y = (this.size/2) * Math.sin(angle);
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
-        }
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
-    class CircuitLine {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.startX = Math.random() * canvas.width;
-        this.startY = Math.random() * canvas.height;
-        this.endX = this.startX + (Math.random() - 0.5) * 300;
-        this.endY = this.startY + (Math.random() - 0.5) * 300;
-        this.progress = 0;
-        this.speed = Math.random() * 0.01 + 0.005;
-        this.color = ['#00f0ff', '#a78bfa'][Math.floor(Math.random() * 2)];
-        this.opacity = Math.random() * 0.3 + 0.1;
-      }
-      update() {
-        this.progress += this.speed;
-        if (this.progress > 1) this.reset();
-      }
-      draw() {
-        const currentX = this.startX + (this.endX - this.startX) * this.progress;
-        const currentY = this.startY + (this.endY - this.startY) * this.progress;
-        
-        ctx.strokeStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(this.startX, this.startY);
-        ctx.lineTo(currentX, currentY);
-        ctx.stroke();
-        
-        // Draw node at end
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 3, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    // Create elements
-    const codeLines = Array.from({ length: 15 }, () => new CodeLine());
-    const binaryRains = Array.from({ length: 10 }, () => new BinaryRain());
-    const terminalLines = Array.from({ length: 8 }, () => new TerminalLine());
-    const geometricShapes = Array.from({ length: 6 }, () => new GeometricShape());
-    const circuitLines = Array.from({ length: 12 }, () => new CircuitLine());
-
-    const animate = () => {
-      // Dark background with slight transparency for trail effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Draw geometric shapes (background layer)
-      geometricShapes.forEach(shape => {
-        shape.update();
-        shape.draw();
-      });
-
-      // Draw circuit lines
-      circuitLines.forEach(line => {
-        line.update();
-        line.draw();
-      });
-
-      // Draw binary rain
-      binaryRains.forEach(rain => {
-        rain.update();
-        rain.draw();
-      });
-
-      // Draw code lines
-      codeLines.forEach(line => {
-        line.update();
-        line.draw();
-      });
-
-      // Draw terminal commands
-      terminalLines.forEach(line => {
-        line.update();
-        line.draw();
-      });
-
-      animationId = requestAnimationFrame(animate);
-    };
-    animate();
-
-    window.addEventListener('resize', resize);
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 0,
-        opacity: 0.6
-      }}
-    />
-  );
-}
-
 
 export default function EliteHackathonShowcase() {
   const [activePhase, setActivePhase] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [soundEnabled, setSoundEnabled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showCertificate, setShowCertificate] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [statsAnimated, setStatsAnimated] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [displayStats, setDisplayStats] = useState([]);
 
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
@@ -513,14 +225,13 @@ export default function EliteHackathonShowcase() {
     { time: "24:00", event: "Deployment & Final Presentation - Victory!", icon: Trophy, status: "completed" }
   ];
 
-  const [displayStats, setDisplayStats] = useState(stats.map(() => 0));
-
-  // Advanced Particle System with 3D effect
+  // Advanced Animated Background - Geometric Shapes with Waves
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationId;
+    let time = 0;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -528,60 +239,194 @@ export default function EliteHackathonShowcase() {
     };
     resize();
 
-    class Particle3D {
+    // Geometric Shape Class
+    class GeometricShape {
       constructor() {
-        this.reset();
-      }
-      reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.z = Math.random() * 1000;
+        this.size = Math.random() * 80 + 40;
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
         this.vx = (Math.random() - 0.5) * 0.5;
         this.vy = (Math.random() - 0.5) * 0.5;
-        this.vz = Math.random() * 2 + 1;
-        this.size = Math.random() * 2 + 1;
-        this.life = 1;
-        this.hue = Math.random() * 60 + 180; // Blue to cyan range
+        this.type = Math.floor(Math.random() * 4); // 0: triangle, 1: square, 2: hexagon, 3: circle
+        const colors = [
+          'rgba(0, 240, 255, 0.15)',
+          'rgba(167, 139, 250, 0.15)',
+          'rgba(255, 97, 210, 0.15)',
+          'rgba(16, 185, 129, 0.15)'
+        ];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.pulsePhase = Math.random() * Math.PI * 2;
       }
-      update() {
+
+      update(deltaTime) {
         this.x += this.vx;
         this.y += this.vy;
-        this.z -= this.vz;
-        
-        if (this.z <= 0) this.reset();
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-      draw() {
-        const scale = 1000 / (1000 + this.z);
-        const x2d = (this.x - canvas.width / 2) * scale + canvas.width / 2;
-        const y2d = (this.y - canvas.height / 2) * scale + canvas.height / 2;
-        const size = this.size * scale;
-        const alpha = (1 - this.z / 1000) * 0.6;
+        this.rotation += this.rotationSpeed;
+        this.pulsePhase += 0.02;
 
-        const gradient = ctx.createRadialGradient(x2d, y2d, 0, x2d, y2d, size * 8);
-        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${alpha})`);
-        gradient.addColorStop(0.5, `hsla(${this.hue}, 100%, 50%, ${alpha * 0.5})`);
-        gradient.addColorStop(1, 'transparent');
-        
-        ctx.fillStyle = gradient;
+        // Wrap around screen
+        if (this.x < -this.size) this.x = canvas.width + this.size;
+        if (this.x > canvas.width + this.size) this.x = -this.size;
+        if (this.y < -this.size) this.y = canvas.height + this.size;
+        if (this.y > canvas.height + this.size) this.y = -this.size;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+
+        const pulse = Math.sin(this.pulsePhase) * 0.3 + 1;
+        const size = this.size * pulse;
+
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.fillStyle = this.color.replace('0.15', '0.05');
+
         ctx.beginPath();
-        ctx.arc(x2d, y2d, size * 8, 0, Math.PI * 2);
+        
+        switch(this.type) {
+          case 0: // Triangle
+            ctx.moveTo(0, -size / 2);
+            ctx.lineTo(size / 2, size / 2);
+            ctx.lineTo(-size / 2, size / 2);
+            ctx.closePath();
+            break;
+          case 1: // Square
+            ctx.rect(-size / 2, -size / 2, size, size);
+            break;
+          case 2: // Hexagon
+            for (let i = 0; i < 6; i++) {
+              const angle = (Math.PI / 3) * i;
+              const x = Math.cos(angle) * size / 2;
+              const y = Math.sin(angle) * size / 2;
+              if (i === 0) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            break;
+          case 3: // Circle
+            ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+            break;
+        }
+
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    // Wave Lines
+    class WaveLine {
+      constructor(index) {
+        this.index = index;
+        this.yOffset = (canvas.height / 6) * index;
+        this.amplitude = 30 + Math.random() * 40;
+        this.frequency = 0.003 + Math.random() * 0.002;
+        this.speed = 0.5 + Math.random() * 0.5;
+        this.phase = Math.random() * Math.PI * 2;
+        const colors = ['0, 240, 255', '167, 139, 250', '255, 97, 210', '16, 185, 129'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.opacity = 0.1 + Math.random() * 0.15;
+      }
+
+      draw(time) {
+        ctx.beginPath();
+        ctx.moveTo(0, this.yOffset);
+
+        for (let x = 0; x <= canvas.width; x += 5) {
+          const y = this.yOffset + 
+                    Math.sin(x * this.frequency + time * this.speed + this.phase) * this.amplitude +
+                    Math.sin(x * this.frequency * 2 + time * this.speed * 1.5) * (this.amplitude / 2);
+          ctx.lineTo(x, y);
+        }
+
+        ctx.strokeStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Filled gradient version
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        ctx.closePath();
+        
+        const gradient = ctx.createLinearGradient(0, this.yOffset, 0, canvas.height);
+        gradient.addColorStop(0, `rgba(${this.color}, ${this.opacity * 0.3})`);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
         ctx.fill();
       }
     }
 
-    const particles = Array.from({ length: 150 }, () => new Particle3D());
+    // Floating Orbs
+    class FloatingOrb {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = Math.random() * 100 + 50;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        const colors = ['0, 240, 255', '167, 139, 250', '255, 97, 210', '16, 185, 129'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.pulsePhase = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.pulsePhase += 0.01;
+
+        if (this.x < -this.radius) this.x = canvas.width + this.radius;
+        if (this.x > canvas.width + this.radius) this.x = -this.radius;
+        if (this.y < -this.radius) this.y = canvas.height + this.radius;
+        if (this.y > canvas.height + this.radius) this.y = -this.radius;
+      }
+
+      draw() {
+        const pulse = Math.sin(this.pulsePhase) * 0.3 + 1;
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, this.radius * pulse
+        );
+        gradient.addColorStop(0, `rgba(${this.color}, 0.2)`);
+        gradient.addColorStop(0.5, `rgba(${this.color}, 0.1)`);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * pulse, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const shapes = Array.from({ length: 15 }, () => new GeometricShape());
+    const waves = Array.from({ length: 5 }, (_, i) => new WaveLine(i));
+    const orbs = Array.from({ length: 8 }, () => new FloatingOrb());
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      time += 0.01;
+      
+      // Create trailing effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach(p => {
-        p.update();
-        p.draw();
+
+      // Draw orbs first (background)
+      orbs.forEach(orb => {
+        orb.update();
+        orb.draw();
       });
-      
+
+      // Draw waves
+      waves.forEach(wave => wave.draw(time));
+
+      // Draw geometric shapes
+      shapes.forEach(shape => {
+        shape.update(time);
+        shape.draw();
+      });
+
       animationId = requestAnimationFrame(animate);
     };
     animate();
@@ -623,6 +468,7 @@ export default function EliteHackathonShowcase() {
       ([entry]) => {
         if (entry.isIntersecting && !statsAnimated) {
           setStatsAnimated(true);
+          const newDisplayStats = [...displayStats];
           stats.forEach((stat, index) => {
             let current = 0;
             const increment = stat.target / 60;
@@ -633,9 +479,9 @@ export default function EliteHackathonShowcase() {
                 clearInterval(timer);
               }
               setDisplayStats(prev => {
-                const newStats = [...prev];
-                newStats[index] = Math.floor(current);
-                return newStats;
+                const updated = [...prev];
+                updated[index] = Math.floor(current);
+                return updated;
               });
             }, 25);
           });
@@ -646,6 +492,11 @@ export default function EliteHackathonShowcase() {
     if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
   }, [statsAnimated]);
+
+  // Initialize display stats
+  useEffect(() => {
+    setDisplayStats(stats.map(() => 0));
+  }, []);
 
   const handleCertificateDownload = () => {
     const link = document.createElement("a");
@@ -669,7 +520,6 @@ export default function EliteHackathonShowcase() {
           --cyber-pink: #ff61d2;
           --cyber-green: #10b981;
           --cyber-orange: #f59e0b;
-          --cyber-red: #ef4444;
         }
 
         @keyframes fadeInUp {
@@ -712,11 +562,6 @@ export default function EliteHackathonShowcase() {
           to { transform: rotateY(360deg); }
         }
 
-        @keyframes scanline {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-
         .glass-card {
           background: rgba(15, 15, 35, 0.7);
           backdrop-filter: blur(20px) saturate(180%);
@@ -750,8 +595,7 @@ export default function EliteHackathonShowcase() {
           border-color: rgba(0, 240, 255, 0.5);
           box-shadow: 
             0 20px 60px 0 rgba(0, 240, 255, 0.3),
-            0 0 80px rgba(0, 240, 255, 0.2),
-            inset 0 0 0 1px rgba(0, 240, 255, 0.2);
+            0 0 80px rgba(0, 240, 255, 0.2);
         }
 
         .neon-text {
@@ -776,37 +620,11 @@ export default function EliteHackathonShowcase() {
           align-items: center;
           gap: 0.5rem;
           transition: all 0.3s;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .tech-badge::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          border-radius: 50%;
-          background: rgba(0, 240, 255, 0.3);
-          transform: translate(-50%, -50%);
-          transition: width 0.3s, height 0.3s;
-        }
-
-        .tech-badge:hover::before {
-          width: 300px;
-          height: 300px;
         }
 
         .tech-badge:hover {
           transform: scale(1.1);
           box-shadow: 0 0 30px var(--cyber-blue);
-          border-color: var(--cyber-blue);
-        }
-
-        .progress-ring {
-          transform: rotate(-90deg);
-          transition: stroke-dashoffset 1s ease;
         }
 
         .holographic {
@@ -820,20 +638,12 @@ export default function EliteHackathonShowcase() {
           animation: shimmer 10s ease infinite;
         }
 
-        .scanline {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, var(--cyber-blue), transparent);
-          animation: scanline 4s linear infinite;
-          pointer-events: none;
-        }
-
         @media (max-width: 768px) {
           .glass-card:hover {
             transform: translateY(-5px) scale(1.01);
+          }
+          .grid-responsive {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
@@ -858,24 +668,41 @@ export default function EliteHackathonShowcase() {
         overflow: 'hidden',
         fontFamily: "'Inter', sans-serif"
       }}>
-        {/* Developer Animated Background */}
-        <DeveloperBackground />
-
-        {/* 3D Particle Canvas */}
+        {/* Advanced Animated Background Canvas */}
         <canvas
           ref={canvasRef}
           style={{
-            position: 'absolute',
-            inset: 0,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             pointerEvents: 'none',
-            zIndex: 1
+            zIndex: 0
           }}
         />
+
+        {/* Grid Overlay */}
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: `
+            linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px',
+          opacity: 0.2,
+          pointerEvents: 'none',
+          zIndex: 1
+        }} />
 
         <div style={{
           position: 'relative',
           zIndex: 10,
-          padding: '6rem 2rem',
+          padding: 'clamp(3rem, 6vw, 6rem) clamp(1rem, 3vw, 2rem)',
           maxWidth: '1600px',
           margin: '0 auto'
         }}>
@@ -884,9 +711,10 @@ export default function EliteHackathonShowcase() {
             ref={heroRef}
             style={{
               textAlign: 'center',
-              marginBottom: '8rem',
+              marginBottom: 'clamp(4rem, 8vw, 8rem)',
               animation: 'fadeInUp 1s ease-out',
-              transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0)`
+              transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0)`,
+              transition: 'transform 0.3s ease-out'
             }}
           >
             <div style={{
@@ -895,24 +723,26 @@ export default function EliteHackathonShowcase() {
               gap: '1rem',
               fontFamily: "'JetBrains Mono', monospace",
               color: '#00f0ff',
-              fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-              padding: '1rem 2.5rem',
+              fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
+              padding: 'clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.5rem)',
               border: '2px solid rgba(0, 240, 255, 0.5)',
               borderRadius: '999px',
               marginBottom: '2rem',
               animation: 'pulse 3s infinite',
               background: 'rgba(0, 240, 255, 0.05)',
-              backdropFilter: 'blur(10px)'
+              backdropFilter: 'blur(10px)',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
               <Terminal size={24} style={{ animation: 'glow 2s infinite' }} />
-              {'> system.hackathon.execute()'}
+              <span>{'> system.hackathon.execute()'}</span>
               <Sparkles size={24} style={{ animation: 'glow 2s infinite' }} />
             </div>
 
             <h1 className="neon-text" style={{
-              fontSize: 'clamp(4rem, 15vw, 10rem)',
+              fontSize: 'clamp(3rem, 12vw, 10rem)',
               fontWeight: 900,
-              letterSpacing: '10px',
+              letterSpacing: 'clamp(2px, 1vw, 10px)',
               textTransform: 'uppercase',
               marginBottom: '1rem',
               fontFamily: "'Space Grotesk', sans-serif",
@@ -923,7 +753,7 @@ export default function EliteHackathonShowcase() {
             </h1>
 
             <div style={{
-              fontSize: 'clamp(1.5rem, 5vw, 3rem)',
+              fontSize: 'clamp(1.2rem, 4vw, 3rem)',
               fontWeight: 700,
               background: 'linear-gradient(135deg, #00f0ff, #a78bfa)',
               WebkitBackgroundClip: 'text',
@@ -936,11 +766,12 @@ export default function EliteHackathonShowcase() {
 
             {/* Floating achievement badges */}
             <div style={{
-              display: 'flex',
-              gap: '2rem',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginBottom: '4rem'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1.5rem',
+              marginBottom: '4rem',
+              maxWidth: '1200px',
+              margin: '0 auto 4rem'
             }}>
               {[
                 { icon: Trophy, text: '1st Place', color: '#ffd700' },
@@ -949,15 +780,17 @@ export default function EliteHackathonShowcase() {
                 { icon: Code, text: '5000+ Lines', color: '#ff61d2' }
               ].map((badge, i) => (
                 <div key={i} className="glass-card" style={{
-                  padding: '1.5rem 2rem',
+                  padding: 'clamp(1rem, 3vw, 1.5rem)',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '1rem',
                   animation: `float 3s ease-in-out infinite`,
-                  animationDelay: `${i * 0.2}s`
+                  animationDelay: `${i * 0.2}s`,
+                  flexDirection: window.innerWidth < 480 ? 'column' : 'row'
                 }}>
-                  <badge.icon size={32} style={{ color: badge.color }} />
-                  <span style={{ fontSize: '1.2rem', fontWeight: 600 }}>{badge.text}</span>
+                  <badge.icon size={32} style={{ color: badge.color, flexShrink: 0 }} />
+                  <span style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', fontWeight: 600 }}>{badge.text}</span>
                 </div>
               ))}
             </div>
@@ -966,26 +799,26 @@ export default function EliteHackathonShowcase() {
             <div className="glass-card holographic" style={{
               margin: '4rem auto',
               maxWidth: '1200px',
-              padding: '3rem',
+              padding: 'clamp(2rem, 5vw, 3rem)',
               position: 'relative'
             }}>
-              <div className="scanline" />
-              
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '1.5rem',
-                marginBottom: '2rem'
+                gap: '1rem',
+                marginBottom: '2rem',
+                flexWrap: 'wrap'
               }}>
                 <Award size={48} style={{ color: '#ffd700', animation: 'glow 2s infinite' }} />
                 <h2 style={{
-                  fontSize: 'clamp(2rem, 6vw, 3.5rem)',
+                  fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
                   fontWeight: 900,
                   background: 'linear-gradient(135deg, #ffd700, #ffed4e)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  fontFamily: "'Space Grotesk', sans-serif"
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  textAlign: 'center'
                 }}>
                   NATIONAL CHAMPIONSHIP
                 </h2>
@@ -1020,25 +853,19 @@ export default function EliteHackathonShowcase() {
                     display: 'block'
                   }}
                 />
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(135deg, transparent, rgba(0, 240, 255, 0.1))',
-                  pointerEvents: 'none'
-                }} />
               </div>
 
               <button
                 onClick={handleCertificateDownload}
                 style={{
                   marginTop: '2rem',
-                  padding: '1.2rem 3rem',
+                  padding: 'clamp(1rem, 2.5vw, 1.2rem) clamp(2rem, 5vw, 3rem)',
                   background: 'linear-gradient(135deg, #ffd700, #ffed4e)',
                   border: 'none',
                   borderRadius: '999px',
                   color: '#000',
                   fontWeight: 800,
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1064,10 +891,10 @@ export default function EliteHackathonShowcase() {
 
           {/* Live Stats Dashboard */}
           <div ref={statsRef} style={{
-            marginBottom: '8rem'
+            marginBottom: 'clamp(4rem, 8vw, 8rem)'
           }}>
             <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+              fontSize: 'clamp(2rem, 7vw, 4rem)',
               fontWeight: 900,
               textAlign: 'center',
               marginBottom: '4rem',
@@ -1078,15 +905,15 @@ export default function EliteHackathonShowcase() {
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '2rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 'clamp(1.5rem, 3vw, 2rem)'
             }}>
               {stats.map((stat, i) => (
                 <div 
                   key={i}
                   className="glass-card"
                   style={{
-                    padding: '2.5rem 2rem',
+                    padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                     textAlign: 'center',
                     animation: 'scaleIn 0.6s ease-out',
                     animationDelay: `${i * 0.1}s`,
@@ -1113,19 +940,18 @@ export default function EliteHackathonShowcase() {
                   }} />
 
                   <div style={{
-                    fontSize: 'clamp(3rem, 8vw, 4.5rem)',
+                    fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
                     fontWeight: 900,
                     color: stat.color,
                     marginBottom: '0.5rem',
                     fontFamily: "'Space Grotesk', sans-serif",
                     textShadow: `0 0 20px ${stat.color}`
                   }}>
-                    {stat.label === "Achievement" ? stat.value : displayStats[i]}
-                    {stat.unit && stat.label !== "Achievement" && <span style={{ fontSize: '1.5rem', opacity: 0.7 }}>{stat.unit}</span>}
+                    {stat.label === "Achievement" ? stat.value : displayStats[i] || 0}
                   </div>
 
                   <div style={{
-                    fontSize: '1.1rem',
+                    fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
                     color: 'rgba(255, 255, 255, 0.7)',
                     fontWeight: 600,
                     textTransform: 'uppercase',
@@ -1134,7 +960,6 @@ export default function EliteHackathonShowcase() {
                     {stat.label}
                   </div>
 
-                  {/* Progress bar for percentage stats */}
                   {stat.label === "Test Coverage" && (
                     <div style={{
                       marginTop: '1.5rem',
@@ -1144,7 +969,7 @@ export default function EliteHackathonShowcase() {
                       overflow: 'hidden'
                     }}>
                       <div style={{
-                        width: `${displayStats[i]}%`,
+                        width: `${displayStats[i] || 0}%`,
                         height: '100%',
                         background: stat.color,
                         transition: 'width 1s ease'
@@ -1157,9 +982,9 @@ export default function EliteHackathonShowcase() {
           </div>
 
           {/* Elite Team Section */}
-          <div style={{ marginBottom: '8rem' }}>
+          <div style={{ marginBottom: 'clamp(4rem, 8vw, 8rem)' }}>
             <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+              fontSize: 'clamp(2rem, 7vw, 4rem)',
               fontWeight: 900,
               textAlign: 'center',
               marginBottom: '4rem',
@@ -1168,21 +993,21 @@ export default function EliteHackathonShowcase() {
               DEVELOPMENT TEAM
             </h2>
 
-            <div style={{
+            <div className="grid-responsive" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2.5rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(1.5rem, 3vw, 2.5rem)'
             }}>
               {teamMembers.map((member, i) => (
                 <div key={i} className="glass-card" style={{
-                  padding: '2.5rem',
+                  padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                   textAlign: 'center',
                   animation: 'fadeInUp 0.8s ease-out',
                   animationDelay: `${i * 0.15}s`,
                   animationFillMode: 'backwards'
                 }}>
                   <div style={{
-                    fontSize: '5rem',
+                    fontSize: 'clamp(3.5rem, 8vw, 5rem)',
                     marginBottom: '1.5rem',
                     animation: 'float 4s ease-in-out infinite',
                     animationDelay: `${i * 0.3}s`,
@@ -1192,7 +1017,7 @@ export default function EliteHackathonShowcase() {
                   </div>
 
                   <h3 style={{
-                    fontSize: '1.8rem',
+                    fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
                     fontWeight: 800,
                     marginBottom: '0.5rem',
                     background: 'linear-gradient(135deg, #fff, #00f0ff)',
@@ -1204,7 +1029,7 @@ export default function EliteHackathonShowcase() {
 
                   <div style={{
                     color: '#00f0ff',
-                    fontSize: '1.1rem',
+                    fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
                     fontWeight: 600,
                     marginBottom: '1rem'
                   }}>
@@ -1213,7 +1038,7 @@ export default function EliteHackathonShowcase() {
 
                   <p style={{
                     color: 'rgba(255, 255, 255, 0.6)',
-                    fontSize: '0.95rem',
+                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
                     marginBottom: '1.5rem',
                     fontFamily: "'JetBrains Mono', monospace"
                   }}>
@@ -1227,7 +1052,10 @@ export default function EliteHackathonShowcase() {
                     justifyContent: 'center'
                   }}>
                     {member.skills.map((skill, idx) => (
-                      <span key={idx} className="tech-badge">
+                      <span key={idx} className="tech-badge" style={{
+                        fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+                        padding: 'clamp(0.35rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem)'
+                      }}>
                         {skill}
                       </span>
                     ))}
@@ -1243,13 +1071,13 @@ export default function EliteHackathonShowcase() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        padding: '0.8rem 1.5rem',
+                        padding: 'clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 3vw, 1.5rem)',
                         background: 'rgba(0, 240, 255, 0.1)',
                         border: '2px solid rgba(0, 240, 255, 0.3)',
                         borderRadius: '999px',
                         color: '#00f0ff',
                         textDecoration: 'none',
-                        fontSize: '0.95rem',
+                        fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
                         fontWeight: 600,
                         transition: 'all 0.3s'
                       }}
@@ -1272,9 +1100,9 @@ export default function EliteHackathonShowcase() {
           </div>
 
           {/* Battle Log - Phases */}
-          <div style={{ marginBottom: '8rem' }}>
+          <div style={{ marginBottom: 'clamp(4rem, 8vw, 8rem)' }}>
             <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+              fontSize: 'clamp(2rem, 7vw, 4rem)',
               fontWeight: 900,
               textAlign: 'center',
               marginBottom: '4rem',
@@ -1283,10 +1111,10 @@ export default function EliteHackathonShowcase() {
               24-HOUR BATTLE LOG
             </h2>
 
-            <div style={{
+            <div className="grid-responsive" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-              gap: '2.5rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: 'clamp(1.5rem, 3vw, 2.5rem)'
             }}>
               {phases.map((phase, i) => (
                 <div
@@ -1296,7 +1124,7 @@ export default function EliteHackathonShowcase() {
                   onMouseEnter={() => setHoveredId(phase.id)}
                   onMouseLeave={() => setHoveredId(null)}
                   style={{
-                    padding: '2.5rem',
+                    padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                     cursor: 'pointer',
                     animation: 'slideInRight 0.8s ease-out',
                     animationDelay: `${i * 0.15}s`,
@@ -1308,18 +1136,21 @@ export default function EliteHackathonShowcase() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    marginBottom: '2rem'
+                    marginBottom: '2rem',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
                   }}>
                     <div style={{
-                      width: '80px',
-                      height: '80px',
+                      width: 'clamp(60px, 15vw, 80px)',
+                      height: 'clamp(60px, 15vw, 80px)',
                       borderRadius: '50%',
                       background: phase.gradient,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       boxShadow: hoveredId === phase.id ? `0 0 40px ${phase.color}` : 'none',
-                      transition: 'all 0.4s'
+                      transition: 'all 0.4s',
+                      flexShrink: 0
                     }}>
                       <phase.icon size={40} style={{ color: '#000' }} />
                     </div>
@@ -1329,7 +1160,7 @@ export default function EliteHackathonShowcase() {
                       background: `${phase.color}20`,
                       border: `2px solid ${phase.color}`,
                       borderRadius: '999px',
-                      fontSize: '1rem',
+                      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                       fontWeight: 700,
                       color: phase.color,
                       fontFamily: "'JetBrains Mono', monospace"
@@ -1339,7 +1170,7 @@ export default function EliteHackathonShowcase() {
                   </div>
 
                   <h3 style={{
-                    fontSize: '1.8rem',
+                    fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
                     fontWeight: 800,
                     marginBottom: '1rem',
                     color: '#fff'
@@ -1349,7 +1180,7 @@ export default function EliteHackathonShowcase() {
 
                   <p style={{
                     color: 'rgba(255, 255, 255, 0.7)',
-                    fontSize: '1rem',
+                    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                     lineHeight: 1.6,
                     marginBottom: '1.5rem'
                   }}>
@@ -1366,75 +1197,42 @@ export default function EliteHackathonShowcase() {
                     borderRadius: '12px'
                   }}>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ color: phase.color, fontSize: '1.8rem', fontWeight: 800 }}>
+                      <div style={{ color: phase.color, fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800 }}>
                         {phase.metrics.linesOfCode}
                       </div>
-                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>
+                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)' }}>
                         Lines
                       </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ color: phase.color, fontSize: '1.8rem', fontWeight: 800 }}>
+                      <div style={{ color: phase.color, fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800 }}>
                         {phase.metrics.apis}
                       </div>
-                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>
+                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)' }}>
                         APIs
                       </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ color: phase.color, fontSize: '1.8rem', fontWeight: 800 }}>
+                      <div style={{ color: phase.color, fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800 }}>
                         {phase.metrics.tests}
                       </div>
-                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.8rem' }}>
+                      <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)' }}>
                         Tests
                       </div>
                     </div>
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '0.5rem',
-                    marginBottom: '1.5rem'
-                  }}>
-                    {phase.techUsed.slice(0, 3).map((tech, idx) => (
-                      <span key={idx} style={{
-                        padding: '0.4rem 0.8rem',
-                        background: `${phase.color}15`,
-                        border: `1px solid ${phase.color}40`,
-                        borderRadius: '6px',
-                        fontSize: '0.85rem',
-                        color: phase.color,
-                        fontFamily: "'JetBrains Mono', monospace"
-                      }}>
-                        {tech}
-                      </span>
-                    ))}
-                    {phase.techUsed.length > 3 && (
-                      <span style={{
-                        padding: '0.4rem 0.8rem',
-                        background: `${phase.color}15`,
-                        border: `1px solid ${phase.color}40`,
-                        borderRadius: '6px',
-                        fontSize: '0.85rem',
-                        color: phase.color
-                      }}>
-                        +{phase.techUsed.length - 3}
-                      </span>
-                    )}
                   </div>
 
                   <button
                     onClick={() => setActivePhase(phase.id)}
                     style={{
                       width: '100%',
-                      padding: '1rem',
+                      padding: 'clamp(0.8rem, 2vw, 1rem)',
                       background: 'transparent',
                       border: `2px solid ${phase.color}`,
                       borderRadius: '12px',
                       color: phase.color,
                       fontWeight: 700,
-                      fontSize: '1rem',
+                      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
                       cursor: 'pointer',
                       transition: 'all 0.3s',
                       display: 'flex',
@@ -1460,9 +1258,9 @@ export default function EliteHackathonShowcase() {
           </div>
 
           {/* Tech Stack */}
-          <div style={{ marginBottom: '8rem' }}>
+          <div style={{ marginBottom: 'clamp(4rem, 8vw, 8rem)' }}>
             <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+              fontSize: 'clamp(2rem, 7vw, 4rem)',
               fontWeight: 900,
               textAlign: 'center',
               marginBottom: '4rem',
@@ -1471,14 +1269,14 @@ export default function EliteHackathonShowcase() {
               TECHNOLOGY ARSENAL
             </h2>
 
-            <div style={{
+            <div className="grid-responsive" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(1.5rem, 3vw, 2rem)'
             }}>
               {techStack.map((tech, i) => (
                 <div key={i} className="glass-card" style={{
-                  padding: '2.5rem',
+                  padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                   animation: 'scaleIn 0.8s ease-out',
                   animationDelay: `${i * 0.1}s`,
                   animationFillMode: 'backwards'
@@ -1490,20 +1288,21 @@ export default function EliteHackathonShowcase() {
                     marginBottom: '1.5rem'
                   }}>
                     <div style={{
-                      width: '70px',
-                      height: '70px',
+                      width: 'clamp(50px, 12vw, 70px)',
+                      height: 'clamp(50px, 12vw, 70px)',
                       borderRadius: '16px',
                       background: `${tech.color}20`,
                       border: `2px solid ${tech.color}40`,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      flexShrink: 0
                     }}>
                       <tech.icon size={36} style={{ color: tech.color }} />
                     </div>
 
                     <div style={{
-                      fontSize: '2rem',
+                      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
                       fontWeight: 800,
                       color: tech.color,
                       fontFamily: "'Space Grotesk', sans-serif"
@@ -1513,7 +1312,7 @@ export default function EliteHackathonShowcase() {
                   </div>
 
                   <h3 style={{
-                    fontSize: '1.5rem',
+                    fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
                     fontWeight: 800,
                     marginBottom: '0.5rem',
                     color: '#fff'
@@ -1523,7 +1322,7 @@ export default function EliteHackathonShowcase() {
 
                   <p style={{
                     color: 'rgba(255, 255, 255, 0.6)',
-                    fontSize: '0.95rem',
+                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
                     marginBottom: '1.5rem'
                   }}>
                     {tech.desc}
@@ -1552,11 +1351,11 @@ export default function EliteHackathonShowcase() {
                   }}>
                     {tech.features.map((feature, idx) => (
                       <span key={idx} style={{
-                        padding: '0.4rem 0.8rem',
+                        padding: 'clamp(0.3rem, 1vw, 0.4rem) clamp(0.6rem, 1.5vw, 0.8rem)',
                         background: 'rgba(0, 0, 0, 0.4)',
                         border: `1px solid ${tech.color}30`,
                         borderRadius: '6px',
-                        fontSize: '0.8rem',
+                        fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)',
                         color: 'rgba(255, 255, 255, 0.8)',
                         fontFamily: "'JetBrains Mono', monospace"
                       }}>
@@ -1569,104 +1368,13 @@ export default function EliteHackathonShowcase() {
             </div>
           </div>
 
-          {/* Timeline */}
-          <div style={{ marginBottom: '8rem' }}>
-            <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
-              fontWeight: 900,
-              textAlign: 'center',
-              marginBottom: '4rem',
-              fontFamily: "'Space Grotesk', sans-serif"
-            }}>
-              MISSION TIMELINE
-            </h2>
-
-            <div style={{
-              position: 'relative',
-              maxWidth: '900px',
-              margin: '0 auto'
-            }}>
-              {/* Vertical line */}
-              <div style={{
-                position: 'absolute',
-                left: '50%',
-                top: 0,
-                bottom: 0,
-                width: '4px',
-                background: 'linear-gradient(180deg, #00f0ff, #a78bfa, #ff61d2, #10b981)',
-                transform: 'translateX(-50%)',
-                borderRadius: '2px'
-              }} />
-
-              {milestones.map((milestone, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginBottom: '3rem',
-                  position: 'relative',
-                  flexDirection: i % 2 === 0 ? 'row' : 'row-reverse'
-                }}>
-                  <div style={{
-                    width: '50%',
-                    padding: i % 2 === 0 ? '0 3rem 0 0' : '0 0 0 3rem',
-                    textAlign: i % 2 === 0 ? 'right' : 'left'
-                  }}>
-                    <div className="glass-card" style={{
-                      padding: '1.5rem',
-                      animation: 'fadeInUp 0.8s ease-out',
-                      animationDelay: `${i * 0.1}s`,
-                      animationFillMode: 'backwards'
-                    }}>
-                      <div style={{
-                        fontSize: '1.2rem',
-                        fontWeight: 800,
-                        color: i % 2 === 0 ? '#00f0ff' : '#ff61d2',
-                        marginBottom: '0.5rem',
-                        fontFamily: "'JetBrains Mono', monospace"
-                      }}>
-                        {milestone.time}
-                      </div>
-                      <div style={{
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        fontSize: '1rem'
-                      }}>
-                        {milestone.event}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Center dot */}
-                  <div style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    background: i % 2 === 0 ? '#00f0ff' : '#ff61d2',
-                    border: '4px solid #000',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'absolute',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    zIndex: 10,
-                    boxShadow: `0 0 30px ${i % 2 === 0 ? '#00f0ff' : '#ff61d2'}`
-                  }}>
-                    <milestone.icon size={24} style={{ color: '#000' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* CTA Section */}
           <div className="glass-card holographic" style={{
-            padding: '5rem 3rem',
+            padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem)',
             textAlign: 'center',
             marginBottom: '4rem',
             position: 'relative'
           }}>
-            <div className="scanline" />
-
             <div style={{
               display: 'inline-block',
               padding: '0.5rem 1.5rem',
@@ -1674,7 +1382,7 @@ export default function EliteHackathonShowcase() {
               border: '2px solid rgba(0, 240, 255, 0.5)',
               borderRadius: '999px',
               marginBottom: '2rem',
-              fontSize: '0.9rem',
+              fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
               fontWeight: 700,
               color: '#00f0ff',
               textTransform: 'uppercase',
@@ -1684,7 +1392,7 @@ export default function EliteHackathonShowcase() {
             </div>
 
             <h2 className="neon-text" style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+              fontSize: 'clamp(2rem, 7vw, 4.5rem)',
               fontWeight: 900,
               marginBottom: '1.5rem',
               fontFamily: "'Space Grotesk', sans-serif"
@@ -1693,7 +1401,7 @@ export default function EliteHackathonShowcase() {
             </h2>
 
             <p style={{
-              fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
+              fontSize: 'clamp(1rem, 2.5vw, 1.4rem)',
               color: 'rgba(255, 255, 255, 0.7)',
               maxWidth: '800px',
               margin: '0 auto 3rem',
@@ -1713,13 +1421,13 @@ export default function EliteHackathonShowcase() {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  padding: '1.2rem 3rem',
+                  padding: 'clamp(1rem, 2.5vw, 1.2rem) clamp(2rem, 5vw, 3rem)',
                   background: 'rgba(0, 240, 255, 0.15)',
                   border: '2px solid rgba(0, 240, 255, 0.6)',
                   borderRadius: '12px',
                   color: '#00f0ff',
                   fontWeight: 700,
-                  fontSize: '1.1rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1745,12 +1453,12 @@ export default function EliteHackathonShowcase() {
               <a
                 href="mailto:g.sivasatyasaibhagavan@gmail.com"
                 style={{
-                  padding: '1.2rem 3rem',
+                  padding: 'clamp(1rem, 2.5vw, 1.2rem) clamp(2rem, 5vw, 3rem)',
                   background: 'linear-gradient(135deg, #00f0ff, #a78bfa)',
                   borderRadius: '12px',
                   color: '#000',
                   fontWeight: 800,
-                  fontSize: '1.1rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1886,8 +1594,9 @@ export default function EliteHackathonShowcase() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem',
-            animation: 'fadeInUp 0.3s ease-out'
+            padding: 'clamp(1rem, 3vw, 2rem)',
+            animation: 'fadeInUp 0.3s ease-out',
+            overflowY: 'auto'
           }}
         >
           <div
@@ -1898,7 +1607,7 @@ export default function EliteHackathonShowcase() {
               width: '95%',
               maxHeight: '90vh',
               overflowY: 'auto',
-              padding: '3rem',
+              padding: 'clamp(2rem, 5vw, 3rem)',
               position: 'relative',
               animation: 'scaleIn 0.4s ease-out'
             }}
@@ -1919,7 +1628,8 @@ export default function EliteHackathonShowcase() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'all 0.3s'
+                transition: 'all 0.3s',
+                zIndex: 10
               }}
             >
               <X size={24} />
@@ -1934,8 +1644,8 @@ export default function EliteHackathonShowcase() {
                     marginBottom: '3rem'
                   }}>
                     <div style={{
-                      width: '120px',
-                      height: '120px',
+                      width: 'clamp(80px, 20vw, 120px)',
+                      height: 'clamp(80px, 20vw, 120px)',
                       margin: '0 auto 2rem',
                       borderRadius: '50%',
                       background: phase.gradient,
@@ -1948,7 +1658,7 @@ export default function EliteHackathonShowcase() {
                     </div>
 
                     <div style={{
-                      fontSize: '1.3rem',
+                      fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
                       color: phase.color,
                       fontWeight: 700,
                       marginBottom: '1rem',
@@ -1958,7 +1668,7 @@ export default function EliteHackathonShowcase() {
                     </div>
 
                     <h2 style={{
-                      fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                      fontSize: 'clamp(2rem, 5vw, 4rem)',
                       fontWeight: 900,
                       marginBottom: '1rem',
                       background: `linear-gradient(135deg, ${phase.color}, #ffffff)`,
@@ -1969,7 +1679,7 @@ export default function EliteHackathonShowcase() {
                     </h2>
 
                     <p style={{
-                      fontSize: '1.2rem',
+                      fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                       color: 'rgba(255, 255, 255, 0.8)',
                       lineHeight: 1.6
                     }}>
@@ -1980,7 +1690,7 @@ export default function EliteHackathonShowcase() {
                   {/* Achievements */}
                   <div style={{ marginBottom: '3rem' }}>
                     <h3 style={{
-                      fontSize: '1.8rem',
+                      fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
                       color: phase.color,
                       marginBottom: '1.5rem',
                       fontWeight: 800
@@ -2003,7 +1713,7 @@ export default function EliteHackathonShowcase() {
                           gap: '1rem'
                         }}>
                           <CheckCircle2 size={24} style={{ color: phase.color, flexShrink: 0 }} />
-                          <span style={{ color: 'rgba(255, 255, 255, 0.9)' }}>{ach}</span>
+                          <span style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>{ach}</span>
                         </div>
                       ))}
                     </div>
@@ -2012,7 +1722,7 @@ export default function EliteHackathonShowcase() {
                   {/* Tech Stack */}
                   <div style={{ marginBottom: '3rem' }}>
                     <h3 style={{
-                      fontSize: '1.8rem',
+                      fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
                       color: phase.color,
                       marginBottom: '1.5rem',
                       fontWeight: 800
@@ -2027,7 +1737,8 @@ export default function EliteHackathonShowcase() {
                       {phase.techUsed.map((tech, idx) => (
                         <span key={idx} className="tech-badge" style={{
                           borderColor: phase.color,
-                          color: phase.color
+                          color: phase.color,
+                          fontSize: 'clamp(0.8rem, 2vw, 0.9rem)'
                         }}>
                           {tech}
                         </span>
@@ -2049,7 +1760,7 @@ export default function EliteHackathonShowcase() {
                     }}>
                       <h4 style={{
                         color: '#ef4444',
-                        fontSize: '1.5rem',
+                        fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
                         marginBottom: '1rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -2062,7 +1773,7 @@ export default function EliteHackathonShowcase() {
                       <p style={{ 
                         color: 'rgba(255, 255, 255, 0.8)', 
                         lineHeight: 1.6,
-                        fontSize: '1.05rem'
+                        fontSize: 'clamp(0.9rem, 2vw, 1.05rem)'
                       }}>
                         {phase.challenges}
                       </p>
@@ -2076,7 +1787,7 @@ export default function EliteHackathonShowcase() {
                     }}>
                       <h4 style={{
                         color: '#10b981',
-                        fontSize: '1.5rem',
+                        fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
                         marginBottom: '1rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -2089,7 +1800,7 @@ export default function EliteHackathonShowcase() {
                       <p style={{ 
                         color: 'rgba(255, 255, 255, 0.8)', 
                         lineHeight: 1.6,
-                        fontSize: '1.05rem'
+                        fontSize: 'clamp(0.9rem, 2vw, 1.05rem)'
                       }}>
                         {phase.solutions}
                       </p>

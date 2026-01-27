@@ -4,7 +4,8 @@ import {
   CheckCircle2, Layers, Sparkles, Zap, Github, Trophy,
   Target, Flame, Star, Rocket, Clock, MapPin, Calendar,
   TrendingUp, Shield, Crown, Hexagon, Activity, Users,
-  ChevronRight, Cpu, GitBranch, Box, Boxes, Globe
+  ChevronRight, Cpu, GitBranch, Box, Boxes, Globe,
+  Briefcase, Mail, Download, Share2, Eye, Heart
 } from 'lucide-react';
 
 const internships = [
@@ -18,7 +19,7 @@ const internships = [
     badge: "Full-Stack Pro",
     rarity: "LEGENDARY",
     certId: "1bwbNlc9mdPYQOIyUpoiBIOhpyxaMBvbC",
-    color: "#00f0ff",
+    color: "#00f5ff",
     secondaryColor: "#8b5cf6",
     accentColor: "#f59e0b",
     icon: Code,
@@ -108,7 +109,7 @@ const internships = [
     badge: "Data Specialist",
     rarity: "EPIC",
     certId: "1yQQqBf32o8d3sYlheDCdaLTKj5_hepfY",
-    color: "#00f0ff",
+    color: "#00f5ff",
     secondaryColor: "#10b981",
     accentColor: "#f472b6",
     icon: Database,
@@ -145,16 +146,16 @@ const internships = [
   }
 ];
 
-export default function EliteInternships() {
+export default function EnterpriseInternships() {
   const [hoveredId, setHoveredId] = useState(null);
   const [activeCert, setActiveCert] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('ALL');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [viewMode, setViewMode] = useState('grid');
   const canvasRef = useRef(null);
-  const parallaxRef = useRef(null);
 
-  // Advanced mouse tracking for 3D effects
+  // Mouse tracking for parallax
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({
@@ -166,7 +167,7 @@ export default function EliteInternships() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Scroll progress tracking
+  // Scroll progress
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -177,7 +178,7 @@ export default function EliteInternships() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Developer-themed Matrix code rain effect
+  // Advanced particle system
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -190,53 +191,18 @@ export default function EliteInternships() {
     };
     resize();
 
-    // Matrix-style code rain
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>{}[]()=+-*/@#$%&';
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-    
-    // Binary particles
-    class BinaryParticle {
+    class Particle {
       constructor() {
         this.reset();
       }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.speed = Math.random() * 2 + 0.5;
-        this.value = Math.random() > 0.5 ? '1' : '0';
-        this.opacity = Math.random() * 0.5 + 0.3;
-        this.color = ['#00f0ff', '#a78bfa', '#ec4899'][Math.floor(Math.random() * 3)];
-      }
-      update() {
-        this.y += this.speed;
-        if (this.y > canvas.height) {
-          this.y = 0;
-          this.x = Math.random() * canvas.width;
-        }
-      }
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.font = '12px "Fira Code", monospace';
-        ctx.fillText(this.value, this.x, this.y);
-        ctx.globalAlpha = 1;
-      }
-    }
-
-    const binaryParticles = Array.from({ length: 50 }, () => new BinaryParticle());
-
-    // Code symbols floating
-    class CodeSymbol {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.symbol = characters.charAt(Math.floor(Math.random() * characters.length));
         this.vx = (Math.random() - 0.5) * 0.5;
         this.vy = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.4 + 0.1;
-        this.color = ['#00f0ff', '#a78bfa', '#10b981'][Math.floor(Math.random() * 3)];
+        this.size = Math.random() * 2 + 1;
+        this.color = ['#00f5ff', '#a78bfa', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)];
+        this.opacity = Math.random() * 0.5 + 0.2;
       }
       update() {
         this.x += this.vx;
@@ -247,66 +213,39 @@ export default function EliteInternships() {
       draw() {
         ctx.fillStyle = this.color;
         ctx.globalAlpha = this.opacity;
-        ctx.font = '20px "Fira Code", monospace';
-        ctx.fillText(this.symbol, this.x, this.y);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
         ctx.globalAlpha = 1;
       }
     }
 
-    const codeSymbols = Array.from({ length: 30 }, () => new CodeSymbol());
+    const particles = Array.from({ length: 100 }, () => new Particle());
 
     const animate = () => {
-      // Fade effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Matrix rain effect
-      ctx.fillStyle = '#00f0ff';
-      ctx.font = fontSize + 'px "Fira Code", monospace';
-      
-      for (let i = 0; i < drops.length; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-        
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = i % 3 === 0 ? '#00f0ff' : i % 3 === 1 ? '#a78bfa' : '#10b981';
-        ctx.fillText(text, x, y);
-        
-        if (y > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-      ctx.globalAlpha = 1;
-
-      // Binary particles
-      binaryParticles.forEach(p => {
+      particles.forEach(p => {
         p.update();
         p.draw();
       });
 
-      // Floating code symbols
-      codeSymbols.forEach(s => {
-        s.update();
-        s.draw();
-      });
-
-      // Draw connection lines between nearby symbols
-      codeSymbols.forEach((s1, i) => {
-        codeSymbols.forEach((s2, j) => {
-          if (i < j) {
-            const dx = s1.x - s2.x;
-            const dy = s1.y - s2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 150) {
-              ctx.strokeStyle = `rgba(0, 240, 255, ${0.1 * (1 - dist / 150)})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(s1.x, s1.y);
-              ctx.lineTo(s2.x, s2.y);
-              ctx.stroke();
-            }
+      // Connect nearby particles
+      particles.forEach((p1, i) => {
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.strokeStyle = p1.color;
+            ctx.globalAlpha = 0.1 * (1 - dist / 120);
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
           }
         });
       });
@@ -329,9 +268,9 @@ export default function EliteInternships() {
     const colors = {
       'LEGENDARY': '#ffd700',
       'EPIC': '#a78bfa',
-      'RARE': '#00f0ff'
+      'RARE': '#00f5ff'
     };
-    return colors[rarity] || '#00f0ff';
+    return colors[rarity] || '#00f5ff';
   };
 
   const filteredInternships = selectedFilter === 'ALL'
@@ -341,7 +280,7 @@ export default function EliteInternships() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
         
         * {
           margin: 0;
@@ -349,38 +288,25 @@ export default function EliteInternships() {
           box-sizing: border-box;
         }
 
-        :root {
-          --neon-cyan: #00f0ff;
-          --neon-purple: #a78bfa;
-          --neon-pink: #ec4899;
-          --neon-gold: #ffd700;
-          --neon-green: #10b981;
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(80px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-100px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(100px); }
-          to { opacity: 1; transform: translateX(0); }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-20px) rotate(5deg); }
-          66% { transform: translateY(-10px) rotate(-5deg); }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
         }
 
         @keyframes pulse {
@@ -388,1246 +314,840 @@ export default function EliteInternships() {
           50% { opacity: 0.9; transform: scale(1.05); }
         }
 
-        @keyframes glow {
-          0%, 100% { 
-            box-shadow: 0 0 30px currentColor,
-                        0 0 60px currentColor,
-                        inset 0 0 20px currentColor;
-          }
-          50% { 
-            box-shadow: 0 0 50px currentColor,
-                        0 0 100px currentColor,
-                        inset 0 0 40px currentColor;
-          }
-        }
-
         @keyframes shimmer {
           0% { background-position: -1000px 0; }
           100% { background-position: 1000px 0; }
         }
 
-        @keyframes rotate3d {
-          from { transform: rotateY(0deg) rotateX(0deg); }
-          to { transform: rotateY(360deg) rotateX(360deg); }
+        @keyframes rotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
-        @keyframes scanline {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
         }
 
-        @keyframes glitch {
-          0% { transform: translate(0); }
-          20% { transform: translate(-2px, 2px); }
-          40% { transform: translate(-2px, -2px); }
-          60% { transform: translate(2px, 2px); }
-          80% { transform: translate(2px, -2px); }
-          100% { transform: translate(0); }
-        }
-
-        @keyframes hologram {
-          0%, 100% { opacity: 0.8; transform: translateZ(0); }
-          50% { opacity: 1; transform: translateZ(20px); }
-        }
-
-        @keyframes morph {
-          0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-          50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(30px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 
+            0 8px 32px 0 rgba(0, 0, 0, 0.37),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
         }
 
         .intern-card {
           position: relative;
-          background: linear-gradient(135deg, 
-            rgba(0, 0, 0, 0.98) 0%, 
-            rgba(10, 10, 30, 0.95) 50%, 
-            rgba(0, 0, 0, 0.98) 100%
-          );
-          border: 3px solid;
-          border-radius: 32px;
           overflow: hidden;
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-          backdrop-filter: blur(20px);
+          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
           cursor: pointer;
           transform-style: preserve-3d;
-          perspective: 1000px;
-        }
-
-        .intern-card:hover {
-          transform: translateY(-30px) scale(1.04) rotateX(5deg);
-          box-shadow: 
-            0 40px 100px currentColor,
-            0 0 150px currentColor;
         }
 
         .intern-card::before {
           content: '';
           position: absolute;
-          inset: -2px;
-          background: linear-gradient(45deg, 
-            transparent 30%, 
-            currentColor 50%, 
-            transparent 70%
-          );
-          animation: scanline 8s linear infinite;
-          pointer-events: none;
-          z-index: 1;
-          opacity: 0.1;
-        }
-
-        .intern-card::after {
-          content: '';
-          position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, 
-            transparent, 
-            currentColor, 
-            transparent
-          );
-          animation: shimmer 4s infinite;
-          pointer-events: none;
-          opacity: 0.05;
-        }
-
-        .card-3d-layer {
-          transform: translateZ(30px);
-          transition: transform 0.6s;
-        }
-
-        .intern-card:hover .card-3d-layer {
-          transform: translateZ(60px);
-        }
-
-        .tech-pill {
-          position: relative;
-          background: rgba(0, 0, 0, 0.9);
-          border: 2.5px solid;
-          padding: 0.7rem 1.3rem;
-          border-radius: 999px;
-          font-family: 'Fira Code', monospace;
-          font-size: 0.9rem;
-          font-weight: 700;
-          transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-          cursor: pointer;
-          overflow: hidden;
-          transform-style: preserve-3d;
-        }
-
-        .tech-pill::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, 
-            transparent, 
-            currentColor, 
-            transparent
-          );
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
           transition: left 0.6s;
-          opacity: 0.1;
         }
 
-        .tech-pill:hover {
-          transform: translateY(-6px) scale(1.12) rotateZ(-2deg);
-          box-shadow: 
-            0 10px 30px currentColor,
-            0 0 50px currentColor;
-        }
-
-        .tech-pill:hover::before {
+        .intern-card:hover::before {
           left: 100%;
         }
 
-        .rarity-badge {
-          position: absolute;
-          top: 1.5rem;
-          right: 1.5rem;
-          padding: 0.7rem 1.5rem;
-          border-radius: 999px;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 900;
-          font-size: 0.8rem;
-          letter-spacing: 2px;
-          border: 3px solid;
-          animation: pulse 3s ease-in-out infinite, glow 2s ease-in-out infinite;
-          z-index: 20;
-          backdrop-filter: blur(15px);
-          transform-style: preserve-3d;
-          box-shadow: 0 0 40px currentColor;
+        .intern-card:hover {
+          transform: translateY(-20px) scale(1.02);
         }
 
-        .impact-metric {
-          background: rgba(0, 0, 0, 0.7);
-          border: 2.5px solid;
-          border-radius: 20px;
-          padding: 1.5rem;
-          text-align: center;
-          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-          transform-style: preserve-3d;
-          position: relative;
-          overflow: hidden;
+        .gradient-text {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: gradient-shift 3s ease infinite;
         }
 
-        .impact-metric::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, currentColor, transparent);
-          opacity: 0;
-          transition: opacity 0.5s;
+        .tech-badge {
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .impact-metric:hover {
-          transform: translateY(-12px) scale(1.08) rotateZ(3deg);
-          box-shadow: 
-            0 15px 40px currentColor,
-            0 0 80px currentColor;
+        .tech-badge:hover {
+          transform: translateY(-4px) scale(1.05);
         }
 
-        .impact-metric:hover::before {
-          opacity: 0.1;
+        ::-webkit-scrollbar {
+          width: 10px;
         }
 
-        .hexagon-icon {
-          clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-          background: linear-gradient(135deg, currentColor, transparent);
-          animation: rotate3d 30s linear infinite, morph 8s ease-in-out infinite;
-          filter: drop-shadow(0 0 20px currentColor);
+        ::-webkit-scrollbar-track {
+          background: #000;
         }
 
-        .filter-btn {
-          background: rgba(0, 0, 0, 0.85);
-          border: 3px solid;
-          padding: 1rem 2.2rem;
-          border-radius: 999px;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 900;
-          cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-          font-size: 0.95rem;
-          letter-spacing: 1.5px;
-          position: relative;
-          overflow: hidden;
-          transform-style: preserve-3d;
-        }
-
-        .filter-btn::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: currentColor;
-          opacity: 0;
-          transition: opacity 0.4s;
-        }
-
-        .filter-btn:hover {
-          transform: scale(1.12) translateY(-4px);
-          box-shadow: 0 0 50px currentColor, 0 10px 30px currentColor;
-        }
-
-        .filter-btn.active {
-          background: currentColor;
-          color: black;
-          box-shadow: 0 0 80px currentColor, 0 0 150px currentColor;
-          animation: glow 2s ease-in-out infinite;
-        }
-
-        .progress-bar {
-          position: fixed;
-          top: 0;
-          left: 0;
-          height: 5px;
-          background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-          z-index: 9999;
-          transition: width 0.3s;
-          box-shadow: 0 0 20px currentColor;
-        }
-
-        .cert-preview {
-          position: relative;
-          overflow: hidden;
-          cursor: pointer;
-          transition: all 0.8s;
-        }
-
-        .cert-preview::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, 
-            transparent 0%, 
-            rgba(255, 255, 255, 0.1) 50%, 
-            transparent 100%
-          );
-          transform: translateX(-100%);
-          transition: transform 0.8s;
-        }
-
-        .cert-preview:hover::before {
-          transform: translateX(100%);
-        }
-
-        .hologram-effect {
-          animation: hologram 3s ease-in-out infinite;
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #667eea, #764ba2);
+          border-radius: 10px;
         }
 
         @media (max-width: 768px) {
-          .intern-card { 
-            max-width: 100%; 
-            margin: 0 auto;
-          }
-          .cert-preview { 
-            height: 220px !important; 
-          }
-          .impact-metrics-grid { 
-            grid-template-columns: 1fr !important; 
-          }
           .intern-card:hover {
-            transform: translateY(-15px) scale(1.02);
+            transform: translateY(-10px) scale(1.01);
           }
-        }
-
-        @media (max-width: 480px) {
-          .cert-preview { 
-            height: 200px !important; 
-          }
-          .tech-pill { 
-            padding: 0.6rem 1rem; 
-            font-size: 0.85rem; 
-          }
-        }
-
-        .glass-morphism {
-          background: rgba(0, 0, 0, 0.4);
-          backdrop-filter: blur(30px);
-          border: 1px solid currentColor;
-        }
-
-        .perspective-container {
-          perspective: 2000px;
-          transform-style: preserve-3d;
         }
       `}</style>
 
       <div style={{
         minHeight: '100vh',
-        background: '#000000',
-        color: '#e0e0ff',
+        background: 'radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)',
+        color: '#fff',
         position: 'relative',
-        overflow: 'hidden',
-        padding: '6rem 1rem 7rem',
-        fontFamily: "'Inter', sans-serif"
+        overflow: 'hidden'
       }}>
-        {/* Scroll Progress Bar */}
-        <div 
-          className="progress-bar"
-          style={{ width: `${scrollProgress}%` }}
-        />
-
-        {/* Developer Grid Pattern */}
-        <div 
-          ref={parallaxRef}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `
-              linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(rgba(167, 139, 250, 0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(167, 139, 250, 0.02) 1px, transparent 1px)
-            `,
-            backgroundSize: '100px 100px, 100px 100px, 20px 20px, 20px 20px',
-            opacity: 0.5,
-            pointerEvents: 'none',
-            transform: `translateY(${scrollProgress * 0.5}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        />
-
-        {/* Circuit Board Pattern */}
-        <svg style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
+        {/* Progress Bar */}
+        <div style={{
+          position: 'fixed',
           top: 0,
           left: 0,
-          opacity: 0.08,
-          pointerEvents: 'none'
-        }}>
-          <defs>
-            <pattern id="circuit" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              <circle cx="10" cy="10" r="2" fill="#00f0ff" />
-              <circle cx="190" cy="190" r="2" fill="#a78bfa" />
-              <circle cx="100" cy="50" r="3" fill="#ec4899" />
-              <line x1="10" y1="10" x2="100" y2="50" stroke="#00f0ff" strokeWidth="0.5" />
-              <line x1="100" y1="50" x2="190" y2="190" stroke="#a78bfa" strokeWidth="0.5" />
-              <rect x="95" y="45" width="10" height="10" fill="none" stroke="#10b981" strokeWidth="0.5" />
-              <circle cx="150" cy="150" r="2" fill="#10b981" />
-              <line x1="100" y1="50" x2="150" y2="150" stroke="#ec4899" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#circuit)" />
-        </svg>
+          width: `${scrollProgress}%`,
+          height: '3px',
+          background: 'linear-gradient(90deg, #667eea, #764ba2, #f093fb)',
+          zIndex: 10000,
+          transition: 'width 0.1s',
+          boxShadow: '0 0 20px #667eea'
+        }} />
 
-        {/* Matrix-style code rain canvas */}
+        {/* Particle Canvas */}
         <canvas
           ref={canvasRef}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             inset: 0,
             pointerEvents: 'none',
             zIndex: 1,
-            opacity: 0.7
+            opacity: 0.4
           }}
         />
 
-        {/* Developer Terminal Lines */}
-        {[...Array(6)].map((_, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: `${15 + i * 15}%`,
-            height: '1px',
-            background: `linear-gradient(90deg, transparent, ${i % 3 === 0 ? '#00f0ff' : i % 3 === 1 ? '#a78bfa' : '#10b981'}40, transparent)`,
-            opacity: 0.3,
-            pointerEvents: 'none'
-          }} />
-        ))}
+        {/* Gradient Orbs */}
+        <div style={{
+          position: 'absolute',
+          top: '10%',
+          left: `${50 + mousePosition.x * 5}%`,
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%)',
+          borderRadius: '50%',
+          filter: 'blur(100px)',
+          pointerEvents: 'none',
+          transition: 'all 0.3s ease-out'
+        }} />
 
-        {/* Floating Code Brackets */}
-        {[
-          { symbol: '<>', color: '#00f0ff', top: '10%', left: '5%', rotate: 45 },
-          { symbol: '{}', color: '#a78bfa', top: '25%', right: '8%', rotate: -30 },
-          { symbol: '[]', color: '#ec4899', top: '50%', left: '3%', rotate: 15 },
-          { symbol: '()', color: '#10b981', bottom: '20%', right: '5%', rotate: -45 },
-          { symbol: '</>', color: '#fbbf24', top: '70%', right: '10%', rotate: 60 },
-          { symbol: '=>', color: '#00f0ff', bottom: '30%', left: '7%', rotate: -15 }
-        ].map((item, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            ...item,
-            fontSize: '80px',
-            fontFamily: "'Fira Code', monospace",
-            fontWeight: 700,
-            color: item.color,
-            opacity: 0.06,
-            pointerEvents: 'none',
-            zIndex: 0,
-            transform: `rotate(${item.rotate}deg)`,
-            animation: `float ${8 + i * 2}s ease-in-out infinite`,
-            animationDelay: `${i * 0.5}s`,
-            textShadow: `0 0 30px ${item.color}`
-          }}>
-            {item.symbol}
-          </div>
-        ))}
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: `${50 + mousePosition.y * 5}%`,
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(circle, rgba(118, 75, 162, 0.12) 0%, transparent 70%)',
+          borderRadius: '50%',
+          filter: 'blur(80px)',
+          pointerEvents: 'none',
+          transition: 'all 0.3s ease-out'
+        }} />
 
-        {/* Binary Code Streams */}
-        {[...Array(8)].map((_, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            top: `${i * 12}%`,
-            left: `${5 + i * 10}%`,
-            width: '2px',
-            height: '200px',
-            background: `linear-gradient(to bottom, transparent, ${i % 2 === 0 ? '#00f0ff' : '#a78bfa'}20, transparent)`,
-            opacity: 0.3,
-            transform: 'rotate(25deg)',
-            pointerEvents: 'none',
-            animation: `slideUp ${10 + i * 2}s linear infinite`,
-            animationDelay: `${i * 0.7}s`
-          }} />
-        ))}
-
-        {/* Glowing Nodes */}
-        {[
-          { top: '15%', left: '15%', color: '#00f0ff' },
-          { top: '30%', right: '20%', color: '#a78bfa' },
-          { bottom: '25%', left: '25%', color: '#ec4899' },
-          { top: '60%', right: '15%', color: '#10b981' },
-          { bottom: '40%', right: '30%', color: '#fbbf24' }
-        ].map((node, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            ...node,
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            background: node.color,
-            boxShadow: `0 0 40px ${node.color}, 0 0 80px ${node.color}`,
-            opacity: 0.5,
-            pointerEvents: 'none',
-            zIndex: 0,
-            animation: `pulse ${3 + i * 0.5}s ease-in-out infinite`,
-            animationDelay: `${i * 0.3}s`
-          }} />
-        ))}
-
-        <div className="perspective-container" style={{
+        {/* Content */}
+        <div style={{
           position: 'relative',
           zIndex: 10,
-          maxWidth: '1700px',
+          maxWidth: '1600px',
           margin: '0 auto',
-          width: '100%',
-          padding: '0 1rem'
+          padding: '0 clamp(1rem, 5vw, 3rem)'
         }}>
-          {/* Header Section */}
-          <div style={{
+          {/* Hero Section */}
+          <section style={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
             textAlign: 'center',
-            marginBottom: '6rem',
-            animation: 'fadeInUp 1.2s ease-out'
+            paddingTop: '80px',
+            paddingBottom: '80px'
           }}>
-            {/* Terminal Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '1.2rem',
-              fontFamily: "'Fira Code', monospace",
-              color: 'var(--neon-cyan)',
-              fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-              padding: '1.2rem 2.5rem',
-              border: '3px solid rgba(0, 240, 255, 0.6)',
-              borderRadius: 999,
-              marginBottom: '2.5rem',
-              background: 'rgba(0, 0, 0, 0.9)',
-              animation: 'pulse 4s ease-in-out infinite, glow 3s ease-in-out infinite',
-              backdropFilter: 'blur(20px)',
-              boxShadow: '0 0 50px rgba(0, 240, 255, 0.5)',
-              position: 'relative'
-            }}>
-              <Terminal size={28} />
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                {'>'} ELITE_EXPERIENCE.initialize()
-                <span style={{
-                  display: 'inline-block',
-                  width: '3px',
-                  height: '20px',
-                  background: '#00f0ff',
-                  marginLeft: '5px',
-                  animation: 'blink 1s infinite'
-                }}>|</span>
-              </span>
-              <Activity size={28} />
+            {/* Badge */}
+            <div
+              className="glass-card"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '100px',
+                marginBottom: '2rem',
+                fontSize: '0.9rem',
+                fontWeight: 500,
+                color: '#a0aec0',
+                animation: 'fadeInScale 0.8s ease-out'
+              }}
+            >
+              <Terminal size={18} style={{ color: '#667eea' }} />
+              Professional Experience
+              <Activity size={18} style={{ color: '#f093fb' }} />
             </div>
 
-            {/* Main Title with Hologram Effect */}
-            <h1 className="hologram-effect" style={{
-              fontSize: 'clamp(4rem, 12vw, 8.5rem)',
-              fontWeight: 900,
-              letterSpacing: '8px',
-              textTransform: 'uppercase',
-              marginBottom: '2.5rem',
-              lineHeight: 1,
-              background: 'linear-gradient(90deg, #00f0ff, #a78bfa, #ec4899, #ffd700, #00f0ff)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '300% 100%',
-              animation: 'shimmer 6s linear infinite',
-              fontFamily: "'Orbitron', sans-serif",
-              filter: 'drop-shadow(0 0 40px #00f0ff)'
-            }}>
-              LEGENDARY<br/>INTERNSHIPS
+            {/* Main Title */}
+            <h1
+              className="gradient-text"
+              style={{
+                fontSize: 'clamp(3rem, 10vw, 7rem)',
+                fontWeight: 900,
+                lineHeight: 1.1,
+                marginBottom: '2rem',
+                fontFamily: "'Space Grotesk', sans-serif",
+                letterSpacing: '-0.03em',
+                animation: 'fadeInUp 1s ease-out'
+              }}
+            >
+              ELITE
+              <br />
+              INTERNSHIPS
             </h1>
 
             {/* Subtitle */}
             <p style={{
-              fontSize: 'clamp(1.25rem, 3.5vw, 1.6rem)',
-              color: '#c0c0e0',
-              maxWidth: '950px',
-              margin: '0 auto 3rem',
-              fontFamily: "'Rajdhani', sans-serif",
-              fontWeight: 500,
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
+              color: '#a0aec0',
+              maxWidth: '800px',
               lineHeight: 1.8,
-              textShadow: '0 2px 20px rgba(0, 0, 0, 0.8)'
+              marginBottom: '3rem',
+              fontWeight: 400,
+              animation: 'fadeInUp 1.2s ease-out'
             }}>
-              Elite-tier professional experience across cutting-edge domains:
+              Professional experience across cutting-edge domains:
               <br />
-              <span style={{ 
-                color: '#00f0ff', 
-                fontFamily: "'Fira Code', monospace", 
-                fontSize: '1.15rem',
-                fontWeight: 700,
-                textShadow: '0 0 20px rgba(0, 240, 255, 0.8)'
-              }}>
-                [ Full-Stack Engineering | Artificial Intelligence | Advanced Data Science ]
-              </span>
+              Full-Stack Engineering • Artificial Intelligence • Data Science
             </p>
 
-            {/* Stats Bar */}
+            {/* Stats */}
             <div style={{
               display: 'flex',
-              justifyContent: 'center',
               gap: 'clamp(1.5rem, 4vw, 3rem)',
               flexWrap: 'wrap',
-              marginBottom: '3rem'
+              justifyContent: 'center',
+              marginBottom: '3rem',
+              animation: 'fadeInUp 1.4s ease-out'
             }}>
               {[
-                { icon: Flame, label: '3 Elite Firms', color: '#ff6b35' },
-                { icon: Clock, label: '7+ Months', color: '#00f0ff' },
+                { icon: Flame, label: '3 Companies', color: '#ff6b35' },
+                { icon: Clock, label: '7+ Months', color: '#00f5ff' },
                 { icon: Trophy, label: '95% Success', color: '#ffd700' },
                 { icon: Rocket, label: '15+ Projects', color: '#a78bfa' }
               ].map((stat, i) => {
                 const Icon = stat.icon;
                 return (
-                  <div key={i} className="glass-morphism" style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.8rem',
-                    padding: '1rem 1.8rem',
-                    borderRadius: '999px',
-                    color: stat.color,
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    fontFamily: "'Rajdhani', sans-serif",
-                    border: `2px solid ${stat.color}40`,
-                    animation: `fadeInUp ${1 + i * 0.1}s ease-out`,
-                    boxShadow: `0 0 30px ${stat.color}30`
-                  }}>
-                    <Icon size={22} />
+                  <div
+                    key={i}
+                    className="glass-card"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '1rem 1.5rem',
+                      borderRadius: '100px',
+                      color: stat.color,
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      border: `1px solid ${stat.color}40`
+                    }}
+                  >
+                    <Icon size={20} />
                     {stat.label}
                   </div>
                 );
               })}
             </div>
 
-            {/* Filter Buttons with Enhanced Design */}
+            {/* Filters */}
             <div style={{
               display: 'flex',
-              justifyContent: 'center',
-              gap: '1.5rem',
+              gap: '1rem',
               flexWrap: 'wrap',
-              marginBottom: '1.5rem'
+              justifyContent: 'center',
+              animation: 'fadeInUp 1.6s ease-out'
             }}>
-              {['ALL', 'LEGENDARY', 'EPIC'].map((filter, i) => (
+              {['ALL', 'LEGENDARY', 'EPIC'].map((filter) => (
                 <button
                   key={filter}
-                  className={`filter-btn ${selectedFilter === filter ? 'active' : ''}`}
                   onClick={() => setSelectedFilter(filter)}
+                  className="glass-card"
                   style={{
-                    borderColor: getRarityColor(filter),
-                    color: selectedFilter === filter ? '#000' : getRarityColor(filter),
-                    background: selectedFilter === filter ? getRarityColor(filter) : 'rgba(0, 0, 0, 0.85)',
-                    animation: `fadeInUp ${1.2 + i * 0.1}s ease-out`
+                    padding: '0.875rem 2rem',
+                    borderRadius: '100px',
+                    fontSize: '0.95rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    background: selectedFilter === filter 
+                      ? 'linear-gradient(135deg, #667eea, #764ba2)'
+                      : 'rgba(255, 255, 255, 0.03)',
+                    color: selectedFilter === filter ? '#fff' : '#a0aec0',
+                    border: selectedFilter === filter 
+                      ? 'none' 
+                      : '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (selectedFilter !== filter) {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedFilter !== filter) {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.03)';
+                    }
                   }}
                 >
-                  {filter === 'ALL' ? '⚡ ALL EXPERIENCES' : `✨ ${filter}`}
+                  {filter === 'ALL' ? '⚡ All Experiences' : `✨ ${filter}`}
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
-          {/* Internship Cards Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))',
-            gap: 'clamp(3rem, 6vw, 4.5rem)',
-            marginBottom: '7rem',
-            width: '100%'
+          {/* Internships Grid */}
+          <section style={{
+            padding: '4rem 0',
+            marginBottom: '6rem'
           }}>
-            {filteredInternships.map((intern, i) => {
-              const isHovered = hoveredId === intern.id;
-              const rarityColor = getRarityColor(intern.rarity);
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 450px), 1fr))',
+              gap: 'clamp(2.5rem, 5vw, 4rem)'
+            }}>
+              {filteredInternships.map((intern, i) => {
+                const isHovered = hoveredId === intern.id;
+                const Icon = intern.icon;
 
-              return (
-                <div
-                  key={intern.id}
-                  className="intern-card"
-                  onMouseEnter={() => setHoveredId(intern.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  style={{
-                    borderColor: isHovered ? intern.color : 'rgba(0, 240, 255, 0.3)',
-                    animation: `fadeInUp ${0.8 + i * 0.15}s ease-out`,
-                    opacity: 0,
-                    animationFillMode: 'forwards',
-                    animationDelay: `${i * 0.2}s`
-                  }}
-                >
-                  {/* Rarity Badge */}
-                  <div className="rarity-badge" style={{
-                    background: rarityColor,
-                    color: '#000',
-                    borderColor: rarityColor
-                  }}>
-                    ★ {intern.rarity}
-                  </div>
-
-                  {/* Animated Top Border */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '8px',
-                    background: `linear-gradient(90deg, ${intern.color}, ${intern.secondaryColor}, ${intern.accentColor})`,
-                    backgroundSize: '200% 100%',
-                    animation: 'shimmer 3s linear infinite',
-                    opacity: isHovered ? 1 : 0.7,
-                    transition: 'opacity 0.6s'
-                  }} />
-
-                  {/* Certificate Preview */}
+                return (
                   <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveCert(intern);
-                    }}
-                    className="cert-preview"
+                    key={intern.id}
+                    className="glass-card intern-card"
+                    onMouseEnter={() => setHoveredId(intern.id)}
+                    onMouseLeave={() => setHoveredId(null)}
                     style={{
-                      height: 'clamp(220px, 40vw, 280px)',
-                      position: 'relative'
+                      borderRadius: '32px',
+                      overflow: 'hidden',
+                      borderColor: isHovered ? intern.color : 'rgba(255, 255, 255, 0.08)',
+                      boxShadow: isHovered 
+                        ? `0 20px 60px rgba(${intern.color === '#00f5ff' ? '0, 245, 255' : intern.color === '#a78bfa' ? '167, 139, 250' : '16, 185, 129'}, 0.4)`
+                        : '0 8px 32px rgba(0, 0, 0, 0.37)',
+                      animation: `fadeInUp ${0.8 + i * 0.2}s ease-out`
                     }}
                   >
-                    <img
-                      src={getCertificateUrl(intern.certId)}
-                      alt={`${intern.title} Certificate`}
+                    {/* Top Accent */}
+                    <div style={{
+                      height: '6px',
+                      background: `linear-gradient(90deg, ${intern.color}, ${intern.secondaryColor}, ${intern.accentColor})`,
+                      backgroundSize: '200% 100%',
+                      animation: 'shimmer 3s linear infinite'
+                    }} />
+
+                    {/* Certificate Preview */}
+                    <div
+                      onClick={() => setActiveCert(intern)}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'transform 1s cubic-bezier(0.23, 1, 0.32, 1)',
-                        transform: isHovered ? 'scale(1.2) rotate(2deg)' : 'scale(1.08)'
+                        height: '260px',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        cursor: 'pointer'
                       }}
-                    />
+                    >
+                      <img
+                        src={getCertificateUrl(intern.certId)}
+                        alt={`${intern.title} Certificate`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.8s',
+                          transform: isHovered ? 'scale(1.15)' : 'scale(1.05)'
+                        }}
+                      />
 
-                    {/* Rating Badge */}
-                    <div style={{
-                      position: 'absolute',
-                      top: '2rem',
-                      left: '2rem',
-                      background: 'rgba(0, 0, 0, 0.95)',
-                      backdropFilter: 'blur(20px)',
-                      padding: '1rem 1.5rem',
-                      borderRadius: 999,
-                      border: `3px solid ${intern.color}`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.8rem',
-                      fontFamily: "'Orbitron', sans-serif",
-                      fontWeight: 900,
-                      fontSize: '1.2rem',
-                      color: intern.color,
-                      boxShadow: `0 0 40px ${intern.color}`,
-                      animation: isHovered ? 'pulse 2s ease-in-out infinite' : 'none'
-                    }}>
-                      <Star size={24} fill={intern.color} />
-                      {intern.rating}%
-                    </div>
-
-                    {/* Overlay with View Button */}
-                    <div style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(to top, rgba(0, 0, 0, 0.98) 0%, transparent 70%)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: isHovered ? 1 : 0.6,
-                      transition: 'opacity 0.6s'
-                    }}>
-                      <div className="glass-morphism" style={{
-                        padding: '1.2rem 2.5rem',
-                        border: `3px solid ${intern.color}`,
-                        borderRadius: 999,
-                        color: '#fff',
-                        fontWeight: 900,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        fontSize: '1.1rem',
-                        fontFamily: "'Rajdhani', sans-serif",
-                        boxShadow: isHovered ? `0 0 60px ${intern.color}` : 'none',
-                        animation: isHovered ? 'pulse 2.5s ease-in-out infinite' : 'none'
-                      }}>
-                        <Award size={26} />
-                        VIEW CERTIFICATE
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="card-3d-layer" style={{
-                    padding: 'clamp(2rem, 4.5vw, 3rem) clamp(1.8rem, 4vw, 2.5rem)',
-                    position: 'relative',
-                    zIndex: 2
-                  }}>
-                    {/* Icon + Duration Bar */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginBottom: '2rem',
-                      flexWrap: 'wrap',
-                      gap: '1.5rem'
-                    }}>
-                      <div className="hexagon-icon" style={{
-                        width: '90px',
-                        height: '90px',
-                        background: `linear-gradient(135deg, ${intern.color}, ${intern.secondaryColor})`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        animation: isHovered ? 'float 3.5s ease-in-out infinite' : 'none',
-                        boxShadow: isHovered ? `0 0 60px ${intern.color}` : `0 0 30px ${intern.color}50`,
-                        flexShrink: 0
-                      }}>
-                        <intern.icon size={44} style={{
-                          color: '#fff',
-                          transform: 'rotate(90deg)',
-                          filter: 'drop-shadow(0 0 15px currentColor)'
-                        }} />
-                      </div>
-
-                      <div className="glass-morphism" style={{
-                        padding: '0.9rem 1.8rem',
-                        border: `3px solid ${intern.color}`,
-                        borderRadius: 999,
-                        fontSize: '1rem',
-                        fontWeight: 900,
-                        color: intern.color,
-                        fontFamily: "'Orbitron', sans-serif",
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.8rem',
-                        boxShadow: `0 0 30px ${intern.color}40`
-                      }}>
-                        <Clock size={20} />
-                        {intern.duration}
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 style={{
-                      fontSize: 'clamp(2rem, 5vw, 2.5rem)',
-                      fontWeight: 900,
-                      color: '#ffffff',
-                      marginBottom: '1rem',
-                      fontFamily: "'Orbitron', sans-serif",
-                      letterSpacing: '1.5px',
-                      lineHeight: 1.2
-                    }}>
-                      {intern.title}
-                    </h3>
-
-                    {/* Company Info */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.8rem',
-                      marginBottom: '1rem',
-                      fontFamily: "'Rajdhani', sans-serif"
-                    }}>
+                      {/* Gradient Overlay */}
                       <div style={{
-                        fontSize: '1.2rem',
-                        color: '#d0d0ff',
-                        fontWeight: 700
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%)'
+                      }} />
+
+                      {/* Rarity Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        padding: '0.5rem 1.25rem',
+                        background: getRarityColor(intern.rarity),
+                        color: '#000',
+                        borderRadius: '100px',
+                        fontSize: '0.75rem',
+                        fontWeight: 900,
+                        letterSpacing: '1px',
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        boxShadow: `0 0 30px ${getRarityColor(intern.rarity)}`,
+                        animation: 'pulse 2s ease-in-out infinite'
+                      }}>
+                        ★ {intern.rarity}
+                      </div>
+
+                      {/* Rating */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        left: '1rem',
+                        padding: '0.75rem 1.25rem',
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: '100px',
+                        border: `2px solid ${intern.color}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        fontSize: '1rem',
+                        fontWeight: 800,
+                        color: intern.color
+                      }}>
+                        <Star size={18} fill={intern.color} />
+                        {intern.rating}%
+                      </div>
+
+                      {/* View Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '1rem',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        padding: '0.875rem 2rem',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: '100px',
+                        border: `2px solid ${intern.color}`,
+                        color: '#fff',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        opacity: isHovered ? 1 : 0.7,
+                        transition: 'opacity 0.3s'
+                      }}>
+                        <Award size={18} />
+                        View Certificate
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div style={{
+                      padding: 'clamp(2rem, 4vw, 2.5rem)'
+                    }}>
+                      {/* Icon & Duration */}
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '1.5rem',
+                        gap: '1rem',
+                        flexWrap: 'wrap'
+                      }}>
+                        <div style={{
+                          width: '70px',
+                          height: '70px',
+                          background: `linear-gradient(135deg, ${intern.color}20, ${intern.color}10)`,
+                          border: `2px solid ${intern.color}40`,
+                          borderRadius: '20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          animation: isHovered ? 'float 2s ease-in-out infinite' : 'none'
+                        }}>
+                          <Icon size={36} style={{ color: intern.color }} />
+                        </div>
+
+                        <div
+                          className="glass-card"
+                          style={{
+                            padding: '0.625rem 1.25rem',
+                            borderRadius: '100px',
+                            border: `1px solid ${intern.color}40`,
+                            color: intern.color,
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                          }}
+                        >
+                          <Clock size={16} />
+                          {intern.duration}
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <h3 style={{
+                        fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                        fontWeight: 800,
+                        color: '#fff',
+                        marginBottom: '0.75rem',
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        lineHeight: 1.2
+                      }}>
+                        {intern.title}
+                      </h3>
+
+                      {/* Company Info */}
+                      <div style={{
+                        fontSize: '1.1rem',
+                        color: '#cbd5e0',
+                        fontWeight: 600,
+                        marginBottom: '0.5rem'
                       }}>
                         {intern.company}
                       </div>
 
                       <div style={{
                         display: 'flex',
-                        gap: '2rem',
+                        gap: '1.5rem',
                         flexWrap: 'wrap',
-                        fontSize: '1.05rem',
+                        fontSize: '0.95rem',
                         color: intern.color,
-                        fontWeight: 600
+                        fontWeight: 500,
+                        marginBottom: '1.5rem'
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <MapPin size={18} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <MapPin size={16} />
                           {intern.location}
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <Calendar size={18} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <Calendar size={16} />
                           {intern.period}
                         </div>
                       </div>
-                    </div>
 
-                    {/* Impact Statement */}
-                    <div className="glass-morphism" style={{
-                      border: `2.5px solid ${intern.color}50`,
-                      borderRadius: '20px',
-                      padding: '1.5rem',
-                      marginBottom: '2.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1.2rem',
-                      background: `linear-gradient(135deg, ${intern.color}10, ${intern.secondaryColor}10)`
-                    }}>
-                      <Trophy size={32} style={{ 
-                        color: intern.color, 
-                        flexShrink: 0,
-                        filter: 'drop-shadow(0 0 10px currentColor)'
-                      }} />
-                      <span style={{
-                        fontFamily: "'Rajdhani', sans-serif",
-                        fontSize: '1.15rem',
-                        fontWeight: 700,
-                        color: '#f0f0ff',
-                        textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)'
+                      {/* Impact */}
+                      <div
+                        className="glass-card"
+                        style={{
+                          padding: '1rem',
+                          borderRadius: '16px',
+                          border: `1px solid ${intern.color}30`,
+                          marginBottom: '1.5rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          background: `${intern.color}05`
+                        }}
+                      >
+                        <Trophy size={24} style={{ color: intern.color, flexShrink: 0 }} />
+                        <span style={{
+                          fontSize: '0.95rem',
+                          fontWeight: 600,
+                          color: '#e2e8f0'
+                        }}>
+                          {intern.impact}
+                        </span>
+                      </div>
+
+                      {/* Metrics */}
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '0.75rem',
+                        marginBottom: '1.5rem'
                       }}>
-                        {intern.impact}
-                      </span>
-                    </div>
-
-                    {/* Impact Metrics Grid */}
-                    <div className="impact-metrics-grid" style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(3, 1fr)',
-                      gap: '1.2rem',
-                      marginBottom: '2.5rem'
-                    }}>
-                      {intern.impact_metrics.map((metric, idx) => {
-                        const MetricIcon = metric.icon;
-                        return (
-                          <div
-                            key={idx}
-                            className="impact-metric"
-                            style={{
-                              borderColor: intern.color,
-                              background: isHovered ? `${intern.color}15` : 'rgba(0, 0, 0, 0.7)'
-                            }}
-                          >
-                            <MetricIcon size={28} style={{ 
-                              color: intern.color, 
-                              marginBottom: '0.8rem',
-                              display: 'block',
-                              margin: '0 auto 0.8rem',
-                              filter: 'drop-shadow(0 0 10px currentColor)'
-                            }} />
-                            <div style={{
-                              fontSize: '2rem',
-                              fontWeight: 900,
-                              color: intern.color,
-                              fontFamily: "'Orbitron', sans-serif",
-                              marginBottom: '0.4rem'
-                            }}>
-                              {metric.value}
+                        {intern.impact_metrics.map((metric, idx) => {
+                          const MetricIcon = metric.icon;
+                          return (
+                            <div
+                              key={idx}
+                              className="glass-card"
+                              style={{
+                                padding: '1rem',
+                                borderRadius: '12px',
+                                textAlign: 'center',
+                                border: `1px solid ${intern.color}30`,
+                                transition: 'all 0.3s'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                e.currentTarget.style.borderColor = intern.color;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.borderColor = `${intern.color}30`;
+                              }}
+                            >
+                              <MetricIcon size={20} style={{ 
+                                color: intern.color, 
+                                marginBottom: '0.5rem',
+                                display: 'block',
+                                margin: '0 auto 0.5rem'
+                              }} />
+                              <div style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 900,
+                                color: intern.color,
+                                marginBottom: '0.25rem',
+                                fontFamily: "'Space Grotesk', sans-serif"
+                              }}>
+                                {metric.value}
+                              </div>
+                              <div style={{
+                                fontSize: '0.75rem',
+                                color: '#94a3b8',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
+                                fontWeight: 600
+                              }}>
+                                {metric.label}
+                              </div>
                             </div>
-                            <div style={{
-                              fontSize: '0.9rem',
-                              color: '#b0b0d0',
-                              textTransform: 'uppercase',
-                              letterSpacing: '1px',
-                              fontWeight: 600
-                            }}>
-                              {metric.label}
+                          );
+                        })}
+                      </div>
+
+                      {/* Tech Stack */}
+                      <div
+                        className="glass-card"
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '16px',
+                          border: `1px solid ${intern.color}30`,
+                          marginBottom: '1.5rem'
+                        }}
+                      >
+                        <h4 style={{
+                          color: intern.color,
+                          fontSize: '0.95rem',
+                          fontWeight: 700,
+                          marginBottom: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
+                        }}>
+                          <Cpu size={18} />
+                          Tech Stack
+                        </h4>
+                        <div style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: '0.5rem'
+                        }}>
+                          {intern.tech.map((t) => (
+                            <span
+                              key={t}
+                              className="tech-badge"
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: `1px solid ${intern.color}40`,
+                                borderRadius: '100px',
+                                fontSize: '0.8rem',
+                                color: '#cbd5e0',
+                                fontFamily: "'JetBrains Mono', monospace",
+                                fontWeight: 500
+                              }}
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Achievements */}
+                      <div
+                        className="glass-card"
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '16px',
+                          border: `1px solid ${intern.color}30`,
+                          marginBottom: '1.5rem'
+                        }}
+                      >
+                        <h4 style={{
+                          color: intern.color,
+                          fontSize: '0.95rem',
+                          fontWeight: 700,
+                          marginBottom: '1rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
+                        }}>
+                          <Zap size={18} />
+                          Key Achievements
+                        </h4>
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.625rem'
+                        }}>
+                          {intern.achievements.map((ach, idx) => (
+                            <div
+                              key={idx}
+                              style={{
+                                fontSize: '0.9rem',
+                                color: '#e2e8f0',
+                                padding: '0.5rem',
+                                borderRadius: '8px',
+                                transition: 'all 0.3s'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = `${intern.color}10`;
+                                e.currentTarget.style.transform = 'translateX(8px)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'transparent';
+                                e.currentTarget.style.transform = 'translateX(0)';
+                              }}
+                            >
+                              {ach}
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="glass-morphism" style={{
-                      border: `2.5px solid ${intern.color}35`,
-                      borderRadius: '22px',
-                      padding: '1.8rem',
-                      marginBottom: '2.5rem'
-                    }}>
-                      <h4 style={{
-                        color: intern.color,
-                        fontSize: '1.25rem',
-                        fontWeight: 900,
-                        marginBottom: '1.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        fontFamily: "'Orbitron', sans-serif"
-                      }}>
-                        <Cpu size={26} /> Tech Arsenal
-                      </h4>
-                      <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '1rem'
-                      }}>
-                        {intern.tech.map(t => (
-                          <span
-                            key={t}
-                            className="tech-pill"
-                            style={{
-                              color: isHovered ? intern.color : '#b0e0ff',
-                              borderColor: isHovered ? intern.color : `${intern.color}60`
-                            }}
-                          >
-                            {t}
-                          </span>
-                        ))}
+                          ))}
+                        </div>
                       </div>
+
+                      {/* CTA */}
+                      <a
+                        href={getViewUrl(intern.certId)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.75rem',
+                          padding: '1rem',
+                          background: `linear-gradient(90deg, ${intern.color}, ${intern.secondaryColor})`,
+                          color: '#000',
+                          fontWeight: 800,
+                          borderRadius: '100px',
+                          textDecoration: 'none',
+                          fontSize: '0.95rem',
+                          transition: 'all 0.3s',
+                          fontFamily: "'Space Grotesk', sans-serif"
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.03)';
+                          e.currentTarget.style.boxShadow = `0 10px 30px ${intern.color}60`;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }}
+                      >
+                        <Award size={20} />
+                        View Certificate
+                        <ExternalLink size={20} />
+                      </a>
                     </div>
-
-                    {/* Achievements */}
-                    <div className="glass-morphism" style={{
-                      border: `2.5px solid ${intern.color}35`,
-                      borderRadius: '22px',
-                      padding: '1.8rem',
-                      marginBottom: '2.5rem'
-                    }}>
-                      <h4 style={{
-                        color: intern.color,
-                        fontSize: '1.25rem',
-                        fontWeight: 900,
-                        marginBottom: '1.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        fontFamily: "'Orbitron', sans-serif"
-                      }}>
-                        <Zap size={26} /> Key Achievements
-                      </h4>
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1rem'
-                      }}>
-                        {intern.achievements.map((ach, idx) => (
-                          <div
-                            key={idx}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '1rem',
-                              fontSize: '1.08rem',
-                              padding: '0.9rem 1.2rem',
-                              borderRadius: '12px',
-                              transition: 'all 0.4s',
-                              background: 'transparent',
-                              border: '2px solid transparent',
-                              fontWeight: 500
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = `${intern.color}18`;
-                              e.currentTarget.style.borderColor = `${intern.color}60`;
-                              e.currentTarget.style.transform = 'translateX(15px)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = 'transparent';
-                              e.currentTarget.style.borderColor = 'transparent';
-                              e.currentTarget.style.transform = 'translateX(0)';
-                            }}
-                          >
-                            {ach}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Skills Gained (Collapsible) */}
-                    <details className="glass-morphism" style={{
-                      border: `2.5px solid ${intern.color}35`,
-                      borderRadius: '22px',
-                      padding: '1.8rem',
-                      marginBottom: '2.5rem',
-                      cursor: 'pointer'
-                    }}>
-                      <summary style={{
-                        color: intern.color,
-                        fontSize: '1.25rem',
-                        fontWeight: 900,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        fontFamily: "'Orbitron', sans-serif",
-                        cursor: 'pointer',
-                        userSelect: 'none'
-                      }}>
-                        <Target size={26} /> Skills Mastered ({intern.skills_gained.length})
-                      </summary>
-                      <div style={{
-                        marginTop: '1.5rem',
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '1rem'
-                      }}>
-                        {intern.skills_gained.map((skill, idx) => (
-                          <div
-                            key={idx}
-                            style={{
-                              padding: '0.8rem 1.5rem',
-                              background: `${intern.color}20`,
-                              border: `2.5px solid ${intern.color}70`,
-                              borderRadius: 999,
-                              fontSize: '1rem',
-                              fontWeight: 800,
-                              color: intern.color,
-                              boxShadow: `0 0 20px ${intern.color}30`
-                            }}
-                          >
-                            {skill}
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-
-                    {/* View Certificate CTA */}
-                    <a
-                      href={getViewUrl(intern.certId)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '1.2rem',
-                        padding: '1.5rem',
-                        background: `linear-gradient(90deg, ${intern.color}, ${intern.secondaryColor}, ${intern.accentColor})`,
-                        backgroundSize: '200% 100%',
-                        color: '#000',
-                        fontWeight: 900,
-                        borderRadius: 999,
-                        textDecoration: 'none',
-                        boxShadow: isHovered ? `0 0 80px ${intern.color}` : `0 0 40px ${intern.color}60`,
-                        transition: 'all 0.5s',
-                        fontSize: '1.15rem',
-                        fontFamily: "'Orbitron', sans-serif",
-                        letterSpacing: '1.5px',
-                        animation: 'shimmer 3s linear infinite'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.08) translateY(-4px)';
-                        e.currentTarget.style.boxShadow = `0 0 100px ${intern.color}`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = `0 0 40px ${intern.color}60`;
-                      }}
-                    >
-                      <Award size={28} />
-                      VIEW CERTIFICATE
-                      <ExternalLink size={28} />
-                    </a>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </section>
 
-          {/* Stats Overview Section */}
-          <div className="glass-morphism" style={{
-            border: '4px solid rgba(0, 240, 255, 0.4)',
-            borderRadius: '40px',
-            padding: 'clamp(3rem, 7vw, 5rem) clamp(2rem, 5vw, 4rem)',
-            position: 'relative',
-            overflow: 'hidden',
-            marginBottom: '6rem',
-            boxShadow: '0 0 100px rgba(0, 240, 255, 0.3)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '8px',
-              background: 'linear-gradient(90deg, #00f0ff, #a78bfa, #ec4899, #ffd700, #00f0ff)',
-              backgroundSize: '300% 100%',
-              animation: 'shimmer 4s linear infinite'
-            }} />
-
+          {/* Stats Section */}
+          <section
+            className="glass-card"
+            style={{
+              padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem)',
+              borderRadius: '32px',
+              marginBottom: '6rem',
+              border: '1px solid rgba(102, 126, 234, 0.3)'
+            }}
+          >
             <h2 style={{
-              fontSize: 'clamp(3rem, 8vw, 4.5rem)',
+              fontSize: 'clamp(2.5rem, 6vw, 4rem)',
               fontWeight: 900,
-              color: '#00f0ff',
               textAlign: 'center',
-              marginBottom: '4rem',
-              fontFamily: "'Orbitron', sans-serif",
-              textTransform: 'uppercase',
-              letterSpacing: '4px'
+              marginBottom: '3rem',
+              fontFamily: "'Space Grotesk', sans-serif"
             }}>
-              🏆 CAREER ACHIEVEMENTS
+              <span className="gradient-text">Career Achievements</span>
             </h2>
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
-              gap: '3rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '2rem'
             }}>
               {[
-                { label: 'Total Experience', value: '7+', unit: 'Months', icon: Clock, color: '#00f0ff' },
-                { label: 'Elite Companies', value: '3', unit: 'Firms', icon: Shield, color: '#a78bfa' },
-                { label: 'Projects Built', value: '15+', unit: 'Production', icon: Rocket, color: '#ec4899' },
-                { label: 'Technologies', value: '25+', unit: 'Mastered', icon: Zap, color: '#10b981' },
-                { label: 'Success Rate', value: '95%', unit: 'Achievement', icon: TrendingUp, color: '#fbbf24' },
-                { label: 'Certifications', value: '3', unit: 'Verified', icon: Award, color: '#f97316' }
+                { label: 'Experience', value: '7+', unit: 'Months', icon: Clock, color: '#667eea' },
+                { label: 'Companies', value: '3', unit: 'Elite', icon: Shield, color: '#764ba2' },
+                { label: 'Projects', value: '15+', unit: 'Built', icon: Rocket, color: '#f093fb' },
+                { label: 'Technologies', value: '25+', unit: 'Skills', icon: Zap, color: '#10b981' },
+                { label: 'Success Rate', value: '95%', unit: 'Average', icon: TrendingUp, color: '#fbbf24' },
+                { label: 'Certificates', value: '3', unit: 'Verified', icon: Award, color: '#f97316' }
               ].map((stat, i) => {
                 const StatIcon = stat.icon;
                 return (
                   <div
                     key={i}
-                    className="glass-morphism"
+                    className="glass-card"
                     style={{
-                      border: `3.5px solid ${stat.color}`,
-                      borderRadius: '28px',
-                      padding: '2.5rem',
+                      padding: '2rem',
+                      borderRadius: '24px',
                       textAlign: 'center',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-                      cursor: 'pointer',
-                      animation: `fadeInUp ${1.2 + i * 0.12}s ease-out`,
-                      opacity: 0,
-                      animationFillMode: 'forwards',
-                      animationDelay: `${0.5 + i * 0.12}s`,
-                      background: `linear-gradient(135deg, ${stat.color}08, ${stat.color}15)`
+                      border: `1px solid ${stat.color}40`,
+                      transition: 'all 0.4s',
+                      cursor: 'pointer'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-18px) scale(1.05)';
-                      e.currentTarget.style.boxShadow = `0 20px 60px ${stat.color}`;
+                      e.currentTarget.style.transform = 'translateY(-10px)';
+                      e.currentTarget.style.boxShadow = `0 15px 40px ${stat.color}40`;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                      e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
                     <div style={{
-                      width: '85px',
-                      height: '85px',
-                      margin: '0 auto 1.8rem',
-                      border: `4px solid ${stat.color}`,
-                      borderRadius: '22px',
+                      width: '60px',
+                      height: '60px',
+                      margin: '0 auto 1rem',
+                      background: `${stat.color}20`,
+                      border: `2px solid ${stat.color}40`,
+                      borderRadius: '16px',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      animation: 'float 4s ease-in-out infinite',
-                      animationDelay: `${i * 0.4}s`,
-                      boxShadow: `0 0 50px ${stat.color}50`,
-                      background: `${stat.color}15`
+                      justifyContent: 'center'
                     }}>
-                      <StatIcon size={42} style={{ 
-                        color: stat.color,
-                        filter: 'drop-shadow(0 0 10px currentColor)'
-                      }} />
+                      <StatIcon size={32} style={{ color: stat.color }} />
                     </div>
                     <div style={{
-                      fontSize: 'clamp(3.5rem, 8vw, 4.5rem)',
+                      fontSize: '3rem',
                       fontWeight: 900,
                       color: stat.color,
-                      marginBottom: '0.6rem',
-                      fontFamily: "'Orbitron', sans-serif"
+                      marginBottom: '0.5rem',
+                      fontFamily: "'Space Grotesk', sans-serif"
                     }}>
                       {stat.value}
                     </div>
                     <div style={{
-                      fontSize: '1.15rem',
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      textTransform: 'uppercase',
-                      letterSpacing: '1.5px',
-                      marginBottom: '0.5rem',
-                      fontFamily: "'Rajdhani', sans-serif"
+                      fontSize: '1rem',
+                      color: '#fff',
+                      fontWeight: 700,
+                      marginBottom: '0.25rem'
                     }}>
                       {stat.label}
                     </div>
                     <div style={{
-                      fontSize: '1rem',
-                      color: '#b0b0d8',
-                      fontWeight: 600
+                      fontSize: '0.85rem',
+                      color: '#94a3b8',
+                      fontWeight: 500
                     }}>
                       {stat.unit}
                     </div>
@@ -1635,130 +1155,105 @@ export default function EliteInternships() {
                 );
               })}
             </div>
-          </div>
+          </section>
 
-          {/* Call to Action Section */}
-          <div className="glass-morphism" style={{
-            padding: 'clamp(4rem, 10vw, 6rem) clamp(2.5rem, 6vw, 4rem)',
-            background: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(167, 139, 250, 0.15))',
-            border: '4px solid rgba(0, 240, 255, 0.5)',
-            borderRadius: '40px',
-            textAlign: 'center',
-            position: 'relative',
-            overflow: 'hidden',
-            boxShadow: '0 0 120px rgba(0, 240, 255, 0.4)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.2) 0%, transparent 70%)',
-              pointerEvents: 'none'
-            }} />
-
-            <div style={{
-              fontSize: 'clamp(3.5rem, 10vw, 6rem)',
+          {/* CTA Section */}
+          <section
+            className="glass-card"
+            style={{
+              padding: 'clamp(4rem, 8vw, 6rem) clamp(2rem, 4vw, 3rem)',
+              borderRadius: '32px',
+              textAlign: 'center',
+              background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))',
+              border: '1px solid rgba(102, 126, 234, 0.3)',
+              marginBottom: '6rem'
+            }}
+          >
+            <h2 style={{
+              fontSize: 'clamp(3rem, 8vw, 5rem)',
               fontWeight: 900,
-              background: 'linear-gradient(90deg, #00f0ff, #a78bfa, #ec4899, #ffd700)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '2.5rem',
-              fontFamily: "'Orbitron', sans-serif",
-              letterSpacing: '3px',
-              lineHeight: 1.2
+              marginBottom: '1.5rem',
+              fontFamily: "'Space Grotesk', sans-serif"
             }}>
-              READY FOR THE<br/>NEXT MISSION?
-            </div>
+              <span className="gradient-text">Ready to Collaborate?</span>
+            </h2>
 
             <p style={{
-              fontSize: 'clamp(1.3rem, 3.5vw, 1.7rem)',
-              color: '#d0d0ff',
-              marginBottom: '4rem',
-              fontFamily: "'Rajdhani', sans-serif",
-              maxWidth: '900px',
-              margin: '0 auto 4rem',
-              lineHeight: 1.8,
-              fontWeight: 500
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+              color: '#a0aec0',
+              maxWidth: '800px',
+              margin: '0 auto 3rem',
+              lineHeight: 1.7
             }}>
-              Let's collaborate on cutting-edge projects that push the boundaries of technology.
-              From full-stack applications to AI-powered solutions—let's build something legendary.
+              Let's build something amazing together. From full-stack applications to AI-powered solutions.
             </p>
 
             <div style={{
               display: 'flex',
-              gap: 'clamp(2rem, 5vw, 3rem)',
+              gap: '1.5rem',
               justifyContent: 'center',
               flexWrap: 'wrap'
             }}>
-              <a 
-                href="https://github.com/bhagavan444" 
-                target="_blank" 
+              <a
+                href="https://github.com/bhagavan444"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="glass-morphism"
+                className="glass-card"
                 style={{
-                  padding: '1.6rem 3.5rem',
-                  border: '3.5px solid rgba(0, 240, 255, 0.8)',
-                  borderRadius: 999,
-                  color: '#00f0ff',
-                  fontWeight: 900,
-                  fontSize: '1.25rem',
-                  textDecoration: 'none',
+                  padding: '1.25rem 2.5rem',
+                  borderRadius: '100px',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1.5rem',
-                  fontFamily: "'Orbitron', sans-serif",
-                  transition: 'all 0.5s',
-                  letterSpacing: '1.5px',
-                  textShadow: '0 0 20px rgba(0, 240, 255, 0.8)'
+                  gap: '0.75rem',
+                  textDecoration: 'none',
+                  color: '#667eea',
+                  border: '1px solid rgba(102, 126, 234, 0.5)',
+                  transition: 'all 0.3s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.12) translateY(-6px)';
-                  e.currentTarget.style.boxShadow = '0 0 80px #00f0ff';
-                  e.currentTarget.style.background = 'rgba(0, 240, 255, 0.25)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(102, 126, 234, 0.3)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                 }}
               >
-                <Github size={32} />
-                VIEW REPOSITORIES
+                <Github size={24} />
+                View Repositories
               </a>
 
-              <a 
+              <a
                 href="mailto:g.sivasatyasaibhagavan@gmail.com"
                 style={{
-                  padding: '1.6rem 3.5rem',
-                  background: 'linear-gradient(90deg, #00f0ff, #a78bfa, #ec4899)',
-                  backgroundSize: '200% 100%',
-                  borderRadius: 999,
-                  color: '#000',
-                  fontWeight: 900,
-                  fontSize: '1.25rem',
-                  textDecoration: 'none',
+                  padding: '1.25rem 2.5rem',
+                  borderRadius: '100px',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1.5rem',
-                  fontFamily: "'Orbitron', sans-serif",
-                  transition: 'all 0.5s',
-                  letterSpacing: '1.5px',
-                  boxShadow: '0 0 60px rgba(0, 240, 255, 0.6)',
-                  animation: 'shimmer 4s linear infinite'
+                  gap: '0.75rem',
+                  textDecoration: 'none',
+                  background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                  color: '#fff',
+                  transition: 'all 0.3s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.12) translateY(-6px)';
-                  e.currentTarget.style.boxShadow = '0 0 100px rgba(0, 240, 255, 0.9)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(102, 126, 234, 0.5)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 0 60px rgba(0, 240, 255, 0.6)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <Sparkles size={32} />
-                LET'S COLLABORATE
+                <Mail size={24} />
+                Let's Collaborate
               </a>
             </div>
-          </div>
+          </section>
         </div>
       </div>
 
@@ -1769,94 +1264,83 @@ export default function EliteInternships() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.98)',
-            backdropFilter: 'blur(30px)',
+            background: 'rgba(0, 0, 0, 0.95)',
+            backdropFilter: 'blur(20px)',
             zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: 'clamp(1rem, 3vw, 2.5rem)',
-            animation: 'fadeInUp 0.4s ease-out'
+            padding: '2rem',
+            animation: 'fadeInScale 0.3s ease-out'
           }}
         >
           <div
-            onClick={e => e.stopPropagation()}
-            className="glass-morphism"
+            onClick={(e) => e.stopPropagation()}
+            className="glass-card"
             style={{
-              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(10, 10, 30, 0.98))',
-              border: `5px solid ${activeCert.color}`,
-              borderRadius: '40px',
-              maxWidth: '1500px',
-              width: '96%',
-              maxHeight: '95vh',
-              overflowY: 'auto',
-              boxShadow: `0 0 200px ${activeCert.color}80`,
-              position: 'relative',
-              animation: 'fadeInUp 0.5s ease-out'
+              maxWidth: '1400px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              borderRadius: '32px',
+              border: `2px solid ${activeCert.color}`,
+              position: 'relative'
             }}
           >
+            {/* Close Button */}
             <button
               onClick={() => setActiveCert(null)}
-              className="glass-morphism"
+              className="glass-card"
               style={{
                 position: 'absolute',
-                top: 'clamp(1.5rem, 3vw, 2.5rem)',
-                right: 'clamp(1.5rem, 3vw, 2.5rem)',
-                background: 'rgba(255, 100, 100, 0.25)',
-                border: '3px solid #ff6666',
+                top: '1.5rem',
+                right: '1.5rem',
+                width: '50px',
+                height: '50px',
                 borderRadius: '50%',
-                width: '65px',
-                height: '65px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#ff6666',
                 cursor: 'pointer',
-                zIndex: 10,
-                transition: 'all 0.4s',
-                backdropFilter: 'blur(20px)'
+                border: '2px solid #ff4444',
+                background: 'rgba(255, 68, 68, 0.2)',
+                transition: 'all 0.3s',
+                zIndex: 10
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 100, 100, 0.5)';
-                e.currentTarget.style.transform = 'scale(1.15) rotate(90deg)';
-                e.currentTarget.style.boxShadow = '0 0 40px #ff6666';
+                e.currentTarget.style.background = 'rgba(255, 68, 68, 0.4)';
+                e.currentTarget.style.transform = 'rotate(90deg)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 100, 100, 0.25)';
-                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.background = 'rgba(255, 68, 68, 0.2)';
+                e.currentTarget.style.transform = 'rotate(0deg)';
               }}
             >
-              <X size={36} strokeWidth={3} />
+              <X size={24} color="#ff4444" />
             </button>
 
+            {/* Certificate Image */}
             <img
               src={getCertificateUrl(activeCert.certId)}
               alt={`${activeCert.title} Certificate`}
               style={{
                 width: '100%',
-                height: 'auto',
-                maxHeight: '55vh',
+                maxHeight: '50vh',
                 objectFit: 'contain',
-                display: 'block',
-                borderTopLeftRadius: '36px',
-                borderTopRightRadius: '36px',
-                boxShadow: '0 10px 50px rgba(0, 0, 0, 0.5)'
+                borderRadius: '32px 32px 0 0'
               }}
             />
 
-            <div style={{ 
-              padding: 'clamp(2.5rem, 6vw, 5rem) clamp(2rem, 5vw, 4.5rem)'
-            }}>
+            {/* Content */}
+            <div style={{ padding: 'clamp(2rem, 5vw, 4rem)' }}>
               <h2 style={{
-                fontSize: 'clamp(3rem, 8vw, 5rem)',
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                 fontWeight: 900,
-                background: `linear-gradient(90deg, ${activeCert.color}, ${activeCert.secondaryColor}, ${activeCert.accentColor})`,
+                background: `linear-gradient(90deg, ${activeCert.color}, ${activeCert.secondaryColor})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                marginBottom: '2rem',
-                fontFamily: "'Orbitron', sans-serif",
-                letterSpacing: '2px'
+                marginBottom: '1.5rem',
+                fontFamily: "'Space Grotesk', sans-serif"
               }}>
                 {activeCert.title}
               </h2>
@@ -1864,23 +1348,21 @@ export default function EliteInternships() {
               <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '2.5rem',
-                marginBottom: '3rem',
-                fontSize: 'clamp(1.15rem, 3vw, 1.5rem)',
-                color: '#d0d0ff',
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 600
+                gap: '2rem',
+                marginBottom: '2rem',
+                fontSize: '1.1rem',
+                color: '#cbd5e0'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-                  <Code size={32} style={{ color: activeCert.color }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Briefcase size={20} style={{ color: activeCert.color }} />
                   {activeCert.company}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-                  <Calendar size={32} style={{ color: activeCert.color }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Calendar size={20} style={{ color: activeCert.color }} />
                   {activeCert.period}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-                  <MapPin size={32} style={{ color: activeCert.color }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <MapPin size={20} style={{ color: activeCert.color }} />
                   {activeCert.location}
                 </div>
               </div>
@@ -1888,20 +1370,23 @@ export default function EliteInternships() {
               <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '1.5rem',
-                marginBottom: '3rem'
+                gap: '1rem',
+                marginBottom: '2rem'
               }}>
-                {activeCert.tech.map(t => (
-                  <span key={t} className="glass-morphism" style={{
-                    padding: '1rem 2rem',
-                    border: `3px solid ${activeCert.color}70`,
-                    borderRadius: 999,
-                    fontFamily: "'Fira Code', monospace",
-                    fontSize: '1.1rem',
-                    fontWeight: 800,
-                    color: activeCert.color,
-                    boxShadow: `0 0 30px ${activeCert.color}30`
-                  }}>
+                {activeCert.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="glass-card"
+                    style={{
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '100px',
+                      border: `1px solid ${activeCert.color}60`,
+                      color: activeCert.color,
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      fontFamily: "'JetBrains Mono', monospace"
+                    }}
+                  >
                     {t}
                   </span>
                 ))}
@@ -1910,61 +1395,57 @@ export default function EliteInternships() {
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1.5rem',
-                marginBottom: '4rem'
+                gap: '1rem',
+                marginBottom: '3rem'
               }}>
                 {activeCert.achievements.map((ach, idx) => (
-                  <div key={idx} className="glass-morphism" style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1.5rem',
-                    fontSize: 'clamp(1.1rem, 2.8vw, 1.3rem)',
-                    padding: '1.5rem',
-                    borderRadius: '16px',
-                    borderLeft: `5px solid ${activeCert.color}`,
-                    border: `2px solid ${activeCert.color}30`,
-                    fontWeight: 500
-                  }}>
+                  <div
+                    key={idx}
+                    className="glass-card"
+                    style={{
+                      padding: '1rem',
+                      borderRadius: '12px',
+                      borderLeft: `4px solid ${activeCert.color}`,
+                      fontSize: '1rem',
+                      color: '#e2e8f0'
+                    }}
+                  >
                     {ach}
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: '4rem', textAlign: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
                 <a
                   href={getViewUrl(activeCert.certId)}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    padding: '1.8rem 4rem',
-                    background: `linear-gradient(90deg, ${activeCert.color}, ${activeCert.secondaryColor}, ${activeCert.accentColor})`,
-                    backgroundSize: '200% 100%',
-                    color: '#000',
-                    fontWeight: 900,
-                    fontSize: '1.3rem',
-                    borderRadius: 999,
-                    textDecoration: 'none',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '1.5rem',
-                    boxShadow: `0 0 100px ${activeCert.color}70`,
-                    transition: 'all 0.5s',
-                    letterSpacing: '1.5px',
-                    fontFamily: "'Orbitron', sans-serif",
-                    animation: 'shimmer 3s linear infinite, pulse 3s ease-in-out infinite'
+                    gap: '1rem',
+                    padding: '1.25rem 3rem',
+                    background: `linear-gradient(90deg, ${activeCert.color}, ${activeCert.secondaryColor})`,
+                    color: '#000',
+                    fontWeight: 800,
+                    fontSize: '1.1rem',
+                    borderRadius: '100px',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s',
+                    fontFamily: "'Space Grotesk', sans-serif"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.1) translateY(-5px)';
-                    e.currentTarget.style.boxShadow = `0 0 150px ${activeCert.color}`;
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.boxShadow = `0 15px 40px ${activeCert.color}60`;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = `0 0 100px ${activeCert.color}70`;
+                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  <Award size={32} />
-                  VIEW FULL CERTIFICATE
-                  <ExternalLink size={32} />
+                  <Award size={24} />
+                  View Full Certificate
+                  <ExternalLink size={24} />
                 </a>
               </div>
             </div>

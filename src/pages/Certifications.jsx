@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Award, ExternalLink, Code, Cloud, Database, Terminal, Brain, Rocket, Zap, Star, Sparkles, Trophy, Target, Cpu, Shield, Box, GitBranch, Layers } from 'lucide-react';
+import { Award, ExternalLink, Code, Cloud, Database, Terminal, Brain, Rocket, Zap, Star, Sparkles, Trophy, Target, Cpu, Shield, Box, GitBranch, Layers, CheckCircle, TrendingUp, BarChart3, Activity } from 'lucide-react';
 
 const certificationsData = [
   {
@@ -11,7 +11,8 @@ const certificationsData = [
     skills: ["React", "Node.js", "MongoDB"],  
     power: 95,
     desc: "Advanced full-stack certification focused on building complete web applications.",
-    year: "2024"
+    year: "2024",
+    issuer: "Tech Academy"
   },
   {
     title: "Python Programming",
@@ -22,7 +23,8 @@ const certificationsData = [
     skills: ["Python", "OOP", "Algorithms"],
     power: 92,
     desc: "Comprehensive Python programming certification.",
-    year: "2024"
+    year: "2024",
+    issuer: "Python Institute"
   },
   {
     title: "Java Programming",
@@ -33,7 +35,8 @@ const certificationsData = [
     skills: ["Java", "Spring", "Multithreading"],
     power: 90,
     desc: "Advanced Java certification covering core and backend concepts.",
-    year: "2024"
+    year: "2024",
+    issuer: "Oracle"
   },
   {
     title: "AWS Cloud",
@@ -44,7 +47,8 @@ const certificationsData = [
     skills: ["AWS", "EC2", "S3"],
     power: 88,
     desc: "Professional certification on AWS cloud services.",
-    year: "2024"
+    year: "2024",
+    issuer: "Amazon Web Services"
   },
   {
     title: "Azure Fundamentals",
@@ -55,7 +59,8 @@ const certificationsData = [
     skills: ["Azure", "Cloud", "DevOps"],
     power: 85,
     desc: "Fundamental certification on Microsoft Azure cloud.",
-    year: "2024"
+    year: "2024",
+    issuer: "Microsoft"
   },
   {
     title: "Data Science",
@@ -66,7 +71,8 @@ const certificationsData = [
     skills: ["Python", "Pandas", "Visualization"],
     power: 93,
     desc: "Advanced data science certification.",
-    year: "2024"
+    year: "2024",
+    issuer: "Data Science Institute"
   },
   {
     title: "Machine Learning",
@@ -77,7 +83,8 @@ const certificationsData = [
     skills: ["ML", "AI", "Neural Networks"],
     power: 98,
     desc: "Expert-level certification in machine learning.",
-    year: "2024"
+    year: "2024",
+    issuer: "AI Research Lab"
   },
   {
     title: "Cloud Computing",
@@ -88,7 +95,8 @@ const certificationsData = [
     skills: ["Cloud", "Distributed Systems"],
     power: 87,
     desc: "Cloud computing concepts and architectures.",
-    year: "2023"
+    year: "2023",
+    issuer: "Cloud Academy"
   },
   {
     title: "R Programming",
@@ -99,7 +107,8 @@ const certificationsData = [
     skills: ["R", "Statistics", "Data Analysis"],
     power: 86,
     desc: "Statistical programming using R.",
-    year: "2023"
+    year: "2023",
+    issuer: "R Consortium"
   },
   {
     title: "Art of Programming",
@@ -110,7 +119,8 @@ const certificationsData = [
     skills: ["Algorithms", "Problem Solving"],
     power: 91,
     desc: "Algorithmic thinking and problem-solving certification.",
-    year: "2023"
+    year: "2023",
+    issuer: "Programming Institute"
   },
   {
     title: "Machine Learning with Python",
@@ -121,7 +131,8 @@ const certificationsData = [
     skills: ["Python", "Scikit-learn", "TensorFlow"],
     power: 96,
     desc: "Hands-on ML certification using Python.",
-    year: "2024"
+    year: "2024",
+    issuer: "ML Academy"
   },
   {
     title: "Large Language Models",
@@ -132,7 +143,8 @@ const certificationsData = [
     skills: ["LLM", "GPT", "Prompt Engineering"],
     power: 99,
     desc: "Advanced certification on Large Language Models.",
-    year: "2024"
+    year: "2024",
+    issuer: "OpenAI Institute"
   },
   {
     title: "React",
@@ -143,7 +155,8 @@ const certificationsData = [
     skills: ["React", "Hooks", "State Management"],
     power: 94,
     desc: "Advanced React development certification.",
-    year: "2024"
+    year: "2024",
+    issuer: "Meta"
   },
   {
     title: "JavaScript",
@@ -154,7 +167,8 @@ const certificationsData = [
     skills: ["JavaScript", "ES6+", "Async"],
     power: 93,
     desc: "Modern JavaScript programming certification.",
-    year: "2024"
+    year: "2024",
+    issuer: "JS Academy"
   },
   {
     title: "MLOps",
@@ -165,7 +179,8 @@ const certificationsData = [
     skills: ["MLOps", "CI/CD", "Kubernetes"],
     power: 89,
     desc: "Professional certification in MLOps.",
-    year: "2024"
+    year: "2024",
+    issuer: "MLOps Institute"
   },
   {
     title: "CI/CD",
@@ -176,7 +191,8 @@ const certificationsData = [
     skills: ["Jenkins", "GitHub Actions", "Docker"],
     power: 87,
     desc: "CI/CD pipeline automation certification.",
-    year: "2024"
+    year: "2024",
+    issuer: "DevOps Academy"
   },
   {
     title: "Django",
@@ -187,7 +203,8 @@ const certificationsData = [
     skills: ["Django", "Python", "REST API"],
     power: 90,
     desc: "Backend web development using Django.",
-    year: "2023"
+    year: "2023",
+    issuer: "Django Foundation"
   },
   {
     title: "HTML",
@@ -198,7 +215,8 @@ const certificationsData = [
     skills: ["HTML5", "Semantic", "Accessibility"],
     power: 88,
     desc: "Advanced HTML and semantic web development.",
-    year: "2023"
+    year: "2023",
+    issuer: "W3C"
   },
   {
     title: "CSS",
@@ -209,20 +227,20 @@ const certificationsData = [
     skills: ["CSS3", "Flexbox", "Grid"],
     power: 89,
     desc: "Advanced CSS layout and styling techniques.",
-    year: "2023"
+    year: "2023",
+    issuer: "CSS Academy"
   }
 ];
 
 const categoryConfig = {
-  Web: { icon: Code, color: '#00ff9f', gradient: 'linear-gradient(135deg, #00ff9f, #00cc7a)' },
-  Programming: { icon: Terminal, color: '#ff0080', gradient: 'linear-gradient(135deg, #ff0080, #cc0066)' },
-  Cloud: { icon: Cloud, color: '#00d4ff', gradient: 'linear-gradient(135deg, #00d4ff, #0099cc)' },
-  Data: { icon: Database, color: '#ffd700', gradient: 'linear-gradient(135deg, #ffd700, #ffb700)' },
-  "AI/ML": { icon: Brain, color: '#a855f7', gradient: 'linear-gradient(135deg, #a855f7, #8b35d4)' },
-  DevOps: { icon: Rocket, color: '#ff6b35', gradient: 'linear-gradient(135deg, #ff6b35, #e64a19)' }
+  Web: { icon: Code, color: '#00ff9f', gradient: 'linear-gradient(135deg, #00ff9f, #00cc7a)', bgGlow: 'rgba(0, 255, 159, 0.15)' },
+  Programming: { icon: Terminal, color: '#ff0080', gradient: 'linear-gradient(135deg, #ff0080, #cc0066)', bgGlow: 'rgba(255, 0, 128, 0.15)' },
+  Cloud: { icon: Cloud, color: '#00d4ff', gradient: 'linear-gradient(135deg, #00d4ff, #0099cc)', bgGlow: 'rgba(0, 212, 255, 0.15)' },
+  Data: { icon: Database, color: '#ffd700', gradient: 'linear-gradient(135deg, #ffd700, #ffb700)', bgGlow: 'rgba(255, 215, 0, 0.15)' },
+  "AI/ML": { icon: Brain, color: '#a855f7', gradient: 'linear-gradient(135deg, #a855f7, #8b35d4)', bgGlow: 'rgba(168, 85, 247, 0.15)' },
+  DevOps: { icon: Rocket, color: '#ff6b35', gradient: 'linear-gradient(135deg, #ff6b35, #e64a19)', bgGlow: 'rgba(255, 107, 53, 0.15)' }
 };
 
-// Advanced Developer Background Component
 function DeveloperAnimatedBackground() {
   const canvasRef = useRef(null);
 
@@ -238,26 +256,11 @@ function DeveloperAnimatedBackground() {
     };
     resize();
 
-    // Floating code snippets
     const codeSnippets = [
-      'import React from "react"',
-      'const [state, setState]',
-      'async function getData()',
-      'export default App',
-      'npm install package',
-      'git commit -m "feat"',
-      'docker-compose up',
-      'kubectl apply -f',
-      'const express = require',
-      'app.listen(PORT)',
-      'mongoose.connect(URI)',
-      'JWT.verify(token)',
-      'await fetch(API_URL)',
-      'Redux.dispatch(action)',
-      '<Component prop={} />',
-      'styled.div`padding`',
-      'useEffect(() => {})',
-      'class Model extends',
+      'import React', 'const [state]', 'async function', 'export default',
+      'npm install', 'git commit', 'docker-compose', 'kubectl apply',
+      'const express', 'app.listen', 'mongoose.connect', 'JWT.verify',
+      'await fetch', 'Redux.dispatch', '<Component />', 'useEffect(() => {})'
     ];
 
     class CodeParticle {
@@ -267,26 +270,19 @@ function DeveloperAnimatedBackground() {
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height - canvas.height;
-        this.speed = Math.random() * 0.8 + 0.3;
+        this.speed = Math.random() * 0.5 + 0.2;
         this.text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        this.opacity = Math.random() * 0.4 + 0.1;
+        this.opacity = Math.random() * 0.3 + 0.1;
         this.color = ['#00ff9f', '#00d4ff', '#a855f7', '#ff0080'][Math.floor(Math.random() * 4)];
-        this.rotation = Math.random() * 0.02 - 0.01;
-        this.angle = 0;
       }
       update() {
         this.y += this.speed;
-        this.angle += this.rotation;
         if (this.y > canvas.height + 50) this.reset();
       }
       draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.font = '13px "JetBrains Mono", monospace';
+        ctx.font = '11px "JetBrains Mono", monospace';
         ctx.fillStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.fillText(this.text, 0, 0);
-        ctx.restore();
+        ctx.fillText(this.text, this.x, this.y);
       }
     }
 
@@ -296,22 +292,21 @@ function DeveloperAnimatedBackground() {
       }
       reset() {
         this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height - canvas.height;
-        this.speed = Math.random() * 2 + 1.5;
-        this.length = Math.floor(Math.random() * 15) + 10;
+        this.y = -100;
+        this.speed = Math.random() * 1.5 + 1;
+        this.length = Math.floor(Math.random() * 12) + 8;
         this.chars = Array(this.length).fill(0).map(() => Math.random() > 0.5 ? '1' : '0');
-        this.opacity = Math.random() * 0.3 + 0.2;
       }
       update() {
         this.y += this.speed;
         if (this.y > canvas.height + 100) this.reset();
       }
       draw() {
-        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.font = '10px "JetBrains Mono", monospace';
         this.chars.forEach((char, i) => {
-          const alpha = Math.max(0, this.opacity - (i * 0.015));
+          const alpha = Math.max(0, 0.25 - (i * 0.02));
           ctx.fillStyle = `rgba(0, 212, 255, ${alpha})`;
-          ctx.fillText(char, this.x, this.y - (i * 14));
+          ctx.fillText(char, this.x, this.y - (i * 12));
         });
       }
     }
@@ -323,12 +318,11 @@ function DeveloperAnimatedBackground() {
       reset() {
         this.startX = Math.random() * canvas.width;
         this.startY = Math.random() * canvas.height;
-        this.endX = this.startX + (Math.random() - 0.5) * 400;
-        this.endY = this.startY + (Math.random() - 0.5) * 400;
+        this.endX = this.startX + (Math.random() - 0.5) * 300;
+        this.endY = this.startY + (Math.random() - 0.5) * 300;
         this.progress = 0;
-        this.speed = Math.random() * 0.008 + 0.004;
+        this.speed = Math.random() * 0.005 + 0.003;
         this.color = ['#00ff9f', '#00d4ff', '#a855f7'][Math.floor(Math.random() * 3)];
-        this.opacity = Math.random() * 0.4 + 0.2;
       }
       update() {
         this.progress += this.speed;
@@ -338,138 +332,34 @@ function DeveloperAnimatedBackground() {
         const x = this.startX + (this.endX - this.startX) * this.progress;
         const y = this.startY + (this.endY - this.startY) * this.progress;
         
-        ctx.strokeStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = `${this.color}30`;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(this.startX, this.startY);
         ctx.lineTo(x, y);
         ctx.stroke();
         
-        // Glowing node
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 8);
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, 6);
         gradient.addColorStop(0, this.color);
         gradient.addColorStop(1, 'transparent');
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    class GeometricParticle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 80 + 40;
-        this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.008;
-        this.opacity = Math.random() * 0.08 + 0.04;
-        this.type = Math.floor(Math.random() * 4);
-        this.color = ['#00ff9f', '#00d4ff', '#a855f7', '#ff0080'][Math.floor(Math.random() * 4)];
-      }
-      update() {
-        this.rotation += this.rotationSpeed;
-      }
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.strokeStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        
-        if (this.type === 0) {
-          ctx.rect(-this.size/2, -this.size/2, this.size, this.size);
-        } else if (this.type === 1) {
-          ctx.moveTo(0, -this.size/2);
-          ctx.lineTo(this.size/2, this.size/2);
-          ctx.lineTo(-this.size/2, this.size/2);
-          ctx.closePath();
-        } else if (this.type === 2) {
-          for (let i = 0; i < 6; i++) {
-            const angle = (Math.PI / 3) * i;
-            const x = (this.size/2) * Math.cos(angle);
-            const y = (this.size/2) * Math.sin(angle);
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
-        } else {
-          ctx.arc(0, 0, this.size/2, 0, Math.PI * 2);
-        }
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
-    class WaveformLine {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.y = Math.random() * canvas.height;
-        this.amplitude = Math.random() * 30 + 20;
-        this.frequency = Math.random() * 0.01 + 0.005;
-        this.speed = Math.random() * 0.02 + 0.01;
-        this.offset = 0;
-        this.color = ['#00ff9f', '#ff0080', '#00d4ff'][Math.floor(Math.random() * 3)];
-        this.opacity = Math.random() * 0.2 + 0.1;
-      }
-      update() {
-        this.offset += this.speed;
-      }
-      draw() {
-        ctx.strokeStyle = `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        
-        for (let x = 0; x < canvas.width; x += 5) {
-          const y = this.y + Math.sin((x * this.frequency) + this.offset) * this.amplitude;
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-      }
-    }
-
-    // Create elements
-    const codeParticles = Array.from({ length: 20 }, () => new CodeParticle());
-    const binaryStreams = Array.from({ length: 15 }, () => new BinaryStream());
-    const circuitNodes = Array.from({ length: 12 }, () => new CircuitNode());
-    const geometricParticles = Array.from({ length: 8 }, () => new GeometricParticle());
-    const waveformLines = Array.from({ length: 3 }, () => new WaveformLine());
+    const codeParticles = Array.from({ length: 25 }, () => new CodeParticle());
+    const binaryStreams = Array.from({ length: 18 }, () => new BinaryStream());
+    const circuitNodes = Array.from({ length: 15 }, () => new CircuitNode());
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      geometricParticles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
-      waveformLines.forEach(w => {
-        w.update();
-        w.draw();
-      });
-
-      circuitNodes.forEach(c => {
-        c.update();
-        c.draw();
-      });
-
-      binaryStreams.forEach(b => {
-        b.update();
-        b.draw();
-      });
-
-      codeParticles.forEach(c => {
-        c.update();
-        c.draw();
-      });
+      circuitNodes.forEach(c => { c.update(); c.draw(); });
+      binaryStreams.forEach(b => { b.update(); b.draw(); });
+      codeParticles.forEach(c => { c.update(); c.draw(); });
 
       animationId = requestAnimationFrame(animate);
     };
@@ -490,7 +380,7 @@ function DeveloperAnimatedBackground() {
         inset: 0,
         pointerEvents: 'none',
         zIndex: 0,
-        opacity: 0.7
+        opacity: 0.6
       }}
     />
   );
@@ -502,42 +392,50 @@ export default function CertificationsShowcase() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [statsAnimated, setStatsAnimated] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [sortBy, setSortBy] = useState("power");
   const statsRef = useRef(null);
 
-  // Mouse parallax effect
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 10,
-        y: (e.clientY / window.innerHeight - 0.5) * 10
+        x: (e.clientX / window.innerWidth - 0.5) * 8,
+        y: (e.clientY / window.innerHeight - 0.5) * 8
       });
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Stats animation on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setStatsAnimated(true);
-        }
+        if (entry.isIntersecting) setStatsAnimated(true);
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
     if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const filteredCerts = certificationsData.filter(cert => {
-    const matchesFilter = filter === "All" || cert.category === filter;
-    const matchesSearch = cert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         cert.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesFilter && matchesSearch;
-  });
+  const filteredCerts = certificationsData
+    .filter(cert => {
+      const matchesFilter = filter === "All" || cert.category === filter;
+      const matchesSearch = 
+        cert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cert.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        cert.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesFilter && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === "power") return b.power - a.power;
+      if (sortBy === "year") return b.year.localeCompare(a.year);
+      if (sortBy === "name") return a.title.localeCompare(b.title);
+      return 0;
+    });
 
-  const avgPower = Math.round(filteredCerts.reduce((sum, c) => sum + c.power, 0) / filteredCerts.length);
+  const avgPower = Math.round(filteredCerts.reduce((sum, c) => sum + c.power, 0) / filteredCerts.length) || 0;
+  const totalCerts = certificationsData.length;
+  const expertCerts = certificationsData.filter(c => c.level === "Expert").length;
 
   return (
     <>
@@ -545,35 +443,36 @@ export default function CertificationsShowcase() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow-x: hidden; }
 
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
+          from { opacity: 0; transform: translateY(40px); }
           to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.9); }
+          from { opacity: 0; transform: scale(0.85); }
           to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(50px); }
+          from { opacity: 0; transform: translateX(60px); }
           to { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes pulse3d {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+          50% { transform: scale(1.05); }
         }
 
         @keyframes glow {
-          0%, 100% { filter: drop-shadow(0 0 5px currentColor); }
-          50% { filter: drop-shadow(0 0 20px currentColor); }
+          0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+          50% { filter: drop-shadow(0 0 25px currentColor); }
         }
 
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
+          50% { transform: translateY(-12px); }
         }
 
         @keyframes shimmer {
@@ -586,19 +485,33 @@ export default function CertificationsShowcase() {
           to { transform: rotateY(360deg); }
         }
 
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
         .glass-card {
-          background: rgba(10, 10, 30, 0.6);
+          background: rgba(15, 15, 35, 0.7);
           backdrop-filter: blur(20px) saturate(180%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 8px 32px 0 rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
           transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .glass-card:hover {
-          border-color: rgba(0, 240, 255, 0.4);
+          border-color: rgba(0, 240, 255, 0.5);
           box-shadow: 
-            0 20px 60px 0 rgba(0, 240, 255, 0.3),
-            0 0 80px rgba(0, 240, 255, 0.2);
+            0 20px 60px 0 rgba(0, 240, 255, 0.4),
+            0 0 80px rgba(0, 240, 255, 0.2),
+            inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+          transform: translateY(-2px);
         }
 
         .neon-text {
@@ -612,31 +525,34 @@ export default function CertificationsShowcase() {
 
         .holographic {
           background: linear-gradient(135deg, 
-            rgba(0, 255, 159, 0.08) 0%,
-            rgba(0, 212, 255, 0.08) 25%,
-            rgba(168, 85, 247, 0.08) 50%,
-            rgba(255, 0, 128, 0.08) 75%,
-            rgba(0, 255, 159, 0.08) 100%);
+            rgba(0, 255, 159, 0.1) 0%,
+            rgba(0, 212, 255, 0.1) 25%,
+            rgba(168, 85, 247, 0.1) 50%,
+            rgba(255, 0, 128, 0.1) 75%,
+            rgba(0, 255, 159, 0.1) 100%);
           background-size: 400% 400%;
           animation: shimmer 10s ease infinite;
         }
 
         @media (max-width: 768px) {
           .glass-card:hover {
-            transform: translateY(-5px) !important;
+            transform: translateY(-4px) !important;
           }
+        }
+
+        @media (max-width: 640px) {
+          body { overflow-x: hidden; }
         }
       `}</style>
 
       <div style={{
         minHeight: '100vh',
-        background: '#000000',
+        background: 'linear-gradient(to bottom, #000000, #0a0a1a)',
         color: '#ffffff',
         position: 'relative',
         overflow: 'hidden',
         fontFamily: "'Inter', sans-serif"
       }}>
-        {/* Developer Animated Background */}
         <DeveloperAnimatedBackground />
 
         <div style={{
@@ -644,81 +560,85 @@ export default function CertificationsShowcase() {
           zIndex: 10,
           maxWidth: '1600px',
           margin: '0 auto',
-          padding: '4rem 2rem'
+          padding: 'clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem)'
         }}>
           {/* Hero Header */}
           <div style={{
             textAlign: 'center',
-            marginBottom: '5rem',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
             animation: 'fadeInUp 1s ease-out',
-            transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0)`
+            transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0)`,
+            transition: 'transform 0.3s ease-out'
           }}>
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '1rem',
-              padding: '0.8rem 2rem',
-              background: 'rgba(0, 240, 255, 0.1)',
-              border: '2px solid rgba(0, 240, 255, 0.3)',
+              gap: 'clamp(0.5rem, 2vw, 1rem)',
+              padding: 'clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 3vw, 2rem)',
+              background: 'rgba(0, 240, 255, 0.12)',
+              border: '2px solid rgba(0, 240, 255, 0.35)',
               borderRadius: '999px',
-              marginBottom: '2rem',
+              marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '1.1rem',
+              fontSize: 'clamp(0.85rem, 2vw, 1.1rem)',
               color: '#00f0ff',
-              animation: 'pulse3d 3s infinite'
+              animation: 'pulse3d 3s infinite',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
-              <Trophy size={24} style={{ animation: 'glow 2s infinite' }} />
-              {'> certificates.showcase()'}
-              <Sparkles size={24} style={{ animation: 'glow 2s infinite' }} />
+              <Trophy size={20} style={{ animation: 'glow 2s infinite', flexShrink: 0 }} />
+              <span style={{ whiteSpace: 'nowrap' }}>{'> certificates.showcase()'}</span>
+              <Sparkles size={20} style={{ animation: 'glow 2s infinite', flexShrink: 0 }} />
             </div>
 
             <h1 className="neon-text" style={{
-              fontSize: 'clamp(4rem, 15vw, 9rem)',
+              fontSize: 'clamp(3rem, 12vw, 9rem)',
               fontWeight: 900,
-              letterSpacing: '8px',
-              marginBottom: '1rem',
+              letterSpacing: 'clamp(2px, 1vw, 8px)',
+              marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
               fontFamily: "'Space Grotesk', sans-serif",
-              lineHeight: 1,
+              lineHeight: 1.1,
               textTransform: 'uppercase',
-              textShadow: '0 0 80px rgba(0, 240, 255, 0.5)'
+              textShadow: '0 0 80px rgba(0, 240, 255, 0.5)',
+              wordWrap: 'break-word'
             }}>
               CERTIFICATIONS
             </h1>
 
             <div style={{
-              fontSize: 'clamp(1.2rem, 4vw, 2rem)',
+              fontSize: 'clamp(1rem, 3vw, 2rem)',
               fontWeight: 600,
               background: 'linear-gradient(135deg, #00ff9f, #00d4ff)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              marginBottom: '3rem'
+              marginBottom: 'clamp(2rem, 4vw, 3rem)'
             }}>
-              Professional Technical Credentials
+              Professional Technical Credentials & Achievements
             </div>
 
-            {/* Stats Dashboard */}
+            {/* Enhanced Stats Dashboard */}
             <div 
               ref={statsRef}
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '2rem',
-                maxWidth: '1000px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
+                gap: 'clamp(1rem, 2vw, 2rem)',
+                maxWidth: '1100px',
                 margin: '0 auto'
               }}
             >
               {[
-                { label: 'Power Score', value: avgPower, icon: Zap, color: '#ffd700' },
-                { label: 'Certifications', value: filteredCerts.length, icon: Award, color: '#00ff9f' },
-                { label: 'Categories', value: 6, icon: Layers, color: '#ff0080' },
-                { label: 'Skill Level', value: 'Expert', icon: Star, color: '#00d4ff' },
+                { label: 'Avg Power', value: avgPower, icon: Zap, color: '#ffd700', suffix: '' },
+                { label: 'Total Certs', value: totalCerts, icon: Award, color: '#00ff9f', suffix: '+' },
+                { label: 'Categories', value: 6, icon: Layers, color: '#ff0080', suffix: '' },
+                { label: 'Expert Level', value: expertCerts, icon: Star, color: '#00d4ff', suffix: '' },
               ].map((stat, i) => (
                 <div
                   key={i}
                   className="glass-card"
                   style={{
-                    padding: '2rem 1.5rem',
-                    borderRadius: '20px',
+                    padding: 'clamp(1.2rem, 3vw, 2rem) clamp(1rem, 2vw, 1.5rem)',
+                    borderRadius: '18px',
                     textAlign: 'center',
                     animation: statsAnimated ? `scaleIn 0.6s ease-out ${i * 0.1}s both` : 'none',
                     cursor: 'pointer',
@@ -732,13 +652,13 @@ export default function CertificationsShowcase() {
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                   }}
                 >
                   <div style={{
-                    width: '70px',
-                    height: '70px',
-                    margin: '0 auto 1rem',
+                    width: 'clamp(50px, 10vw, 70px)',
+                    height: 'clamp(50px, 10vw, 70px)',
+                    margin: '0 auto clamp(0.5rem, 2vw, 1rem)',
                     borderRadius: '50%',
                     background: `linear-gradient(135deg, ${stat.color}, ${stat.color}80)`,
                     display: 'flex',
@@ -747,24 +667,24 @@ export default function CertificationsShowcase() {
                     boxShadow: `0 0 40px ${stat.color}60`,
                     animation: 'float 3s ease-in-out infinite'
                   }}>
-                    <stat.icon size={36} style={{ color: '#000' }} />
+                    <stat.icon size={Math.min(36, window.innerWidth * 0.06)} style={{ color: '#000' }} />
                   </div>
                   <div style={{
-                    fontSize: '2.5rem',
+                    fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
                     fontWeight: 900,
                     color: stat.color,
-                    marginBottom: '0.5rem',
+                    marginBottom: '0.3rem',
                     fontFamily: "'Space Grotesk', sans-serif",
                     textShadow: `0 0 20px ${stat.color}60`
                   }}>
-                    {stat.value}
+                    {stat.value}{stat.suffix}
                   </div>
                   <div style={{
-                    fontSize: '0.9rem',
+                    fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
                     color: 'rgba(255, 255, 255, 0.6)',
                     fontWeight: 600,
                     textTransform: 'uppercase',
-                    letterSpacing: '2px'
+                    letterSpacing: '1.5px'
                   }}>
                     {stat.label}
                   </div>
@@ -773,44 +693,80 @@ export default function CertificationsShowcase() {
             </div>
           </div>
 
-          {/* Search & Filter */}
-          <div style={{ marginBottom: '3rem' }}>
-            <div className="glass-card" style={{
-              padding: '1.5rem',
-              borderRadius: '20px',
-              marginBottom: '1.5rem'
+          {/* Search, Sort & Filter */}
+          <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+              gap: 'clamp(1rem, 2vw, 1.5rem)',
+              marginBottom: 'clamp(1rem, 2vw, 1.5rem)'
             }}>
-              <input
-                type="text"
-                placeholder="🔍 Search certifications, skills, technologies..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: '100%',
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  border: '2px solid rgba(0, 240, 255, 0.2)',
-                  borderRadius: '12px',
-                  padding: '1.2rem 1.5rem',
-                  fontSize: '1.1rem',
-                  outline: 'none',
-                  color: '#fff',
-                  transition: 'all 0.3s ease',
-                  fontFamily: "'Inter', sans-serif"
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#00f0ff';
-                  e.target.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.3)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = 'rgba(0, 240, 255, 0.2)';
-                  e.target.style.boxShadow = 'none';
-                }}
-              />
+              {/* Search Bar */}
+              <div className="glass-card" style={{
+                padding: 'clamp(0.8rem, 2vw, 1.2rem)',
+                borderRadius: '16px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="🔍 Search certifications..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(0, 0, 0, 0.4)',
+                    border: '2px solid rgba(0, 240, 255, 0.2)',
+                    borderRadius: '10px',
+                    padding: 'clamp(0.8rem, 2vw, 1.1rem) clamp(1rem, 2vw, 1.3rem)',
+                    fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
+                    outline: 'none',
+                    color: '#fff',
+                    transition: 'all 0.3s ease',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#00f0ff';
+                    e.target.style.boxShadow = '0 0 30px rgba(0, 240, 255, 0.3)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(0, 240, 255, 0.2)';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                />
+              </div>
+
+              {/* Sort Dropdown */}
+              <div className="glass-card" style={{
+                padding: 'clamp(0.8rem, 2vw, 1.2rem)',
+                borderRadius: '16px'
+              }}>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(0, 0, 0, 0.4)',
+                    border: '2px solid rgba(0, 240, 255, 0.2)',
+                    borderRadius: '10px',
+                    padding: 'clamp(0.8rem, 2vw, 1.1rem) clamp(1rem, 2vw, 1.3rem)',
+                    fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
+                    outline: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 600
+                  }}
+                >
+                  <option value="power">⚡ Sort by Power</option>
+                  <option value="year">📅 Sort by Year</option>
+                  <option value="name">🔤 Sort by Name</option>
+                </select>
+              </div>
             </div>
 
+            {/* Category Filters */}
             <div style={{
               display: 'flex',
-              gap: '1rem',
+              gap: 'clamp(0.6rem, 2vw, 1rem)',
               flexWrap: 'wrap',
               justifyContent: 'center'
             }}>
@@ -824,13 +780,13 @@ export default function CertificationsShowcase() {
                     key={cat}
                     onClick={() => setFilter(cat)}
                     style={{
-                      padding: '0.9rem 1.8rem',
+                      padding: 'clamp(0.7rem, 2vw, 0.9rem) clamp(1.2rem, 3vw, 1.8rem)',
                       borderRadius: '12px',
                       fontWeight: 700,
-                      fontSize: '1rem',
+                      fontSize: 'clamp(0.85rem, 2vw, 1rem)',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.6rem',
+                      gap: '0.5rem',
                       transition: 'all 0.3s ease',
                       border: `2px solid ${isActive ? config?.color || '#00f0ff' : 'rgba(255, 255, 255, 0.2)'}`,
                       background: isActive 
@@ -838,13 +794,14 @@ export default function CertificationsShowcase() {
                         : 'rgba(0, 0, 0, 0.3)',
                       color: isActive ? config?.color || '#00f0ff' : '#fff',
                       boxShadow: isActive ? `0 0 40px ${config?.color || '#00f0ff'}40` : 'none',
-                      transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                      transform: isActive ? 'scale(1.05)' : 'scale(1)',
                       cursor: 'pointer',
-                      backdropFilter: 'blur(10px)'
+                      backdropFilter: 'blur(10px)',
+                      whiteSpace: 'nowrap'
                     }}
                     onMouseEnter={(e) => {
                       if (!isActive && window.innerWidth >= 768) {
-                        e.currentTarget.style.transform = 'scale(1.05)';
+                        e.currentTarget.style.transform = 'scale(1.03)';
                         e.currentTarget.style.borderColor = config?.color || '#00f0ff';
                       }
                     }}
@@ -855,7 +812,7 @@ export default function CertificationsShowcase() {
                       }
                     }}
                   >
-                    {cat !== 'All' && <Icon size={20} />}
+                    {cat !== 'All' && <Icon size={18} />}
                     {cat}
                   </button>
                 );
@@ -863,11 +820,34 @@ export default function CertificationsShowcase() {
             </div>
           </div>
 
+          {/* Results Count */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
+            animation: 'fadeIn 0.5s ease-out'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.8rem',
+              padding: '0.8rem 1.5rem',
+              background: 'rgba(0, 240, 255, 0.1)',
+              border: '2px solid rgba(0, 240, 255, 0.3)',
+              borderRadius: '12px',
+              fontSize: 'clamp(0.9rem, 2vw, 1.05rem)',
+              fontWeight: 600,
+              color: '#00f0ff'
+            }}>
+              <CheckCircle size={20} />
+              <span>Showing {filteredCerts.length} of {totalCerts} Certifications</span>
+            </div>
+          </div>
+
           {/* Certification Cards Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '2rem'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(320px, 100%), 1fr))',
+            gap: 'clamp(1.5rem, 3vw, 2rem)'
           }}>
             {filteredCerts.map((cert, idx) => {
               const config = categoryConfig[cert.category];
@@ -881,21 +861,24 @@ export default function CertificationsShowcase() {
                     perspective: '1500px',
                     transformStyle: 'preserve-3d',
                     cursor: 'pointer',
-                    animation: `fadeInUp 0.8s ease-out ${idx * 0.08}s both`
+                    animation: `fadeInUp 0.8s ease-out ${Math.min(idx * 0.05, 1)}s both`
                   }}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
                   onClick={() => window.open(cert.link, '_blank')}
                 >
                   <div className="glass-card" style={{
-                    borderRadius: '24px',
+                    borderRadius: '20px',
                     overflow: 'hidden',
                     transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
                     transform: isHovered && window.innerWidth >= 768 
-                      ? 'rotateY(5deg) rotateX(3deg) scale(1.04) translateY(-10px)' 
+                      ? 'rotateY(3deg) rotateX(2deg) scale(1.03) translateY(-8px)' 
                       : 'none',
                     transformStyle: 'preserve-3d',
-                    position: 'relative'
+                    position: 'relative',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
                   }}>
                     {/* Power Score Bar */}
                     <div style={{
@@ -903,7 +886,7 @@ export default function CertificationsShowcase() {
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: '5px',
+                      height: '4px',
                       background: 'rgba(0, 0, 0, 0.5)',
                       zIndex: 20
                     }}>
@@ -919,13 +902,14 @@ export default function CertificationsShowcase() {
                     {/* Certificate Image */}
                     <div style={{
                       position: 'relative',
-                      height: '240px',
-                      overflow: 'hidden'
+                      height: 'clamp(200px, 30vw, 240px)',
+                      overflow: 'hidden',
+                      flexShrink: 0
                     }}>
                       <div style={{
                         position: 'absolute',
                         inset: 0,
-                        background: 'linear-gradient(to top, #000, transparent)',
+                        background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
                         zIndex: 10
                       }} />
                       <img 
@@ -936,16 +920,16 @@ export default function CertificationsShowcase() {
                           height: '100%',
                           objectFit: 'cover',
                           transition: 'transform 0.6s ease',
-                          transform: isHovered && window.innerWidth >= 768 ? 'scale(1.15)' : 'scale(1)'
+                          transform: isHovered && window.innerWidth >= 768 ? 'scale(1.12)' : 'scale(1)'
                         }}
                       />
                       
                       {/* Category Badge */}
                       <div style={{
                         position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        padding: '0.6rem 1rem',
+                        top: 'clamp(0.8rem, 2vw, 1rem)',
+                        right: 'clamp(0.8rem, 2vw, 1rem)',
+                        padding: 'clamp(0.5rem, 1.5vw, 0.6rem) clamp(0.8rem, 2vw, 1rem)',
                         borderRadius: '999px',
                         backdropFilter: 'blur(15px)',
                         display: 'flex',
@@ -956,9 +940,9 @@ export default function CertificationsShowcase() {
                         border: `2px solid ${config.color}`,
                         boxShadow: `0 0 30px ${config.color}50`
                       }}>
-                        <config.icon size={18} style={{ color: config.color }} />
+                        <config.icon size={16} style={{ color: config.color }} />
                         <span style={{ 
-                          fontSize: '0.85rem', 
+                          fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', 
                           fontWeight: 700, 
                           color: config.color,
                           fontFamily: "'JetBrains Mono', monospace"
@@ -970,14 +954,14 @@ export default function CertificationsShowcase() {
                       {/* Year Badge */}
                       <div style={{
                         position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        padding: '0.5rem 0.9rem',
+                        top: 'clamp(0.8rem, 2vw, 1rem)',
+                        left: 'clamp(0.8rem, 2vw, 1rem)',
+                        padding: 'clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.7rem, 2vw, 0.9rem)',
                         borderRadius: '999px',
                         background: 'rgba(0, 0, 0, 0.7)',
                         backdropFilter: 'blur(10px)',
                         border: '2px solid rgba(255, 255, 255, 0.2)',
-                        fontSize: '0.8rem',
+                        fontSize: 'clamp(0.7rem, 2vw, 0.8rem)',
                         fontWeight: 700,
                         color: '#fff',
                         zIndex: 20,
@@ -988,14 +972,20 @@ export default function CertificationsShowcase() {
                     </div>
 
                     {/* Card Content */}
-                    <div style={{ padding: '1.8rem' }}>
+                    <div style={{ 
+                      padding: 'clamp(1.2rem, 3vw, 1.8rem)',
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}>
                       <h3 style={{
-                        fontSize: '1.4rem',
+                        fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
                         fontWeight: 800,
-                        marginBottom: '0.8rem',
+                        marginBottom: 'clamp(0.6rem, 2vw, 0.8rem)',
                         color: isHovered ? config.color : '#fff',
                         transition: 'color 0.3s ease',
-                        fontFamily: "'Space Grotesk', sans-serif"
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        lineHeight: 1.3
                       }}>
                         {cert.title}
                       </h3>
@@ -1004,10 +994,12 @@ export default function CertificationsShowcase() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        marginBottom: '1rem'
+                        marginBottom: 'clamp(0.8rem, 2vw, 1rem)',
+                        flexWrap: 'wrap',
+                        gap: '0.5rem'
                       }}>
                         <span style={{ 
-                          fontSize: '0.95rem', 
+                          fontSize: 'clamp(0.8rem, 2vw, 0.95rem)', 
                           fontWeight: 600, 
                           color: config.color,
                           padding: '0.4rem 0.8rem',
@@ -1026,9 +1018,9 @@ export default function CertificationsShowcase() {
                           borderRadius: '8px',
                           border: '1px solid rgba(255, 215, 0, 0.4)'
                         }}>
-                          <Zap size={18} style={{ color: '#ffd700' }} />
+                          <Zap size={16} style={{ color: '#ffd700' }} />
                           <span style={{ 
-                            fontSize: '0.95rem', 
+                            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)', 
                             fontWeight: 800, 
                             color: '#ffd700',
                             fontFamily: "'Space Grotesk', sans-serif"
@@ -1039,10 +1031,11 @@ export default function CertificationsShowcase() {
                       </div>
 
                       <p style={{
-                        fontSize: '0.95rem',
+                        fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
                         color: 'rgba(255, 255, 255, 0.7)',
-                        marginBottom: '1.2rem',
-                        lineHeight: 1.6
+                        marginBottom: 'clamp(0.8rem, 2vw, 1.2rem)',
+                        lineHeight: 1.6,
+                        flex: 1
                       }}>
                         {cert.desc}
                       </p>
@@ -1052,13 +1045,13 @@ export default function CertificationsShowcase() {
                         display: 'flex',
                         flexWrap: 'wrap',
                         gap: '0.5rem',
-                        marginBottom: '1.2rem'
+                        marginBottom: 'clamp(0.8rem, 2vw, 1.2rem)'
                       }}>
                         {cert.skills.map((skill, i) => (
                           <span 
                             key={i}
                             style={{
-                              fontSize: '0.8rem',
+                              fontSize: 'clamp(0.7rem, 2vw, 0.8rem)',
                               padding: '0.4rem 0.8rem',
                               borderRadius: '8px',
                               background: 'rgba(0, 0, 0, 0.5)',
@@ -1073,6 +1066,16 @@ export default function CertificationsShowcase() {
                         ))}
                       </div>
 
+                      {/* Issuer */}
+                      <div style={{
+                        fontSize: 'clamp(0.75rem, 2vw, 0.85rem)',
+                        color: 'rgba(255, 255, 255, 0.5)',
+                        marginBottom: 'clamp(0.8rem, 2vw, 1rem)',
+                        fontWeight: 500
+                      }}>
+                        Issued by: {cert.issuer}
+                      </div>
+
                       {/* View Certificate Link */}
                       <div style={{
                         display: 'flex',
@@ -1080,12 +1083,13 @@ export default function CertificationsShowcase() {
                         justifyContent: 'flex-end',
                         gap: isHovered ? '0.8rem' : '0.5rem',
                         color: config.color,
-                        fontSize: '0.95rem',
+                        fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
                         fontWeight: 700,
-                        transition: 'gap 0.3s ease'
+                        transition: 'gap 0.3s ease',
+                        marginTop: 'auto'
                       }}>
                         <span>View Certificate</span>
-                        <ExternalLink size={18} style={{
+                        <ExternalLink size={16} style={{
                           transition: 'transform 0.3s ease',
                           transform: isHovered ? 'translateX(3px)' : 'translateX(0)'
                         }} />
@@ -1100,7 +1104,7 @@ export default function CertificationsShowcase() {
                       opacity: isHovered ? 1 : 0,
                       transition: 'opacity 0.4s ease',
                       pointerEvents: 'none',
-                      borderRadius: '24px'
+                      borderRadius: '20px'
                     }} />
                   </div>
                 </div>
@@ -1112,33 +1116,64 @@ export default function CertificationsShowcase() {
           {filteredCerts.length === 0 && (
             <div className="glass-card" style={{
               textAlign: 'center',
-              padding: '5rem 2rem',
+              padding: 'clamp(3rem, 8vw, 5rem) clamp(1.5rem, 4vw, 2rem)',
               borderRadius: '24px',
-              marginTop: '3rem'
+              marginTop: 'clamp(2rem, 4vw, 3rem)',
+              animation: 'scaleIn 0.5s ease-out'
             }}>
               <div style={{ 
-                fontSize: '5rem', 
-                marginBottom: '1.5rem',
+                fontSize: 'clamp(3rem, 10vw, 5rem)', 
+                marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
                 animation: 'float 3s ease-in-out infinite'
               }}>
                 🔍
               </div>
               <h3 style={{
-                fontSize: '2rem',
+                fontSize: 'clamp(1.5rem, 4vw, 2rem)',
                 fontWeight: 800,
                 color: '#00f0ff',
-                marginBottom: '1rem'
+                marginBottom: 'clamp(0.8rem, 2vw, 1rem)',
+                fontFamily: "'Space Grotesk', sans-serif"
               }}>
                 No Certifications Found
               </h3>
               <p style={{
-                fontSize: '1.1rem',
-                color: 'rgba(255, 255, 255, 0.6)'
+                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+                color: 'rgba(255, 255, 255, 0.6)',
+                maxWidth: '500px',
+                margin: '0 auto'
               }}>
-                Try adjusting your search or filter criteria
+                Try adjusting your search or filter criteria to find what you're looking for
               </p>
             </div>
           )}
+
+          {/* Footer Stats */}
+          <div style={{
+            marginTop: 'clamp(3rem, 6vw, 5rem)',
+            padding: 'clamp(2rem, 4vw, 3rem)',
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, rgba(0, 255, 159, 0.05), rgba(0, 212, 255, 0.05))',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.05)'
+          }}>
+            <div style={{
+              fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+              fontWeight: 700,
+              color: 'rgba(255, 255, 255, 0.8)',
+              marginBottom: '1rem'
+            }}>
+              🎯 Continuously Learning & Growing
+            </div>
+            <div style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+              color: 'rgba(255, 255, 255, 0.6)',
+              maxWidth: '600px',
+              margin: '0 auto'
+            }}>
+              Building expertise across multiple domains with industry-recognized certifications
+            </div>
+          </div>
         </div>
       </div>
     </>
