@@ -967,7 +967,7 @@ export default function AdvancedSkills() {
                 0 0 120px #a855f7
               `
             }}>
-              SKILLS ARSENAL
+              SKILLS
             </h1>
 
             <p style={{

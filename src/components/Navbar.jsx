@@ -646,7 +646,7 @@ const Navbar = () => {
                 textShadow: '0 0 30px rgba(0, 245, 255, 0.5)',
               }}
             >
-              Bhagavan
+              BHAGAVAN
             </motion.span>
           </motion.button>
 
