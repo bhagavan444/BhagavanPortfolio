@@ -28,7 +28,6 @@ export default function ModernDeveloperHome() {
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [activeMetric, setActiveMetric] = useState(0);
   const [cursorTrail, setCursorTrail] = useState([]);
-  const [ringRotation, setRingRotation] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const canvasRef = useRef(null);
@@ -201,14 +200,6 @@ export default function ModernDeveloperHome() {
       color: "#0089d6" 
     }
   ], []);
-
-  // Animated ring rotation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRingRotation(prev => (prev + 0.5) % 360);
-    }, 30);
-    return () => clearInterval(interval);
-  }, []);
 
   // Real-time clock
   useEffect(() => {
@@ -741,171 +732,18 @@ export default function ModernDeveloperHome() {
           zIndex:10 
         }}>
           
-          {/* HERO */}
+          {/* HERO - SWAPPED LAYOUT */}
           <section style={{ 
             minHeight:"100vh", 
             display:"grid", 
-            gridTemplateColumns:"1.2fr 1fr", 
+            gridTemplateColumns:"1fr 1.2fr", 
             gap:"5rem", 
             alignItems:"center",
             paddingTop:"5rem"
           }} className="hero-grid">
             
-            <div>
-              {/* Enhanced Status Badge */}
-              <div className="fade-in delay-1" style={{
-                display:"inline-flex",
-                alignItems:"center",
-                gap:"0.7rem",
-                background:"linear-gradient(135deg, rgba(0,245,255,0.15), rgba(168,85,247,0.15))",
-                border:"2px solid rgba(0,245,255,0.4)",
-                borderRadius:"30px",
-                padding:"0.7rem 1.5rem",
-                marginBottom:"2rem",
-                fontFamily:"'Roboto Mono',monospace",
-                fontSize:"0.85rem",
-                fontWeight:700,
-                color:"#00f5ff",
-                boxShadow:"0 0 25px rgba(0,245,255,0.3)"
-              }}>
-                <Fingerprint size={16} style={{ animation:"pulse 2s ease-in-out infinite" }} />
-                2026 GRADUATE • IMMEDIATE JOINER
-              </div>
-
-              {/* Name */}
-              <h1 className="fade-in delay-2" style={{
-                fontSize:"clamp(2.5rem, 7vw, 5.5rem)",
-                fontWeight:900,
-                lineHeight:1.1,
-                marginBottom:"1rem",
-                fontFamily:"'Orbitron',sans-serif",
-                letterSpacing:"-0.02em"
-              }}>
-                <span style={{ color:'#fff' }}>SIVA SATYA SAI</span>
-                <br />
-                <span className="gradient-text">BHAGAVAN</span>
-              </h1>
-
-              {/* Enhanced Role */}
-              <div className="fade-in delay-3" style={{
-                fontSize:"clamp(1.2rem, 2.5vw, 2rem)",
-                fontWeight:700,
-                marginBottom:"1.5rem",
-                fontFamily:"'Roboto Mono',monospace",
-                color:"#00f5ff",
-                minHeight:"3rem",
-                display:"flex",
-                alignItems:"center",
-                textShadow:"0 0 30px rgba(0,245,255,0.5)"
-              }}>
-                &lt; {typedText}
-                <span style={{
-                  width:'3px',
-                  height:'1.3em',
-                  background:'#00f5ff',
-                  marginLeft:'10px',
-                  animation:'cursor 1s step-end infinite',
-                  boxShadow:"0 0 10px #00f5ff"
-                }} />
-                &nbsp;/&gt;
-              </div>
-
-              {/* Enhanced Description */}
-              <p className="fade-in delay-4" style={{
-                fontSize:"1.15rem",
-                lineHeight:1.8,
-                color:"#c0c0c0",
-                maxWidth:"700px",
-                marginBottom:"2.5rem"
-              }}>
-                <strong style={{ color:'#fff', fontWeight:700 }}>Elite software engineer</strong> with{' '}
-                <span style={{ color:'#00f5ff', fontWeight:600 }}>proven enterprise experience</span> across{' '}
-                <strong style={{ color:'#fff' }}>3 industry internships</strong> at leading tech companies.
-                Specialized in <span style={{ color:'#a855f7', fontWeight:600 }}>AI/ML systems</span> and{' '}
-                <span style={{ color:'#22c55e', fontWeight:600 }}>scalable cloud architecture</span>.
-                Delivered <strong style={{ color:'#fff' }}>15+ production-grade projects</strong> with{' '}
-                <span style={{ color:'#ffd700', fontWeight:600 }}>100% client satisfaction</span>.
-                Armed with <strong style={{ color:'#fff' }}>20+ industry certifications</strong> from 
-                AWS, Azure, and Google Cloud.
-              </p>
-
-              {/* Buttons */}
-              <div className="fade-in delay-5" style={{
-                display:"flex",
-                gap:"1.5rem",
-                marginBottom:"3rem",
-                flexWrap:"wrap"
-              }}>
-                <button 
-                  onClick={() => handleNavigation('/projects')} 
-                  className="btn-primary"
-                >
-                  <Rocket size={20} />
-                  <span>VIEW PROJECTS</span>
-                </button>
-                <a 
-                  href={resumePdf} 
-                  download="Bhagavan_Resume.pdf" 
-                  className="btn-outline" 
-                  style={{ color:"#00f5ff" }}
-                >
-                  <Download size={20} />
-                  <span>DOWNLOAD RESUME</span>
-                </a>
-              </div>
-
-              {/* Enhanced Social */}
-              <div className="fade-in delay-6" style={{
-                display:"flex",
-                gap:"1.2rem"
-              }}>
-                {[
-                  { icon:Github, href:"https://github.com/bhagavan444", color:"#fff", label:"GitHub" },
-                  { icon:Linkedin, href:"https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/", color:"#00f5ff", label:"LinkedIn" },
-                  { icon:Mail, href:"mailto:g.sivasatyasaibhagavan@gmail.com", color:"#a855f7", label:"Email" },
-                  { icon:Phone, href:"tel:+917569205626", color:"#22c55e", label:"Phone" }
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={social.label}
-                    style={{
-                      width:"52px",
-                      height:"52px",
-                      background:"rgba(0,0,0,0.6)",
-                      border:`2px solid ${social.color}`,
-                      borderRadius:"50%",
-                      display:"flex",
-                      alignItems:"center",
-                      justifyContent:"center",
-                      color:social.color,
-                      transition:"all 0.3s cubic-bezier(0.16,1,0.3,1)",
-                      textDecoration:"none",
-                      position:"relative"
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = social.color;
-                      e.currentTarget.style.color = "#000";
-                      e.currentTarget.style.transform = "scale(1.3) translateY(-8px)";
-                      e.currentTarget.style.boxShadow = `0 10px 30px ${social.color}80`;
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = "rgba(0,0,0,0.6)";
-                      e.currentTarget.style.color = social.color;
-                      e.currentTarget.style.transform = "scale(1) translateY(0)";
-                      e.currentTarget.style.boxShadow = "none";
-                    }}
-                  >
-                    <social.icon size={22} />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Enhanced Profile Card with Background Rotating Ring */}
-            <div className="profile-card scale-in delay-4" style={{
+            {/* Enhanced Profile Card with Professional Ring - NOW ON LEFT */}
+            <div className="profile-card scale-in delay-2" style={{
               position:"relative",
               maxWidth:"450px",
               margin:"0 auto"
@@ -915,110 +753,6 @@ export default function ModernDeveloperHome() {
                 aspectRatio:"4/5",
                 animation:"float 6s ease-in-out infinite"
               }}>
-                {/* Background Rotating Ring - Behind Everything */}
-                <div style={{
-                  position:"absolute",
-                  inset:"-40px",
-                  zIndex:0,
-                  pointerEvents:"none"
-                }}>
-                  <svg 
-                    width="100%" 
-                    height="100%" 
-                    viewBox="0 0 100 100"
-                    style={{
-                      position:"absolute",
-                      inset:0,
-                      transform:`rotate(${ringRotation}deg)`,
-                      transition:"transform 0.05s linear"
-                    }}
-                  >
-                    {/* Outer ring with gradient */}
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="url(#ringGradient1)"
-                      strokeWidth="0.5"
-                      strokeDasharray="3 3"
-                      opacity="0.6"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="42"
-                      fill="none"
-                      stroke="url(#ringGradient2)"
-                      strokeWidth="0.8"
-                      strokeDasharray="5 5"
-                      opacity="0.8"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="48"
-                      fill="none"
-                      stroke="url(#ringGradient3)"
-                      strokeWidth="0.4"
-                      strokeDasharray="2 2"
-                      opacity="0.5"
-                    />
-                    
-                    <defs>
-                      <linearGradient id="ringGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#00f5ff" stopOpacity="1" />
-                        <stop offset="25%" stopColor="#a855f7" stopOpacity="0.8" />
-                        <stop offset="50%" stopColor="#ffd700" stopOpacity="0.6" />
-                        <stop offset="75%" stopColor="#22c55e" stopOpacity="0.8" />
-                        <stop offset="100%" stopColor="#00f5ff" stopOpacity="1" />
-                      </linearGradient>
-                      <linearGradient id="ringGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#ff6b35" stopOpacity="1" />
-                        <stop offset="33%" stopColor="#00f5ff" stopOpacity="0.9" />
-                        <stop offset="66%" stopColor="#a855f7" stopOpacity="0.9" />
-                        <stop offset="100%" stopColor="#ff6b35" stopOpacity="1" />
-                      </linearGradient>
-                      <linearGradient id="ringGradient3" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#22c55e" stopOpacity="0.7" />
-                        <stop offset="50%" stopColor="#ffd700" stopOpacity="0.7" />
-                        <stop offset="100%" stopColor="#22c55e" stopOpacity="0.7" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-
-                  {/* Counter-rotating ring */}
-                  <svg 
-                    width="100%" 
-                    height="100%" 
-                    viewBox="0 0 100 100"
-                    style={{
-                      position:"absolute",
-                      inset:0,
-                      transform:`rotate(${-ringRotation * 1.5}deg)`,
-                      transition:"transform 0.05s linear"
-                    }}
-                  >
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="46"
-                      fill="none"
-                      stroke="url(#ringGradient4)"
-                      strokeWidth="0.6"
-                      strokeDasharray="4 4"
-                      opacity="0.7"
-                    />
-                    <defs>
-                      <linearGradient id="ringGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
-                        <stop offset="50%" stopColor="#00f5ff" stopOpacity="0.8" />
-                        <stop offset="100%" stopColor="#a855f7" stopOpacity="0.8" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </div>
-
                 {/* Glowing Corners */}
                 {[
                   { top:"-12px", left:"-12px", borderTop:"4px solid #00f5ff", borderLeft:"4px solid #00f5ff", boxShadow:"0 0 20px #00f5ff" },
@@ -1212,6 +946,160 @@ export default function ModernDeveloperHome() {
                     </a>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Content - NOW ON RIGHT */}
+            <div>
+              {/* Enhanced Status Badge */}
+              <div className="fade-in delay-1" style={{
+                display:"inline-flex",
+                alignItems:"center",
+                gap:"0.7rem",
+                background:"linear-gradient(135deg, rgba(0,245,255,0.15), rgba(168,85,247,0.15))",
+                border:"2px solid rgba(0,245,255,0.4)",
+                borderRadius:"30px",
+                padding:"0.7rem 1.5rem",
+                marginBottom:"2rem",
+                fontFamily:"'Roboto Mono',monospace",
+                fontSize:"0.85rem",
+                fontWeight:700,
+                color:"#00f5ff",
+                boxShadow:"0 0 25px rgba(0,245,255,0.3)"
+              }}>
+                <Fingerprint size={16} style={{ animation:"pulse 2s ease-in-out infinite" }} />
+                2026 GRADUATE • IMMEDIATE JOINER
+              </div>
+
+              {/* Name */}
+              <h1 className="fade-in delay-2" style={{
+                fontSize:"clamp(2.5rem, 7vw, 5.5rem)",
+                fontWeight:900,
+                lineHeight:1.1,
+                marginBottom:"1rem",
+                fontFamily:"'Orbitron',sans-serif",
+                letterSpacing:"-0.02em"
+              }}>
+                <span style={{ color:'#fff' }}>SIVA SATYA SAI</span>
+                <br />
+                <span className="gradient-text">BHAGAVAN</span>
+              </h1>
+
+              {/* Enhanced Role */}
+              <div className="fade-in delay-3" style={{
+                fontSize:"clamp(1.2rem, 2.5vw, 2rem)",
+                fontWeight:700,
+                marginBottom:"1.5rem",
+                fontFamily:"'Roboto Mono',monospace",
+                color:"#00f5ff",
+                minHeight:"3rem",
+                display:"flex",
+                alignItems:"center",
+                textShadow:"0 0 30px rgba(0,245,255,0.5)"
+              }}>
+                &lt; {typedText}
+                <span style={{
+                  width:'3px',
+                  height:'1.3em',
+                  background:'#00f5ff',
+                  marginLeft:'10px',
+                  animation:'cursor 1s step-end infinite',
+                  boxShadow:"0 0 10px #00f5ff"
+                }} />
+                &nbsp;/&gt;
+              </div>
+
+              {/* Enhanced Description */}
+              <p className="fade-in delay-4" style={{
+                fontSize:"1.15rem",
+                lineHeight:1.8,
+                color:"#c0c0c0",
+                maxWidth:"700px",
+                marginBottom:"2.5rem"
+              }}>
+                <strong style={{ color:'#fff', fontWeight:700 }}>Elite software engineer</strong> with{' '}
+                <span style={{ color:'#00f5ff', fontWeight:600 }}>proven enterprise experience</span> across{' '}
+                <strong style={{ color:'#fff' }}>3 industry internships</strong> at leading tech companies.
+                Specialized in <span style={{ color:'#a855f7', fontWeight:600 }}>AI/ML systems</span> and{' '}
+                <span style={{ color:'#22c55e', fontWeight:600 }}>scalable cloud architecture</span>.
+                Delivered <strong style={{ color:'#fff' }}>15+ production-grade projects</strong> with{' '}
+                <span style={{ color:'#ffd700', fontWeight:600 }}>100% client satisfaction</span>.
+                Armed with <strong style={{ color:'#fff' }}>20+ industry certifications</strong> from 
+                AWS, Azure, and Google Cloud.
+              </p>
+
+              {/* Buttons */}
+              <div className="fade-in delay-5" style={{
+                display:"flex",
+                gap:"1.5rem",
+                marginBottom:"3rem",
+                flexWrap:"wrap"
+              }}>
+                <button 
+                  onClick={() => handleNavigation('/projects')} 
+                  className="btn-primary"
+                >
+                  <Rocket size={20} />
+                  <span>VIEW PROJECTS</span>
+                </button>
+                <a 
+                  href={resumePdf} 
+                  download="Bhagavan_Resume.pdf" 
+                  className="btn-outline" 
+                  style={{ color:"#00f5ff" }}
+                >
+                  <Download size={20} />
+                  <span>DOWNLOAD RESUME</span>
+                </a>
+              </div>
+
+              {/* Enhanced Social */}
+              <div className="fade-in delay-6" style={{
+                display:"flex",
+                gap:"1.2rem"
+              }}>
+                {[
+                  { icon:Github, href:"https://github.com/bhagavan444", color:"#fff", label:"GitHub" },
+                  { icon:Linkedin, href:"https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/", color:"#00f5ff", label:"LinkedIn" },
+                  { icon:Mail, href:"mailto:g.sivasatyasaibhagavan@gmail.com", color:"#a855f7", label:"Email" },
+                  { icon:Phone, href:"tel:+917569205626", color:"#22c55e", label:"Phone" }
+                ].map((social, i) => (
+                  <a
+                    key={i}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={social.label}
+                    style={{
+                      width:"52px",
+                      height:"52px",
+                      background:"rgba(0,0,0,0.6)",
+                      border:`2px solid ${social.color}`,
+                      borderRadius:"50%",
+                      display:"flex",
+                      alignItems:"center",
+                      justifyContent:"center",
+                      color:social.color,
+                      transition:"all 0.3s cubic-bezier(0.16,1,0.3,1)",
+                      textDecoration:"none",
+                      position:"relative"
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = social.color;
+                      e.currentTarget.style.color = "#000";
+                      e.currentTarget.style.transform = "scale(1.3) translateY(-8px)";
+                      e.currentTarget.style.boxShadow = `0 10px 30px ${social.color}80`;
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "rgba(0,0,0,0.6)";
+                      e.currentTarget.style.color = social.color;
+                      e.currentTarget.style.transform = "scale(1) translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
+                    <social.icon size={22} />
+                  </a>
+                ))}
               </div>
             </div>
           </section>
