@@ -1,4 +1,8 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
+
+// No big Lucide import — we use simple emoji/icons or CDN where needed
 
 const skills = [
   {
@@ -9,24 +13,27 @@ const skills = [
     level: 82,
     projects: 2,
     experience: "Internship",
-    color: "#06b6d4",
-    gradient: "linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)",
-    icon: "💻",
-    techs: [
-      { name: "React", icon: "devicon-react-original colored", color: "#61DAFB" },
-      { name: "Node.js", icon: "devicon-nodejs-plain colored", color: "#339933" },
-      { name: "MongoDB", icon: "devicon-mongodb-plain colored", color: "#47A248" },
-      { name: "Express", icon: "devicon-express-original", color: "#fff" },
-      { name: "JWT", icon: "devicon-json-plain", color: "#fff" },
-      { name: "OAuth", icon: "devicon-google-plain colored", color: "#4285F4" },
-      { name: "REST API", icon: "devicon-nodejs-plain", color: "#339933" }
-    ],
+    whereLearned: "StudyOwl Education Pvt Ltd (MERN Stack Internship)",
+    color: "#00f5ff",
+    glowRGB: "0, 245, 255",
+    secondaryColor: "#8b5cf6",
+    accentColor: "#f59e0b",
+    gradient: "linear-gradient(135deg, #00f5ff 0%, #0099ff 100%)",
+    iconEmoji: "💻",
+    badge: "FULL-STACK PRO",
+    rarity: "LEGENDARY",
+    tech: ["React", "Node.js", "Express", "MongoDB", "JWT", "OAuth", "REST API"],
     achievements: [
       "Built ATS-friendly Resume Builder with PDF & Word export",
       "Implemented secure OAuth-based authentication system",
       "Optimized REST API performance by 40%"
     ],
-    metrics: { apps: "2", auth: "OAuth", db: "Atlas" }
+    impact: "Production-grade full-stack applications",
+    impact_metrics: [
+      { label: "Projects", value: "2+", iconEmoji: "🧩" },
+      { label: "Auth", value: "OAuth", iconEmoji: "🔐" },
+      { label: "Database", value: "Atlas", iconEmoji: "☁️" }
+    ]
   },
   {
     id: 2,
@@ -36,23 +43,27 @@ const skills = [
     level: 80,
     projects: 2,
     experience: "Internship",
-    color: "#a855f7",
-    gradient: "linear-gradient(135deg, #a855f7 0%, #9333ea 100%)",
-    icon: "🧠",
-    techs: [
-      { name: "Python", icon: "devicon-python-plain colored", color: "#3776AB" },
-      { name: "Scikit-learn", icon: "devicon-scikitlearn-plain colored", color: "#F7931E" },
-      { name: "Pandas", icon: "devicon-pandas-original colored", color: "#150458" },
-      { name: "NumPy", icon: "devicon-numpy-original colored", color: "#013243" },
-      { name: "TensorFlow", icon: "devicon-tensorflow-original colored", color: "#FF6F00" },
-      { name: "Jupyter", icon: "devicon-jupyter-plain colored", color: "#F37626" }
-    ],
+    whereLearned: "Blackbucks & SmartBridge Internships",
+    color: "#a78bfa",
+    glowRGB: "167, 139, 250",
+    secondaryColor: "#ec4899",
+    accentColor: "#06b6d4",
+    gradient: "linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)",
+    iconEmoji: "🧠",
+    badge: "ML ENGINEER",
+    rarity: "EPIC",
+    tech: ["Python", "Scikit-learn", "Pandas", "NumPy", "TensorFlow", "Jupyter"],
     achievements: [
       "Built Fake News Detection with 89% accuracy",
       "Implemented TF-IDF vectorization pipeline",
       "Analyzed 50K+ data points for model training"
     ],
-    metrics: { models: "4+", accuracy: "89%", data: "50K+" }
+    impact: "High-accuracy ML & NLP solutions",
+    impact_metrics: [
+      { label: "Models", value: "4+", iconEmoji: "📈" },
+      { label: "Accuracy", value: "89%", iconEmoji: "🎯" },
+      { label: "Data", value: "50K+", iconEmoji: "📊" }
+    ]
   },
   {
     id: 3,
@@ -62,23 +73,27 @@ const skills = [
     level: 78,
     projects: 2,
     experience: "Internship",
+    whereLearned: "SmartBridge AI/ML Internship",
     color: "#3b82f6",
+    glowRGB: "59, 130, 246",
+    secondaryColor: "#2563eb",
+    accentColor: "#60a5fa",
     gradient: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-    icon: "🤖",
-    techs: [
-      { name: "TensorFlow", icon: "devicon-tensorflow-original colored", color: "#FF6F00" },
-      { name: "Keras", icon: "devicon-keras-plain colored", color: "#D00000" },
-      { name: "Python", icon: "devicon-python-plain colored", color: "#3776AB" },
-      { name: "OpenCV", icon: "devicon-opencv-plain colored", color: "#5C3EE8" },
-      { name: "PyTorch", icon: "devicon-pytorch-original colored", color: "#EE4C2C" },
-      { name: "Flask", icon: "devicon-flask-original", color: "#fff" }
-    ],
+    iconEmoji: "🤖",
+    badge: "CV SPECIALIST",
+    rarity: "EPIC",
+    tech: ["TensorFlow", "Keras", "OpenCV", "PyTorch", "Flask", "Python"],
     achievements: [
       "Developed CNN models with 92% accuracy",
       "Deployed real-time object detection system",
       "Optimized inference time by 35%"
     ],
-    metrics: { models: "3+", accuracy: "92%", deploy: "Flask" }
+    impact: "Computer Vision & Deep Learning pipelines",
+    impact_metrics: [
+      { label: "Models", value: "3+", iconEmoji: "🧬" },
+      { label: "Accuracy", value: "92%", iconEmoji: "🏆" },
+      { label: "Deploy", value: "Flask", iconEmoji: "🚀" }
+    ]
   },
   {
     id: 4,
@@ -88,23 +103,27 @@ const skills = [
     level: 76,
     projects: 2,
     experience: "Internship",
+    whereLearned: "Blackbucks Data Science Internship",
     color: "#f97316",
+    glowRGB: "249, 115, 22",
+    secondaryColor: "#ea580c",
+    accentColor: "#fb923c",
     gradient: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
-    icon: "📊",
-    techs: [
-      { name: "Python", icon: "devicon-python-plain colored", color: "#3776AB" },
-      { name: "Pandas", icon: "devicon-pandas-original colored", color: "#150458" },
-      { name: "NumPy", icon: "devicon-numpy-original colored", color: "#013243" },
-      { name: "Jupyter", icon: "devicon-jupyter-plain colored", color: "#F37626" },
-      { name: "MySQL", icon: "devicon-mysql-plain colored", color: "#4479A1" },
-      { name: "PostgreSQL", icon: "devicon-postgresql-plain colored", color: "#336791" }
-    ],
+    iconEmoji: "📊",
+    badge: "DATA ANALYST",
+    rarity: "RARE",
+    tech: ["Python", "Pandas", "NumPy", "Jupyter", "MySQL", "PostgreSQL"],
     achievements: [
       "Analyzed datasets with 100K+ records",
       "Created interactive data visualizations",
       "Automated data cleaning workflows"
     ],
-    metrics: { datasets: "10+", records: "100K+", viz: "Multi" }
+    impact: "Large-scale data processing & insights",
+    impact_metrics: [
+      { label: "Datasets", value: "10+", iconEmoji: "📂" },
+      { label: "Records", value: "100K+", iconEmoji: "📈" },
+      { label: "Viz", value: "Multi", iconEmoji: "📉" }
+    ]
   },
   {
     id: 5,
@@ -113,24 +132,28 @@ const skills = [
     subtitle: "Algorithms & Problem Solving",
     level: 85,
     projects: 5,
-    experience: "Fresher",
+    experience: "Self + Academic",
+    whereLearned: "Self-learning + College coursework",
     color: "#8b5cf6",
+    glowRGB: "139, 92, 246",
+    secondaryColor: "#7c3aed",
+    accentColor: "#a78bfa",
     gradient: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
-    icon: "⚡",
-    techs: [
-      { name: "Python", icon: "devicon-python-plain colored", color: "#3776AB" },
-      { name: "Java", icon: "devicon-java-plain colored", color: "#007396" },
-      { name: "JavaScript", icon: "devicon-javascript-plain colored", color: "#F7DF1E" },
-      { name: "C++", icon: "devicon-cplusplus-plain colored", color: "#00599C" },
-      { name: "Git", icon: "devicon-git-plain colored", color: "#F05032" },
-      { name: "GitHub", icon: "devicon-github-original", color: "#fff" }
-    ],
+    iconEmoji: "⚡",
+    badge: "DSA MASTER",
+    rarity: "LEGENDARY",
+    tech: ["Python", "Java", "JavaScript", "C++", "Git", "GitHub"],
     achievements: [
       "Solved 100+ DSA problems on coding platforms",
       "Strong foundation in OOP principles",
       "Implemented complex algorithms efficiently"
     ],
-    metrics: { problems: "100+", oop: "Expert", dsa: "Strong" }
+    impact: "Strong algorithmic thinking & clean code",
+    impact_metrics: [
+      { label: "Problems", value: "100+", iconEmoji: "🧩" },
+      { label: "OOP", value: "Expert", iconEmoji: "🏛️" },
+      { label: "DSA", value: "Strong", iconEmoji: "🚀" }
+    ]
   },
   {
     id: 6,
@@ -139,1223 +162,1038 @@ const skills = [
     subtitle: "AWS & Docker Specialist",
     level: 70,
     projects: 2,
-    experience: "Basic",
+    experience: "Self-learning",
+    whereLearned: "Personal projects & online courses",
     color: "#10b981",
+    glowRGB: "16, 185, 129",
+    secondaryColor: "#059669",
+    accentColor: "#34d399",
     gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-    icon: "☁️",
-    techs: [
-      { name: "AWS", icon: "devicon-amazonwebservices-plain-wordmark colored", color: "#FF9900" },
-      { name: "Docker", icon: "devicon-docker-plain colored", color: "#2496ED" },
-      { name: "Kubernetes", icon: "devicon-kubernetes-plain colored", color: "#326CE5" },
-      { name: "Linux", icon: "devicon-linux-plain", color: "#FCC624" },
-      { name: "Nginx", icon: "devicon-nginx-original colored", color: "#009639" },
-      { name: "Jenkins", icon: "devicon-jenkins-plain colored", color: "#D24939" }
-    ],
+    iconEmoji: "☁️",
+    badge: "CLOUD ENGINEER",
+    rarity: "RARE",
+    tech: ["AWS", "Docker", "Kubernetes", "Linux", "Nginx", "Jenkins"],
     achievements: [
       "Deployed apps on AWS EC2 & S3",
       "Containerized microservices with Docker",
       "Set up CI/CD pipelines with GitHub Actions"
     ],
-    metrics: { cloud: "AWS", ci: "GitHub", container: "Docker" }
+    impact: "Scalable & reliable cloud infrastructure",
+    impact_metrics: [
+      { label: "Cloud", value: "AWS", iconEmoji: "🌐" },
+      { label: "CI/CD", value: "GitHub", iconEmoji: "🔄" },
+      { label: "Container", value: "Docker", iconEmoji: "📦" }
+    ]
   }
 ];
 
-export default function UltimatePortfolioShowcase() {
+export default function AdvancedSkills() {
+  const [viewMode, setViewMode] = useState("grid");
+  const [hoveredId, setHoveredId] = useState(null);
   const [activeSkill, setActiveSkill] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [filter, setFilter] = useState('all');
-  const [viewMode, setViewMode] = useState('cards');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const canvasRef = useRef(null);
-  const cursorRef = useRef(null);
 
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
-  // Advanced particle system
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setCanvasSize();
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.size = Math.random() * 2.5 + 0.5;
-        this.opacity = Math.random() * 0.5 + 0.3;
-        this.hue = Math.random() * 60 + 240;
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-
-      draw() {
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2);
-        gradient.addColorStop(0, `hsla(${this.hue}, 80%, 60%, ${this.opacity})`);
-        gradient.addColorStop(1, `hsla(${this.hue}, 80%, 60%, 0)`);
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    const particles = Array.from({ length: 80 }, () => new Particle());
-
-    let animationId;
-    const animate = () => {
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach((p, i) => {
-        p.update();
-        p.draw();
-
-        particles.forEach((other, j) => {
-          if (i < j) {
-            const dx = p.x - other.x;
-            const dy = p.y - other.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 150) {
-              ctx.strokeStyle = `hsla(${(p.hue + other.hue) / 2}, 70%, 60%, ${0.15 * (1 - dist / 150)})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(other.x, other.y);
-              ctx.stroke();
-            }
-          }
-        });
-      });
-
-      animationId = requestAnimationFrame(animate);
-    };
-    animate();
-
-    window.addEventListener('resize', setCanvasSize);
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', setCanvasSize);
-    };
-  }, []);
-
-  // Mouse tracking
+  // Mouse movement for subtle parallax
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      const x = (e.clientX / window.innerWidth - 0.5) * 18;
+      const y = (e.clientY / window.innerHeight - 0.5) * 18;
+      setMousePosition({ x, y });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Scroll progress
+  // Scroll progress bar
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress((scrolled / maxScroll) * 100);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const filteredSkills = filter === 'all' 
-    ? skills 
-    : skills.filter(s => s.category.toLowerCase().replace(/\s+/g, '-') === filter);
+  // Particle background
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
 
-  const SkillCard = ({ skill, index }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [tilt, setTilt] = useState({ x: 0, y: 0 });
-    const [ripples, setRipples] = useState([]);
-    const cardRef = useRef(null);
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
 
-    const handleMouseMove = (e) => {
-      if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      setTilt({
-        x: (y - 0.5) * -12,
-        y: (x - 0.5) * 12
+    class Particle {
+      constructor() {
+        this.reset();
+        this.y = Math.random() * canvas.height;
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.speed = Math.random() * 1.8 + 0.6;
+        this.radius = Math.random() * 2.2 + 0.6;
+        this.color = Math.random() > 0.5 ? '0, 245, 255' : '139, 92, 246';
+        this.opacity = Math.random() * 0.45 + 0.25;
+        this.drift = (Math.random() - 0.5) * 0.4;
+      }
+      update() {
+        this.y += this.speed;
+        this.x += this.drift;
+        if (this.y > canvas.height + 20) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 2.8);
+        gradient.addColorStop(0, `rgba(${this.color}, ${this.opacity})`);
+        gradient.addColorStop(1, `rgba(${this.color}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+    }
+
+    const particles = Array.from({ length: 130 }, () => new Particle());
+
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
       });
+
+      // connections
+      for (let i = 0; i < particles.length; i += 2) {
+        for (let j = i + 1; j < particles.length; j += 2) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 110) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 245, 255, ${0.10 * (1 - distance / 110)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(animate);
     };
+    animate();
 
-    const handleClick = (e) => {
-      const rect = cardRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      
-      const newRipple = { x, y, id: Date.now() };
-      setRipples([...ripples, newRipple]);
-      
-      setTimeout(() => {
-        setRipples(prev => prev.filter(r => r.id !== newRipple.id));
-      }, 1000);
-
-      setActiveSkill(activeSkill === skill.id ? null : skill.id);
+    window.addEventListener('resize', resize);
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
     };
+  }, []);
 
-    return (
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => {
-          setIsHovered(false);
-          setTilt({ x: 0, y: 0 });
-        }}
-        onClick={handleClick}
-        style={{
-          position: 'relative',
-          background: 'rgba(15, 23, 42, 0.5)',
-          backdropFilter: 'blur(30px)',
-          WebkitBackdropFilter: 'blur(30px)',
-          borderRadius: '28px',
-          overflow: 'hidden',
-          cursor: 'pointer',
-          transform: isHovered 
-            ? `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.03) translateZ(30px)`
-            : 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)',
-          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease',
-          boxShadow: isHovered
-            ? `0 40px 80px rgba(0, 0, 0, 0.5), 0 0 60px ${skill.color}50, inset 0 2px 0 rgba(255, 255, 255, 0.15)`
-            : '0 15px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-          animation: `cardSlideUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.1}s both`,
-          border: `1px solid ${isHovered ? `${skill.color}70` : 'rgba(255, 255, 255, 0.12)'}`,
-          transformStyle: 'preserve-3d',
-          willChange: 'transform'
-        }}
-      >
-        {/* Ripple effects */}
-        {ripples.map(ripple => (
-          <div
-            key={ripple.id}
-            style={{
-              position: 'absolute',
-              left: `${ripple.x}%`,
-              top: `${ripple.y}%`,
-              width: '10px',
-              height: '10px',
-              borderRadius: '50%',
-              background: skill.color,
-              transform: 'translate(-50%, -50%) scale(0)',
-              opacity: 0.6,
-              animation: 'rippleEffect 1s ease-out forwards',
-              pointerEvents: 'none',
-              zIndex: 10
-            }}
-          />
-        ))}
+  const getRarityColor = (rarity) => {
+    const map = {
+      'LEGENDARY': '#ffd700',
+      'EPIC': '#c084fc',
+      'RARE': '#22d3ee'
+    };
+    return map[rarity] || '#67e8f9';
+  };
 
-        {/* Animated gradient overlay */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: skill.gradient,
-          opacity: isHovered ? 0.2 : 0.1,
-          transition: 'opacity 0.6s ease',
-          zIndex: 1,
-          mixBlendMode: 'overlay'
-        }} />
+  const filteredSkills = selectedFilter === 'ALL'
+    ? skills
+    : skills.filter(s => s.rarity === selectedFilter);
 
-        {/* Top animated border */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '4px',
-          background: skill.gradient,
-          opacity: isHovered ? 1 : 0.6,
-          transition: 'opacity 0.3s ease',
-          boxShadow: `0 0 25px ${skill.color}`,
-          animation: isHovered ? 'borderFlow 2s ease-in-out infinite' : 'none'
-        }} />
+  // ────────────────────────────────────────────────
+  //   VIEW MODE SELECTOR
+  // ────────────────────────────────────────────────
+  const ViewModeSelector = () => (
+    <div style={{
+      display: 'flex',
+      gap: '1.4rem',
+      justifyContent: 'center',
+      margin: '0 auto 4.5rem',
+      flexWrap: 'wrap',
+      maxWidth: '1000px'
+    }}>
+      {[
+        { mode: "grid", label: "Grid", icon: "◼◼◼" },
+        { mode: "timeline", label: "Timeline", icon: "➜" },
+        { mode: "network", label: "Network", icon: "⟁" },
+        { mode: "immersive", label: "Immersive", icon: "⛶" }
+      ].map(({ mode, label, icon }) => (
+        <button
+          key={mode}
+          onClick={() => setViewMode(mode)}
+          style={{
+            padding: '0.9rem 2.2rem',
+            background: viewMode === mode ? 'rgba(0,245,255,0.14)' : 'rgba(255,255,255,0.04)',
+            border: viewMode === mode ? '2px solid #00f5ff' : '1px solid rgba(255,255,255,0.13)',
+            borderRadius: '999px',
+            color: viewMode === mode ? '#00f5ff' : '#cbd5e1',
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: '0.94rem',
+            fontWeight: 700,
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            transition: 'all 0.35s ease',
+            backdropFilter: 'blur(12px)',
+            boxShadow: viewMode === mode ? '0 0 30px rgba(0,245,255,0.4)' : 'none'
+          }}
+        >
+          <span style={{ marginRight: '10px', fontSize: '1.1rem' }}>{icon}</span>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 
-        {/* Shine effect */}
-        <div style={{
-          position: 'absolute',
-          top: '-100%',
-          left: '-100%',
-          width: '300%',
-          height: '300%',
-          background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%)',
-          transform: isHovered ? 'translate(33%, 33%)' : 'translate(-100%, -100%)',
-          transition: 'transform 0.8s ease',
-          pointerEvents: 'none',
-          zIndex: 5
-        }} />
-
-        <div style={{ position: 'relative', zIndex: 2, padding: 'clamp(24px, 5vw, 32px)' }}>
-          {/* Header with icon */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            marginBottom: 'clamp(20px, 4vw, 28px)',
-            gap: '16px'
-          }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
+  // ────────────────────────────────────────────────
+  //   GRID VIEW
+  // ────────────────────────────────────────────────
+  const GridView = () => (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+      gap: '3rem',
+      padding: '1rem 0 6rem'
+    }}>
+      {filteredSkills.map((skill, index) => (
+        <div
+          key={skill.id}
+          onMouseEnter={() => setHoveredId(skill.id)}
+          onMouseLeave={() => setHoveredId(null)}
+          onClick={() => setActiveSkill(skill)}
+          style={{
+            background: 'rgba(255,255,255,0.035)',
+            backdropFilter: 'blur(38px)',
+            border: `2px solid ${hoveredId === skill.id ? skill.color : 'rgba(255,255,255,0.11)'}`,
+            borderRadius: '26px',
+            overflow: 'hidden',
+            cursor: 'pointer',
+            transition: 'all 0.55s cubic-bezier(0.16,1,0.3,1)',
+            transform: hoveredId === skill.id ? 'translateY(-14px) scale(1.025)' : 'translateY(0)',
+            boxShadow: hoveredId === skill.id
+              ? `0 30px 80px rgba(${skill.glowRGB},0.48)`
+              : '0 10px 35px rgba(0,0,0,0.32)',
+            animation: `fadeUp 0.8s ease-out ${index * 0.1}s both`
+          }}
+        >
+          <div style={{ padding: '2.4rem 2rem' }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '1.8rem'
+            }}>
               <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '8px 16px',
-                background: `${skill.color}18`,
-                borderRadius: '100px',
-                marginBottom: '14px',
-                border: `1px solid ${skill.color}40`,
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)'
-              }}>
-                <span style={{
-                  fontSize: 'clamp(10px, 2.2vw, 12px)',
-                  fontWeight: 800,
-                  color: skill.color,
-                  letterSpacing: '1.8px',
-                  textTransform: 'uppercase',
-                  textShadow: `0 0 20px ${skill.color}`
-                }}>
-                  {skill.category}
-                </span>
-              </div>
-              <h3 style={{
-                fontSize: 'clamp(22px, 4.5vw, 28px)',
+                fontSize: '3.6rem',
+                lineHeight: 1,
                 fontWeight: 900,
-                color: '#fff',
-                marginBottom: '8px',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.15,
-                textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
+                color: skill.color,
+                textShadow: `0 0 25px ${skill.color}80`
               }}>
-                {skill.title}
-              </h3>
-              <p style={{
-                fontSize: 'clamp(13px, 2.8vw, 16px)',
-                color: 'rgba(148, 163, 184, 0.95)',
-                fontWeight: 500,
-                letterSpacing: '0.2px'
-              }}>
-                {skill.subtitle}
-              </p>
+                {skill.iconEmoji}
+              </div>
+
+              <div style={{ textAlign: 'right' }}>
+                <div style={{
+                  fontSize: '2.6rem',
+                  fontWeight: 900,
+                  color: skill.color,
+                  fontFamily: "'Orbitron', sans-serif",
+                  lineHeight: 0.95
+                }}>
+                  {skill.level}
+                </div>
+                <div style={{
+                  fontSize: '0.82rem',
+                  color: '#94a3b8',
+                  fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: '1px'
+                }}>
+                  MASTERY
+                </div>
+              </div>
             </div>
 
-            {/* 3D Floating Icon */}
+            <h3 style={{
+              fontSize: '1.85rem',
+              fontWeight: 800,
+              color: '#f1f5f9',
+              marginBottom: '0.6rem',
+              fontFamily: "'Orbitron', sans-serif"
+            }}>
+              {skill.title}
+            </h3>
+
             <div style={{
-              width: 'clamp(70px, 16vw, 90px)',
-              height: 'clamp(70px, 16vw, 90px)',
-              background: `linear-gradient(135deg, ${skill.color}25, ${skill.color}10)`,
-              borderRadius: '22px',
+              fontSize: '1.1rem',
+              color: '#cbd5e1',
+              marginBottom: '1.4rem',
+              fontWeight: 500
+            }}>
+              {skill.subtitle}
+            </div>
+
+            <div style={{
+              fontSize: '0.95rem',
+              color: '#94a3b8',
+              marginBottom: '1.8rem',
+              fontFamily: "'JetBrains Mono', monospace",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.6rem'
+            }}>
+              <span style={{ color: skill.color, fontSize: '1.1rem' }}>⌂</span>
+              {skill.whereLearned}
+            </div>
+
+            <div style={{
+              padding: '1rem',
+              background: `rgba(${skill.glowRGB},0.07)`,
+              borderRadius: '16px',
+              border: `1px solid ${skill.color}25`,
+              marginBottom: '1.8rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.9rem'
+            }}>
+              <span style={{ fontSize: '1.4rem' }}>★</span>
+              <span style={{ fontWeight: 600, color: '#e2e8f0' }}>
+                {skill.impact}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '2rem' }}>
+              {skill.tech.slice(0, 5).map((t, i) => (
+                <span
+                  key={i}
+                  style={{
+                    padding: '0.48rem 1.1rem',
+                    background: 'rgba(0,0,0,0.45)',
+                    border: `1.5px solid ${skill.color}45`,
+                    borderRadius: '999px',
+                    fontSize: '0.82rem',
+                    color: skill.color,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontWeight: 600
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.7rem',
+              padding: '0.85rem 1.7rem',
+              background: skill.gradient,
+              color: '#000',
+              borderRadius: '999px',
+              fontWeight: 800,
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: '0.94rem',
+              boxShadow: `0 8px 25px rgba(${skill.glowRGB},0.35)`
+            }}>
+              <span>Details</span>
+              <span style={{ fontSize: '1.1rem' }}>→</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // ────────────────────────────────────────────────
+  //   TIMELINE VIEW (simplified version)
+  // ────────────────────────────────────────────────
+  const TimelineView = () => (
+    <div style={{ position: 'relative', padding: '4rem 0' }}>
+      <div style={{
+        position: 'absolute',
+        left: '50%',
+        top: 0,
+        bottom: 0,
+        width: '3px',
+        background: 'linear-gradient(to bottom, #00f5ff, #a78bfa, #10b981)',
+        transform: 'translateX(-50%)',
+        boxShadow: '0 0 25px rgba(0,245,255,0.5)'
+      }} />
+
+      {filteredSkills.map((skill, i) => {
+        const isLeft = i % 2 === 0;
+        return (
+          <div
+            key={skill.id}
+            onClick={() => setActiveSkill(skill)}
+            style={{
+              display: 'flex',
+              justifyContent: isLeft ? 'flex-end' : 'flex-start',
+              margin: '5rem 0',
+              position: 'relative',
+              opacity: 0,
+              animation: `fadeInFromSide 1s ease-out ${i * 0.2}s forwards`,
+              animationFillMode: 'forwards'
+            }}
+          >
+            {/* Node */}
+            <div style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '70px',
+              height: '70px',
+              borderRadius: '50%',
+              background: skill.color,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 'clamp(36px, 8vw, 48px)',
-              border: `2px solid ${skill.color}35`,
-              transform: isHovered ? 'scale(1.15) rotate(12deg) translateZ(20px)' : 'scale(1) rotate(0deg) translateZ(0px)',
-              transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              boxShadow: isHovered 
-                ? `0 15px 40px ${skill.color}50, inset 0 0 20px ${skill.color}20` 
-                : `0 5px 15px ${skill.color}30`,
-              position: 'relative',
-              transformStyle: 'preserve-3d',
-              flexShrink: 0
+              zIndex: 10,
+              boxShadow: `0 0 50px ${skill.color}80`,
+              border: '5px solid #000'
             }}>
-              <div style={{
-                position: 'absolute',
-                inset: '-6px',
-                borderRadius: '22px',
-                background: `radial-gradient(circle at 30% 30%, ${skill.color}50, transparent 70%)`,
-                opacity: isHovered ? 1 : 0,
-                transition: 'opacity 0.5s ease',
-                filter: 'blur(20px)',
-                zIndex: -1,
-                animation: isHovered ? 'pulse 2s ease-in-out infinite' : 'none'
-              }} />
-              {skill.icon}
+              <span style={{ fontSize: '2.2rem' }}>{skill.iconEmoji}</span>
             </div>
-          </div>
 
-          {/* Animated circular progress */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 'clamp(22px, 5vw, 30px)',
-            position: 'relative'
-          }}>
-            <svg width="clamp(130, 35vw, 160)" height="clamp(130, 35vw, 160)" style={{ transform: 'rotate(-90deg)' }}>
-              <defs>
-                <linearGradient id={`gradient-${skill.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: skill.color, stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: skill.color, stopOpacity: 0.4 }} />
-                </linearGradient>
-                <filter id={`glow-${skill.id}`}>
-                  <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                  <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor={skill.color} floodOpacity="0.7"/>
-                </filter>
-              </defs>
-              <circle cx="50%" cy="50%" r="clamp(55, 15vw, 65)" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="12" />
-              <circle
-                cx="50%" cy="50%" r="clamp(55, 15vw, 65)" fill="none"
-                stroke={`url(#gradient-${skill.id})`}
-                strokeWidth="12"
-                strokeLinecap="round"
-                strokeDasharray={408}
-                strokeDashoffset={408 - (408 * skill.level / 100)}
-                style={{
-                  transition: 'stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s',
-                  filter: `url(#glow-${skill.id})`
-                }}
-              />
-            </svg>
+            {/* Card */}
             <div style={{
-              position: 'absolute',
-              textAlign: 'center'
+              width: '46%',
+              padding: '2.2rem',
+              background: 'rgba(255,255,255,0.04)',
+              backdropFilter: 'blur(35px)',
+              border: `2px solid ${hoveredId === skill.id ? skill.color : 'rgba(255,255,255,0.14)'}`,
+              borderRadius: '24px',
+              cursor: 'pointer',
+              transition: 'all 0.5s ease',
+              transform: hoveredId === skill.id ? 'scale(1.04)' : 'scale(1)',
+              boxShadow: hoveredId === skill.id
+                ? `0 25px 70px rgba(${skill.glowRGB},0.45)`
+                : '0 10px 35px rgba(0,0,0,0.3)'
             }}>
               <div style={{
-                fontSize: 'clamp(32px, 8vw, 42px)',
-                fontWeight: 900,
-                background: skill.gradient,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                lineHeight: 1,
-                fontFamily: 'monospace',
-                textShadow: `0 0 30px ${skill.color}80`
+                fontSize: '1.1rem',
+                color: '#94a3b8',
+                marginBottom: '1rem',
+                fontFamily: "'JetBrains Mono', monospace"
               }}>
-                {skill.level}
+                {skill.whereLearned}
               </div>
-              <div style={{
-                fontSize: 'clamp(11px, 2.5vw, 14px)',
-                color: 'rgba(148, 163, 184, 0.9)',
-                fontWeight: 700,
-                marginTop: '6px',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase'
+
+              <h3 style={{
+                fontSize: '1.7rem',
+                fontWeight: 800,
+                color: skill.color,
+                marginBottom: '0.8rem',
+                fontFamily: "'Orbitron', sans-serif"
               }}>
-                MASTERY
+                {skill.title}
+              </h3>
+
+              <div style={{
+                fontSize: '1.05rem',
+                color: '#cbd5e1',
+                marginBottom: '1.4rem'
+              }}>
+                {skill.subtitle}
+              </div>
+
+              <div style={{
+                fontSize: '2.4rem',
+                fontWeight: 900,
+                color: skill.color,
+                margin: '1.5rem 0'
+              }}>
+                {skill.level}%
               </div>
             </div>
           </div>
+        );
+      })}
+    </div>
+  );
 
-          {/* Metrics Grid */}
+  // ────────────────────────────────────────────────
+  //   NETWORK VIEW (simplified)
+  // ────────────────────────────────────────────────
+  const NetworkView = () => (
+    <div style={{
+      height: '900px',
+      position: 'relative',
+      margin: '5rem 0'
+    }}>
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+        {filteredSkills.map((skill, i) => {
+          const angle = (i / filteredSkills.length) * Math.PI * 2;
+          const x = 50 + 32 * Math.cos(angle);
+          const y = 50 + 32 * Math.sin(angle);
+          return (
+            <line
+              key={i}
+              x1="50%"
+              y1="50%"
+              x2={`${x}%`}
+              y2={`${y}%`}
+              stroke={skill.color}
+              strokeWidth={hoveredId === skill.id ? 3.5 : 1.8}
+              opacity={hoveredId === skill.id ? 0.9 : 0.35}
+              style={{ transition: 'all 0.4s' }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* Center */}
+      <div style={{
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '180px',
+        height: '180px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #00f5ff, #a78bfa)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#000',
+        fontWeight: 900,
+        fontSize: '1.3rem',
+        boxShadow: '0 0 90px rgba(0,245,255,0.7)',
+        border: '6px solid #000'
+      }}>
+        SKILLS
+      </div>
+
+      {/* Nodes */}
+      {filteredSkills.map((skill, i) => {
+        const angle = (i / filteredSkills.length) * Math.PI * 2;
+        const x = 50 + 32 * Math.cos(angle);
+        const y = 50 + 32 * Math.sin(angle);
+
+        return (
+          <div
+            key={skill.id}
+            onMouseEnter={() => setHoveredId(skill.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setActiveSkill(skill)}
+            style={{
+              position: 'absolute',
+              left: `${x}%`,
+              top: `${y}%`,
+              transform: `translate(-50%, -50%) scale(${hoveredId === skill.id ? 1.12 : 1})`,
+              transition: 'all 0.45s ease',
+              cursor: 'pointer',
+              width: '260px',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{
+              background: 'rgba(0,0,0,0.85)',
+              backdropFilter: 'blur(28px)',
+              border: `3px solid ${skill.color}`,
+              borderRadius: '20px',
+              padding: '1.6rem',
+              boxShadow: hoveredId === skill.id
+                ? `0 25px 70px rgba(${skill.glowRGB},0.65)`
+                : `0 8px 30px rgba(${skill.glowRGB},0.3)`
+            }}>
+              <div style={{ fontSize: '3.2rem', marginBottom: '0.8rem' }}>
+                {skill.iconEmoji}
+              </div>
+              <div style={{
+                fontSize: '1.35rem',
+                fontWeight: 800,
+                color: skill.color,
+                marginBottom: '0.4rem'
+              }}>
+                {skill.level}%
+              </div>
+              <div style={{
+                fontSize: '1.05rem',
+                color: '#e2e8f0',
+                fontWeight: 600
+              }}>
+                {skill.title.split(' ')[0]}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  // ────────────────────────────────────────────────
+  //   IMMERSIVE VIEW
+  // ────────────────────────────────────────────────
+  const ImmersiveView = () => {
+    const [index, setIndex] = useState(0);
+    const skill = filteredSkills[index];
+
+    return (
+      <div style={{
+        minHeight: '90vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '4rem 2rem',
+        position: 'relative'
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(135deg, ${skill.color}15, #000)`,
+          opacity: 0.4,
+          zIndex: -1
+        }} />
+
+        <div style={{
+          maxWidth: '1200px',
+          width: '100%',
+          display: 'flex',
+          gap: '5rem',
+          flexWrap: 'wrap',
+          alignItems: 'center'
+        }}>
+          {/* Left - Big Icon */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 'clamp(10px, 2.5vw, 14px)',
-            marginBottom: 'clamp(20px, 4vw, 26px)'
+            flex: 1,
+            minWidth: '300px',
+            textAlign: 'center'
           }}>
-            {Object.entries(skill.metrics).map(([key, value], i) => (
-              <div
-                key={key}
+            <div style={{
+              fontSize: 'clamp(12rem, 30vw, 18rem)',
+              color: skill.color,
+              textShadow: `0 0 80px ${skill.color}90`,
+              lineHeight: 0.9
+            }}>
+              {skill.iconEmoji}
+            </div>
+          </div>
+
+          {/* Right - Content */}
+          <div style={{ flex: 1.4, minWidth: '400px' }}>
+            <div style={{
+              display: 'inline-flex',
+              padding: '0.7rem 1.6rem',
+              background: `rgba(${skill.glowRGB},0.18)`,
+              border: `2px solid ${skill.color}`,
+              borderRadius: '999px',
+              color: skill.color,
+              fontFamily: "'JetBrains Mono', monospace",
+              marginBottom: '1.8rem'
+            }}>
+              {skill.badge} • {skill.rarity}
+            </div>
+
+            <h2 style={{
+              fontSize: 'clamp(3.5rem, 8vw, 5.5rem)',
+              fontWeight: 900,
+              color: '#fff',
+              background: skill.gradient,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '1.5rem',
+              lineHeight: 1.05,
+              fontFamily: "'Orbitron', sans-serif"
+            }}>
+              {skill.title}
+            </h2>
+
+            <div style={{
+              fontSize: '1.5rem',
+              color: '#cbd5e1',
+              marginBottom: '2rem'
+            }}>
+              {skill.subtitle}
+            </div>
+
+            <div style={{
+              fontSize: '1.1rem',
+              color: '#94a3b8',
+              marginBottom: '2.5rem',
+              fontFamily: "'JetBrains Mono', monospace"
+            }}>
+              Learned at: {skill.whereLearned}
+            </div>
+
+            <div style={{
+              fontSize: '4.5rem',
+              fontWeight: 900,
+              color: skill.color,
+              marginBottom: '2.5rem'
+            }}>
+              {skill.level}%
+            </div>
+
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setIndex((index - 1 + filteredSkills.length) % filteredSkills.length)}
                 style={{
-                  background: 'rgba(0, 0, 0, 0.35)',
-                  borderRadius: '16px',
-                  padding: 'clamp(12px, 3vw, 16px)',
-                  textAlign: 'center',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  transform: isHovered ? `translateY(-6px) scale(1.05)` : 'translateY(0) scale(1)',
-                  transition: `all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.06}s`,
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  boxShadow: isHovered ? `0 8px 20px ${skill.color}30` : 'none'
+                  padding: '1rem 2.2rem',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '2px solid rgba(255,255,255,0.25)',
+                  borderRadius: '999px',
+                  color: '#fff',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: "'Orbitron', sans-serif"
                 }}
               >
-                <div style={{
-                  fontSize: 'clamp(18px, 4.5vw, 24px)',
+                ← Prev
+              </button>
+
+              <button
+                onClick={() => setIndex((index + 1) % filteredSkills.length)}
+                style={{
+                  padding: '1rem 2.2rem',
+                  background: skill.gradient,
+                  border: 'none',
+                  borderRadius: '999px',
+                  color: '#000',
                   fontWeight: 900,
-                  color: skill.color,
-                  marginBottom: '6px',
-                  fontFamily: 'monospace',
-                  textShadow: `0 0 15px ${skill.color}80`
-                }}>
-                  {value}
-                </div>
-                <div style={{
-                  fontSize: 'clamp(9px, 2vw, 11px)',
-                  color: 'rgba(148, 163, 184, 0.85)',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px'
-                }}>
-                  {key}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Tech Stack with Icons */}
-          <div style={{
-            background: 'rgba(0, 0, 0, 0.25)',
-            borderRadius: '20px',
-            padding: 'clamp(16px, 4vw, 22px)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            backdropFilter: 'blur(15px)',
-            WebkitBackdropFilter: 'blur(15px)'
-          }}>
-            <div style={{
-              fontSize: 'clamp(10px, 2.2vw, 12px)',
-              color: 'rgba(148, 163, 184, 0.95)',
-              fontWeight: 800,
-              letterSpacing: '1.8px',
-              marginBottom: '16px',
-              textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <div style={{
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                background: skill.color,
-                boxShadow: `0 0 12px ${skill.color}`
-              }} />
-              Technology Stack
-            </div>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 'clamp(8px, 2vw, 12px)'
-            }}>
-              {skill.techs.map((tech, i) => (
-                <div
-                  key={tech.name}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'clamp(8px, 2vw, 12px)',
-                    padding: 'clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px)',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '12px',
-                    fontSize: 'clamp(12px, 2.8vw, 15px)',
-                    color: '#fff',
-                    fontWeight: 600,
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    cursor: 'pointer',
-                    animation: `techSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.06}s both`,
-                    backdropFilter: 'blur(5px)',
-                    WebkitBackdropFilter: 'blur(5px)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = `${skill.color}28`;
-                    e.currentTarget.style.borderColor = `${skill.color}70`;
-                    e.currentTarget.style.transform = 'translateY(-4px) scale(1.08)';
-                    e.currentTarget.style.boxShadow = `0 10px 25px ${skill.color}40`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <i className={tech.icon} style={{ 
-                    fontSize: 'clamp(20px, 5vw, 28px)',
-                    transition: 'transform 0.3s ease'
-                  }} />
-                  <span>{tech.name}</span>
-                </div>
-              ))}
+                  cursor: 'pointer',
+                  fontFamily: "'Orbitron', sans-serif",
+                  boxShadow: `0 12px 40px rgba(${skill.glowRGB},0.5)`
+                }}
+              >
+                Next →
+              </button>
             </div>
           </div>
-
-          {/* Expandable Achievements */}
-          {activeSkill === skill.id && (
-            <div style={{
-              marginTop: 'clamp(18px, 4vw, 24px)',
-              padding: 'clamp(16px, 4vw, 22px)',
-              background: `linear-gradient(135deg, ${skill.color}15, ${skill.color}08)`,
-              borderRadius: '20px',
-              border: `1px solid ${skill.color}35`,
-              animation: 'expandIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: `0 10px 30px ${skill.color}20`
-            }}>
-              <div style={{
-                fontSize: 'clamp(11px, 2.5vw, 13px)',
-                color: skill.color,
-                fontWeight: 800,
-                letterSpacing: '1.5px',
-                marginBottom: '16px',
-                textTransform: 'uppercase',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                textShadow: `0 0 20px ${skill.color}`
-              }}>
-                <span style={{ fontSize: 'clamp(16px, 4vw, 20px)' }}>🏆</span>
-                Key Achievements
-              </div>
-              {skill.achievements.map((achievement, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 'clamp(10px, 2.5vw, 14px)',
-                    marginBottom: i < skill.achievements.length - 1 ? '12px' : '0',
-                    fontSize: 'clamp(13px, 3vw, 15px)',
-                    color: 'rgba(226, 232, 240, 0.95)',
-                    lineHeight: 1.7,
-                    animation: `achievementSlide 0.4s ease-out ${i * 0.1}s both`
-                  }}
-                >
-                  <div style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: skill.color,
-                    marginTop: '8px',
-                    flexShrink: 0,
-                    boxShadow: `0 0 12px ${skill.color}`,
-                    animation: 'pulse 2s ease-in-out infinite'
-                  }} />
-                  <span style={{ fontWeight: 500 }}>{achievement}</span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     );
   };
 
+  // ────────────────────────────────────────────────
+  //   MAIN RETURN
+  // ────────────────────────────────────────────────
   return (
-    <>
-      {/* Devicon CDN */}
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-      
-      {/* Google Fonts */}
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
+    <div style={{
+      background: '#000',
+      color: '#fff',
+      minHeight: '100vh',
+      position: 'relative',
+      overflowX: 'hidden',
+      fontFamily: "'Inter', system-ui, sans-serif"
+    }}>
       <style>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap');
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          background: #030712;
-          overflow-x: hidden;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
+        @keyframes fadeInFromSide {
+          from { opacity: 0; transform: translateX(80px); }
+          to { opacity: 1; transform: translateX(0); }
         }
 
-        @keyframes cardSlideUp {
-          from {
-            opacity: 0;
-            transform: translateY(60px) scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        @keyframes techSlideIn {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes achievementSlide {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes expandIn {
-          from {
-            opacity: 0;
-            transform: scaleY(0);
-            transformOrigin: top;
-          }
-          to {
-            opacity: 1;
-            transform: scaleY(1);
-            transformOrigin: top;
-          }
-        }
-
-        @keyframes rippleEffect {
-          to {
-            transform: translate(-50%, -50%) scale(40);
-            opacity: 0;
-          }
-        }
-
-        @keyframes borderFlow {
-          0%, 100% {
-            box-shadow: 0 0 25px currentColor;
-          }
-          50% {
-            box-shadow: 0 0 50px currentColor;
-          }
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-25px) rotate(3deg); }
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.7; transform: scale(0.95); }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        ::-webkit-scrollbar {
-          width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: rgba(15, 23, 42, 0.5);
-          border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(135deg, #8b5cf6, #06b6d4);
-          border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(135deg, #7c3aed, #0891b2);
-        }
-
-        @media (max-width: 640px) {
-          body {
-            font-size: 14px;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          *, *::before, *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
+        .glass-card {
+          background: rgba(255,255,255,0.03);
+          backdrop-filter: blur(22px);
+          border: 1px solid rgba(255,255,255,0.09);
         }
       `}</style>
 
+      {/* Progress bar */}
       <div style={{
-        minHeight: '100vh',
-        background: '#030712',
-        position: 'relative',
-        overflow: 'hidden'
+        position: 'fixed', top: 0, left: 0, right: 0, height: '5px', zIndex: 9999,
+        background: 'rgba(0,0,0,0.75)'
       }}>
-        {/* Scroll Progress */}
         <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '5px',
-          background: 'rgba(15, 23, 42, 0.8)',
-          zIndex: 10000,
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)'
-        }}>
-          <div style={{
-            height: '100%',
-            width: `${scrollProgress}%`,
-            background: 'linear-gradient(90deg, #8b5cf6, #06b6d4, #10b981)',
-            backgroundSize: '200% 100%',
-            animation: 'gradientShift 3s ease infinite',
-            transition: 'width 0.1s ease',
-            boxShadow: '0 0 30px rgba(139, 92, 246, 0.8)'
-          }} />
-        </div>
+          width: `${scrollProgress}%`,
+          height: '100%',
+          background: 'linear-gradient(90deg, #00f5ff, #a78bfa, #10b981)',
+          boxShadow: '0 0 30px currentColor',
+          transition: 'width 0.12s linear'
+        }} />
+      </div>
 
-        {/* Particle Canvas */}
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            pointerEvents: 'none',
-            zIndex: 0,
-            opacity: 0.7
-          }}
-        />
+      {/* Particles */}
+      <canvas ref={canvasRef} style={{
+        position: 'fixed',
+        inset: 0,
+        pointerEvents: 'none',
+        zIndex: 1
+      }} />
 
-        {/* Gradient Orbs */}
+      {/* Floating orbs */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
         <div style={{
-          position: 'fixed',
-          inset: 0,
-          overflow: 'hidden',
-          pointerEvents: 'none',
-          zIndex: 0
-        }}>
-          <div style={{
-            position: 'absolute',
-            width: 'clamp(400px, 60vw, 800px)',
-            height: 'clamp(400px, 60vw, 800px)',
-            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent 70%)',
-            borderRadius: '50%',
-            top: '-15%',
-            right: '-15%',
-            animation: 'float 10s ease-in-out infinite',
-            filter: 'blur(80px)'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: 'clamp(350px, 55vw, 700px)',
-            height: 'clamp(350px, 55vw, 700px)',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.2), transparent 70%)',
-            borderRadius: '50%',
-            bottom: '-15%',
-            left: '-15%',
-            animation: 'float 12s ease-in-out infinite 2s',
-            filter: 'blur(80px)'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: 'clamp(300px, 50vw, 600px)',
-            height: 'clamp(300px, 50vw, 600px)',
-            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 70%)',
-            borderRadius: '50%',
-            top: '40%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            animation: 'float 14s ease-in-out infinite 4s',
-            filter: 'blur(80px)'
-          }} />
-        </div>
-
-        {/* Custom Cursor */}
-        <div 
-          ref={cursorRef}
-          style={{
-            position: 'fixed',
-            width: '30px',
-            height: '30px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.5), transparent 70%)',
-            pointerEvents: 'none',
-            left: mousePosition.x - 15,
-            top: mousePosition.y - 15,
-            transition: 'transform 0.2s ease',
-            zIndex: 9999,
-            filter: 'blur(15px)',
-            mixBlendMode: 'screen',
-            display: window.innerWidth > 768 ? 'block' : 'none'
-          }}
-        />
-
+          position: 'absolute', width: '720px', height: '720px', top: '12%', left: '8%',
+          background: 'radial-gradient(circle, rgba(0,245,255,0.13), transparent 70%)',
+          borderRadius: '50%', filter: 'blur(85px)',
+          animation: 'float 24s infinite ease-in-out',
+          transform: `translate(${mousePosition.x * 0.7}px, ${mousePosition.y * 0.7}px)`
+        }} />
         <div style={{
-          position: 'relative',
-          zIndex: 10,
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 clamp(16px, 4vw, 32px)'
-        }}>
-          {/* Hero Header */}
-          <header style={{
-            padding: 'clamp(80px, 18vw, 120px) 0 clamp(50px, 12vw, 80px)',
-            textAlign: 'center'
+          position: 'absolute', width: '620px', height: '620px', bottom: '18%', right: '12%',
+          background: 'radial-gradient(circle, rgba(167,139,250,0.11), transparent 70%)',
+          borderRadius: '50%', filter: 'blur(75px)',
+          animation: 'float 30s infinite ease-in-out reverse',
+          transform: `translate(${-mousePosition.x * 0.5}px, ${-mousePosition.y * 0.5}px)`
+        }} />
+      </div>
+
+      <div style={{
+        position: 'relative',
+        zIndex: 10,
+        maxWidth: '1800px',
+        margin: '0 auto',
+        padding: 'clamp(7rem, 12vw, 12rem) clamp(1.8rem, 5vw, 5rem)'
+      }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '9rem' }}>
+          <h1 style={{
+            fontSize: 'clamp(6rem, 16vw, 11rem)',
+            fontWeight: 900,
+            fontFamily: "'Orbitron', sans-serif",
+            background: 'linear-gradient(135deg, #00f5ff, #a78bfa, #10b981, #00f5ff)',
+            backgroundSize: '300% auto',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            animation: 'gradientFlow 12s linear infinite',
+            marginBottom: '1.8rem',
+            letterSpacing: '8px',
+            textTransform: 'uppercase'
           }}>
-            {/* Status Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'clamp(10px, 2.5vw, 14px)',
-              padding: 'clamp(10px, 2.5vw, 14px) clamp(20px, 5vw, 28px)',
-              background: 'rgba(15, 23, 42, 0.7)',
-              backdropFilter: 'blur(30px)',
-              WebkitBackdropFilter: 'blur(30px)',
-              border: '2px solid rgba(139, 92, 246, 0.4)',
-              borderRadius: '100px',
-              marginBottom: 'clamp(28px, 7vw, 40px)',
-              animation: 'fadeInUp 1s ease-out, pulse 3s ease-in-out infinite 2s',
-              boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)'
-            }}>
-              <div style={{
-                width: 'clamp(8px, 2vw, 10px)',
-                height: 'clamp(8px, 2vw, 10px)',
-                borderRadius: '50%',
-                background: '#10b981',
-                boxShadow: '0 0 15px #10b981',
-                animation: 'pulse 2s ease-in-out infinite'
-              }} />
-              <span style={{
-                fontSize: 'clamp(11px, 2.5vw, 14px)',
-                fontWeight: 800,
-                background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                fontFamily: 'JetBrains Mono, monospace'
-              }}>
-                Open To Work • Available Now
-              </span>
-            </div>
+            SKILLS
+          </h1>
 
-            {/* Main Title */}
-            <h1 style={{
-              fontSize: 'clamp(40px, 12vw, 96px)',
-              fontWeight: 900,
-              background: 'linear-gradient(135deg, #fff 0%, #8b5cf6 40%, #06b6d4 80%, #10b981 100%)',
-              backgroundSize: '200% auto',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: 'clamp(20px, 5vw, 32px)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1,
-              animation: 'fadeInUp 1s ease-out 0.2s both, gradientShift 5s ease infinite',
-              fontFamily: 'Outfit, sans-serif',
-              textShadow: '0 20px 60px rgba(139, 92, 246, 0.3)'
-            }}>
-              TECHNICAL
-              <br />
-              EXCELLENCE
-            </h1>
-
-            <p style={{
-              fontSize: 'clamp(15px, 3.8vw, 22px)',
-              color: 'rgba(148, 163, 184, 0.95)',
-              maxWidth: '900px',
-              margin: '0 auto clamp(40px, 10vw, 60px)',
-              lineHeight: 1.8,
-              fontWeight: 500,
-              animation: 'fadeInUp 1s ease-out 0.4s both',
-              letterSpacing: '0.3px'
-            }}>
-              Transforming ideas into scalable, production-ready solutions with modern tech stack.
-              <br />
-              <span style={{
-                background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 700,
-                fontSize: 'clamp(16px, 4vw, 24px)'
-              }}>
-                Code with purpose. Build with passion.
-              </span>
-            </p>
-
-            {/* Filter Buttons */}
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 'clamp(10px, 2.5vw, 14px)',
-              animation: 'fadeInUp 1s ease-out 0.6s both',
-              marginBottom: 'clamp(30px, 7vw, 50px)'
-            }}>
-              {[
-                { value: 'all', label: 'All Skills', icon: '⚡' },
-                { value: 'full-stack', label: 'Full-Stack', icon: '💻' },
-                { value: 'ai/ml', label: 'AI/ML', icon: '🧠' },
-                { value: 'deep-learning', label: 'Deep Learning', icon: '🤖' },
-                { value: 'cloud-&-devops', label: 'Cloud', icon: '☁️' }
-              ].map((f) => (
-                <button
-                  key={f.value}
-                  onClick={() => setFilter(f.value)}
-                  style={{
-                    padding: 'clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px)',
-                    background: filter === f.value 
-                      ? 'linear-gradient(135deg, #8b5cf6, #06b6d4)' 
-                      : 'rgba(15, 23, 42, 0.7)',
-                    backdropFilter: 'blur(30px)',
-                    WebkitBackdropFilter: 'blur(30px)',
-                    border: filter === f.value 
-                      ? '2px solid rgba(139, 92, 246, 0.7)' 
-                      : '2px solid rgba(255, 255, 255, 0.12)',
-                    borderRadius: '100px',
-                    color: filter === f.value ? '#000' : '#fff',
-                    fontSize: 'clamp(12px, 3vw, 15px)',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    boxShadow: filter === f.value ? '0 10px 30px rgba(139, 92, 246, 0.5)' : 'none',
-                    fontFamily: 'JetBrains Mono, monospace',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (filter !== f.value) {
-                      e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
-                      e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.3)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (filter !== f.value) {
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }
-                  }}
-                >
-                  <span>{f.icon}</span>
-                  <span>{f.label}</span>
-                </button>
-              ))}
-            </div>
-          </header>
-
-          {/* Skills Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-            gap: 'clamp(24px, 6vw, 40px)',
-            marginBottom: 'clamp(80px, 18vw, 120px)'
+          <p style={{
+            fontSize: 'clamp(1.4rem, 3.2vw, 1.7rem)',
+            color: '#cbd5e1',
+            maxWidth: '920px',
+            margin: '0 auto 4rem',
+            lineHeight: 1.8
           }}>
-            {filteredSkills.map((skill, index) => (
-              <SkillCard key={skill.id} skill={skill} index={index} />
+            Advanced technical capabilities across full-stack, AI/ML, cloud & core programming
+          </p>
+
+          <ViewModeSelector />
+
+          <div style={{
+            display: 'flex',
+            gap: '1.1rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            marginTop: '3.5rem'
+          }}>
+            {['ALL', 'LEGENDARY', 'EPIC', 'RARE'].map(f => (
+              <button
+                key={f}
+                onClick={() => setSelectedFilter(f)}
+                style={{
+                  padding: '0.85rem 2.1rem',
+                  borderRadius: '999px',
+                  background: selectedFilter === f ? 'linear-gradient(135deg, #00f5ff, #a78bfa)' : 'rgba(255,255,255,0.06)',
+                  color: selectedFilter === f ? '#000' : '#e2e8f0',
+                  border: selectedFilter === f ? 'none' : '1px solid rgba(255,255,255,0.14)',
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }}
+              >
+                {f === 'ALL' ? 'All Skills' : f}
+              </button>
             ))}
           </div>
-
-          {/* CTA Section */}
-          <section style={{
-            background: 'rgba(15, 23, 42, 0.5)',
-            backdropFilter: 'blur(40px)',
-            WebkitBackdropFilter: 'blur(40px)',
-            borderRadius: 'clamp(24px, 6vw, 40px)',
-            padding: 'clamp(50px, 12vw, 80px) clamp(30px, 7vw, 60px)',
-            textAlign: 'center',
-            marginBottom: 'clamp(80px, 18vw, 120px)',
-            position: 'relative',
-            overflow: 'hidden',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 30px 80px rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.2), transparent 70%)',
-              pointerEvents: 'none'
-            }} />
-
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '4px',
-              background: 'linear-gradient(90deg, transparent, #8b5cf6, #06b6d4, #10b981, transparent)',
-              backgroundSize: '200% 100%',
-              animation: 'gradientShift 3s ease infinite'
-            }} />
-
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <div style={{
-                fontSize: 'clamp(36px, 9vw, 72px)',
-                fontWeight: 900,
-                background: 'linear-gradient(135deg, #fff, #8b5cf6, #06b6d4)',
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: 'clamp(20px, 5vw, 32px)',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.1,
-                fontFamily: 'Outfit, sans-serif',
-                animation: 'gradientShift 5s ease infinite'
-              }}>
-                Let's Create Together
-              </div>
-
-              <p style={{
-                fontSize: 'clamp(15px, 3.8vw, 20px)',
-                color: 'rgba(148, 163, 184, 0.95)',
-                maxWidth: '800px',
-                margin: '0 auto clamp(40px, 10vw, 50px)',
-                lineHeight: 1.8,
-                fontWeight: 500,
-                letterSpacing: '0.3px'
-              }}>
-                Ready to bring your vision to life with cutting-edge technology and innovative solutions. Let's build something amazing!
-              </p>
-
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                gap: 'clamp(14px, 3.5vw, 24px)'
-              }}>
-                <a
-                  href="https://github.com/bhagavan444"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    padding: 'clamp(16px, 4vw, 22px) clamp(32px, 8vw, 50px)',
-                    background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
-                    borderRadius: '100px',
-                    color: '#000',
-                    fontSize: 'clamp(14px, 3.5vw, 18px)',
-                    fontWeight: 900,
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'clamp(10px, 2.5vw, 14px)',
-                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    boxShadow: '0 15px 40px rgba(139, 92, 246, 0.5)',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    border: '2px solid transparent',
-                    fontFamily: 'JetBrains Mono, monospace'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-6px) scale(1.08)';
-                    e.currentTarget.style.boxShadow = '0 25px 60px rgba(139, 92, 246, 0.7)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.boxShadow = '0 15px 40px rgba(139, 92, 246, 0.5)';
-                  }}
-                >
-                  <i className="devicon-github-original" style={{ fontSize: 'clamp(20px, 5vw, 24px)' }} />
-                  <span>View Projects</span>
-                  <span>→</span>
-                </a>
-                <a
-                  href="mailto:g.sivasatyasaibhagavan@gmail.com"
-                  style={{
-                    padding: 'clamp(16px, 4vw, 22px) clamp(32px, 8vw, 50px)',
-                    background: 'transparent',
-                    border: '2px solid rgba(139, 92, 246, 0.7)',
-                    borderRadius: '100px',
-                    color: '#fff',
-                    fontSize: 'clamp(14px, 3.5vw, 18px)',
-                    fontWeight: 900,
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'clamp(10px, 2.5vw, 14px)',
-                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase',
-                    fontFamily: 'JetBrains Mono, monospace',
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-6px) scale(1.08)';
-                    e.currentTarget.style.background = 'rgba(139, 92, 246, 0.2)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
-                    e.currentTarget.style.boxShadow = '0 15px 40px rgba(139, 92, 246, 0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.7)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  <span>✉</span>
-                  <span>Get in Touch</span>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          {/* Footer */}
-          <footer style={{
-            textAlign: 'center',
-            paddingBottom: 'clamp(50px, 12vw, 80px)',
-            color: 'rgba(148, 163, 184, 0.6)',
-            fontSize: 'clamp(12px, 3vw, 15px)',
-            letterSpacing: '0.5px',
-            fontFamily: 'JetBrains Mono, monospace'
-          }}>
-            <div style={{ 
-              marginBottom: '20px',
-              fontSize: 'clamp(14px, 3.5vw, 16px)',
-              fontWeight: 600
-            }}>
-              Engineered with precision • Designed with passion
-            </div>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '12px',
-              alignItems: 'center',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
-                boxShadow: '0 0 12px #8b5cf6',
-                animation: 'pulse 2s ease-in-out infinite'
-              }} />
-              <span>© 2026 Portfolio Showcase</span>
-              <div style={{
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #06b6d4, #10b981)',
-                boxShadow: '0 0 12px #06b6d4',
-                animation: 'pulse 2s ease-in-out infinite 0.5s'
-              }} />
-              <span>All rights reserved</span>
-              <div style={{
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #10b981, #8b5cf6)',
-                boxShadow: '0 0 12px #10b981',
-                animation: 'pulse 2s ease-in-out infinite 1s'
-              }} />
-            </div>
-          </footer>
         </div>
+
+        {viewMode === "grid" && <GridView />}
+        {viewMode === "timeline" && <TimelineView />}
+        {viewMode === "network" && <NetworkView />}
+        {viewMode === "immersive" && <ImmersiveView />}
+
+        {/* Modal Detail View */}
+        {activeSkill && (
+          <div
+            onClick={() => setActiveSkill(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.95)',
+              backdropFilter: 'blur(22px)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '2.5rem'
+            }}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: 'rgba(8,8,35,0.94)',
+                border: `4px solid ${activeSkill.color}`,
+                borderRadius: '32px',
+                maxWidth: '1100px',
+                width: '92%',
+                maxHeight: '92vh',
+                overflowY: 'auto',
+                boxShadow: `0 0 200px rgba(${activeSkill.glowRGB},0.65)`,
+                backdropFilter: 'blur(28px)'
+              }}
+            >
+              <button
+                onClick={() => setActiveSkill(null)}
+                style={{
+                  position: 'absolute',
+                  top: '1.8rem',
+                  right: '1.8rem',
+                  background: 'rgba(255,100,100,0.2)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '54px',
+                  height: '54px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ff6b6b',
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(10px)',
+                  fontSize: '1.6rem'
+                }}
+              >
+                ×
+              </button>
+
+              <div style={{ padding: '4rem 3.5rem' }}>
+                <div style={{
+                  fontSize: 'clamp(3rem, 7vw, 4.5rem)',
+                  fontWeight: 900,
+                  color: activeSkill.color,
+                  fontFamily: "'Orbitron', sans-serif",
+                  marginBottom: '1.2rem'
+                }}>
+                  {activeSkill.title}
+                </div>
+
+                <div style={{
+                  fontSize: '1.45rem',
+                  color: '#cbd5e1',
+                  marginBottom: '2rem'
+                }}>
+                  {activeSkill.subtitle}
+                </div>
+
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '1.2rem',
+                  padding: '0.9rem 2rem',
+                  background: `rgba(${activeSkill.glowRGB},0.16)`,
+                  border: `2px solid ${activeSkill.color}`,
+                  borderRadius: '999px',
+                  color: activeSkill.color,
+                  fontSize: '1.15rem',
+                  fontFamily: "'JetBrains Mono', monospace",
+                  marginBottom: '2.8rem'
+                }}>
+                  <span style={{ fontSize: '1.4rem' }}>★</span>
+                  {activeSkill.level}% Mastery
+                </div>
+
+                <div style={{
+                  marginBottom: '3rem'
+                }}>
+                  <h4 style={{
+                    color: activeSkill.color,
+                    fontSize: '1.35rem',
+                    marginBottom: '1.4rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Where I Learned
+                  </h4>
+                  <div style={{
+                    fontSize: '1.15rem',
+                    color: '#e2e8f0',
+                    padding: '1rem 1.4rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    borderRadius: '16px',
+                    border: `1px solid ${activeSkill.color}30`
+                  }}>
+                    {activeSkill.whereLearned}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '3.5rem' }}>
+                  <h4 style={{
+                    color: activeSkill.color,
+                    fontSize: '1.35rem',
+                    marginBottom: '1.4rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Key Achievements
+                  </h4>
+                  {activeSkill.achievements.map((ach, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '1.1rem',
+                        marginBottom: '1.2rem',
+                        fontSize: '1.08rem',
+                        color: '#e2e8f0'
+                      }}
+                    >
+                      <span style={{ color: activeSkill.color, fontSize: '1.4rem' }}>›</span>
+                      {ach}
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <h4 style={{
+                    color: activeSkill.color,
+                    fontSize: '1.35rem',
+                    marginBottom: '1.4rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Technology Stack
+                  </h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.9rem' }}>
+                    {activeSkill.tech.map((t, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          padding: '0.75rem 1.5rem',
+                          background: 'rgba(255,255,255,0.06)',
+                          border: `2px solid ${activeSkill.color}40`,
+                          borderRadius: '999px',
+                          color: activeSkill.color,
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontWeight: 600
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

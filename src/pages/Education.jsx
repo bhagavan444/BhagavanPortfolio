@@ -1,1508 +1,1314 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import {
-  GraduationCap, Calendar, MapPin, Brain, Code, Trophy,
-  Sparkles, X, CheckCircle2, ExternalLink, Award,
-  Star, ChevronRight, Rocket, Terminal, Activity,
-  Zap, Flame, Globe, Play, ArrowRight, Target,
-  BookOpen, TrendingUp, Layers, Grid3x3
-} from "lucide-react";
+"use client";
 
-export default function NextGenEducation() {
-  const [activeView, setActiveView] = useState("cards");
-  const [selectedEdu, setSelectedEdu] = useState(null);
+import React, { useState, useEffect, useRef } from 'react';
+
+const education = [
+  {
+    id: 1,
+    degree: "B.Tech in AI & Data Science",
+    institution: "Ramachandra College of Engineering",
+    university: "JNTUK",
+    duration: "2022 – 2026",
+    score: "7.9 CGPA",
+    location: "Eluru, Andhra Pradesh",
+    description: "Specialized in building intelligent systems using Machine Learning, Deep Learning, and Full-Stack Development. Focus on production-ready AI applications.",
+    certId: "1wxnzvsS3MA7xWSxuXKeIkS8GaQoG4Y1a",
+    color: "#00f5ff",
+    glowRGB: "0, 245, 255",
+    secondaryColor: "#8b5cf6",
+    accentColor: "#f59e0b",
+    gradient: "linear-gradient(135deg, #00f5ff 0%, #0099ff 100%)",
+    iconEmoji: "🧠",
+    badge: "CURRENT",
+    rarity: "LEGENDARY",
+    year: "2022–2026",
+    progress: 85,
+    skills: [
+      "Machine Learning",
+      "Deep Learning",
+      "MERN Stack",
+      "Computer Vision",
+      "MLOps",
+      "Neural Networks",
+      "Python",
+      "React.js"
+    ],
+    achievements: [
+      "AI/ML Internship at Leading Tech Firms",
+      "Top 10% Academic Performer",
+      "10+ Full-Stack AI Projects Deployed",
+      "24-Hour Hackathon Winner",
+      "20+ Professional Certifications"
+    ],
+    impact: "Building next-generation AI systems",
+    impact_metrics: [
+      { label: "Projects", value: "10+", iconEmoji: "🚀" },
+      { label: "CGPA", value: "7.9", iconEmoji: "📊" },
+      { label: "Certs", value: "20+", iconEmoji: "🏆" }
+    ]
+  },
+  {
+    id: 2,
+    degree: "Intermediate (MPC)",
+    institution: "Srividhya Junior College",
+    university: "Board of Intermediate",
+    duration: "2020 – 2022",
+    score: "7.8 CGPA",
+    location: "Gudivada, Andhra Pradesh",
+    description: "Pre-engineering curriculum with emphasis on Mathematics, Physics, and Chemistry. Built strong analytical and problem-solving foundation.",
+    certId: "1N1K1j6QGrgNPNL2D9UmfJAL2PVSulhPJ",
+    color: "#a78bfa",
+    glowRGB: "167, 139, 250",
+    secondaryColor: "#ec4899",
+    accentColor: "#c084fc",
+    gradient: "linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)",
+    iconEmoji: "📐",
+    badge: "FOUNDATION",
+    rarity: "EPIC",
+    year: "2020–2022",
+    progress: 78,
+    skills: [
+      "Mathematical Reasoning",
+      "Physics Principles",
+      "Problem Solving",
+      "Analytical Thinking",
+      "Scientific Method"
+    ],
+    achievements: [
+      "Top Performer in Mathematics",
+      "Strong Academic Foundation",
+      "Science Exhibition Participant"
+    ],
+    impact: "Strong base for engineering studies",
+    impact_metrics: [
+      { label: "CGPA", value: "7.8", iconEmoji: "📈" },
+      { label: "Maths", value: "Top", iconEmoji: "🧮" },
+      { label: "Science", value: "Strong", iconEmoji: "🔬" }
+    ]
+  },
+  {
+    id: 3,
+    degree: "Secondary Education (10th)",
+    institution: "Montessori English Medium High School",
+    university: "SSC Board",
+    duration: "2019 – 2020",
+    score: "9.5 GPA",
+    location: "Gudivada, Andhra Pradesh",
+    description: "Achieved academic excellence with exceptional performance in Mathematics and Science. Perfect GPA with distinction in all subjects.",
+    certId: "1p1RXnVn9jySamu8OiIWF0WFhe7G6QxiL",
+    color: "#f97316",
+    glowRGB: "249, 115, 22",
+    secondaryColor: "#ea580c",
+    accentColor: "#fb923c",
+    gradient: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
+    iconEmoji: "🏆",
+    badge: "EXCELLENCE",
+    rarity: "LEGENDARY",
+    year: "2019–2020",
+    progress: 95,
+    skills: [
+      "Academic Excellence",
+      "Leadership",
+      "Critical Thinking",
+      "Discipline"
+    ],
+    achievements: [
+      "School Topper (9.5 GPA)",
+      "Perfect Score in Mathematics",
+      "Excellence Award Winner"
+    ],
+    impact: "Outstanding school performance",
+    impact_metrics: [
+      { label: "GPA", value: "9.5", iconEmoji: "⭐" },
+      { label: "Maths", value: "100%", iconEmoji: "🧠" },
+      { label: "Rank", value: "1st", iconEmoji: "👑" }
+    ]
+  }
+];
+
+export default function AdvancedEducation() {
+  const [viewMode, setViewMode] = useState("grid");
   const [hoveredId, setHoveredId] = useState(null);
+  const [activeEdu, setActiveEdu] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll();
-  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const opacityProgress = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const canvasRef = useRef(null);
 
-  const education = [
-    {
-      id: 1,
-      degree: "B.Tech in AI & Data Science",
-      institution: "Ramachandra College of Engineering",
-      university: "JNTUK",
-      duration: "2022 – 2026",
-      score: "7.9 CGPA",
-      location: "Eluru, Andhra Pradesh",
-      description: "Specialized in building intelligent systems using Machine Learning, Deep Learning, and Full-Stack Development. Focus on production-ready AI applications.",
-      image: "https://lh3.googleusercontent.com/d/1wxnzvsS3MA7xWSxuXKeIkS8GaQoG4Y1a",
-      gradient: "from-blue-500 via-cyan-500 to-teal-500",
-      color: "#06b6d4",
-      icon: Brain,
-      badge: "CURRENT",
-      year: 2024,
-      skills: [
-        "Machine Learning",
-        "Deep Learning", 
-        "MERN Stack",
-        "Computer Vision",
-        "MLOps",
-        "Neural Networks",
-        "Python",
-        "React.js"
-      ],
-      achievements: [
-        "AI/ML Internship at Leading Tech Firms",
-        "Top 10% Academic Performer",
-        "10+ Full-Stack AI Projects Deployed",
-        "24-Hour Hackathon Winner",
-        "20+ Professional Certifications"
-      ],
-      progress: 85
-    },
-    {
-      id: 2,
-      degree: "Intermediate (MPC)",
-      institution: "Srividhya Junior College",
-      university: "Board of Intermediate",
-      duration: "2020 – 2022",
-      score: "7.8 CGPA",
-      location: "Gudivada, Andhra Pradesh",
-      description: "Pre-engineering curriculum with emphasis on Mathematics, Physics, and Chemistry. Built strong analytical and problem-solving foundation.",
-      image: "https://lh3.googleusercontent.com/d/1N1K1j6QGrgNPNL2D9UmfJAL2PVSulhPJ",
-      gradient: "from-purple-500 via-pink-500 to-rose-500",
-      color: "#a855f7",
-      icon: Code,
-      badge: "FOUNDATION",
-      year: 2021,
-      skills: [
-        "Mathematical Reasoning",
-        "Physics Principles",
-        "Problem Solving",
-        "Analytical Thinking",
-        "Scientific Method"
-      ],
-      achievements: [
-        "Top Performer in Mathematics",
-        "Strong Academic Foundation",
-        "Science Exhibition Participant"
-      ],
-      progress: 78
-    },
-    {
-      id: 3,
-      degree: "Secondary Education (10th)",
-      institution: "Montessori English Medium High School",
-      university: "SSC Board",
-      duration: "2019 – 2020",
-      score: "9.5 GPA",
-      location: "Gudivada, Andhra Pradesh",
-      description: "Achieved academic excellence with exceptional performance in Mathematics and Science. Perfect GPA with distinction in all subjects.",
-      image: "https://lh3.googleusercontent.com/d/1p1RXnVn9jySamu8OiIWF0WFhe7G6QxiL",
-      gradient: "from-orange-500 via-amber-500 to-yellow-500",
-      color: "#f59e0b",
-      icon: Trophy,
-      badge: "EXCELLENCE",
-      year: 2020,
-      skills: [
-        "Academic Excellence",
-        "Leadership",
-        "Critical Thinking",
-        "Discipline"
-      ],
-      achievements: [
-        "School Topper (9.5 GPA)",
-        "Perfect Score in Mathematics",
-        "Excellence Award Winner"
-      ],
-      progress: 95
-    }
-  ];
-
-  // Mouse tracking
+  // Mouse tracking for subtle parallax effect
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      setMousePosition({ x, y });
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Auto-rotate for carousel
+  // Scroll progress indicator
   useEffect(() => {
-    if (activeView === "carousel") {
-      const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % education.length);
-      }, 5000);
-      return () => clearInterval(interval);
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress((scrolled / maxScroll) * 100);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Particle background system
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.y = Math.random() * canvas.height;
+        this.opacity = Math.random();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -10;
+        this.speed = Math.random() * 2 + 0.5;
+        this.radius = Math.random() * 2.5 + 0.5;
+        this.color = Math.random() > 0.5 ? '0, 245, 255' : '167, 139, 250';
+        this.opacity = Math.random() * 0.5 + 0.3;
+        this.drift = (Math.random() - 0.5) * 0.5;
+      }
+
+      update() {
+        this.y += this.speed;
+        this.x += this.drift;
+        if (this.y > canvas.height + 10) this.reset();
+        if (this.x < -10 || this.x > canvas.width + 10) this.reset();
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 3);
+        gradient.addColorStop(0, `rgba(${this.color}, ${this.opacity})`);
+        gradient.addColorStop(1, `rgba(${this.color}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
     }
-  }, [activeView, education.length]);
 
-  const HeroSection = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      style={{
-        textAlign: 'center',
-        marginBottom: 'clamp(4rem, 8vw, 8rem)',
-        position: 'relative'
-      }}
-    >
-      {/* Floating badge */}
-      <motion.div
-        animate={{
-          y: [0, -10, 0],
-          rotate: [0, 2, -2, 0]
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 'clamp(0.5rem, 1vw, 1rem)',
-          padding: 'clamp(0.6rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem)',
-          background: 'rgba(6, 182, 212, 0.1)',
-          border: '2px solid rgba(6, 182, 212, 0.5)',
-          borderRadius: '100px',
-          marginBottom: 'clamp(2rem, 4vw, 3rem)',
-          backdropFilter: 'blur(20px)',
-          boxShadow: '0 10px 40px rgba(6, 182, 212, 0.2)'
-        }}
-      >
-        <Terminal size={20} color="#06b6d4" strokeWidth={2.5} />
-        <span style={{
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 'clamp(0.75rem, 1.5vw, 0.95rem)',
-          fontWeight: 700,
-          color: '#06b6d4',
-          letterSpacing: '2px'
-        }}>
-          EDUCATION.NEXUS
-        </span>
-        <Activity size={20} color="#06b6d4" strokeWidth={2.5} />
-      </motion.div>
+    const particles = Array.from({ length: 160 }, () => new Particle());
 
-      {/* Main title */}
-      <motion.h1
-        style={{
-          fontSize: 'clamp(3rem, 10vw, 7rem)',
-          fontWeight: 900,
-          fontFamily: "'Space Grotesk', sans-serif",
-          marginBottom: 'clamp(1rem, 2vw, 2rem)',
-          lineHeight: 1,
-          letterSpacing: '-0.02em'
-        }}
-      >
-        <motion.span
-          animate={{
-            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      // Connect nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 130) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 245, 255, ${0.13 * (1 - distance / 130)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    window.addEventListener('resize', resize);
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  const getCertificateThumbnail = (id) => `https://lh3.googleusercontent.com/d/${id}`;
+  const getCertificateViewUrl = (id) => `https://drive.google.com/file/d/${id}/view`;
+
+  const getRarityColor = (rarity) => {
+    const colors = {
+      'LEGENDARY': '#ffd700',
+      'EPIC': '#a78bfa',
+      'RARE': '#00f5ff'
+    };
+    return colors[rarity] || '#00f5ff';
+  };
+
+  const filteredEducation = selectedFilter === 'ALL'
+    ? education
+    : education.filter(e => e.rarity === selectedFilter);
+
+  // ────────────────────────────────────────────────
+  // View Mode Selector
+  // ────────────────────────────────────────────────
+  const ViewModeSelector = () => (
+    <div style={{
+      display: 'flex',
+      gap: '1.6rem',
+      justifyContent: 'center',
+      marginBottom: '5rem',
+      flexWrap: 'wrap'
+    }}>
+      {[
+        { mode: "grid", icon: "◼◼◼", label: "Grid" },
+        { mode: "timeline", icon: "➜", label: "Timeline" },
+        { mode: "network", icon: "⟁", label: "Network" },
+        { mode: "immersive", icon: "⛶", label: "Immersive" }
+      ].map(({ mode, icon, label }) => (
+        <button
+          key={mode}
+          onClick={() => setViewMode(mode)}
           style={{
-            background: 'linear-gradient(90deg, #06b6d4, #a855f7, #f59e0b, #06b6d4)',
-            backgroundSize: '200% auto',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}
-        >
-          Academic Journey
-        </motion.span>
-      </motion.h1>
-
-      {/* Subtitle */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        style={{
-          fontSize: 'clamp(1rem, 2vw, 1.4rem)',
-          color: '#94a3b8',
-          maxWidth: '800px',
-          margin: '0 auto',
-          lineHeight: 1.8,
-          fontWeight: 500,
-          padding: '0 1rem'
-        }}
-      >
-        From foundational excellence to cutting-edge AI expertise
-        <br />
-        <motion.span
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          style={{
-            color: '#06b6d4',
+            padding: '1.1rem 2.8rem',
+            background: viewMode === mode ? 'rgba(0, 245, 255, 0.2)' : 'rgba(255,255,255,0.05)',
+            border: viewMode === mode ? '2.5px solid #00f5ff' : '1.5px solid rgba(255,255,255,0.16)',
+            borderRadius: '999px',
+            color: viewMode === mode ? '#00f5ff' : '#e2e8f0',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
             fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 'clamp(0.85rem, 1.6vw, 1.1rem)',
-            display: 'inline-block',
-            marginTop: '1rem'
+            fontSize: '0.98rem',
+            fontWeight: 700,
+            letterSpacing: '1.3px',
+            textTransform: 'uppercase',
+            transition: 'all 0.4s ease',
+            backdropFilter: 'blur(12px)',
+            boxShadow: viewMode === mode ? '0 0 40px rgba(0,245,255,0.5)' : 'none'
           }}
         >
-          [ 2019 → Present ] • 7 Years of Growth
-        </motion.span>
-      </motion.p>
+          <span style={{ fontSize: '1.3rem' }}>{icon}</span>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 
-      {/* View mode selector */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        style={{
-          display: 'flex',
-          gap: 'clamp(0.8rem, 2vw, 1.5rem)',
-          justifyContent: 'center',
-          marginTop: 'clamp(2.5rem, 5vw, 4rem)',
-          flexWrap: 'wrap',
-          padding: '0 1rem'
-        }}
-      >
-        {[
-          { mode: "cards", icon: Grid3x3, label: "Cards" },
-          { mode: "timeline", icon: Layers, label: "Timeline" },
-          { mode: "carousel", icon: Play, label: "Carousel" }
-        ].map(({ mode, icon: Icon, label }) => (
-          <motion.button
-            key={mode}
-            onClick={() => setActiveView(mode)}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              padding: 'clamp(0.8rem, 2vw, 1rem) clamp(2rem, 4vw, 3rem)',
-              background: activeView === mode
-                ? 'rgba(6, 182, 212, 0.2)'
-                : 'rgba(255, 255, 255, 0.05)',
-              border: activeView === mode
-                ? '2px solid #06b6d4'
-                : '2px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '100px',
-              color: activeView === mode ? '#06b6d4' : '#fff',
-              cursor: 'pointer',
+  // ────────────────────────────────────────────────
+  // Grid View
+  // ────────────────────────────────────────────────
+  const GridView = () => (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))',
+      gap: '3.8rem',
+      padding: '2.5rem 0'
+    }}>
+      {filteredEducation.map((edu, index) => (
+        <div
+          key={edu.id}
+          onMouseEnter={() => setHoveredId(edu.id)}
+          onMouseLeave={() => setHoveredId(null)}
+          onClick={() => setActiveEdu(edu)}
+          style={{
+            background: 'rgba(255,255,255,0.045)',
+            backdropFilter: 'blur(42px)',
+            border: `2.5px solid ${hoveredId === edu.id ? edu.color : 'rgba(255,255,255,0.13)'}`,
+            borderRadius: '30px',
+            overflow: 'hidden',
+            cursor: 'pointer',
+            transition: 'all 0.65s cubic-bezier(0.16,1,0.3,1)',
+            transform: hoveredId === edu.id ? 'translateY(-18px) scale(1.035)' : 'translateY(0)',
+            boxShadow: hoveredId === edu.id
+              ? `0 40px 100px rgba(${edu.glowRGB},0.6)`
+              : '0 14px 45px rgba(0,0,0,0.38)',
+            animation: `slide-up 1s ease-out ${index * 0.14}s both`
+          }}
+        >
+          {/* Image + overlay */}
+          <div style={{
+            height: '300px',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <img
+              src={getCertificateThumbnail(edu.certId)}
+              alt={edu.institution}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'transform 0.9s ease',
+                transform: hoveredId === edu.id ? 'scale(1.18)' : 'scale(1.08)'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 65%)'
+            }} />
+
+            {/* Badge */}
+            <div style={{
+              position: 'absolute',
+              top: '1.6rem',
+              right: '1.6rem',
+              padding: '0.7rem 1.6rem',
+              background: `rgba(${edu.glowRGB}, 0.22)`,
+              backdropFilter: 'blur(14px)',
+              border: `2.5px solid ${edu.color}`,
+              borderRadius: '999px',
+              fontSize: '0.88rem',
+              fontWeight: 900,
+              color: edu.color,
+              fontFamily: "'JetBrains Mono', monospace",
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(0.5rem, 1vw, 0.8rem)',
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
-              fontWeight: 700,
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: activeView === mode
-                ? '0 10px 40px rgba(6, 182, 212, 0.3)'
-                : '0 5px 20px rgba(0, 0, 0, 0.2)'
-            }}
-          >
-            <Icon size={18} strokeWidth={2.5} />
-            {label}
-          </motion.button>
-        ))}
-      </motion.div>
-    </motion.div>
-  );
-
-  const CardsView = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))',
-        gap: 'clamp(2rem, 4vw, 3rem)',
-        padding: '0 clamp(1rem, 2vw, 2rem)'
-      }}
-    >
-      {education.map((edu, index) => {
-        const Icon = edu.icon;
-        const isHovered = hoveredId === edu.id;
-
-        return (
-          <motion.div
-            key={edu.id}
-            initial={{ opacity: 0, y: 50, rotateX: -10 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{
-              delay: index * 0.15,
-              duration: 0.8,
-              type: "spring",
-              stiffness: 100
-            }}
-            whileHover={{ y: -10, rotateX: 2 }}
-            onHoverStart={() => setHoveredId(edu.id)}
-            onHoverEnd={() => setHoveredId(null)}
-            onClick={() => setSelectedEdu(edu)}
-            style={{
-              position: 'relative',
-              background: 'rgba(15, 23, 42, 0.6)',
-              backdropFilter: 'blur(30px)',
-              border: `2px solid ${isHovered ? edu.color : 'rgba(255, 255, 255, 0.1)'}`,
-              borderRadius: '24px',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: isHovered
-                ? `0 30px 60px rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.4)`
-                : '0 10px 30px rgba(0, 0, 0, 0.3)'
-            }}
-          >
-            {/* Image section */}
-            <div style={{
-              height: '280px',
-              position: 'relative',
-              overflow: 'hidden'
+              gap: '0.6rem',
+              boxShadow: `0 6px 25px rgba(${edu.glowRGB},0.4)`
             }}>
-              <motion.img
-                src={edu.image}
-                alt={edu.institution}
-                animate={{
-                  scale: isHovered ? 1.15 : 1.05
-                }}
-                transition={{ duration: 0.6 }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-              
-              {/* Gradient overlay */}
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%)'
-              }} />
-
-              {/* Badge */}
-              <motion.div
-                animate={{
-                  scale: isHovered ? 1.05 : 1
-                }}
-                style={{
-                  position: 'absolute',
-                  top: '1.5rem',
-                  right: '1.5rem',
-                  padding: '0.6rem 1.5rem',
-                  background: `rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`,
-                  backdropFilter: 'blur(20px)',
-                  border: `2px solid ${edu.color}`,
-                  borderRadius: '100px',
-                  fontSize: '0.75rem',
-                  fontWeight: 900,
-                  color: edu.color,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  boxShadow: `0 5px 20px rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.3)`
-                }}
-              >
-                <Flame size={14} />
-                {edu.badge}
-              </motion.div>
-
-              {/* Icon */}
-              <motion.div
-                animate={{
-                  scale: isHovered ? 1.1 : 1,
-                  rotate: isHovered ? 5 : 0
-                }}
-                style={{
-                  position: 'absolute',
-                  bottom: '-40px',
-                  left: '2rem',
-                  width: '80px',
-                  height: '80px',
-                  background: `linear-gradient(135deg, ${edu.gradient})`,
-                  borderRadius: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '4px solid rgba(15, 23, 42, 1)',
-                  boxShadow: `0 10px 30px rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.5)`
-                }}
-              >
-                <Icon size={40} color="white" strokeWidth={2.5} />
-              </motion.div>
+              <span style={{ fontSize: '1.1rem' }}>★</span>
+              {edu.badge}
             </div>
 
-            {/* Content */}
-            <div style={{ padding: '3rem 2rem 2rem' }}>
-              {/* Year */}
-              <div style={{
-                fontSize: '0.85rem',
-                color: '#64748b',
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: '0.8rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
-                <Calendar size={16} />
-                {edu.duration}
-              </div>
+            {/* Big icon */}
+            <div style={{
+              position: 'absolute',
+              bottom: '-50px',
+              left: '2.2rem',
+              fontSize: '6.5rem',
+              color: edu.color,
+              opacity: 0.9,
+              textShadow: `0 0 40px ${edu.color}80`
+            }}>
+              {edu.iconEmoji}
+            </div>
+          </div>
 
-              {/* Title */}
-              <h3 style={{
-                fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)',
-                fontWeight: 800,
-                color: edu.color,
-                marginBottom: '0.5rem',
-                fontFamily: "'Space Grotesk', sans-serif",
-                lineHeight: 1.2
-              }}>
-                {edu.degree}
-              </h3>
-
-              {/* Institution */}
-              <div style={{
-                fontSize: '1.1rem',
-                color: '#cbd5e1',
-                marginBottom: '0.3rem',
-                fontWeight: 600
-              }}>
-                {edu.institution}
-              </div>
-
-              {/* Location */}
-              <div style={{
-                fontSize: '0.95rem',
-                color: '#64748b',
-                marginBottom: '1.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontFamily: "'JetBrains Mono', monospace"
-              }}>
-                <MapPin size={16} />
-                {edu.location}
-              </div>
-
-              {/* Description */}
-              <p style={{
-                fontSize: '1rem',
-                color: '#94a3b8',
-                lineHeight: 1.7,
-                marginBottom: '2rem'
-              }}>
-                {edu.description}
-              </p>
-
-              {/* Score & Progress */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '1.5rem'
-              }}>
-                <div style={{
-                  padding: '0.8rem 2rem',
-                  background: `rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.15)`,
-                  border: `2px solid ${edu.color}`,
-                  borderRadius: '100px',
-                  fontSize: '1.2rem',
+          {/* Content */}
+          <div style={{ padding: '2.8rem 2.2rem' }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '2.2rem'
+            }}>
+              <div>
+                <h3 style={{
+                  fontSize: '2rem',
                   fontWeight: 900,
                   color: edu.color,
-                  fontFamily: "'Space Grotesk', sans-serif"
+                  marginBottom: '0.6rem',
+                  fontFamily: "'Orbitron', sans-serif"
                 }}>
-                  {edu.score}
-                </div>
-
-                {/* Progress ring */}
-                <div style={{ position: 'relative', width: '60px', height: '60px' }}>
-                  <svg style={{ transform: 'rotate(-90deg)', width: '100%', height: '100%' }}>
-                    <circle
-                      cx="30"
-                      cy="30"
-                      r="26"
-                      fill="none"
-                      stroke="rgba(255, 255, 255, 0.1)"
-                      strokeWidth="4"
-                    />
-                    <circle
-                      cx="30"
-                      cy="30"
-                      r="26"
-                      fill="none"
-                      stroke={edu.color}
-                      strokeWidth="4"
-                      strokeDasharray={`${2 * Math.PI * 26}`}
-                      strokeDashoffset={`${2 * Math.PI * 26 * (1 - edu.progress / 100)}`}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    color: edu.color
-                  }}>
-                    {edu.progress}%
-                  </div>
+                  {edu.degree}
+                </h3>
+                <div style={{
+                  fontSize: '1.2rem',
+                  color: '#d0d8f0',
+                  fontWeight: 600
+                }}>
+                  {edu.institution}
                 </div>
               </div>
 
-              {/* Skills */}
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.6rem'
-              }}>
-                {edu.skills.slice(0, 4).map((skill, idx) => (
-                  <span
-                    key={idx}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      background: 'rgba(0, 0, 0, 0.5)',
-                      border: `1.5px solid ${edu.color}40`,
-                      borderRadius: '100px',
-                      fontSize: '0.8rem',
-                      color: edu.color,
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontWeight: 600
-                    }}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <motion.div
-                whileHover={{ x: 5 }}
-                style={{
-                  marginTop: '2rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
+              <div style={{ textAlign: 'right' }}>
+                <div style={{
+                  fontSize: '3rem',
+                  fontWeight: 900,
                   color: edu.color,
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  cursor: 'pointer'
-                }}
-              >
-                View Details
-                <ArrowRight size={18} strokeWidth={3} />
-              </motion.div>
+                  lineHeight: 0.95,
+                  fontFamily: "'Orbitron', sans-serif"
+                }}>
+                  {edu.progress}%
+                </div>
+                <div style={{
+                  fontSize: '0.9rem',
+                  color: '#94a3b8',
+                  fontFamily: "'JetBrains Mono', monospace"
+                }}>
+                  PROGRESS
+                </div>
+              </div>
             </div>
-          </motion.div>
-        );
-      })}
-    </motion.div>
+
+            <div style={{
+              fontSize: '1.05rem',
+              color: '#94a3b8',
+              marginBottom: '1.8rem',
+              fontFamily: "'JetBrains Mono', monospace",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.7rem'
+            }}>
+              <span style={{ fontSize: '1.3rem', color: edu.color }}>⌛</span>
+              {edu.duration} • {edu.score}
+            </div>
+
+            <div style={{
+              padding: '1.1rem',
+              background: `rgba(${edu.glowRGB},0.09)`,
+              borderRadius: '18px',
+              border: `1px solid ${edu.color}35`,
+              marginBottom: '2.2rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem'
+            }}>
+              <span style={{ fontSize: '1.6rem' }}>★</span>
+              <span style={{ fontWeight: 600, color: '#e2e8f0' }}>
+                {edu.impact}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', marginBottom: '2.4rem' }}>
+              {edu.skills.slice(0, 5).map((t, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    padding: '0.55rem 1.3rem',
+                    background: 'rgba(0,0,0,0.52)',
+                    border: `2px solid ${edu.color}55`,
+                    borderRadius: '999px',
+                    fontSize: '0.88rem',
+                    color: edu.color,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontWeight: 600
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.9rem',
+              padding: '1rem 2rem',
+              background: edu.gradient,
+              color: '#000',
+              borderRadius: '999px',
+              fontWeight: 900,
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: '1rem',
+              boxShadow: `0 10px 35px rgba(${edu.glowRGB},0.45)`
+            }}>
+              View Certificate
+              <span style={{ fontSize: '1.2rem' }}>→</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 
+  // ────────────────────────────────────────────────
+  // Timeline View
+  // ────────────────────────────────────────────────
   const TimelineView = () => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      style={{
-        position: 'relative',
-        padding: '4rem 0',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}
-    >
-      {/* Timeline line */}
+    <div style={{ position: 'relative', padding: '6rem 0', maxWidth: '1400px', margin: '0 auto' }}>
       <div style={{
         position: 'absolute',
         left: '50%',
         top: 0,
         bottom: 0,
-        width: '3px',
-        background: 'linear-gradient(to bottom, #06b6d4, #a855f7, #f59e0b)',
+        width: '5px',
+        background: 'linear-gradient(to bottom, #00f5ff, #a78bfa, #f97316)',
         transform: 'translateX(-50%)',
-        boxShadow: '0 0 20px rgba(6, 182, 212, 0.5)'
+        boxShadow: '0 0 35px rgba(0,245,255,0.7)'
       }} />
 
-      {education.map((edu, index) => {
-        const Icon = edu.icon;
+      {filteredEducation.map((edu, index) => {
         const isLeft = index % 2 === 0;
 
         return (
-          <motion.div
+          <div
             key={edu.id}
-            initial={{ opacity: 0, x: isLeft ? -100 : 100, y: 50 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            transition={{
-              delay: index * 0.2,
-              duration: 0.8,
-              type: "spring",
-              stiffness: 100
-            }}
+            onMouseEnter={() => setHoveredId(edu.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setActiveEdu(edu)}
             style={{
               display: 'flex',
               justifyContent: isLeft ? 'flex-end' : 'flex-start',
-              marginBottom: '6rem',
+              margin: '7rem 0',
               position: 'relative',
-              padding: '0 clamp(1rem, 3vw, 3rem)'
+              padding: '0 2rem'
             }}
           >
             {/* Timeline node */}
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '80px',
-                height: '80px',
-                background: `linear-gradient(135deg, ${edu.gradient})`,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '4px solid rgba(0, 0, 0, 1)',
-                boxShadow: `0 0 40px ${edu.color}`,
-                zIndex: 10
-              }}
-            >
-              <Icon size={36} color="white" strokeWidth={2.5} />
-            </motion.div>
+            <div style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '90px',
+              height: '90px',
+              background: edu.color,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              boxShadow: `0 0 70px ${edu.color}90`,
+              border: '7px solid #000'
+            }}>
+              <span style={{ fontSize: '3.2rem' }}>{edu.iconEmoji}</span>
+            </div>
 
-            {/* Content card */}
-            <motion.div
-              whileHover={{ scale: 1.02, x: isLeft ? -10 : 10 }}
-              onClick={() => setSelectedEdu(edu)}
-              style={{
-                width: 'calc(50% - 60px)',
-                background: 'rgba(15, 23, 42, 0.8)',
-                backdropFilter: 'blur(30px)',
-                border: `2px solid ${edu.color}40`,
-                borderRadius: '20px',
-                padding: '2.5rem',
-                cursor: 'pointer',
-                transition: 'all 0.4s',
-                boxShadow: `0 10px 40px rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`
-              }}
-            >
-              {/* Badge */}
+            {/* Card */}
+            <div style={{
+              width: '48%',
+              padding: '2.8rem',
+              background: 'rgba(255,255,255,0.045)',
+              backdropFilter: 'blur(40px)',
+              border: `2.5px solid ${hoveredId === edu.id ? edu.color : 'rgba(255,255,255,0.15)'}`,
+              borderRadius: '26px',
+              cursor: 'pointer',
+              transition: 'all 0.55s ease',
+              transform: hoveredId === edu.id ? 'scale(1.04) translateX(0)' : 'scale(1)',
+              boxShadow: hoveredId === edu.id
+                ? `0 30px 80px rgba(${edu.glowRGB},0.55)`
+                : '0 12px 40px rgba(0,0,0,0.35)'
+            }}>
               <div style={{
-                display: 'inline-block',
-                padding: '0.5rem 1.5rem',
-                background: `rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`,
-                border: `2px solid ${edu.color}`,
-                borderRadius: '100px',
-                fontSize: '0.75rem',
-                fontWeight: 900,
-                color: edu.color,
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: '1.5rem'
+                fontSize: '1.2rem',
+                color: '#94a3b8',
+                marginBottom: '1.2rem',
+                fontFamily: "'JetBrains Mono', monospace"
               }}>
                 {edu.year}
               </div>
 
               <h3 style={{
-                fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)',
-                fontWeight: 800,
+                fontSize: '2.1rem',
+                fontWeight: 900,
                 color: edu.color,
-                marginBottom: '0.8rem',
-                fontFamily: "'Space Grotesk', sans-serif"
+                marginBottom: '0.9rem',
+                fontFamily: "'Orbitron', sans-serif"
               }}>
                 {edu.degree}
               </h3>
 
               <div style={{
-                fontSize: '1.1rem',
-                color: '#cbd5e1',
-                marginBottom: '0.5rem',
+                fontSize: '1.25rem',
+                color: '#d0d8f0',
+                marginBottom: '1.2rem',
                 fontWeight: 600
               }}>
                 {edu.institution}
               </div>
 
               <div style={{
-                fontSize: '0.9rem',
-                color: '#64748b',
-                marginBottom: '1.5rem',
+                fontSize: '1.05rem',
+                color: '#94a3b8',
+                marginBottom: '1.8rem',
                 fontFamily: "'JetBrains Mono', monospace"
               }}>
-                {edu.duration}
+                {edu.duration} • {edu.score} • {edu.location}
               </div>
-
-              <p style={{
-                fontSize: '1rem',
-                color: '#94a3b8',
-                lineHeight: 1.7,
-                marginBottom: '1.5rem'
-              }}>
-                {edu.description}
-              </p>
 
               <div style={{
-                padding: '0.8rem 2rem',
-                background: `rgba(${edu.color === '#06b6d4' ? '6, 182, 212' : edu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.15)`,
-                border: `2px solid ${edu.color}`,
-                borderRadius: '100px',
-                fontSize: '1.2rem',
+                fontSize: '3.2rem',
                 fontWeight: 900,
                 color: edu.color,
-                fontFamily: "'Space Grotesk', sans-serif",
-                display: 'inline-block'
+                margin: '1.5rem 0'
               }}>
-                {edu.score}
+                {edu.progress}%
               </div>
-            </motion.div>
-          </motion.div>
+
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.9rem',
+                padding: '1rem 2rem',
+                background: edu.gradient,
+                color: '#000',
+                borderRadius: '999px',
+                fontWeight: 900,
+                fontFamily: "'Orbitron', sans-serif",
+                fontSize: '1.05rem'
+              }}>
+                View Details →
+              </div>
+            </div>
+          </div>
         );
       })}
-    </motion.div>
+    </div>
   );
 
-  const CarouselView = () => {
-    const currentEdu = education[currentIndex];
-    const Icon = currentEdu.icon;
+  // ────────────────────────────────────────────────
+  // Network View
+  // ────────────────────────────────────────────────
+  const NetworkView = () => (
+    <div style={{
+      height: '1000px',
+      position: 'relative',
+      margin: '6rem 0'
+    }}>
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+        {filteredEducation.map((edu, i) => {
+          const angle = (i / filteredEducation.length) * Math.PI * 2 - Math.PI / 2;
+          const x = 50 + 36 * Math.cos(angle);
+          const y = 50 + 36 * Math.sin(angle);
+          return (
+            <line
+              key={i}
+              x1="50%"
+              y1="50%"
+              x2={`${x}%`}
+              y2={`${y}%`}
+              stroke={edu.color}
+              strokeWidth={hoveredId === edu.id ? 4.5 : 2}
+              opacity={hoveredId === edu.id ? 0.95 : 0.4}
+              style={{ transition: 'all 0.45s' }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* Center node */}
+      <div style={{
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '220px',
+        height: '220px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #00f5ff, #a78bfa, #f97316)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.6rem',
+        fontWeight: 900,
+        color: '#000',
+        boxShadow: '0 0 110px rgba(0,245,255,0.8)',
+        border: '9px solid #000'
+      }}>
+        EDUCATION
+      </div>
+
+      {filteredEducation.map((edu, i) => {
+        const angle = (i / filteredEducation.length) * Math.PI * 2 - Math.PI / 2;
+        const x = 50 + 36 * Math.cos(angle);
+        const y = 50 + 36 * Math.sin(angle);
+
+        return (
+          <div
+            key={edu.id}
+            onMouseEnter={() => setHoveredId(edu.id)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setActiveEdu(edu)}
+            style={{
+              position: 'absolute',
+              left: `${x}%`,
+              top: `${y}%`,
+              transform: `translate(-50%, -50%) scale(${hoveredId === edu.id ? 1.18 : 1})`,
+              transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
+              cursor: 'pointer',
+              width: '300px',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{
+              background: 'rgba(0,0,0,0.9)',
+              backdropFilter: 'blur(32px)',
+              border: `4px solid ${edu.color}`,
+              borderRadius: '26px',
+              padding: '2.2rem',
+              boxShadow: hoveredId === edu.id
+                ? `0 35px 90px rgba(${edu.glowRGB},0.75)`
+                : `0 12px 45px rgba(${edu.glowRGB},0.4)`
+            }}>
+              <div style={{ fontSize: '4.5rem', marginBottom: '1.2rem' }}>
+                {edu.iconEmoji}
+              </div>
+              <div style={{
+                fontSize: '1.9rem',
+                fontWeight: 900,
+                color: edu.color
+              }}>
+                {edu.progress}%
+              </div>
+              <div style={{
+                fontSize: '1.25rem',
+                color: '#e2e8f0',
+                marginTop: '0.6rem',
+                fontWeight: 600
+              }}>
+                {edu.degree.split(' in ')[0]}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  // ────────────────────────────────────────────────
+  // Immersive / Spotlight View
+  // ────────────────────────────────────────────────
+  const ImmersiveView = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const edu = filteredEducation[activeIndex];
 
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        style={{
-          minHeight: '700px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 'clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem)',
-          position: 'relative'
-        }}
-      >
-        {/* Background */}
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '5rem 2.5rem',
+        position: 'relative'
+      }}>
+        {/* Background gradient & blur */}
         <div style={{
           position: 'absolute',
           inset: 0,
-          borderRadius: '32px',
-          overflow: 'hidden'
-        }}>
-          <motion.img
-            key={currentIndex}
-            initial={{ scale: 1.2, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            src={currentEdu.image}
-            alt=""
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              filter: 'blur(20px) brightness(0.3)'
-            }}
-          />
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.95) 80%)'
-          }} />
-        </div>
+          background: `linear-gradient(135deg, ${edu.color}15, #000 70%)`,
+          opacity: 0.5,
+          zIndex: -1
+        }} />
 
-        {/* Content */}
         <div style={{
-          position: 'relative',
-          zIndex: 10,
           maxWidth: '1400px',
           width: '100%',
-          display: 'grid',
-          gridTemplateColumns: window.innerWidth > 1024 ? '1fr 1fr' : '1fr',
-          gap: 'clamp(3rem, 6vw, 5rem)',
+          display: 'flex',
+          gap: '7rem',
+          flexWrap: 'wrap',
           alignItems: 'center'
         }}>
-          {/* Image */}
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, type: "spring" }}
-            style={{
-              position: 'relative',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              border: `4px solid ${currentEdu.color}`,
-              boxShadow: `0 30px 80px rgba(${currentEdu.color === '#06b6d4' ? '6, 182, 212' : currentEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.6)`
-            }}
-          >
-            <img
-              src={currentEdu.image}
-              alt={currentEdu.institution}
-              style={{
-                width: '100%',
-                aspectRatio: '4/3',
-                objectFit: 'cover'
-              }}
-            />
-            
-            {/* Icon overlay */}
+          {/* Left - Large Icon / Image */}
+          <div style={{
+            flex: 1,
+            minWidth: '340px',
+            textAlign: 'center',
+            position: 'relative'
+          }}>
             <div style={{
-              position: 'absolute',
-              top: '2rem',
-              right: '2rem',
-              width: '100px',
-              height: '100px',
-              background: `rgba(${currentEdu.color === '#06b6d4' ? '6, 182, 212' : currentEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`,
-              backdropFilter: 'blur(20px)',
-              borderRadius: '50%',
-              border: `3px solid ${currentEdu.color}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: `0 0 40px ${currentEdu.color}`
+              fontSize: 'clamp(16rem, 40vw, 26rem)',
+              color: edu.color,
+              textShadow: `0 0 100px ${edu.color}90`,
+              lineHeight: 0.85,
+              opacity: 0.9
             }}>
-              <Icon size={50} color={currentEdu.color} strokeWidth={2.5} />
+              {edu.iconEmoji}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Details */}
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, type: "spring" }}
-          >
-            {/* Badge */}
+          {/* Right - Content */}
+          <div style={{ flex: 1.6, minWidth: '440px' }}>
             <div style={{
-              display: 'inline-block',
-              padding: '0.7rem 2rem',
-              background: `rgba(${currentEdu.color === '#06b6d4' ? '6, 182, 212' : currentEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`,
-              border: `2px solid ${currentEdu.color}`,
-              borderRadius: '100px',
-              fontSize: '0.85rem',
-              fontWeight: 900,
-              color: currentEdu.color,
+              display: 'inline-flex',
+              padding: '0.9rem 2.2rem',
+              background: `rgba(${edu.glowRGB},0.2)`,
+              border: `2.5px solid ${edu.color}`,
+              borderRadius: '999px',
+              color: edu.color,
               fontFamily: "'JetBrains Mono', monospace",
-              marginBottom: '2rem'
+              fontSize: '1.05rem',
+              marginBottom: '2.5rem'
             }}>
-              {currentEdu.badge} • {currentEdu.duration}
+              {edu.badge} • {edu.year}
             </div>
 
             <h2 style={{
-              fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+              fontSize: 'clamp(4rem, 10vw, 7rem)',
               fontWeight: 900,
-              fontFamily: "'Space Grotesk', sans-serif",
-              color: currentEdu.color,
-              marginBottom: '1.5rem',
-              lineHeight: 1.1
+              background: edu.gradient,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '2rem',
+              lineHeight: 1.05,
+              fontFamily: "'Orbitron', sans-serif"
             }}>
-              {currentEdu.degree}
+              {edu.degree}
             </h2>
 
             <div style={{
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-              color: '#cbd5e1',
-              marginBottom: '1rem',
+              fontSize: '1.8rem',
+              color: '#d0d8f0',
+              marginBottom: '1.8rem',
               fontWeight: 600
             }}>
-              {currentEdu.institution}
+              {edu.institution} • {edu.university}
             </div>
 
             <div style={{
-              fontSize: '1rem',
-              color: '#64748b',
-              marginBottom: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontFamily: "'JetBrains Mono', monospace"
-            }}>
-              <MapPin size={18} />
-              {currentEdu.location}
-            </div>
-
-            <p style={{
-              fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+              fontSize: '1.25rem',
               color: '#94a3b8',
-              lineHeight: 1.8,
-              marginBottom: '2.5rem'
+              marginBottom: '3.5rem',
+              fontFamily: "'JetBrains Mono', monospace",
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '2rem'
             }}>
-              {currentEdu.description}
-            </p>
-
-            {/* Score */}
-            <div style={{
-              display: 'inline-block',
-              padding: '1.2rem 3rem',
-              background: `linear-gradient(135deg, ${currentEdu.gradient})`,
-              borderRadius: '100px',
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              fontWeight: 900,
-              color: '#000',
-              fontFamily: "'Space Grotesk', sans-serif",
-              boxShadow: `0 15px 50px rgba(${currentEdu.color === '#06b6d4' ? '6, 182, 212' : currentEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.6)`,
-              marginBottom: '2.5rem'
-            }}>
-              {currentEdu.score}
+              <div>{edu.duration}</div>
+              <div>{edu.score}</div>
+              <div>{edu.location}</div>
             </div>
 
-            {/* Navigation */}
             <div style={{
-              display: 'flex',
-              gap: '1rem',
-              alignItems: 'center'
+              fontSize: '6.5rem',
+              fontWeight: 900,
+              color: edu.color,
+              marginBottom: '3.5rem',
+              textShadow: `0 0 60px ${edu.color}70`
             }}>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setCurrentIndex((currentIndex - 1 + education.length) % education.length)}
+              {edu.progress}%
+            </div>
+
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setActiveIndex((activeIndex - 1 + filteredEducation.length) % filteredEducation.length)}
                 style={{
-                  padding: '1rem 2rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '100px',
+                  padding: '1.3rem 3rem',
+                  background: 'rgba(255,255,255,0.09)',
+                  border: '2.5px solid rgba(255,255,255,0.28)',
+                  borderRadius: '999px',
                   color: '#fff',
+                  fontWeight: 800,
                   cursor: 'pointer',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  backdropFilter: 'blur(10px)'
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: '1.1rem'
                 }}
               >
                 ← Previous
-              </motion.button>
+              </button>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setCurrentIndex((currentIndex + 1) % education.length)}
+              <button
+                onClick={() => setActiveIndex((activeIndex + 1) % filteredEducation.length)}
                 style={{
-                  padding: '1rem 2rem',
-                  background: `linear-gradient(135deg, ${currentEdu.gradient})`,
+                  padding: '1.3rem 3rem',
+                  background: edu.gradient,
                   border: 'none',
-                  borderRadius: '100px',
+                  borderRadius: '999px',
                   color: '#000',
+                  fontWeight: 900,
                   cursor: 'pointer',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  boxShadow: `0 10px 30px rgba(${currentEdu.color === '#06b6d4' ? '6, 182, 212' : currentEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.5)`
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontSize: '1.1rem',
+                  boxShadow: `0 18px 50px rgba(${edu.glowRGB},0.6)`
                 }}
               >
                 Next →
-              </motion.button>
+              </button>
             </div>
-          </motion.div>
+          </div>
         </div>
-
-        {/* Indicators */}
-        <div style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          gap: '1rem',
-          zIndex: 20
-        }}>
-          {education.map((_, idx) => (
-            <motion.button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              whileHover={{ scale: 1.2 }}
-              style={{
-                width: idx === currentIndex ? '50px' : '12px',
-                height: '12px',
-                borderRadius: '100px',
-                background: idx === currentIndex ? currentEdu.color : 'rgba(255, 255, 255, 0.3)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s',
-                boxShadow: idx === currentIndex ? `0 0 20px ${currentEdu.color}` : 'none'
-              }}
-            />
-          ))}
-        </div>
-      </motion.div>
-    );
-  };
-
-  const DetailModal = () => {
-    if (!selectedEdu) return null;
-
-    const Icon = selectedEdu.icon;
-
-    return (
-      <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setSelectedEdu(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.95)',
-            backdropFilter: 'blur(20px)',
-            zIndex: 10000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 'clamp(1rem, 3vw, 2rem)',
-            overflowY: 'auto'
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 50 }}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'rgba(15, 23, 42, 0.95)',
-              border: `3px solid ${selectedEdu.color}`,
-              borderRadius: '32px',
-              maxWidth: '1200px',
-              width: '100%',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              position: 'relative',
-              boxShadow: `0 0 100px rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.5)`
-            }}
-          >
-            {/* Close button */}
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setSelectedEdu(null)}
-              style={{
-                position: 'absolute',
-                top: '2rem',
-                right: '2rem',
-                width: '50px',
-                height: '50px',
-                background: 'rgba(239, 68, 68, 0.2)',
-                border: '2px solid #ef4444',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ef4444',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                zIndex: 10
-              }}
-            >
-              <X size={24} strokeWidth={3} />
-            </motion.button>
-
-            <div style={{ padding: 'clamp(2rem, 5vw, 4rem)' }}>
-              {/* Header */}
-              <div style={{
-                display: 'inline-block',
-                padding: '0.7rem 2rem',
-                background: `rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.2)`,
-                border: `2px solid ${selectedEdu.color}`,
-                borderRadius: '100px',
-                fontSize: '0.85rem',
-                fontWeight: 900,
-                color: selectedEdu.color,
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: '2rem'
-              }}>
-                {selectedEdu.badge} • {selectedEdu.duration}
-              </div>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: window.innerWidth > 768 ? '120px 1fr' : '1fr',
-                gap: '2rem',
-                alignItems: 'start',
-                marginBottom: '3rem'
-              }}>
-                {/* Icon */}
-                <div style={{
-                  width: '120px',
-                  height: '120px',
-                  background: `linear-gradient(135deg, ${selectedEdu.gradient})`,
-                  borderRadius: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: `0 20px 60px rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.5)`
-                }}>
-                  <Icon size={60} color="white" strokeWidth={2.5} />
-                </div>
-
-                {/* Title */}
-                <div>
-                  <h2 style={{
-                    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                    fontWeight: 900,
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    color: selectedEdu.color,
-                    marginBottom: '1rem',
-                    lineHeight: 1.1
-                  }}>
-                    {selectedEdu.degree}
-                  </h2>
-
-                  <div style={{
-                    fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-                    color: '#cbd5e1',
-                    marginBottom: '0.5rem',
-                    fontWeight: 600
-                  }}>
-                    {selectedEdu.institution}
-                  </div>
-
-                  <div style={{
-                    fontSize: '1rem',
-                    color: '#64748b',
-                    fontFamily: "'JetBrains Mono', monospace",
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <MapPin size={16} />
-                    {selectedEdu.location}
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p style={{
-                fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                color: '#94a3b8',
-                lineHeight: 1.8,
-                marginBottom: '3rem'
-              }}>
-                {selectedEdu.description}
-              </p>
-
-              {/* Score */}
-              <div style={{
-                display: 'inline-block',
-                padding: '1.2rem 3rem',
-                background: `linear-gradient(135deg, ${selectedEdu.gradient})`,
-                borderRadius: '100px',
-                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                fontWeight: 900,
-                color: '#000',
-                fontFamily: "'Space Grotesk', sans-serif",
-                boxShadow: `0 15px 50px rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.6)`,
-                marginBottom: '3rem'
-              }}>
-                {selectedEdu.score}
-              </div>
-
-              {/* Skills */}
-              <div style={{ marginBottom: '3rem' }}>
-                <h3 style={{
-                  fontSize: '1.2rem',
-                  color: selectedEdu.color,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800,
-                  marginBottom: '1.5rem'
-                }}>
-                  Key Skills & Technologies
-                </h3>
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '1rem'
-                }}>
-                  {selectedEdu.skills.map((skill, idx) => (
-                    <span
-                      key={idx}
-                      style={{
-                        padding: '0.8rem 1.5rem',
-                        background: 'rgba(0, 0, 0, 0.5)',
-                        border: `2px solid ${selectedEdu.color}`,
-                        borderRadius: '100px',
-                        fontSize: '0.95rem',
-                        color: selectedEdu.color,
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontWeight: 600
-                      }}
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Achievements */}
-              <div>
-                <h3 style={{
-                  fontSize: '1.2rem',
-                  color: selectedEdu.color,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800,
-                  marginBottom: '1.5rem'
-                }}>
-                  Major Achievements
-                </h3>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem'
-                }}>
-                  {selectedEdu.achievements.map((achievement, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        padding: '1.2rem',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '16px',
-                        border: `1.5px solid rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.3)`
-                      }}
-                    >
-                      <CheckCircle2 size={24} color={selectedEdu.color} strokeWidth={2.5} />
-                      <span style={{
-                        fontSize: '1.05rem',
-                        color: '#cbd5e1'
-                      }}>
-                        {achievement}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div style={{
-                marginTop: '3rem',
-                textAlign: 'center'
-              }}>
-                <motion.a
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="mailto:g.sivasatyasaibhagavan@gmail.com"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                    padding: '1.2rem 3rem',
-                    background: `linear-gradient(135deg, ${selectedEdu.gradient})`,
-                    borderRadius: '100px',
-                    fontSize: '1.1rem',
-                    fontWeight: 800,
-                    color: '#000',
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    textDecoration: 'none',
-                    boxShadow: `0 15px 50px rgba(${selectedEdu.color === '#06b6d4' ? '6, 182, 212' : selectedEdu.color === '#a855f7' ? '168, 85, 247' : '245, 158, 11'}, 0.6)`
-                  }}
-                >
-                  <Sparkles size={24} strokeWidth={2.5} />
-                  Let's Collaborate
-                  <Rocket size={24} strokeWidth={2.5} />
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </AnimatePresence>
+      </div>
     );
   };
 
   return (
     <div style={{
-      fontFamily: "'Inter', sans-serif",
       background: '#000',
       color: '#fff',
       minHeight: '100vh',
       position: 'relative',
-      overflow: 'hidden'
+      overflowX: 'hidden',
+      fontFamily: "'Inter', system-ui, sans-serif"
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap');
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(80px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
-        html {
-          scroll-behavior: smooth;
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-30px); }
         }
 
-        ::-webkit-scrollbar {
-          width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.5);
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(135deg, #06b6d4, #a855f7);
-          borderRadius: 10px;
+        .glass-card {
+          background: rgba(255,255,255,0.035);
+          backdrop-filter: blur(24px);
+          border: 1px solid rgba(255,255,255,0.1);
         }
       `}</style>
 
-      {/* Animated background gradient */}
-      <motion.div
-        animate={{
-          background: [
-            'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)',
-            'radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)',
-            'radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%)',
-            'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)'
-          ]
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          pointerEvents: 'none'
-        }}
-      />
-
-      {/* Grid pattern */}
+      {/* Progress bar */}
       <div style={{
         position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '6px',
+        zIndex: 9999,
+        background: 'rgba(0,0,0,0.75)'
+      }}>
+        <div style={{
+          width: `${scrollProgress}%`,
+          height: '100%',
+          background: 'linear-gradient(90deg, #00f5ff, #a78bfa, #f97316)',
+          boxShadow: '0 0 35px currentColor',
+          transition: 'width 0.12s linear'
+        }} />
+      </div>
+
+      {/* Particle canvas */}
+      <canvas ref={canvasRef} style={{
+        position: 'fixed',
         inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
-        `,
-        backgroundSize: '50px 50px',
         pointerEvents: 'none',
-        opacity: 0.5
+        zIndex: 1
       }} />
 
-      {/* Content */}
-      <div
-        ref={containerRef}
-        style={{
-          position: 'relative',
-          zIndex: 10,
-          maxWidth: '1800px',
-          margin: '0 auto',
-          padding: 'clamp(5rem, 10vw, 8rem) clamp(1rem, 3vw, 3rem) clamp(4rem, 8vw, 6rem)'
-        }}
-      >
-        <HeroSection />
+      {/* Floating orbs */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
+        <div style={{
+          position: 'absolute',
+          width: '800px',
+          height: '800px',
+          top: '10%',
+          left: '5%',
+          background: 'radial-gradient(circle, rgba(0,245,255,0.14), transparent 70%)',
+          borderRadius: '50%',
+          filter: 'blur(90px)',
+          animation: 'float 26s infinite ease-in-out',
+          transform: `translate(${mousePosition.x * 0.7}px, ${mousePosition.y * 0.7}px)`
+        }} />
 
-        {activeView === "cards" && <CardsView />}
-        {activeView === "timeline" && <TimelineView />}
-        {activeView === "carousel" && <CarouselView />}
+        <div style={{
+          position: 'absolute',
+          width: '680px',
+          height: '680px',
+          bottom: '15%',
+          right: '10%',
+          background: 'radial-gradient(circle, rgba(167,139,250,0.13), transparent 70%)',
+          borderRadius: '50%',
+          filter: 'blur(80px)',
+          animation: 'float 32s infinite ease-in-out reverse',
+          transform: `translate(${-mousePosition.x * 0.5}px, ${-mousePosition.y * 0.5}px)`
+        }} />
+      </div>
 
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          style={{
-            marginTop: 'clamp(5rem, 10vw, 8rem)',
-            padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem)',
-            background: 'rgba(6, 182, 212, 0.05)',
-            border: '2px solid rgba(6, 182, 212, 0.3)',
-            borderRadius: '32px',
-            textAlign: 'center',
-            backdropFilter: 'blur(20px)'
-          }}
-        >
-          <h2 style={{
-            fontSize: 'clamp(2rem, 5vw, 4rem)',
+      <div style={{
+        position: 'relative',
+        zIndex: 10,
+        maxWidth: '1800px',
+        margin: '0 auto',
+        padding: 'clamp(8rem, 14vw, 13rem) clamp(2rem, 6vw, 6rem)'
+      }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '10rem' }}>
+          <h1 style={{
+            fontSize: 'clamp(7rem, 18vw, 13rem)',
             fontWeight: 900,
-            fontFamily: "'Space Grotesk', sans-serif",
-            marginBottom: '1.5rem'
+            fontFamily: "'Orbitron', sans-serif",
+            background: 'linear-gradient(135deg, #00f5ff, #a78bfa, #f97316, #00f5ff)',
+            backgroundSize: '300% auto',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            animation: 'gradientFlow 15s linear infinite',
+            marginBottom: '2rem',
+            letterSpacing: '9px',
+            textTransform: 'uppercase'
           }}>
-            <motion.span
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              style={{
-                background: 'linear-gradient(90deg, #06b6d4, #a855f7, #f59e0b, #06b6d4)',
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}
-            >
-              Let's Build Together
-            </motion.span>
-          </h2>
+            EDUCATION
+          </h1>
 
           <p style={{
-            fontSize: 'clamp(1rem, 2vw, 1.3rem)',
-            color: '#94a3b8',
-            maxWidth: '700px',
-            margin: '0 auto 3rem',
-            lineHeight: 1.8
+            fontSize: 'clamp(1.5rem, 3.5vw, 1.9rem)',
+            color: '#cbd5e1',
+            maxWidth: '950px',
+            margin: '0 auto 5rem',
+            lineHeight: 1.9
           }}>
-            Ready to collaborate on innovative AI projects and cutting-edge solutions
+            Academic progression from foundational excellence to advanced AI specialization
           </p>
+
+          <ViewModeSelector />
 
           <div style={{
             display: 'flex',
-            gap: '1.5rem',
+            gap: '1.4rem',
             justifyContent: 'center',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            marginTop: '4.5rem'
           }}>
-            <motion.a
-              whileHover={{ scale: 1.05, y: -3 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://github.com/bhagavan444"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                padding: '1.2rem 3rem',
-                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
-                borderRadius: '100px',
-                fontSize: '1.05rem',
-                fontWeight: 800,
-                color: '#000',
-                fontFamily: "'Space Grotesk', sans-serif",
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.8rem',
-                boxShadow: '0 10px 40px rgba(6, 182, 212, 0.5)'
-              }}
-            >
-              <Globe size={22} strokeWidth={2.5} />
-              View Projects
-              <ExternalLink size={22} strokeWidth={2.5} />
-            </motion.a>
-
-            <motion.a
-              whileHover={{ scale: 1.05, y: -3 }}
-              whileTap={{ scale: 0.95 }}
-              href="mailto:g.sivasatyasaibhagavan@gmail.com"
-              style={{
-                padding: '1.2rem 3rem',
-                background: 'linear-gradient(135deg, #a855f7, #9333ea)',
-                borderRadius: '100px',
-                fontSize: '1.05rem',
-                fontWeight: 800,
-                color: '#000',
-                fontFamily: "'Space Grotesk', sans-serif",
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.8rem',
-                boxShadow: '0 10px 40px rgba(168, 85, 247, 0.5)'
-              }}
-            >
-              <Sparkles size={22} strokeWidth={2.5} />
-              Get In Touch
-              <Rocket size={22} strokeWidth={2.5} />
-            </motion.a>
+            {['ALL', 'LEGENDARY', 'EPIC'].map(f => (
+              <button
+                key={f}
+                onClick={() => setSelectedFilter(f)}
+                style={{
+                  padding: '1rem 2.5rem',
+                  borderRadius: '999px',
+                  background: selectedFilter === f ? 'linear-gradient(135deg, #00f5ff, #a78bfa)' : 'rgba(255,255,255,0.07)',
+                  color: selectedFilter === f ? '#000' : '#e2e8f0',
+                  border: selectedFilter === f ? 'none' : '1.5px solid rgba(255,255,255,0.15)',
+                  fontFamily: "'Orbitron', sans-serif",
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.35s'
+                }}
+              >
+                {f === 'ALL' ? 'All Entries' : f}
+              </button>
+            ))}
           </div>
-        </motion.div>
-      </div>
+        </div>
 
-      <DetailModal />
+        {viewMode === "grid" && <GridView />}
+        {viewMode === "timeline" && <TimelineView />}
+        {viewMode === "network" && <NetworkView />}
+        {viewMode === "immersive" && <ImmersiveView />}
+
+        {/* ──────────────────────────────────────────────── */}
+        {/* Detail Modal */}
+        {/* ──────────────────────────────────────────────── */}
+        {activeEdu && (
+          <div
+            onClick={() => setActiveEdu(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.97)',
+              backdropFilter: 'blur(24px)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '3rem 2rem',
+              overflowY: 'auto'
+            }}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: 'rgba(10,10,40,0.96)',
+                border: `5px solid ${activeEdu.color}`,
+                borderRadius: '36px',
+                maxWidth: '1200px',
+                width: '94%',
+                maxHeight: '94vh',
+                overflowY: 'auto',
+                boxShadow: `0 0 220px rgba(${activeEdu.glowRGB},0.7)`,
+                backdropFilter: 'blur(32px)'
+              }}
+            >
+              <button
+                onClick={() => setActiveEdu(null)}
+                style={{
+                  position: 'absolute',
+                  top: '2rem',
+                  right: '2rem',
+                  background: 'rgba(255,90,90,0.25)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '60px',
+                  height: '60px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ff6b6b',
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(12px)',
+                  fontSize: '1.8rem',
+                  zIndex: 10
+                }}
+              >
+                ×
+              </button>
+
+              <div style={{ padding: '4.5rem 4rem' }}>
+                {/* Header */}
+                <div style={{
+                  fontSize: 'clamp(3.5rem, 8vw, 5rem)',
+                  fontWeight: 900,
+                  color: activeEdu.color,
+                  fontFamily: "'Orbitron', sans-serif",
+                  marginBottom: '1.5rem',
+                  lineHeight: 1.1
+                }}>
+                  {activeEdu.degree}
+                </div>
+
+                <div style={{
+                  fontSize: '1.6rem',
+                  color: '#d0d8f0',
+                  marginBottom: '2.2rem',
+                  fontWeight: 600
+                }}>
+                  {activeEdu.institution} • {activeEdu.university}
+                </div>
+
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '1.3rem',
+                  padding: '1rem 2.2rem',
+                  background: `rgba(${activeEdu.glowRGB},0.18)`,
+                  border: `2.5px solid ${activeEdu.color}`,
+                  borderRadius: '999px',
+                  color: activeEdu.color,
+                  fontSize: '1.2rem',
+                  fontFamily: "'JetBrains Mono', monospace",
+                  marginBottom: '3rem'
+                }}>
+                  <span style={{ fontSize: '1.6rem' }}>★</span>
+                  {activeEdu.progress}% • {activeEdu.score}
+                </div>
+
+                {/* Image */}
+                <div style={{
+                  marginBottom: '4rem',
+                  position: 'relative',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  border: `3px solid ${activeEdu.color}60`,
+                  boxShadow: `0 25px 80px rgba(${activeEdu.glowRGB},0.4)`
+                }}>
+                  <img
+                    src={getCertificateThumbnail(activeEdu.certId)}
+                    alt={activeEdu.institution}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent 60%)'
+                  }} />
+                </div>
+
+                {/* Period & Location */}
+                <div style={{ marginBottom: '3.5rem' }}>
+                  <h4 style={{
+                    color: activeEdu.color,
+                    fontSize: '1.4rem',
+                    marginBottom: '1.5rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Period & Location
+                  </h4>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '2rem',
+                    fontSize: '1.2rem',
+                    color: '#e2e8f0'
+                  }}>
+                    <div>📅 {activeEdu.duration}</div>
+                    <div>📍 {activeEdu.location}</div>
+                  </div>
+                </div>
+
+                {/* Achievements */}
+                <div style={{ marginBottom: '4rem' }}>
+                  <h4 style={{
+                    color: activeEdu.color,
+                    fontSize: '1.4rem',
+                    marginBottom: '1.5rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Key Achievements
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.3rem' }}>
+                    {activeEdu.achievements.map((ach, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '1.2rem',
+                          padding: '1.2rem',
+                          background: 'rgba(255,255,255,0.06)',
+                          borderRadius: '18px',
+                          border: `1.5px solid ${activeEdu.color}35`
+                        }}
+                      >
+                        <span style={{ color: activeEdu.color, fontSize: '1.5rem' }}>›</span>
+                        <span style={{ fontSize: '1.12rem', lineHeight: 1.6 }}>
+                          {ach}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Skills */}
+                <div style={{ marginBottom: '3rem' }}>
+                  <h4 style={{
+                    color: activeEdu.color,
+                    fontSize: '1.4rem',
+                    marginBottom: '1.5rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    Core Skills & Focus Areas
+                  </h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                    {activeEdu.skills.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        style={{
+                          padding: '0.85rem 1.8rem',
+                          background: 'rgba(255,255,255,0.07)',
+                          border: `2px solid ${activeEdu.color}45`,
+                          borderRadius: '999px',
+                          color: activeEdu.color,
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontWeight: 600,
+                          fontSize: '1rem'
+                        }}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                  <a
+                    href={getCertificateViewUrl(activeEdu.certId)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '1.2rem',
+                      padding: '1.4rem 3.2rem',
+                      background: activeEdu.gradient,
+                      color: '#000',
+                      borderRadius: '999px',
+                      fontSize: '1.2rem',
+                      fontWeight: 900,
+                      textDecoration: 'none',
+                      fontFamily: "'Orbitron', sans-serif",
+                      boxShadow: `0 20px 60px rgba(${activeEdu.glowRGB},0.6)`
+                    }}
+                  >
+                    View Certificate
+                    <span style={{ fontSize: '1.4rem' }}>↗</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
