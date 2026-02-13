@@ -1301,7 +1301,7 @@ const techStack = [
                         marginBottom: "1.2rem",
                       }}
                     >
-                      Full-Stack · AI/ML · Cloud
+                      Full-Stack · AI/ML · Cloud. Data Science
                     </div>
 
                     {/* Social Links */}
