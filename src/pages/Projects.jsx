@@ -51,7 +51,7 @@ const allProjects = [
       "Strengthened full-stack development skills, authentication workflows, and backend parsing logic for real-world applications.",
 
     screenshot:
-      "https://lh3.google.com/d/1ngApn37ig05YDXxCbA5mppeva_opwcUs"
+      "https://drive.google.com/uc?export=view&id=1ngApn37ig05YDXxCbA5mppeva_opwcUs"
   },
 
   {
@@ -95,7 +95,7 @@ const allProjects = [
       "Improved understanding of API orchestration, async request handling, and frontend–backend communication.",
 
     screenshot:
-      "https://lh3.google.com/d/10gvXlgHCb__NAWBoLEbj6LglL9dT6Kew"
+      "https://drive.google.com/uc?export=view&id=10gvXlgHCb__NAWBoLEbj6LglL9dT6Kew"
   },
 
   {
@@ -123,7 +123,7 @@ const allProjects = [
     tech: ["Python", "Scikit-learn", "Flask", "React"],
 
     screenshot:
-      "https://lh3.google.com/d/1pTnIysNCQgb3oHPOyofDKVkAe_acI2Bj"
+      "https://drive.google.com/uc?export=view&id=1pTnIysNCQgb3oHPOyofDKVkAe_acI2Bj"
   },
 
   {
@@ -151,7 +151,7 @@ const allProjects = [
     tech: ["Python", "Scikit-learn", "NLP", "TF-IDF"],
 
     screenshot:
-      "https://lh3.google.com/d/17XFIpJvdtb-0KXi5cyW37FQyXXc1-iC9"
+      "https://drive.google.com/uc?export=view&id=17XFIpJvdtb-0KXi5cyW37FQyXXc1-iC9"
   },
 
   {
@@ -179,9 +179,10 @@ const allProjects = [
     tech: ["Python", "Scikit-learn", "Flask", "SQLite"],
 
     screenshot:
-      "https://lh3.google.com/d/1Uy1JiAFMcAwMD0LZgm0J-bYiWuHpRzqq"
+      "https://drive.google.com/uc?export=view&id=1Uy1JiAFMcAwMD0LZgm0J-bYiWuHpRzqq"
   }
 ];
+
 
 
 // Magnetic Button Component

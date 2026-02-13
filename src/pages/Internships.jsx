@@ -43,7 +43,7 @@ const experiences = [
     accent: C.accent,
     accentDim: C.accentDim,
 
-    certPreview: "https://lh3.google.com/d/1bwbNlc9mdPYQOIyUpoiBIOhpyxaMBvbC",
+    certPreview: "https://drive.google.com/uc?export=view&id=1bwbNlc9mdPYQOIyUpoiBIOhpyxaMBvbC",
 
     summary:
       "Worked on full-stack web applications using the MERN stack, implementing authentication systems and REST APIs while collaborating in a team environment.",
@@ -83,7 +83,7 @@ const experiences = [
     accent: C.purple,
     accentDim: C.purpleDim,
 
-    certPreview: "https://lh3.google.com/d/1-_8ZI8uZ3DcrFpfZ3pts7VSYrAqPN5Zw",
+    certPreview: "https://drive.google.com/uc?export=view&id=1-_8ZI8uZ3DcrFpfZ3pts7VSYrAqPN5Zw",
 
     summary:
       "Developed and evaluated machine learning models for image classification and applied deployment using Flask APIs.",
@@ -123,7 +123,7 @@ const experiences = [
     accent: C.green,
     accentDim: C.greenDim,
 
-    certPreview: "https://lh3.google.com/d/18j3Go5VHISIf79vYic6-vcowNoEgg7SW",
+    certPreview: "https://drive.google.com/uc?export=view&id=18j3Go5VHISIf79vYic6-vcowNoEgg7SW",
 
     summary:
       "Worked on data preprocessing, feature engineering, and supervised learning model development using Python-based ML libraries.",
@@ -151,6 +151,7 @@ const experiences = [
     },
   },
 ];
+
 
 /* ═══════════════════════════════════════════════════════════════
    CUSTOM CURSOR
