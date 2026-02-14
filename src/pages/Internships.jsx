@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ExternalLink, MapPin, Calendar, CheckCircle2, ArrowUpRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS — WHITE BACKGROUND PREMIUM
+   DESIGN TOKENS — REFINED SYSTEM
 ═══════════════════════════════════════════════════════════════ */
 const C = {
   bg: "#ffffff",
@@ -27,6 +27,39 @@ const C = {
   purpleDim: "rgba(167,139,250,0.08)",
 };
 
+/* Refined spacing scale (8px base) */
+const spacing = {
+  xs: "0.5rem",    // 8px
+  sm: "1rem",      // 16px
+  md: "1.5rem",    // 24px
+  lg: "2rem",      // 32px
+  xl: "3rem",      // 48px
+  "2xl": "4rem",   // 64px
+  "3xl": "6rem",   // 96px
+  "4xl": "8rem",   // 128px
+};
+
+/* Unified motion system */
+const motion = {
+  easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+  duration: {
+    fast: "200ms",
+    normal: "300ms",
+    slow: "500ms",
+  },
+  hover: {
+    translate: "translateY(-2px)",
+    scale: "scale(1.01)",
+  },
+};
+
+/* Depth system (3 layers) */
+const elevation = {
+  0: "none", // base
+  1: "0 4px 12px rgba(0,0,0,0.04)", // elevated cards
+  2: "0 8px 24px rgba(0,0,0,0.06)", // emphasis
+};
+
 /* ═══════════════════════════════════════════════════════════════
    DATA — TIMELINE STRUCTURE
 ═══════════════════════════════════════════════════════════════ */
@@ -42,18 +75,14 @@ const experiences = [
     type: "Full-Stack Development",
     accent: C.accent,
     accentDim: C.accentDim,
-
     certPreview: "/images/study.jpg",
-
     summary:
       "Worked on full-stack web applications using the MERN stack, implementing authentication systems and REST APIs while collaborating in a team environment.",
-
     impact: [
       { metric: "3", label: "Web Modules", detail: "Frontend–backend integrations" },
       { metric: "2", label: "OAuth Providers", detail: "Google & GitHub login" },
       { metric: "100%", label: "API Connectivity", detail: "REST-based architecture" },
     ],
-
     contributions: [
       "Built reusable React components and connected them to Express-based REST APIs",
       "Implemented Google and GitHub OAuth authentication with JWT handling",
@@ -61,7 +90,6 @@ const experiences = [
       "Integrated frontend forms with backend validation and database persistence",
       "Collaborated using Git and GitHub in an agile-style workflow"
     ],
-
     stack: {
       Frontend: ["React", "HTML", "CSS", "JavaScript"],
       Backend: ["Node.js", "Express.js"],
@@ -70,7 +98,6 @@ const experiences = [
       Tools: ["Git", "Postman"]
     },
   },
-
   {
     id: 2,
     year: "2025",
@@ -82,18 +109,14 @@ const experiences = [
     type: "Machine Learning & Computer Vision",
     accent: C.purple,
     accentDim: C.purpleDim,
-
     certPreview: "/images/intern.png",
-
     summary:
       "Developed and evaluated machine learning models for image classification and applied deployment using Flask APIs.",
-
     impact: [
       { metric: "4", label: "ML Models", detail: "Classification pipelines built" },
       { metric: "85%", label: "CNN Accuracy", detail: "Image classification task" },
       { metric: "1", label: "API Deployment", detail: "Flask inference endpoint" },
     ],
-
     contributions: [
       "Built CNN-based image classification model using TensorFlow and Keras",
       "Performed preprocessing and data augmentation on labeled datasets",
@@ -101,7 +124,6 @@ const experiences = [
       "Deployed trained model through a Flask API for real-time inference",
       "Tested endpoints using Postman for validation"
     ],
-
     stack: {
       Core: ["TensorFlow", "Keras", "Scikit-learn"],
       CV: ["OpenCV"],
@@ -110,7 +132,6 @@ const experiences = [
       Environment: ["Jupyter Notebook", "Python"]
     },
   },
-
   {
     id: 3,
     year: "2024",
@@ -122,18 +143,14 @@ const experiences = [
     type: "Data Science & ML",
     accent: C.green,
     accentDim: C.greenDim,
-
     certPreview: "/images/blackbucks.jpeg",
-
     summary:
       "Worked on data preprocessing, feature engineering, and supervised learning model development using Python-based ML libraries.",
-
     impact: [
       { metric: "6", label: "Models Built", detail: "Supervised algorithms tested" },
       { metric: "90%+", label: "Best Accuracy", detail: "Classification tasks" },
       { metric: "1", label: "NLP Pipeline", detail: "TF-IDF implementation" },
     ],
-
     contributions: [
       "Cleaned and preprocessed structured datasets using Pandas",
       "Built classification models including Logistic Regression and Random Forest",
@@ -141,7 +158,6 @@ const experiences = [
       "Compared models using cross-validation and evaluation metrics",
       "Documented experiments and findings using Jupyter Notebook"
     ],
-
     stack: {
       ML: ["Scikit-learn"],
       Data: ["Pandas", "NumPy"],
@@ -152,18 +168,37 @@ const experiences = [
   },
 ];
 
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY: MOBILE DETECTION
+═══════════════════════════════════════════════════════════════ */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
+  return isMobile;
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   CUSTOM CURSOR
+   CUSTOM CURSOR (DISABLED ON MOBILE)
 ═══════════════════════════════════════════════════════════════ */
 function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [currentAccent, setCurrentAccent] = useState(C.accent);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
@@ -183,7 +218,9 @@ function CustomCursor() {
 
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <>
@@ -192,15 +229,15 @@ function CustomCursor() {
           position: "fixed",
           left: position.x,
           top: position.y,
-          width: isHovering ? "32px" : "8px",
-          height: isHovering ? "32px" : "8px",
+          width: isHovering ? "24px" : "6px",
+          height: isHovering ? "24px" : "6px",
           borderRadius: "50%",
           background: isHovering ? "transparent" : currentAccent,
           border: isHovering ? `2px solid ${currentAccent}` : "none",
           pointerEvents: "none",
           zIndex: 10000,
           transform: "translate(-50%, -50%)",
-          transition: "width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease",
+          transition: `all ${motion.duration.fast} ${motion.easing}`,
           mixBlendMode: "difference",
         }}
       />
@@ -209,14 +246,14 @@ function CustomCursor() {
           position: "fixed",
           left: position.x,
           top: position.y,
-          width: isHovering ? "64px" : "48px",
-          height: isHovering ? "64px" : "48px",
+          width: isHovering ? "48px" : "32px",
+          height: isHovering ? "48px" : "32px",
           borderRadius: "50%",
-          background: `radial-gradient(circle, ${currentAccent}15 0%, transparent 70%)`,
+          background: `radial-gradient(circle, ${currentAccent}10 0%, transparent 70%)`,
           pointerEvents: "none",
           zIndex: 9999,
           transform: "translate(-50%, -50%)",
-          transition: "width 0.3s ease, height 0.3s ease",
+          transition: `all ${motion.duration.normal} ${motion.easing}`,
         }}
       />
     </>
@@ -224,9 +261,9 @@ function CustomCursor() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ANIMATED COUNTER
+   ANIMATED COUNTER (OPTIMIZED)
 ═══════════════════════════════════════════════════════════════ */
-function AnimatedCounter({ value, duration = 2000 }) {
+function AnimatedCounter({ value, duration = 1500 }) {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef(null);
@@ -237,22 +274,19 @@ function AnimatedCounter({ value, duration = 2000 }) {
         if (entry.isIntersecting && !hasAnimated) {
           setHasAnimated(true);
           
-          // Handle string values like "1,000+" or "100K+"
           const numericValue = parseInt(value.toString().replace(/[^0-9]/g, "")) || 0;
-          const start = 0;
-          const end = numericValue;
           const startTime = Date.now();
 
           const animate = () => {
             const now = Date.now();
             const progress = Math.min((now - startTime) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(start + (end - start) * eased));
+            setCount(Math.floor(numericValue * eased));
 
             if (progress < 1) {
               requestAnimationFrame(animate);
             } else {
-              setCount(end);
+              setCount(numericValue);
             }
           };
 
@@ -266,14 +300,12 @@ function AnimatedCounter({ value, duration = 2000 }) {
     return () => observer.disconnect();
   }, [value, duration, hasAnimated]);
 
-  // Format the count back to original format
   const formatCount = (num) => {
-    if (value.toString().includes("K")) {
-      return `${(num / 1000).toFixed(0)}K+`;
-    }
-    if (value.toString().includes(",")) {
-      return `${num.toLocaleString()}+`;
-    }
+    if (value.toString().includes("K")) return `${(num / 1000).toFixed(0)}K+`;
+    if (value.toString().includes(",")) return `${num.toLocaleString()}+`;
+    if (value.toString().includes("%")) return `${num}%`;
+    if (value.toString().includes("+")) return `${num}+`;
+    if (value.toString().includes("–")) return value.toString();
     return num.toString();
   };
 
@@ -281,18 +313,29 @@ function AnimatedCounter({ value, duration = 2000 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SCROLL PROGRESS
+   SCROLL PROGRESS (SIMPLIFIED ON MOBILE)
 ═══════════════════════════════════════════════════════════════ */
 function ScrollProgress() {
   const [progress, setProgress] = useState(0);
+  const isMobile = useIsMobile();
+  const rafRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress((window.scrollY / total) * 100);
+      if (rafRef.current) return;
+      
+      rafRef.current = requestAnimationFrame(() => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress((window.scrollY / total) * 100);
+        rafRef.current = null;
+      });
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   return (
@@ -311,7 +354,9 @@ function ScrollProgress() {
         style={{
           height: "100%",
           width: `${progress}%`,
-          background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+          background: isMobile 
+            ? C.accent 
+            : `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
           transition: "width 0.1s linear",
         }}
       />
@@ -320,42 +365,56 @@ function ScrollProgress() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   STICKY TIMELINE RAIL
+   STICKY TIMELINE RAIL (HIDDEN ON MOBILE)
 ═══════════════════════════════════════════════════════════════ */
 function TimelineRail() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
+  const rafRef = useRef(null);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const handleScroll = () => {
-      const sections = document.querySelectorAll("[data-experience]");
-      let current = 0;
+      if (rafRef.current) return;
+      
+      rafRef.current = requestAnimationFrame(() => {
+        const sections = document.querySelectorAll("[data-experience]");
+        let current = 0;
 
-      sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-          current = index;
-        }
+        sections.forEach((section, index) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            current = index;
+          }
+        });
+
+        setActiveIndex(current);
+        rafRef.current = null;
       });
-
-      setActiveIndex(current);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <div
       style={{
         position: "fixed",
-        left: "3rem",
+        left: spacing.xl,
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 100,
         display: "flex",
         flexDirection: "column",
-        gap: "2rem",
+        gap: spacing.lg,
       }}
     >
       {experiences.map((exp, i) => (
@@ -364,9 +423,9 @@ function TimelineRail() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "1rem",
+            gap: spacing.sm,
             cursor: "pointer",
-            transition: "all 0.3s ease",
+            transition: `all ${motion.duration.normal} ${motion.easing}`,
           }}
           onClick={() => {
             document.getElementById(`exp-${exp.id}`)?.scrollIntoView({ behavior: "smooth" });
@@ -374,17 +433,17 @@ function TimelineRail() {
         >
           <div
             style={{
-              width: activeIndex === i ? "48px" : "24px",
+              width: activeIndex === i ? "40px" : "20px",
               height: "2px",
               background: activeIndex === i ? exp.accent : C.border2,
-              transition: "all 0.3s ease",
+              transition: `all ${motion.duration.normal} ${motion.easing}`,
             }}
           />
           <div
             style={{
               opacity: activeIndex === i ? 1 : 0,
               transform: activeIndex === i ? "translateX(0)" : "translateX(-8px)",
-              transition: "all 0.3s ease",
+              transition: `all ${motion.duration.normal} ${motion.easing}`,
             }}
           >
             <div
@@ -416,18 +475,19 @@ function TimelineRail() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAGNETIC BUTTON
+   MAGNETIC BUTTON (DISABLED ON MOBILE)
 ═══════════════════════════════════════════════════════════════ */
 function MagneticButton({ children, href, accent, style }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
+  const isMobile = useIsMobile();
 
   const handleMouseMove = (e) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    setPosition({ x: x * 0.3, y: y * 0.3 });
+    setPosition({ x: x * 0.2, y: y * 0.2 }); // Reduced from 0.3
   };
 
   const handleMouseLeave = () => {
@@ -446,8 +506,9 @@ function MagneticButton({ children, href, accent, style }) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.5rem",
-        padding: "0.75rem 1.5rem",
+        gap: spacing.xs,
+        padding: `${spacing.sm} ${spacing.md}`,
+        minHeight: "44px", // Accessibility tap target
         background: accent + "10",
         border: `1px solid ${accent}40`,
         borderRadius: "8px",
@@ -456,8 +517,8 @@ function MagneticButton({ children, href, accent, style }) {
         color: accent,
         textDecoration: "none",
         fontFamily: "'DM Mono', monospace",
-        transition: "all 0.2s ease",
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: `all ${motion.duration.normal} ${motion.easing}`,
+        transform: isMobile ? "none" : `translate(${position.x}px, ${position.y}px)`,
         ...style,
       }}
       onMouseEnter={(e) => {
@@ -475,31 +536,32 @@ function MagneticButton({ children, href, accent, style }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   EXPERIENCE SECTION
+   EXPERIENCE SECTION (MOBILE OPTIMIZED)
 ═══════════════════════════════════════════════════════════════ */
 function ExperienceSection({ data, index, isLast }) {
   const [inView, setInView] = useState(false);
   const [activeTab, setActiveTab] = useState("contributions");
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setInView(true);
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
 
   const handleMouseMove = (e) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: y * 2, y: -x * 2 });
+    setTilt({ x: y * 1.5, y: -x * 1.5 }); // Reduced from 2
   };
 
   const handleMouseLeave = () => {
@@ -513,14 +575,14 @@ function ExperienceSection({ data, index, isLast }) {
       data-experience
       data-accent={data.accent}
       style={{
-        minHeight: "100vh",
+        minHeight: isMobile ? "auto" : "100vh",
         display: "flex",
         alignItems: "center",
         position: "relative",
-        padding: "8rem 0",
+        padding: isMobile ? `${spacing["3xl"]} 0` : `${spacing["4xl"]} 0`,
         opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(60px)",
-        transition: "opacity 0.8s ease, transform 0.8s ease",
+        transform: inView ? "translateY(0)" : "translateY(40px)",
+        transition: `opacity ${motion.duration.slow} ${motion.easing}, transform ${motion.duration.slow} ${motion.easing}`,
         borderBottom: isLast ? "none" : `1px solid ${C.border}`,
       }}
     >
@@ -528,32 +590,32 @@ function ExperienceSection({ data, index, isLast }) {
       <div
         style={{
           position: "absolute",
-          left: "-2%",
-          top: "20%",
-          fontSize: "clamp(10rem, 18vw, 20rem)",
+          left: isMobile ? "-10%" : "-2%",
+          top: isMobile ? "10%" : "20%",
+          fontSize: isMobile ? "clamp(6rem, 25vw, 8rem)" : "clamp(10rem, 18vw, 20rem)",
           fontFamily: "'Instrument Serif', serif",
           fontWeight: 400,
           color: data.accentDim,
           lineHeight: 1,
           userSelect: "none",
           pointerEvents: "none",
-          opacity: 0.4,
+          opacity: 0.3,
         }}
       >
         {data.year}
       </div>
 
-      {/* Background glow */}
+      {/* Background glow (reduced on mobile) */}
       <div
         style={{
           position: "absolute",
           left: "15%",
           top: "30%",
-          width: "600px",
-          height: "600px",
+          width: isMobile ? "240px" : "400px",
+          height: isMobile ? "240px" : "400px",
           borderRadius: "50%",
-          background: `radial-gradient(circle, ${data.accent}10 0%, transparent 70%)`,
-          filter: "blur(100px)",
+          background: `radial-gradient(circle, ${data.accent}${isMobile ? '08' : '10'} 0%, transparent 70%)`,
+          filter: isMobile ? "blur(60px)" : "blur(80px)",
           pointerEvents: "none",
         }}
       />
@@ -562,15 +624,15 @@ function ExperienceSection({ data, index, isLast }) {
         style={{
           maxWidth: "1240px",
           margin: "0 auto",
-          padding: "0 2rem",
+          padding: `0 ${isMobile ? spacing.sm : spacing.lg}`,
           width: "100%",
         }}
       >
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.2fr 1fr",
-            gap: "6rem",
+            gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr",
+            gap: isMobile ? spacing.xl : spacing["3xl"],
             alignItems: "start",
           }}
         >
@@ -578,18 +640,18 @@ function ExperienceSection({ data, index, isLast }) {
           <div
             style={{
               opacity: inView ? 1 : 0,
-              transform: inView ? "translateX(0)" : "translateX(-40px)",
-              transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
+              transform: inView ? "translateX(0)" : "translateX(-30px)",
+              transition: `opacity ${motion.duration.slow} ${motion.easing} 0.1s, transform ${motion.duration.slow} ${motion.easing} 0.1s`,
             }}
           >
             {/* Header */}
-            <div style={{ marginBottom: "2rem" }}>
+            <div style={{ marginBottom: spacing.lg }}>
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "0.75rem",
-                  marginBottom: "1rem",
+                  gap: spacing.sm,
+                  marginBottom: spacing.sm,
                 }}
               >
                 <div style={{ width: "32px", height: "2px", background: data.accent }} />
@@ -612,7 +674,7 @@ function ExperienceSection({ data, index, isLast }) {
                   fontSize: "0.875rem",
                   color: C.muted,
                   fontFamily: "'DM Mono', monospace",
-                  marginBottom: "0.5rem",
+                  marginBottom: spacing.xs,
                 }}
               >
                 {data.type}
@@ -621,12 +683,12 @@ function ExperienceSection({ data, index, isLast }) {
               <h2
                 style={{
                   fontFamily: "'Instrument Serif', serif",
-                  fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
+                  fontSize: isMobile ? "clamp(2rem, 10vw, 2.5rem)" : "clamp(2.5rem, 5vw, 3.5rem)",
                   fontWeight: 400,
                   color: C.text,
                   lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-                  marginBottom: "0.5rem",
+                  letterSpacing: "-0.01em",
+                  marginBottom: spacing.xs,
                 }}
               >
                 {data.role}
@@ -634,10 +696,10 @@ function ExperienceSection({ data, index, isLast }) {
 
               <div
                 style={{
-                  fontSize: "1.25rem",
+                  fontSize: isMobile ? "1.1rem" : "1.25rem",
                   fontWeight: 600,
                   color: C.muted2,
-                  marginBottom: "0.75rem",
+                  marginBottom: spacing.sm,
                 }}
               >
                 {data.company}
@@ -647,7 +709,7 @@ function ExperienceSection({ data, index, isLast }) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "0.5rem",
+                  gap: spacing.xs,
                   fontSize: "0.875rem",
                   color: C.muted,
                 }}
@@ -660,33 +722,34 @@ function ExperienceSection({ data, index, isLast }) {
             {/* Animated underline */}
             <div
               style={{
-                width: "120px",
+                width: "96px",
                 height: "3px",
                 background: `linear-gradient(90deg, ${data.accent}, transparent)`,
                 borderRadius: "2px",
-                marginBottom: "2rem",
-                animation: inView ? "lineGrow 0.8s ease 0.4s both" : "none",
+                marginBottom: spacing.lg,
+                animation: inView ? `lineGrow ${motion.duration.slow} ${motion.easing} 0.2s both` : "none",
               }}
             />
 
             {/* Summary */}
             <p
               style={{
-                fontSize: "1.05rem",
+                fontSize: isMobile ? "1rem" : "1.05rem",
                 color: C.muted2,
-                lineHeight: 1.8,
-                marginBottom: "3rem",
+                lineHeight: 1.7,
+                marginBottom: spacing.xl,
+                maxWidth: isMobile ? "100%" : "640px",
               }}
             >
               {data.summary}
             </p>
 
             {/* Tab navigation */}
-            <div style={{ marginBottom: "2rem" }}>
+            <div style={{ marginBottom: spacing.lg }}>
               <div
                 style={{
                   display: "flex",
-                  gap: "2rem",
+                  gap: spacing.lg,
                   borderBottom: `1px solid ${C.border}`,
                   position: "relative",
                 }}
@@ -698,14 +761,15 @@ function ExperienceSection({ data, index, isLast }) {
                     style={{
                       background: "none",
                       border: "none",
-                      padding: "1rem 0",
+                      padding: `${spacing.sm} 0`,
                       fontSize: "0.875rem",
                       fontWeight: 600,
                       color: activeTab === tab ? C.text : C.muted,
                       cursor: "pointer",
-                      transition: "color 0.2s ease",
+                      transition: `color ${motion.duration.normal} ${motion.easing}`,
                       textTransform: "capitalize",
                       position: "relative",
+                      minHeight: "44px", // Accessibility
                     }}
                   >
                     {tab}
@@ -718,7 +782,7 @@ function ExperienceSection({ data, index, isLast }) {
                           right: 0,
                           height: "2px",
                           background: data.accent,
-                          animation: "slideIn 0.3s ease",
+                          animation: `slideIn ${motion.duration.normal} ${motion.easing}`,
                         }}
                       />
                     )}
@@ -728,23 +792,15 @@ function ExperienceSection({ data, index, isLast }) {
             </div>
 
             {/* Tab content */}
-            <div
-              style={{
-                minHeight: "300px",
-              }}
-            >
+            <div style={{ minHeight: isMobile ? "auto" : "300px" }}>
               {activeTab === "contributions" && (
-                <div
-                  style={{
-                    animation: "fadeSlide 0.4s ease",
-                  }}
-                >
+                <div style={{ animation: `fadeSlide ${motion.duration.normal} ${motion.easing}` }}>
                   <ul
                     style={{
                       listStyle: "none",
                       display: "flex",
                       flexDirection: "column",
-                      gap: "1rem",
+                      gap: spacing.sm,
                     }}
                   >
                     {data.contributions.map((item, i) => (
@@ -752,7 +808,7 @@ function ExperienceSection({ data, index, isLast }) {
                         key={i}
                         style={{
                           display: "flex",
-                          gap: "1rem",
+                          gap: spacing.sm,
                           alignItems: "flex-start",
                         }}
                       >
@@ -770,7 +826,7 @@ function ExperienceSection({ data, index, isLast }) {
                           style={{
                             fontSize: "0.95rem",
                             color: C.muted2,
-                            lineHeight: 1.7,
+                            lineHeight: 1.6,
                           }}
                         >
                           {item}
@@ -782,16 +838,12 @@ function ExperienceSection({ data, index, isLast }) {
               )}
 
               {activeTab === "stack" && (
-                <div
-                  style={{
-                    animation: "fadeSlide 0.4s ease",
-                  }}
-                >
+                <div style={{ animation: `fadeSlide ${motion.duration.normal} ${motion.easing}` }}>
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: "1.5rem",
+                      gap: spacing.md,
                     }}
                   >
                     {Object.entries(data.stack).map(([category, items]) => (
@@ -801,7 +853,7 @@ function ExperienceSection({ data, index, isLast }) {
                             fontSize: "0.75rem",
                             fontWeight: 700,
                             color: data.accent,
-                            marginBottom: "0.75rem",
+                            marginBottom: spacing.sm,
                             fontFamily: "'DM Mono', monospace",
                             letterSpacing: "0.1em",
                             textTransform: "uppercase",
@@ -813,7 +865,7 @@ function ExperienceSection({ data, index, isLast }) {
                           style={{
                             display: "flex",
                             flexWrap: "wrap",
-                            gap: "0.5rem",
+                            gap: spacing.xs,
                           }}
                         >
                           {items.map((tech) => (
@@ -821,21 +873,21 @@ function ExperienceSection({ data, index, isLast }) {
                               key={tech}
                               data-hover
                               style={{
-                                padding: "0.5rem 1rem",
+                                padding: `${spacing.xs} ${spacing.sm}`,
                                 background: C.surface,
                                 border: `1px solid ${C.border}`,
                                 borderRadius: "6px",
                                 fontSize: "0.85rem",
                                 fontWeight: 500,
                                 color: C.muted2,
-                                transition: "all 0.2s ease",
+                                transition: `all ${motion.duration.normal} ${motion.easing}`,
                                 cursor: "default",
                               }}
                               onMouseEnter={(e) => {
                                 e.currentTarget.style.background = data.accentDim;
                                 e.currentTarget.style.borderColor = data.accent + "40";
                                 e.currentTarget.style.color = C.text;
-                                e.currentTarget.style.transform = "translateY(-2px)";
+                                e.currentTarget.style.transform = motion.hover.translate;
                               }}
                               onMouseLeave={(e) => {
                                 e.currentTarget.style.background = C.surface;
@@ -856,7 +908,7 @@ function ExperienceSection({ data, index, isLast }) {
             </div>
 
             {/* Certificate button */}
-            <div style={{ marginTop: "3rem" }}>
+            <div style={{ marginTop: spacing.xl }}>
               <MagneticButton href={data.certPreview} accent={data.accent}>
                 <CheckCircle2 size={16} />
                 View Verified Certificate
@@ -864,14 +916,14 @@ function ExperienceSection({ data, index, isLast }) {
             </div>
           </div>
 
-          {/* Right: Metrics */}
+          {/* Right: Metrics (moved below on mobile) */}
           <div
             style={{
               opacity: inView ? 1 : 0,
-              transform: inView ? "translateX(0)" : "translateX(40px)",
-              transition: "opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s",
-              position: "sticky",
-              top: "6rem",
+              transform: inView ? "translateX(0)" : "translateX(30px)",
+              transition: `opacity ${motion.duration.slow} ${motion.easing} 0.2s, transform ${motion.duration.slow} ${motion.easing} 0.2s`,
+              position: isMobile ? "relative" : "sticky",
+              top: isMobile ? "auto" : spacing["3xl"],
             }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -879,22 +931,22 @@ function ExperienceSection({ data, index, isLast }) {
             <div
               style={{
                 position: "relative",
-                padding: "3rem 2.5rem",
+                padding: isMobile ? spacing.lg : `${spacing.xl} ${spacing.lg}`,
                 background: C.surface,
                 border: `1px solid ${C.border}`,
-                borderRadius: "24px",
-                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transition: "transform 0.2s ease",
-                boxShadow: `0 20px 48px rgba(0,0,0,0.06)`,
+                borderRadius: "20px",
+                transform: isMobile ? "none" : `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                transition: `transform ${motion.duration.normal} ${motion.easing}`,
+                boxShadow: elevation[1],
               }}
             >
-              {/* Glow overlay */}
+              {/* Glow overlay (reduced) */}
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
-                  borderRadius: "24px",
-                  background: `radial-gradient(circle at 50% 50%, ${data.accent}08 0%, transparent 60%)`,
+                  borderRadius: "20px",
+                  background: `radial-gradient(circle at 50% 50%, ${data.accent}06 0%, transparent 60%)`,
                   pointerEvents: "none",
                 }}
               />
@@ -907,7 +959,7 @@ function ExperienceSection({ data, index, isLast }) {
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   fontFamily: "'DM Mono', monospace",
-                  marginBottom: "2rem",
+                  marginBottom: spacing.lg,
                 }}
               >
                 Impact Metrics
@@ -917,27 +969,26 @@ function ExperienceSection({ data, index, isLast }) {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "2rem",
+                  gap: spacing.lg,
                 }}
               >
                 {data.impact.map((item, i) => (
                   <div
                     key={i}
                     style={{
-                      paddingBottom: i < data.impact.length - 1 ? "2rem" : 0,
-                      borderBottom:
-                        i < data.impact.length - 1 ? `1px solid ${C.border}` : "none",
+                      paddingBottom: i < data.impact.length - 1 ? spacing.lg : 0,
+                      borderBottom: i < data.impact.length - 1 ? `1px solid ${C.border}` : "none",
                     }}
                   >
                     <div
                       style={{
                         fontFamily: "'Instrument Serif', serif",
-                        fontSize: "3rem",
+                        fontSize: isMobile ? "2.5rem" : "3rem",
                         fontWeight: 400,
                         color: data.accent,
                         lineHeight: 1,
-                        marginBottom: "0.5rem",
-                        letterSpacing: "-0.03em",
+                        marginBottom: spacing.xs,
+                        letterSpacing: "-0.02em",
                       }}
                     >
                       <AnimatedCounter value={item.metric} />
@@ -956,7 +1007,7 @@ function ExperienceSection({ data, index, isLast }) {
                       style={{
                         fontSize: "0.85rem",
                         color: C.muted,
-                        lineHeight: 1.6,
+                        lineHeight: 1.5,
                       }}
                     >
                       {item.detail}
@@ -968,8 +1019,8 @@ function ExperienceSection({ data, index, isLast }) {
               {/* Certificate thumbnail */}
               <div
                 style={{
-                  marginTop: "2.5rem",
-                  paddingTop: "2rem",
+                  marginTop: spacing.lg,
+                  paddingTop: spacing.lg,
                   borderTop: `1px solid ${C.border}`,
                 }}
               >
@@ -979,16 +1030,20 @@ function ExperienceSection({ data, index, isLast }) {
                     overflow: "hidden",
                     border: `1px solid ${C.border}`,
                     position: "relative",
-                    transition: "all 0.3s ease",
+                    transition: `all ${motion.duration.normal} ${motion.easing}`,
                     cursor: "pointer",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.02)";
-                    e.currentTarget.querySelector(".cert-overlay").style.opacity = "1";
+                    if (!isMobile) {
+                      e.currentTarget.style.transform = motion.hover.scale;
+                      e.currentTarget.querySelector(".cert-overlay").style.opacity = "1";
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.querySelector(".cert-overlay").style.opacity = "0";
+                    if (!isMobile) {
+                      e.currentTarget.style.transform = "scale(1)";
+                      e.currentTarget.querySelector(".cert-overlay").style.opacity = "0";
+                    }
                   }}
                 >
                   <img
@@ -997,7 +1052,7 @@ function ExperienceSection({ data, index, isLast }) {
                     style={{
                       width: "100%",
                       display: "block",
-                      transition: "all 0.3s ease",
+                      transition: `all ${motion.duration.normal} ${motion.easing}`,
                     }}
                     loading="lazy"
                   />
@@ -1011,18 +1066,18 @@ function ExperienceSection({ data, index, isLast }) {
                       alignItems: "center",
                       justifyContent: "center",
                       opacity: 0,
-                      transition: "opacity 0.3s ease",
+                      transition: `opacity ${motion.duration.normal} ${motion.easing}`,
                     }}
                   >
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.5rem",
+                        gap: spacing.xs,
                         fontSize: "0.875rem",
                         fontWeight: 600,
                         color: "#fff",
-                        padding: "0.75rem 1.25rem",
+                        padding: `${spacing.sm} ${spacing.md}`,
                         background: "rgba(0,0,0,0.8)",
                         borderRadius: "8px",
                         border: `1px solid ${data.accent}60`,
@@ -1050,6 +1105,7 @@ export default function Internships() {
   const [summaryInView, setSummaryInView] = useState(false);
   const headerRef = useRef(null);
   const summaryRef = useRef(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const observers = [
@@ -1062,7 +1118,7 @@ export default function Internships() {
         ([entry]) => {
           if (entry.isIntersecting) setter(true);
         },
-        { threshold: 0.2 }
+        { threshold: 0.1 }
       );
       if (ref.current) observer.observe(ref.current);
       return observer;
@@ -1095,6 +1151,12 @@ export default function Internships() {
           cursor: none;
         }
 
+        @media (max-width: 768px) {
+          body {
+            cursor: auto;
+          }
+        }
+
         ::selection {
           background: ${C.accentDim};
           color: ${C.text};
@@ -1117,15 +1179,22 @@ export default function Internships() {
           background: ${C.muted};
         }
 
+        /* Accessibility: focus-visible states */
+        button:focus-visible,
+        a:focus-visible {
+          outline: 2px solid ${C.accent};
+          outline-offset: 2px;
+        }
+
         @keyframes lineGrow {
           from { width: 0; }
-          to { width: 120px; }
+          to { width: 96px; }
         }
 
         @keyframes fadeSlide {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(16px);
           }
           to {
             opacity: 1;
@@ -1136,21 +1205,11 @@ export default function Internships() {
         @keyframes slideIn {
           from {
             transform: scaleX(0);
+            transform-origin: left;
           }
           to {
             transform: scaleX(1);
-          }
-        }
-
-        @media (max-width: 768px) {
-          body {
-            cursor: auto;
-          }
-        }
-
-        @media (max-width: 1024px) {
-          [style*="gridTemplateColumns: 1.2fr 1fr"] {
-            grid-template-columns: 1fr !important;
+            transform-origin: left;
           }
         }
       `}</style>
@@ -1169,7 +1228,7 @@ export default function Internships() {
         style={{
           position: "fixed",
           inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.012'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -1183,11 +1242,13 @@ export default function Internships() {
           style={{
             maxWidth: "1240px",
             margin: "0 auto",
-            padding: "10rem 2rem 6rem",
+            padding: isMobile 
+              ? `${spacing["3xl"]} ${spacing.sm} ${spacing.xl}` 
+              : `${spacing["4xl"]} ${spacing.lg} ${spacing["3xl"]}`,
             borderBottom: `1px solid ${C.border}`,
             opacity: headerInView ? 1 : 0,
-            transform: headerInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transform: headerInView ? "translateY(0)" : "translateY(30px)",
+            transition: `opacity ${motion.duration.slow} ${motion.easing}, transform ${motion.duration.slow} ${motion.easing}`,
             position: "relative",
           }}
         >
@@ -1198,11 +1259,11 @@ export default function Internships() {
               top: "20%",
               left: "50%",
               transform: "translateX(-50%)",
-              width: "800px",
-              height: "400px",
+              width: isMobile ? "400px" : "600px",
+              height: isMobile ? "200px" : "300px",
               borderRadius: "50%",
-              background: `radial-gradient(circle, ${C.accent}08 0%, transparent 70%)`,
-              filter: "blur(100px)",
+              background: `radial-gradient(circle, ${C.accent}06 0%, transparent 70%)`,
+              filter: isMobile ? "blur(60px)" : "blur(80px)",
               pointerEvents: "none",
             }}
           />
@@ -1212,11 +1273,11 @@ export default function Internships() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.75rem",
-              marginBottom: "2rem",
+              gap: spacing.sm,
+              marginBottom: spacing.lg,
             }}
           >
-            <div style={{ width: "48px", height: "2px", background: C.accent }} />
+            <div style={{ width: isMobile ? "32px" : "48px", height: "2px", background: C.accent }} />
             <span
               style={{
                 fontFamily: "'DM Mono', monospace",
@@ -1235,12 +1296,12 @@ export default function Internships() {
           <h1
             style={{
               fontFamily: "'Instrument Serif', serif",
-              fontSize: "clamp(3.5rem, 8vw, 6.5rem)",
+              fontSize: isMobile ? "clamp(2.5rem, 12vw, 4rem)" : "clamp(3.5rem, 8vw, 6.5rem)",
               fontWeight: 400,
               color: C.text,
               lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              marginBottom: "1rem",
+              letterSpacing: "-0.02em",
+              marginBottom: spacing.sm,
               maxWidth: "1000px",
             }}
           >
@@ -1250,23 +1311,23 @@ export default function Internships() {
           {/* Animated underline */}
           <div
             style={{
-              width: "240px",
+              width: isMobile ? "160px" : "200px",
               height: "4px",
               background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
               borderRadius: "2px",
-              marginBottom: "2.5rem",
-              animation: headerInView ? "lineGrow 1s ease 0.2s both" : "none",
+              marginBottom: spacing.xl,
+              animation: headerInView ? `lineGrow ${motion.duration.slow} ${motion.easing} 0.1s both` : "none",
             }}
           />
 
           {/* Subtitle */}
           <p
             style={{
-              fontSize: "1.25rem",
+              fontSize: isMobile ? "1.05rem" : "1.25rem",
               color: C.muted2,
-              lineHeight: 1.8,
-              maxWidth: "720px",
-              marginBottom: "4rem",
+              lineHeight: 1.7,
+              maxWidth: isMobile ? "100%" : "700px",
+              marginBottom: spacing["2xl"],
             }}
           >
             Three industry internships across full-stack engineering, machine learning, and
@@ -1278,33 +1339,32 @@ export default function Internships() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "3rem",
+              gridTemplateColumns: isMobile 
+                ? "repeat(2, 1fr)" 
+                : "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: isMobile ? spacing.lg : spacing.xl,
               maxWidth: "900px",
             }}
           >
             {[
               { value: 3, label: "Industry Internships" },
-              { value: 7, label: "Months Total Experience" },
-              { value: 15, label: "Projects Shipped" },
-              { value: 100, label: "Verified Credentials" },
+              { value: "7+", label: "Months Total Experience" },
+              { value: "15+", label: "Projects Shipped" },
+              { value: "100%", label: "Verified Credentials" },
             ].map((stat, i) => (
               <div key={i}>
                 <div
                   style={{
                     fontFamily: "'Instrument Serif', serif",
-                    fontSize: "3rem",
+                    fontSize: isMobile ? "2.5rem" : "3rem",
                     fontWeight: 400,
                     color: C.text,
                     lineHeight: 1,
-                    marginBottom: "0.5rem",
-                    letterSpacing: "-0.03em",
+                    marginBottom: spacing.xs,
+                    letterSpacing: "-0.02em",
                   }}
                 >
                   <AnimatedCounter value={stat.value} />
-                  {stat.value === 100 && "%"}
-                  {stat.value === 15 && "+"}
-                  {stat.value === 7 && "+"}
                 </div>
                 <div
                   style={{
@@ -1337,14 +1397,16 @@ export default function Internships() {
           style={{
             maxWidth: "1240px",
             margin: "0 auto",
-            padding: "8rem 2rem",
+            padding: isMobile 
+              ? `${spacing["3xl"]} ${spacing.sm}` 
+              : `${spacing["4xl"]} ${spacing.lg}`,
             borderTop: `1px solid ${C.border}`,
             opacity: summaryInView ? 1 : 0,
-            transform: summaryInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transform: summaryInView ? "translateY(0)" : "translateY(30px)",
+            transition: `opacity ${motion.duration.slow} ${motion.easing}, transform ${motion.duration.slow} ${motion.easing}`,
           }}
         >
-          <div style={{ marginBottom: "3rem" }}>
+          <div style={{ marginBottom: spacing.xl }}>
             <div
               style={{
                 fontFamily: "'DM Mono', monospace",
@@ -1353,7 +1415,7 @@ export default function Internships() {
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: C.muted,
-                marginBottom: "1rem",
+                marginBottom: spacing.sm,
               }}
             >
               Combined Impact
@@ -1361,10 +1423,10 @@ export default function Internships() {
             <h2
               style={{
                 fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontSize: isMobile ? "clamp(1.75rem, 8vw, 2.5rem)" : "clamp(2rem, 4vw, 3rem)",
                 fontWeight: 400,
                 color: C.text,
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.01em",
               }}
             >
               Aggregate Overview
@@ -1374,51 +1436,56 @@ export default function Internships() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "1.5rem",
+              gridTemplateColumns: isMobile 
+                ? "1fr" 
+                : "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: spacing.md,
             }}
           >
             {[
-             { value: "5+", label: "Major Projects", detail: "Full-stack & ML applications built" },
-  { value: "50K+", label: "Records Processed", detail: "Across structured & text datasets" },
-  { value: "6", label: "ML Models", detail: "Classification & NLP pipelines" },
-  { value: "85–90%", label: "Best Model Accuracy", detail: "Image & text classification tasks" },
-  { value: "Multiple", label: "API Integrations", detail: "REST-based frontend–backend connectivity" },
-  { value: "2", label: "OAuth Providers", detail: "Google & GitHub authentication" },
-
+              { value: "5+", label: "Major Projects", detail: "Full-stack & ML applications built" },
+              { value: "50K+", label: "Records Processed", detail: "Across structured & text datasets" },
+              { value: "6", label: "ML Models", detail: "Classification & NLP pipelines" },
+              { value: "85–90%", label: "Best Model Accuracy", detail: "Image & text classification tasks" },
+              { value: "Multiple", label: "API Integrations", detail: "REST-based frontend–backend connectivity" },
+              { value: "2", label: "OAuth Providers", detail: "Google & GitHub authentication" },
             ].map((stat, i) => (
               <div
                 key={i}
                 style={{
-                  padding: "2rem",
+                  padding: spacing.lg,
                   background: C.surface,
                   border: `1px solid ${C.border}`,
                   borderRadius: "16px",
-                  transition: "all 0.3s ease",
+                  transition: `all ${motion.duration.normal} ${motion.easing}`,
                   opacity: summaryInView ? 1 : 0,
-                  transform: summaryInView ? "translateY(0)" : "translateY(20px)",
-                  transitionDelay: `${i * 0.1}s`,
+                  transform: summaryInView ? "translateY(0)" : "translateY(16px)",
+                  transitionDelay: `${i * 0.05}s`,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = C.accent + "40";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.08)";
+                  if (!isMobile) {
+                    e.currentTarget.style.borderColor = C.accent + "40";
+                    e.currentTarget.style.transform = motion.hover.translate;
+                    e.currentTarget.style.boxShadow = elevation[1];
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = C.border;
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
+                  if (!isMobile) {
+                    e.currentTarget.style.borderColor = C.border;
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }
                 }}
               >
                 <div
                   style={{
                     fontFamily: "'Instrument Serif', serif",
-                    fontSize: "2.5rem",
+                    fontSize: isMobile ? "2rem" : "2.5rem",
                     fontWeight: 400,
                     color: C.text,
                     lineHeight: 1,
-                    marginBottom: "0.75rem",
-                    letterSpacing: "-0.03em",
+                    marginBottom: spacing.sm,
+                    letterSpacing: "-0.02em",
                   }}
                 >
                   {stat.value}
@@ -1428,7 +1495,7 @@ export default function Internships() {
                     fontSize: "1rem",
                     fontWeight: 600,
                     color: C.muted2,
-                    marginBottom: "0.5rem",
+                    marginBottom: spacing.xs,
                   }}
                 >
                   {stat.label}
@@ -1437,7 +1504,7 @@ export default function Internships() {
                   style={{
                     fontSize: "0.875rem",
                     color: C.muted,
-                    lineHeight: 1.6,
+                    lineHeight: 1.5,
                   }}
                 >
                   {stat.detail}
@@ -1452,24 +1519,26 @@ export default function Internships() {
           style={{
             maxWidth: "1240px",
             margin: "0 auto",
-            padding: "4rem 2rem",
+            padding: isMobile 
+              ? `${spacing.xl} ${spacing.sm}` 
+              : `${spacing["2xl"]} ${spacing.lg}`,
             borderTop: `1px solid ${C.border}`,
           }}
         >
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "flex-start" : "center",
               justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "2rem",
+              gap: spacing.lg,
             }}
           >
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.75rem",
+                gap: spacing.sm,
               }}
             >
               <CheckCircle2 size={18} color={C.green} />
@@ -1484,7 +1553,13 @@ export default function Internships() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: "2rem" }}>
+            <div 
+              style={{ 
+                display: "flex", 
+                flexWrap: "wrap",
+                gap: spacing.sm,
+              }}
+            >
               {[
                 { label: "Email", href: "mailto:g.sivasatyasaibhagavan@gmail.com" },
                 { label: "LinkedIn", href: "https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" },
@@ -1494,7 +1569,10 @@ export default function Internships() {
                   key={link.label}
                   href={link.href}
                   accent={C.accent}
-                  style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }}
+                  style={{ 
+                    padding: `${spacing.xs} ${spacing.sm}`, 
+                    fontSize: "0.8rem" 
+                  }}
                 >
                   {link.label}
                 </MagneticButton>

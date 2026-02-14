@@ -48,6 +48,20 @@ const allProjects = [
     Tools: ["Git", "Postman"]
   },
 
+  challenges: [
+    {
+      title: "Real-time ATS Scoring",
+      description: "Implementing accurate keyword matching across varying job description formats.",
+      solution: "Built a normalized scoring algorithm with weighted keyword importance and context awareness."
+    }
+  ],
+
+  results: [
+    "90%+ ATS compatibility score across test resumes",
+    "Reduced resume creation time by 60%",
+    "Successful OAuth integration with zero security incidents"
+  ],
+
   learned:
     "Strengthened full-stack development skills, authentication workflows, and backend parsing logic for real-world applications.",
 
@@ -90,6 +104,20 @@ const allProjects = [
       AI: ["External AI API"],
       Tools: ["Git"]
     },
+
+    challenges: [
+      {
+        title: "API Rate Limiting",
+        description: "Managing external API quota while maintaining responsive user experience.",
+        solution: "Implemented request queuing with exponential backoff and user-facing status indicators."
+      }
+    ],
+
+    results: [
+      "Sub-500ms average response time maintained",
+      "100% async operation success rate",
+      "Zero API timeout errors in production"
+    ],
 
     learned:
       "Improved understanding of API orchestration, async request handling, and frontend–backend communication.",
@@ -185,17 +213,22 @@ const allProjects = [
 
 
 
-// Magnetic Button Component
+// Magnetic Button Component (with touch device detection)
 const MagneticButton = ({ children, href, external = false, className = "", style = {} }) => {
   const ref = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
   
   const handleMouse = (e) => {
-    if (!ref.current) return;
+    if (!ref.current || isTouchDevice) return;
     const { clientX, clientY } = e;
     const { width, height, left, top } = ref.current.getBoundingClientRect();
-    const x = (clientX - (left + width / 2)) * 0.15;
-    const y = (clientY - (top + height / 2)) * 0.15;
+    const x = (clientX - (left + width / 2)) * 0.1;
+    const y = (clientY - (top + height / 2)) * 0.1;
     setPosition({ x, y });
   };
   
@@ -207,7 +240,7 @@ const MagneticButton = ({ children, href, external = false, className = "", styl
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20, mass: 0.1 }}
       className={className}
       style={style}
     >
@@ -241,7 +274,7 @@ const AnimatedCounter = ({ value, suffix = "" }) => {
           const end = parseInt(value);
           if (start === end) return;
           
-          const duration = 2000;
+          const duration = 1600;
           const increment = end / (duration / 16);
           
           const timer = setInterval(() => {
@@ -274,15 +307,15 @@ const FlagshipProject = ({ project, index }) => {
   
   return (
     <motion.section
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
       className="flagship-section"
     >
       {/* Background Elements */}
       <div className="bg-glow" style={{ 
-        background: `radial-gradient(circle at ${isEven ? '20%' : '80%'} 50%, ${project.color}15 0%, transparent 50%)` 
+        background: `radial-gradient(circle at ${isEven ? '20%' : '80%'} 50%, ${project.color}0D 0%, transparent 50%)` 
       }} />
       <div className="bg-watermark" style={{ left: isEven ? '5%' : 'auto', right: isEven ? 'auto' : '5%' }}>
         {project.title.split(' ')[0]}
@@ -293,22 +326,22 @@ const FlagshipProject = ({ project, index }) => {
           {/* Image Side */}
           <motion.div 
             className="flagship-image-wrapper"
-            initial={{ opacity: 0, x: isEven ? -30 : 30 }}
+            initial={{ opacity: 0, x: isEven ? -24 : 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="precision-badge">
-              <Sparkles size={14} />
+              <Sparkles size={12} />
               <span>Built With Precision</span>
             </div>
             
             <motion.div
               className="flagship-image-container"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.4 }}
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <div className="image-glow" style={{ background: `${project.color}40` }} />
+              <div className="image-glow" style={{ background: `${project.color}30` }} />
               <img src={project.screenshot} alt={project.title} className="flagship-image" />
             </motion.div>
             
@@ -325,10 +358,10 @@ const FlagshipProject = ({ project, index }) => {
             <div className="project-hero">
               <motion.h2 
                 className="project-title"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 {project.title}
                 <div className="title-underline" style={{ background: project.color }} />
@@ -341,10 +374,10 @@ const FlagshipProject = ({ project, index }) => {
             {/* Impact Metrics */}
             <motion.div 
               className="impact-showcase"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
             >
               {project.impact.map((metric, idx) => (
                 <div key={idx} className="impact-metric">
@@ -358,46 +391,29 @@ const FlagshipProject = ({ project, index }) => {
             
             {/* CTAs */}
             <div className="cta-row">
-              <MagneticButton href={project.live} external className="btn-primary" style={{ background: project.color }}>
-                <ExternalLink size={18} />
-                <span>View Live Demo</span>
-                <ArrowRight size={18} />
+              <MagneticButton href={project.github} external className="btn-primary" style={{ background: project.color }}>
+                <Github size={16} />
+                <span>View Source</span>
+                <ArrowRight size={16} />
               </MagneticButton>
               
-              <MagneticButton href={project.github} external className="btn-secondary">
-                <Github size={18} />
-                <span>Source Code</span>
+              <MagneticButton href={project.live} external className="btn-secondary">
+                <ExternalLink size={16} />
+                <span>Live Demo</span>
               </MagneticButton>
             </div>
-            
-            {/* Insight */}
-            <motion.div 
-              className="insight-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <div className="insight-icon">
-                <Zap size={20} style={{ color: project.color }} />
-              </div>
-              <div>
-                <div className="insight-label">Key Insight</div>
-                <div className="insight-text">{project.insight}</div>
-              </div>
-            </motion.div>
             
             {/* Problem & Solution */}
             <div className="ps-grid">
               <motion.div 
                 className="ps-card problem"
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className="ps-icon">
-                  <AlertCircle size={18} />
+                  <AlertCircle size={16} />
                 </div>
                 <div className="ps-label">Problem</div>
                 <div className="ps-text">{project.problem}</div>
@@ -405,13 +421,13 @@ const FlagshipProject = ({ project, index }) => {
               
               <motion.div 
                 className="ps-card solution"
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className="ps-icon">
-                  <Target size={18} />
+                  <Target size={16} />
                 </div>
                 <div className="ps-label">Solution</div>
                 <div className="ps-text">{project.solution}</div>
@@ -427,10 +443,10 @@ const FlagshipProject = ({ project, index }) => {
                     className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
                     onClick={() => setActiveTab(tab)}
                   >
-                    {tab === 'architecture' && <Server size={16} />}
-                    {tab === 'tech' && <Code2 size={16} />}
-                    {tab === 'challenges' && <TrendingUp size={16} />}
-                    {tab === 'results' && <Zap size={16} />}
+                    {tab === 'architecture' && <Server size={14} />}
+                    {tab === 'tech' && <Code2 size={14} />}
+                    {tab === 'challenges' && <TrendingUp size={14} />}
+                    {tab === 'results' && <Zap size={14} />}
                     <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
                   </button>
                 ))}
@@ -438,15 +454,16 @@ const FlagshipProject = ({ project, index }) => {
                   className="tab-indicator"
                   layoutId={`indicator-${project.id}`}
                   style={{ background: project.color }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                 />
               </div>
               
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                 className="tab-content"
               >
                 {activeTab === 'architecture' && (
@@ -455,9 +472,9 @@ const FlagshipProject = ({ project, index }) => {
                       <motion.div
                         key={idx}
                         className="arch-item"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
+                        transition={{ delay: idx * 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                       >
                         <div className="arch-label">{section.label}</div>
                         <div className="arch-value">{section.value}</div>
@@ -472,9 +489,9 @@ const FlagshipProject = ({ project, index }) => {
                       <motion.div
                         key={category}
                         className="tech-category"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
+                        transition={{ delay: idx * 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                       >
                         <div className="tech-category-label">{category}</div>
                         <div className="tech-items">
@@ -496,9 +513,9 @@ const FlagshipProject = ({ project, index }) => {
                       <motion.div
                         key={idx}
                         className="challenge-card"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
+                        transition={{ delay: idx * 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                       >
                         <div className="challenge-title">{challenge.title}</div>
                         <div className="challenge-desc">{challenge.description}</div>
@@ -517,18 +534,18 @@ const FlagshipProject = ({ project, index }) => {
                       <motion.div
                         key={idx}
                         className="result-item"
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -8 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
+                        transition={{ delay: idx * 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                       >
-                        <div className="result-check" style={{ background: `${project.color}20`, color: project.color }}>
-                          <Zap size={16} />
+                        <div className="result-check" style={{ background: `${project.color}15`, color: project.color }}>
+                          <Zap size={14} />
                         </div>
                         <span>{result}</span>
                       </motion.div>
                     ))}
                     
-                    <div className="learned-card" style={{ borderColor: `${project.color}30` }}>
+                    <div className="learned-card" style={{ borderColor: `${project.color}20` }}>
                       <div className="learned-label">Lesson Learned</div>
                       <div className="learned-text">{project.learned}</div>
                     </div>
@@ -548,19 +565,19 @@ const CompactProject = ({ project }) => {
   return (
     <motion.div
       className="compact-card"
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(0, 0, 0, 0.12)" }}
-      transition={{ duration: 0.4 }}
+      viewport={{ once: true, margin: "-40px" }}
+      whileHover={{ y: -4, boxShadow: "0 16px 32px rgba(0, 0, 0, 0.08)" }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {/* Project Image */}
       <motion.div 
         className="compact-image-wrapper"
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3 }}
+        whileHover={{ scale: 1.03 }}
+        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <div className="compact-image-overlay" style={{ background: `linear-gradient(135deg, ${project.color}20 0%, transparent 100%)` }} />
+        <div className="compact-image-overlay" style={{ background: `linear-gradient(135deg, ${project.color}15 0%, transparent 100%)` }} />
         <img 
           src={project.screenshot} 
           alt={project.title} 
@@ -573,10 +590,10 @@ const CompactProject = ({ project }) => {
         <div className="compact-header">
           <motion.h3 
             className="compact-title"
-            initial={{ opacity: 0, x: -10 }}
+            initial={{ opacity: 0, x: -8 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {project.title}
           </motion.h3>
@@ -585,7 +602,7 @@ const CompactProject = ({ project }) => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.12, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {project.tagline}
           </motion.p>
@@ -593,19 +610,19 @@ const CompactProject = ({ project }) => {
         
         <motion.div 
           className="compact-metrics"
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.16, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
           {project.impact.map((metric, idx) => (
             <motion.div 
               key={idx} 
               className="compact-metric"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4 + idx * 0.1 }}
+              transition={{ delay: 0.2 + idx * 0.06, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <div className="compact-metric-value" style={{ color: project.color }}>
                 <AnimatedCounter value={metric.value} suffix={metric.suffix} />
@@ -620,7 +637,7 @@ const CompactProject = ({ project }) => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.24, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
           {project.tech.map((tech, idx) => (
             <motion.span 
@@ -629,8 +646,8 @@ const CompactProject = ({ project }) => {
               initial={{ opacity: 0, scale: 0 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.6 + idx * 0.05 }}
-              whileHover={{ scale: 1.1, backgroundColor: '#ffffff', borderColor: project.color }}
+              transition={{ delay: 0.28 + idx * 0.04, duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+              whileHover={{ scale: 1.05, backgroundColor: '#ffffff', borderColor: project.color }}
             >
               {tech}
             </motion.span>
@@ -639,18 +656,18 @@ const CompactProject = ({ project }) => {
         
         <motion.div 
           className="compact-links"
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.32, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <MagneticButton href={project.live} external className="compact-link" style={{ borderColor: project.color }}>
-            <ExternalLink size={14} />
-            <span>Demo</span>
-          </MagneticButton>
           <MagneticButton href={project.github} external className="compact-link">
             <Github size={14} />
             <span>Code</span>
+          </MagneticButton>
+          <MagneticButton href={project.live} external className="compact-link" style={{ borderColor: project.color }}>
+            <ExternalLink size={14} />
+            <span>Demo</span>
           </MagneticButton>
         </motion.div>
       </div>
@@ -680,40 +697,41 @@ export default function Projects() {
           color: #18181b;
           line-height: 1.6;
           -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
           overflow-x: hidden;
         }
         
         /* Hero Section */
         .hero-section {
-          max-width: 1400px;
+          max-width: 1280px;
           margin: 0 auto;
-          padding: 8rem 3rem 6rem;
+          padding: 80px 48px 64px;
           position: relative;
         }
         
         .hero-label {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.625rem 1.25rem;
+          gap: 8px;
+          padding: 8px 16px;
           background: #f4f4f5;
           border: 1px solid #e4e4e7;
           border-radius: 100px;
-          font-size: 0.8125rem;
+          font-size: 0.75rem;
           font-weight: 600;
           letter-spacing: 0.05em;
           text-transform: uppercase;
           color: #52525b;
-          margin-bottom: 2rem;
+          margin-bottom: 24px;
         }
         
         .hero-title {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: clamp(3rem, 7vw, 5rem);
+          font-size: clamp(2.5rem, 6vw, 4.5rem);
           font-weight: 700;
           line-height: 1.1;
-          letter-spacing: -0.03em;
-          margin-bottom: 1.5rem;
+          letter-spacing: -0.025em;
+          margin-bottom: 16px;
           color: #09090b;
         }
         
@@ -725,57 +743,60 @@ export default function Projects() {
         }
         
         .hero-description {
-          font-size: 1.25rem;
+          font-size: 1.125rem;
           color: #52525b;
-          max-width: 700px;
-          line-height: 1.7;
+          max-width: 640px;
+          line-height: 1.65;
         }
         
         .hero-stats {
-          display: flex;
-          gap: 4rem;
-          margin-top: 3rem;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 48px;
+          margin-top: 48px;
         }
         
         .hero-stat-value {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 2.5rem;
+          font-size: 2.25rem;
           font-weight: 700;
           color: #09090b;
+          line-height: 1;
         }
         
         .hero-stat-label {
-          font-size: 0.875rem;
+          font-size: 0.8125rem;
           color: #71717a;
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          margin-top: 8px;
         }
         
         /* Flagship Section */
         .flagship-section {
           position: relative;
-          padding: 6rem 0;
+          padding: 80px 0;
           overflow: hidden;
         }
         
         .flagship-section:not(:last-child) {
-          margin-bottom: 6rem;
+          margin-bottom: 64px;
         }
         
         .bg-glow {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          opacity: 0.4;
+          opacity: 1;
         }
         
         .bg-watermark {
           position: absolute;
           top: 20%;
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 15rem;
+          font-size: 12rem;
           font-weight: 900;
-          color: rgba(0, 0, 0, 0.02);
+          color: rgba(0, 0, 0, 0.015);
           pointer-events: none;
           user-select: none;
           z-index: 0;
@@ -783,9 +804,9 @@ export default function Projects() {
         }
         
         .flagship-container {
-          max-width: 1400px;
+          max-width: 1280px;
           margin: 0 auto;
-          padding: 0 3rem;
+          padding: 0 48px;
           position: relative;
           z-index: 1;
         }
@@ -793,7 +814,7 @@ export default function Projects() {
         .flagship-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 5rem;
+          gap: 64px;
           align-items: center;
         }
         
@@ -808,7 +829,7 @@ export default function Projects() {
         @media (max-width: 1024px) {
           .flagship-grid {
             grid-template-columns: 1fr;
-            gap: 4rem;
+            gap: 48px;
           }
           
           .flagship-grid.reverse {
@@ -824,29 +845,29 @@ export default function Projects() {
         .precision-badge {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 1rem;
+          gap: 6px;
+          padding: 6px 12px;
           background: #f4f4f5;
           border: 1px solid #e4e4e7;
           border-radius: 100px;
-          font-size: 0.75rem;
+          font-size: 0.6875rem;
           font-weight: 600;
           color: #18181b;
-          margin-bottom: 1.5rem;
+          margin-bottom: 16px;
         }
         
         .flagship-image-container {
           position: relative;
-          border-radius: 20px;
+          border-radius: 16px;
           overflow: hidden;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
         }
         
         .image-glow {
           position: absolute;
-          inset: -50%;
+          inset: -40%;
           opacity: 0.15;
-          filter: blur(60px);
+          filter: blur(48px);
           z-index: -1;
         }
         
@@ -855,15 +876,15 @@ export default function Projects() {
           height: auto;
           display: block;
           border: 1px solid #e4e4e7;
-          border-radius: 20px;
+          border-radius: 16px;
         }
         
         .image-meta {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          margin-top: 1.5rem;
-          font-size: 0.875rem;
+          gap: 12px;
+          margin-top: 16px;
+          font-size: 0.8125rem;
           color: #71717a;
         }
         
@@ -871,20 +892,20 @@ export default function Projects() {
         .flagship-content {
           display: flex;
           flex-direction: column;
-          gap: 2.5rem;
+          gap: 32px;
         }
         
         .project-hero {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 12px;
         }
         
         .project-title {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: clamp(2rem, 4vw, 3.5rem);
+          font-size: clamp(1.75rem, 3.5vw, 3rem);
           font-weight: 700;
-          line-height: 1.1;
+          line-height: 1.15;
           letter-spacing: -0.02em;
           color: #09090b;
           position: relative;
@@ -894,12 +915,12 @@ export default function Projects() {
         
         .title-underline {
           position: absolute;
-          bottom: -0.5rem;
+          bottom: -8px;
           left: 0;
           width: 100%;
-          height: 4px;
+          height: 3px;
           border-radius: 2px;
-          animation: expandLine 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation: expandLine 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
         
         @keyframes expandLine {
@@ -908,10 +929,10 @@ export default function Projects() {
         }
         
         .project-subtitle {
-          font-size: 1.125rem;
+          font-size: 1.0625rem;
           font-weight: 600;
           color: #3f3f46;
-          margin-top: 0.75rem;
+          margin-top: 8px;
         }
         
         .project-tagline {
@@ -922,8 +943,8 @@ export default function Projects() {
         /* Impact Metrics */
         .impact-showcase {
           display: flex;
-          gap: 3rem;
-          padding: 2rem 0;
+          gap: 40px;
+          padding: 24px 0;
           border-top: 1px solid #e4e4e7;
           border-bottom: 1px solid #e4e4e7;
         }
@@ -931,28 +952,29 @@ export default function Projects() {
         .impact-metric {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 6px;
         }
         
         .metric-value {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 3rem;
+          font-size: 2.5rem;
           font-weight: 700;
           line-height: 1;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.015em;
         }
         
         .metric-label {
-          font-size: 0.8125rem;
+          font-size: 0.75rem;
           color: #71717a;
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          font-weight: 500;
         }
         
         /* CTAs */
         .cta-row {
           display: flex;
-          gap: 1rem;
+          gap: 12px;
           flex-wrap: wrap;
         }
         
@@ -960,26 +982,27 @@ export default function Projects() {
         .btn-secondary {
           display: inline-flex;
           align-items: center;
-          gap: 0.625rem;
-          padding: 0.875rem 1.75rem;
+          gap: 8px;
+          padding: 12px 20px;
           border-radius: 10px;
           font-size: 0.875rem;
           font-weight: 600;
           text-decoration: none;
-          transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
           cursor: pointer;
+          min-height: 44px;
         }
         
         .btn-primary {
           background: #2563eb;
           color: #fff;
           border: none;
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
         }
         
         .btn-primary:hover {
-          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+          transform: translateY(-1px);
         }
         
         .btn-secondary {
@@ -991,49 +1014,14 @@ export default function Projects() {
         .btn-secondary:hover {
           background: #e4e4e7;
           border-color: #d4d4d8;
-        }
-        
-        /* Insight Card */
-        .insight-card {
-          display: flex;
-          gap: 1.25rem;
-          padding: 1.5rem;
-          background: #fafafa;
-          border: 1px solid #e4e4e7;
-          border-radius: 14px;
-        }
-        
-        .insight-icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 44px;
-          height: 44px;
-          flex-shrink: 0;
-          background: #f4f4f5;
-          border-radius: 10px;
-        }
-        
-        .insight-label {
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #52525b;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-bottom: 0.5rem;
-        }
-        
-        .insight-text {
-          font-size: 0.9375rem;
-          color: #18181b;
-          line-height: 1.6;
+          transform: translateY(-1px);
         }
         
         /* Problem & Solution */
         .ps-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1.25rem;
+          gap: 16px;
         }
         
         @media (max-width: 768px) {
@@ -1043,8 +1031,8 @@ export default function Projects() {
         }
         
         .ps-card {
-          padding: 1.5rem;
-          border-radius: 14px;
+          padding: 20px;
+          border-radius: 12px;
           border: 1px solid #e4e4e7;
         }
         
@@ -1062,10 +1050,10 @@ export default function Projects() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
           border-radius: 8px;
-          margin-bottom: 0.875rem;
+          margin-bottom: 12px;
         }
         
         .ps-card.problem .ps-icon {
@@ -1079,11 +1067,11 @@ export default function Projects() {
         }
         
         .ps-label {
-          font-size: 0.75rem;
+          font-size: 0.6875rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 0.625rem;
+          margin-bottom: 8px;
         }
         
         .ps-card.problem .ps-label {
@@ -1104,13 +1092,13 @@ export default function Projects() {
         .tab-system {
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 16px;
         }
         
         .tab-nav {
           display: flex;
-          gap: 0.75rem;
-          padding: 0.5rem;
+          gap: 8px;
+          padding: 6px;
           background: #fafafa;
           border: 1px solid #e4e4e7;
           border-radius: 10px;
@@ -1121,8 +1109,8 @@ export default function Projects() {
         .tab-btn {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1.25rem;
+          gap: 6px;
+          padding: 10px 16px;
           background: transparent;
           border: none;
           border-radius: 7px;
@@ -1130,9 +1118,10 @@ export default function Projects() {
           font-weight: 600;
           color: #71717a;
           cursor: pointer;
-          transition: color 200ms ease;
+          transition: color 0.2s ease;
           position: relative;
           z-index: 2;
+          min-height: 44px;
         }
         
         .tab-btn:hover {
@@ -1143,30 +1132,35 @@ export default function Projects() {
           color: #ffffff;
         }
         
+        .tab-btn:focus-visible {
+          outline: 2px solid #2563eb;
+          outline-offset: 2px;
+        }
+        
         .tab-indicator {
           position: absolute;
-          top: 0.5rem;
-          left: 0.5rem;
-          height: calc(100% - 1rem);
+          top: 6px;
+          left: 6px;
+          height: calc(100% - 12px);
           border-radius: 7px;
           z-index: 1;
         }
         
         .tab-content {
-          padding: 1.75rem;
+          padding: 24px;
           background: #fafafa;
           border: 1px solid #e4e4e7;
-          border-radius: 14px;
+          border-radius: 12px;
         }
         
         /* Architecture */
         .arch-grid {
           display: grid;
-          gap: 1rem;
+          gap: 12px;
         }
         
         .arch-item {
-          padding: 1.125rem;
+          padding: 16px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 10px;
@@ -1178,7 +1172,7 @@ export default function Projects() {
           color: #71717a;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 0.5rem;
+          margin-bottom: 6px;
         }
         
         .arch-value {
@@ -1190,13 +1184,13 @@ export default function Projects() {
         /* Tech Stack */
         .tech-categories {
           display: grid;
-          gap: 1.75rem;
+          gap: 24px;
         }
         
         .tech-category {
           display: flex;
           flex-direction: column;
-          gap: 0.875rem;
+          gap: 12px;
         }
         
         .tech-category-label {
@@ -1209,21 +1203,21 @@ export default function Projects() {
         
         .tech-items {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 0.625rem;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 8px;
         }
         
         .tech-item {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
-          padding: 0.625rem 0.875rem;
+          gap: 8px;
+          padding: 8px 12px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 7px;
           font-size: 0.8125rem;
           color: #18181b;
-          transition: all 200ms ease;
+          transition: all 0.2s ease;
         }
         
         .tech-item:hover {
@@ -1232,8 +1226,8 @@ export default function Projects() {
         }
         
         .tech-dot {
-          width: 7px;
-          height: 7px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
           flex-shrink: 0;
         }
@@ -1241,32 +1235,32 @@ export default function Projects() {
         /* Challenges */
         .challenges-grid {
           display: grid;
-          gap: 1.25rem;
+          gap: 16px;
         }
         
         .challenge-card {
-          padding: 1.5rem;
+          padding: 20px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 10px;
         }
         
         .challenge-title {
-          font-size: 1rem;
+          font-size: 0.9375rem;
           font-weight: 600;
           color: #09090b;
-          margin-bottom: 0.625rem;
+          margin-bottom: 8px;
         }
         
         .challenge-desc {
           font-size: 0.875rem;
           color: #52525b;
           line-height: 1.6;
-          margin-bottom: 1rem;
+          margin-bottom: 12px;
         }
         
         .challenge-solution {
-          padding: 0.875rem;
+          padding: 12px;
           background: #f4f4f5;
           border-radius: 7px;
         }
@@ -1276,7 +1270,7 @@ export default function Projects() {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 0.5rem;
+          margin-bottom: 6px;
         }
         
         .solution-text {
@@ -1288,14 +1282,14 @@ export default function Projects() {
         /* Results */
         .results-grid {
           display: grid;
-          gap: 0.875rem;
+          gap: 12px;
         }
         
         .result-item {
           display: flex;
           align-items: flex-start;
-          gap: 0.875rem;
-          padding: 0.875rem;
+          gap: 12px;
+          padding: 12px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 7px;
@@ -1308,15 +1302,15 @@ export default function Projects() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 28px;
-          height: 28px;
+          width: 24px;
+          height: 24px;
           flex-shrink: 0;
           border-radius: 5px;
         }
         
         .learned-card {
-          margin-top: 1.25rem;
-          padding: 1.5rem;
+          margin-top: 16px;
+          padding: 20px;
           background: #fafafa;
           border: 1px solid;
           border-radius: 10px;
@@ -1328,7 +1322,7 @@ export default function Projects() {
           color: #52525b;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 0.625rem;
+          margin-bottom: 8px;
         }
         
         .learned-text {
@@ -1340,21 +1334,21 @@ export default function Projects() {
         
         /* Supporting Projects */
         .supporting-section {
-          max-width: 1400px;
+          max-width: 1280px;
           margin: 0 auto;
-          padding: 6rem 3rem;
+          padding: 80px 48px;
         }
         
         .supporting-header {
-          margin-bottom: 3rem;
+          margin-bottom: 48px;
         }
         
         .supporting-title {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+          font-size: clamp(1.5rem, 3vw, 2.25rem);
           font-weight: 700;
           color: #09090b;
-          margin-bottom: 0.75rem;
+          margin-bottom: 12px;
         }
         
         .supporting-desc {
@@ -1364,18 +1358,18 @@ export default function Projects() {
         
         .compact-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 1.75rem;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
         }
         
         .compact-card {
           background: #fafafa;
           border: 1px solid #e4e4e7;
-          border-radius: 16px;
+          border-radius: 14px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         
         .compact-image-wrapper {
@@ -1390,34 +1384,34 @@ export default function Projects() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         
         .compact-card:hover .compact-image {
-          transform: scale(1.08);
+          transform: scale(1.04);
         }
         
         .compact-image-overlay {
           position: absolute;
           inset: 0;
-          opacity: 0.4;
+          opacity: 0.3;
           pointer-events: none;
-          transition: opacity 300ms ease;
+          transition: opacity 0.3s ease;
         }
         
         .compact-card:hover .compact-image-overlay {
-          opacity: 0.6;
+          opacity: 0.5;
         }
         
         .compact-color-badge {
           position: absolute;
-          top: 1rem;
-          right: 1rem;
-          width: 32px;
-          height: 32px;
+          top: 12px;
+          right: 12px;
+          width: 28px;
+          height: 28px;
           border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+          animation: pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
         @keyframes pulse {
@@ -1426,28 +1420,28 @@ export default function Projects() {
             transform: scale(1);
           }
           50% {
-            opacity: 0.8;
-            transform: scale(1.05);
+            opacity: 0.85;
+            transform: scale(1.03);
           }
         }
         
         .compact-content {
-          padding: 1.75rem;
+          padding: 24px;
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 16px;
           flex: 1;
         }
         
         .compact-header {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 6px;
         }
         
         .compact-title {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 1.375rem;
+          font-size: 1.25rem;
           font-weight: 700;
           color: #09090b;
           line-height: 1.3;
@@ -1461,8 +1455,8 @@ export default function Projects() {
         
         .compact-metrics {
           display: flex;
-          gap: 1.75rem;
-          padding: 1.25rem 0;
+          gap: 24px;
+          padding: 16px 0;
           border-top: 1px solid #e4e4e7;
           border-bottom: 1px solid #e4e4e7;
         }
@@ -1470,13 +1464,13 @@ export default function Projects() {
         .compact-metric {
           display: flex;
           flex-direction: column;
-          gap: 0.375rem;
+          gap: 4px;
           flex: 1;
         }
         
         .compact-metric-value {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: 1.75rem;
+          font-size: 1.5rem;
           font-weight: 700;
           line-height: 1;
         }
@@ -1492,28 +1486,28 @@ export default function Projects() {
         .compact-tech {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.5rem;
+          gap: 6px;
         }
         
         .compact-tech-badge {
-          padding: 0.375rem 0.75rem;
+          padding: 6px 10px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 6px;
           font-size: 0.75rem;
           color: #52525b;
           font-weight: 500;
-          transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         
         .compact-tech-badge:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
         
         .compact-links {
           display: flex;
-          gap: 0.875rem;
+          gap: 12px;
           margin-top: auto;
         }
         
@@ -1521,9 +1515,9 @@ export default function Projects() {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
+          gap: 6px;
           flex: 1;
-          padding: 0.875rem;
+          padding: 12px;
           background: #ffffff;
           border: 1px solid #e4e4e7;
           border-radius: 8px;
@@ -1531,39 +1525,61 @@ export default function Projects() {
           font-weight: 600;
           color: #18181b;
           text-decoration: none;
-          transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
           cursor: pointer;
+          min-height: 44px;
         }
         
         .compact-link:hover {
           background: #f4f4f5;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
         }
         
         .compact-link:first-child:hover {
           background: #ffffff;
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
           .hero-section {
-            padding: 6rem 2rem 4rem;
+            padding: 64px 24px 48px;
+          }
+          
+          .hero-title {
+            font-size: 2rem;
           }
           
           .hero-stats {
-            flex-direction: column;
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+          }
+          
+          .hero-stat-value {
+            font-size: 1.75rem;
           }
           
           .flagship-container {
-            padding: 0 2rem;
+            padding: 0 24px;
+          }
+          
+          .flagship-grid {
+            gap: 32px;
+          }
+          
+          .bg-watermark {
+            font-size: 4rem;
+            opacity: 0.5;
           }
           
           .impact-showcase {
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 20px;
+          }
+          
+          .metric-value {
+            font-size: 2rem;
           }
           
           .tab-nav {
@@ -1571,7 +1587,7 @@ export default function Projects() {
           }
           
           .supporting-section {
-            padding: 4rem 2rem;
+            padding: 64px 24px;
           }
           
           .compact-grid {
@@ -1604,15 +1620,15 @@ export default function Projects() {
           className="hero-section"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="hero-label">
-              <Sparkles size={14} />
+              <Sparkles size={12} />
               Engineering Portfolio
             </div>
             
@@ -1628,9 +1644,9 @@ export default function Projects() {
           
           <motion.div 
             className="hero-stats"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div>
               <div className="hero-stat-value">5+</div>
@@ -1656,9 +1672,10 @@ export default function Projects() {
         <div className="supporting-section">
           <motion.div 
             className="supporting-header"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <h2 className="supporting-title">Additional Projects</h2>
             <p className="supporting-desc">

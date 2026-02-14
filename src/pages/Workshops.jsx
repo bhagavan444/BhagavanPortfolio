@@ -3,466 +3,234 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Cpu, Brain, Cloud, Shield, Network, Terminal,
-  Github, ExternalLink, ChevronRight, X, ArrowUpRight,
-  CheckCircle2, Layers, Box, TrendingUp, Zap, Database
+  Github, ExternalLink, X, ArrowUpRight,
+  CheckCircle2, Layers, Box, TrendingUp, Database
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS — WHITE BACKGROUND EXECUTIVE
+   DESIGN TOKENS
 ═══════════════════════════════════════════════════════════════ */
-const C = {
-  bg: "#ffffff",
-  surface: "#f9fafb",
-  surface2: "#f3f4f6",
-  surface3: "#e5e7eb",
-  border: "rgba(0,0,0,0.06)",
-  border2: "rgba(0,0,0,0.10)",
-  border3: "rgba(0,0,0,0.14)",
-  text: "#0f172a",
-  muted: "#64748b",
-  muted2: "#475569",
-  accent: "#4f7fff",
-  accentDim: "rgba(79,127,255,0.08)",
-  green: "#10b981",
-  greenDim: "rgba(16,185,129,0.08)",
-  purple: "#a78bfa",
-  purpleDim: "rgba(167,139,250,0.08)",
-  amber: "#f59e0b",
-  amberDim: "rgba(245,158,11,0.08)",
+const T = {
+  bg: "#F8F7F4",
+  white: "#FFFFFF",
+  ink: "#0C0C0C",
+  ink80: "#1C1C1C",
+  ink60: "#3A3A3A",
+  ink40: "#737373",
+  ink20: "#B8B8B8",
+  ink10: "#E0E0E0",
+  ink05: "#EDEDED",
+  ink02: "#F5F4F1",
+  blue: "#1A56FF",
+  blueMid: "rgba(26,86,255,0.10)",
+  blueSubtle: "rgba(26,86,255,0.06)",
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   DATA — ENGINEERING CAPABILITY MATRIX
+   DATA
 ═══════════════════════════════════════════════════════════════ */
 const CAPABILITIES = [
   {
-    id: "fullstack",
-    icon: Cpu,
-    title: "Full-Stack Engineering",
-    domain: "MERN Stack",
-    depth: "Production",
-    since: "2022",
-    maturity: "Enterprise-ready",
-    accent: C.accent,
-    accentDim: C.accentDim,
-    
-    problemSpace: "End-to-end product development from database design to deployed user interfaces. Solving for complete ownership of web applications.",
-    
-    architecturalPatterns: [
-      "MVC Architecture",
-      "REST API Design",
-      "JWT + OAuth 2.0",
-      "Server-Side Rendering",
-      "Client-Side State Management",
-      "Database Schema Design",
-    ],
-    
-    engineeringFocus: [
-      "API architecture & endpoint design",
-      "Authentication & session strategy",
-      "MongoDB schema optimization",
-      "Performance & caching layers",
-      "Security best practices",
-      "Deployment automation",
-    ],
-    
+    id: "fullstack", icon: Cpu, index: "01",
+    title: "Full-Stack Engineering", domain: "MERN · Production",
+    tagline: "End-to-end product ownership from schema to deployed UI.",
+    problemSpace: "Complete system control without hand-offs. Building products where every layer — database, API, state, UI — is understood and owned.",
+    architecturalPatterns: ["MVC Architecture", "REST API Design", "JWT + OAuth 2.0", "Server-Side Rendering", "Client State Management", "Schema Design"],
+    engineeringFocus: ["API architecture & endpoint design", "Auth & session strategy", "MongoDB schema optimization", "Performance & caching layers", "Security best practices", "Deployment automation"],
     tradeoffs: [
-      { decision: "MongoDB vs PostgreSQL", rationale: "Chose MongoDB for flexible schema evolution in early-stage products" },
+      { decision: "MongoDB vs PostgreSQL", rationale: "MongoDB for flexible schema evolution in early-stage products" },
       { decision: "JWT vs Sessions", rationale: "JWT for stateless auth in distributed deployments" },
-      { decision: "Monolith vs Microservices", rationale: "Started monolith, refactored to services at scale" },
-      { decision: "Client vs Server State", rationale: "Redux for complex state, Context API for simple" },
+      { decision: "Monolith vs Microservices", rationale: "Monolith first, extracted to services at real scale" },
+      { decision: "Client vs Server State", rationale: "Redux for complex shared state, Context for local" },
     ],
-    
-    productionEvidence: {
-      deployments: "5 production apps",
-      users: "3,000+ active users",
-      scale: "Multi-region AWS deployment",
-      performance: "40% API latency reduction",
-    },
-    
-    stack: ["React", "Node.js", "Express", "MongoDB", "Redis", "JWT", "Tailwind CSS"],
-    
+    productionEvidence: { "Deployments": "5 apps", "Active Users": "3,000+", "Scale": "Multi-region AWS", "Impact": "40% latency ↓" },
+    stack: ["React", "Node.js", "Express", "MongoDB", "Redis", "JWT", "Tailwind"],
     projects: [
       { name: "ATS Resume Builder", impact: "3k+ users, 2× hire improvement", tech: ["React", "Node.js", "MongoDB"] },
-      { name: "AI Chat Workspace", impact: "Real-time collaboration", tech: ["WebSockets", "Redis", "Express"] },
-      { name: "E-Commerce Platform", impact: "Payment integration", tech: ["Stripe", "MongoDB", "React"] },
+      { name: "AI Chat Workspace", impact: "Real-time collaboration at scale", tech: ["WebSockets", "Redis", "Express"] },
+      { name: "E-Commerce Platform", impact: "Stripe payments, full cart system", tech: ["Stripe", "MongoDB", "React"] },
     ],
   },
-  
   {
-    id: "aiml",
-    icon: Brain,
-    title: "Machine Learning Engineering",
-    domain: "AI / ML",
-    depth: "Applied",
-    since: "2023",
-    maturity: "Production-deployed",
-    accent: C.purple,
-    accentDim: C.purpleDim,
-    
-    problemSpace: "Building ML systems that solve real business problems, not just achieving notebook accuracy. Focus on model reliability and production pipelines.",
-    
-    architecturalPatterns: [
-      "ETL Pipelines",
-      "Feature Engineering",
-      "Model Versioning",
-      "A/B Testing Framework",
-      "Real-time Inference API",
-      "Batch Prediction Jobs",
-    ],
-    
-    engineeringFocus: [
-      "Model training & evaluation",
-      "Feature engineering pipelines",
-      "Deployment & serving strategy",
-      "Monitoring & drift detection",
-      "Data validation & quality",
-      "Model explainability (SHAP)",
-    ],
-    
+    id: "aiml", icon: Brain, index: "02",
+    title: "Machine Learning Engineering", domain: "AI / ML · Applied",
+    tagline: "ML systems that solve business problems — not notebook accuracy.",
+    problemSpace: "Reliability and production pipelines over experimentation. Every model ships with monitoring, drift detection, and a defined fallback.",
+    architecturalPatterns: ["ETL Pipelines", "Feature Engineering", "Model Versioning", "A/B Testing", "Real-time Inference API", "Batch Prediction Jobs"],
+    engineeringFocus: ["Model training & evaluation", "Feature engineering pipelines", "Serving strategy", "Drift detection", "Data validation", "SHAP explainability"],
     tradeoffs: [
-      { decision: "Model Complexity vs Interpretability", rationale: "Chose simpler models where explainability matters (healthcare, finance)" },
-      { decision: "Real-time vs Batch Inference", rationale: "Batch for cost efficiency, real-time only when latency critical" },
+      { decision: "Complexity vs Interpretability", rationale: "Simpler models where explainability matters — healthcare, finance" },
+      { decision: "Real-time vs Batch", rationale: "Batch for cost efficiency, real-time only when latency is critical" },
       { decision: "Cloud ML vs Self-hosted", rationale: "Self-hosted for cost control at scale" },
-      { decision: "SQL vs NoSQL for Features", rationale: "PostgreSQL for structured features, Redis for real-time" },
+      { decision: "SQL vs NoSQL for Features", rationale: "PostgreSQL for structured features, Redis for real-time lookups" },
     ],
-    
-    productionEvidence: {
-      deployments: "6 ML models deployed",
-      users: "Serving 1M+ predictions",
-      scale: "95% accuracy on fake news detection",
-      performance: "50ms inference latency",
-    },
-    
+    productionEvidence: { "Models Deployed": "6", "Predictions Served": "1M+", "Accuracy": "95%", "Inference": "50ms" },
     stack: ["Python", "Scikit-learn", "TensorFlow", "FastAPI", "Pandas", "Docker", "MLflow"],
-    
     projects: [
-      { name: "Fake News Detector", impact: "95% accuracy, 1M+ articles", tech: ["TF-IDF", "Logistic Regression", "FastAPI"] },
-      { name: "Price Prediction Engine", impact: "Real estate forecasting", tech: ["XGBoost", "Feature Engineering"] },
-      { name: "Churn Detection System", impact: "SHAP explainability", tech: ["Scikit-learn", "Streamlit"] },
+      { name: "Fake News Detector", impact: "95% accuracy across 1M+ articles", tech: ["TF-IDF", "Logistic Regression", "FastAPI"] },
+      { name: "Price Prediction Engine", impact: "Real estate forecasting model", tech: ["XGBoost", "Feature Engineering"] },
+      { name: "Churn Detection System", impact: "SHAP-explainable predictions", tech: ["Scikit-learn", "Streamlit"] },
     ],
   },
-  
   {
-    id: "cloud",
-    icon: Cloud,
-    title: "Cloud Architecture",
-    domain: "DevOps / Infrastructure",
-    depth: "Practitioner",
-    since: "2023",
-    maturity: "Production-grade",
-    accent: C.green,
-    accentDim: C.greenDim,
-    
-    problemSpace: "Building reliable, cost-efficient infrastructure that scales. Focus on reproducibility and automated deployments.",
-    
-    architecturalPatterns: [
-      "Infrastructure as Code",
-      "Blue-Green Deployment",
-      "Load Balancing Strategy",
-      "Container Orchestration",
-      "CI/CD Pipelines",
-      "Monitoring & Alerting",
-    ],
-    
-    engineeringFocus: [
-      "AWS service architecture",
-      "Docker containerization",
-      "CI/CD automation",
-      "Cost optimization strategies",
-      "Security group configuration",
-      "Zero-downtime deployments",
-    ],
-    
+    id: "cloud", icon: Cloud, index: "03",
+    title: "Cloud Architecture", domain: "DevOps · Infrastructure",
+    tagline: "Reliable, cost-efficient infrastructure. Reproducibility by default.",
+    problemSpace: "Automated deployments, zero-downtime releases, and infrastructure that costs less than it should — without sacrificing uptime.",
+    architecturalPatterns: ["Infrastructure as Code", "Blue-Green Deployment", "Load Balancing", "Container Orchestration", "CI/CD Pipelines", "Alerting"],
+    engineeringFocus: ["AWS service architecture", "Docker containerization", "CI/CD automation", "Cost optimization", "Security group config", "Zero-downtime deploys"],
     tradeoffs: [
-      { decision: "EC2 vs Lambda", rationale: "EC2 for predictable workloads, Lambda for spiky traffic" },
-      { decision: "Kubernetes vs Docker Compose", rationale: "Compose for simplicity until scale demands K8s" },
-      { decision: "Multi-cloud vs Single Provider", rationale: "AWS-first for team expertise, avoid vendor lock-in complexity" },
-      { decision: "Cost vs Availability", rationale: "Reserved instances for baseline, spot for batch jobs" },
+      { decision: "EC2 vs Lambda", rationale: "EC2 for predictable workloads, Lambda for traffic spikes" },
+      { decision: "Kubernetes vs Compose", rationale: "Docker Compose for simplicity until scale demands K8s" },
+      { decision: "Multi-cloud vs Single", rationale: "AWS-first for team expertise — multi-cloud complexity rarely pays off early" },
+      { decision: "Cost vs Availability", rationale: "Reserved instances for baseline, spot instances for batch" },
     ],
-    
-    productionEvidence: {
-      deployments: "7 cloud deployments",
-      users: "Multi-region availability",
-      scale: "99.9% uptime maintained",
-      performance: "Auto-scaling enabled",
-    },
-    
+    productionEvidence: { "Deployments": "7", "Uptime": "99.9%", "Regions": "3", "Cost Saving": "40% ↓" },
     stack: ["AWS", "Docker", "Terraform", "GitHub Actions", "Nginx", "EC2", "S3"],
-    
     projects: [
-      { name: "Multi-region Infrastructure", impact: "Global deployment", tech: ["AWS", "Terraform", "ALB"] },
-      { name: "CI/CD Pipeline", impact: "10min deploy time", tech: ["GitHub Actions", "Docker"] },
-      { name: "Cost Optimization", impact: "40% cost reduction", tech: ["Reserved Instances", "Spot"] },
+      { name: "Multi-region Infrastructure", impact: "Global availability with failover", tech: ["AWS", "Terraform", "ALB"] },
+      { name: "CI/CD Pipeline", impact: "10min end-to-end deploy time", tech: ["GitHub Actions", "Docker"] },
+      { name: "Cost Optimization", impact: "40% monthly cost reduction", tech: ["Reserved Instances", "Spot"] },
     ],
   },
-  
   {
-    id: "blockchain",
-    icon: Network,
-    title: "Blockchain Engineering",
-    domain: "Web3",
-    depth: "Builder",
-    since: "2023",
-    maturity: "Testnet-deployed",
-    accent: C.amber,
-    accentDim: C.amberDim,
-    
-    problemSpace: "Building decentralized applications and understanding protocol mechanics. Focus on smart contract security and DApp frontend integration.",
-    
-    architecturalPatterns: [
-      "Smart Contract Design",
-      "Gas Optimization",
-      "Event-driven Architecture",
-      "IPFS Storage Pattern",
-      "Wallet Integration",
-      "On-chain Governance",
-    ],
-    
-    engineeringFocus: [
-      "Solidity contract development",
-      "Security audit practices",
-      "Gas optimization techniques",
-      "Web3.js / Ethers.js integration",
-      "MetaMask wallet flow",
-      "Hardhat testing framework",
-    ],
-    
+    id: "security", icon: Shield, index: "04",
+    title: "Security Engineering", domain: "Cybersecurity · Applied",
+    tagline: "Secure systems by design, not by audit.",
+    problemSpace: "Identifying vulnerabilities before attackers do. Applied in CTF environments and integrated as a first-class concern at every layer.",
+    architecturalPatterns: ["Defense in Depth", "Zero Trust", "Secure by Default", "Rate Limiting", "Input Validation", "Security Monitoring"],
+    engineeringFocus: ["OWASP Top 10 mitigation", "Penetration testing", "Secure auth flows", "Network security", "Vulnerability scanning", "Audit practices"],
     tradeoffs: [
-      { decision: "Layer 1 vs Layer 2", rationale: "L2 (Polygon) for lower gas costs in production" },
-      { decision: "On-chain vs Off-chain Storage", rationale: "IPFS for large data, only hashes on-chain" },
-      { decision: "Upgradeable vs Immutable", rationale: "Proxy pattern for upgradeability with governance" },
-      { decision: "ERC-20 vs ERC-721", rationale: "Token type depends on use case (fungible vs unique)" },
+      { decision: "Security vs Usability", rationale: "MFA where critical, passwordless where it improves both" },
+      { decision: "Client vs Server Validation", rationale: "Both layers — never trust client-side alone" },
+      { decision: "Encrypted vs Plaintext Logs", rationale: "PII encrypted, operational logs plain for debuggability" },
+      { decision: "Rate Limit Strictness", rationale: "Aggressive on auth endpoints, lenient on public read APIs" },
     ],
-    
-    productionEvidence: {
-      deployments: "5 contracts on testnet",
-      users: "NFT minting DApp",
-      scale: "Gas-optimized contracts",
-      performance: "Hardhat test coverage",
-    },
-    
-    stack: ["Solidity", "Hardhat", "Ethers.js", "IPFS", "MetaMask", "OpenZeppelin", "React"],
-    
-    projects: [
-      { name: "NFT Minting Platform", impact: "ERC-721 contract", tech: ["Solidity", "React", "IPFS"] },
-      { name: "Decentralized Voting", impact: "On-chain governance", tech: ["Solidity", "Hardhat"] },
-      { name: "Token Staking", impact: "DeFi yield simulation", tech: ["ERC-20", "Hardhat"] },
-    ],
-  },
-  
-  {
-    id: "security",
-    icon: Shield,
-    title: "Security Engineering",
-    domain: "Cybersecurity",
-    depth: "Practitioner",
-    since: "2023",
-    maturity: "Applied",
-    accent: "#ef4444",
-    accentDim: "rgba(239,68,68,0.08)",
-    
-    problemSpace: "Building secure systems and identifying vulnerabilities. Applied in CTF environments and integrated into application design.",
-    
-    architecturalPatterns: [
-      "Defense in Depth",
-      "Zero Trust Architecture",
-      "Secure by Default",
-      "Rate Limiting Strategy",
-      "Input Validation",
-      "Security Monitoring",
-    ],
-    
-    engineeringFocus: [
-      "OWASP Top 10 mitigation",
-      "Penetration testing techniques",
-      "Secure authentication flows",
-      "Network security analysis",
-      "Vulnerability scanning",
-      "Security audit practices",
-    ],
-    
-    tradeoffs: [
-      { decision: "Security vs Usability", rationale: "MFA where critical, passwordless where possible" },
-      { decision: "Client vs Server Validation", rationale: "Both layers - never trust client" },
-      { decision: "Encrypted vs Plaintext Logs", rationale: "Encrypt PII, plaintext for debugging" },
-      { decision: "Rate Limit Strictness", rationale: "Aggressive on auth, lenient on public APIs" },
-    ],
-    
-    productionEvidence: {
-      deployments: "6 security projects",
-      users: "15+ CTF challenges",
-      scale: "Auth system hardening",
-      performance: "Brute-force protection",
-    },
-    
+    productionEvidence: { "Projects": "6", "CTF Challenges": "15+", "Auth Systems": "Hardened", "Coverage": "OWASP Top 10" },
     stack: ["Kali Linux", "Burp Suite", "Metasploit", "Wireshark", "Nmap", "OWASP ZAP"],
-    
     projects: [
-      { name: "Secure Auth System", impact: "JWT + rate limiting", tech: ["Node.js", "Redis"] },
-      { name: "Vulnerability Scanner", impact: "Automated port analysis", tech: ["Python", "Nmap"] },
-      { name: "CTF Write-ups", impact: "15+ challenges", tech: ["Web Exploitation", "Crypto"] },
+      { name: "Secure Auth System", impact: "JWT + Redis rate limiting", tech: ["Node.js", "Redis"] },
+      { name: "Vulnerability Scanner", impact: "Automated port analysis tool", tech: ["Python", "Nmap"] },
+      { name: "CTF Write-ups", impact: "15+ documented solutions", tech: ["Web Exploitation", "Crypto"] },
     ],
   },
-  
   {
-    id: "vision",
-    icon: Terminal,
-    title: "Deep Learning",
-    domain: "Computer Vision",
-    depth: "Research-grade",
-    since: "2023",
-    maturity: "Applied",
-    accent: "#6366f1",
-    accentDim: "rgba(99,102,241,0.08)",
-    
-    problemSpace: "CNN architectures, transfer learning, and object detection for real-world image datasets - not toy demos.",
-    
-    architecturalPatterns: [
-      "Transfer Learning",
-      "Data Augmentation",
-      "Model Compression",
-      "Ensemble Methods",
-      "Real-time Inference",
-      "Active Learning",
-    ],
-    
-    engineeringFocus: [
-      "CNN architecture design",
-      "Transfer learning strategies",
-      "Data augmentation pipelines",
-      "Model optimization (pruning)",
-      "Real-time inference (YOLO)",
-      "Deployment on edge devices",
-    ],
-    
+    id: "blockchain", icon: Network, index: "05",
+    title: "Blockchain Engineering", domain: "Web3 · Builder",
+    tagline: "Smart contracts that are auditable, upgradeable, and gas-efficient.",
+    problemSpace: "Decentralized applications with real UX. Smart contracts reviewed for security, wallet flows that don't confuse users.",
+    architecturalPatterns: ["Smart Contract Design", "Gas Optimization", "Event-driven", "IPFS Storage", "Wallet Integration", "On-chain Governance"],
+    engineeringFocus: ["Solidity development", "Security audits", "Gas optimization", "Ethers.js integration", "MetaMask flows", "Hardhat testing"],
     tradeoffs: [
-      { decision: "Accuracy vs Speed", rationale: "MobileNet for edge, ResNet for accuracy-critical" },
-      { decision: "Pre-trained vs Train from Scratch", rationale: "Transfer learning unless unique domain" },
-      { decision: "Data Quantity vs Quality", rationale: "Quality annotations beat quantity" },
-      { decision: "GPU vs CPU Inference", rationale: "GPU for batch, CPU for real-time edge" },
+      { decision: "Layer 1 vs Layer 2", rationale: "Polygon for lower gas costs in production DApps" },
+      { decision: "On-chain vs Off-chain", rationale: "IPFS for large data, only content hashes on-chain" },
+      { decision: "Upgradeable vs Immutable", rationale: "Proxy pattern for upgradeability with transparent governance" },
+      { decision: "ERC-20 vs ERC-721", rationale: "Token standard chosen by use case, not default" },
     ],
-    
-    productionEvidence: {
-      deployments: "4 CV models",
-      users: "Real-time detection",
-      scale: "50k+ training images",
-      performance: "30 FPS inference",
-    },
-    
-    stack: ["PyTorch", "TensorFlow", "OpenCV", "YOLO", "ResNet", "MobileNet"],
-    
+    productionEvidence: { "Testnet Contracts": "5", "Gas Optimized": "Yes", "Test Coverage": "100%", "Standards": "ERC-20/721" },
+    stack: ["Solidity", "Hardhat", "Ethers.js", "IPFS", "MetaMask", "OpenZeppelin", "React"],
     projects: [
-      { name: "Face Mask Detector", impact: "Real-time webcam", tech: ["MobileNetV2", "OpenCV"] },
-      { name: "Plant Disease Classifier", impact: "50k+ leaf images", tech: ["CNN", "PyTorch"] },
-      { name: "Object Counter", impact: "YOLO-based pipeline", tech: ["YOLOv5", "Python"] },
+      { name: "NFT Minting Platform", impact: "ERC-721 with IPFS metadata", tech: ["Solidity", "React", "IPFS"] },
+      { name: "Decentralized Voting", impact: "On-chain governance protocol", tech: ["Solidity", "Hardhat"] },
+      { name: "Token Staking DeFi", impact: "Yield simulation with APY calc", tech: ["ERC-20", "Hardhat"] },
     ],
   },
+  {
+    id: "vision", icon: Terminal, index: "06",
+    title: "Deep Learning", domain: "Computer Vision · Research",
+    tagline: "CNN architectures and real-time inference for real-world image data.",
+    problemSpace: "Not toy demos. Transfer learning on real datasets, object detection at 30FPS, model optimization for edge deployment without accuracy collapse.",
+    architecturalPatterns: ["Transfer Learning", "Data Augmentation", "Model Compression", "Ensemble Methods", "Real-time Inference", "Active Learning"],
+    engineeringFocus: ["CNN architecture design", "Transfer learning", "Augmentation pipelines", "Model pruning", "YOLO inference", "Edge deployment"],
+    tradeoffs: [
+      { decision: "Accuracy vs Speed", rationale: "MobileNet for edge devices, ResNet where accuracy is non-negotiable" },
+      { decision: "Pretrained vs Scratch", rationale: "Transfer learning as default — scratch only for genuinely novel domains" },
+      { decision: "Data Quantity vs Quality", rationale: "Quality annotations consistently beat raw quantity" },
+      { decision: "GPU vs CPU Inference", rationale: "GPU for batch processing, CPU-optimized for real-time edge" },
+    ],
+    productionEvidence: { "CV Models": "4", "Training Images": "50k+", "Inference": "30 FPS", "Detection": "Real-time" },
+    stack: ["PyTorch", "TensorFlow", "OpenCV", "YOLOv5", "ResNet", "MobileNet"],
+    projects: [
+      { name: "Face Mask Detector", impact: "Real-time webcam detection", tech: ["MobileNetV2", "OpenCV"] },
+      { name: "Plant Disease Classifier", impact: "50k+ leaf image dataset", tech: ["CNN", "PyTorch"] },
+      { name: "Object Counter Pipeline", impact: "Production YOLO deployment", tech: ["YOLOv5", "Python"] },
+    ],
+  },
+];
+
+const METRICS = [
+  { value: "30+", label: "Production Systems", sub: "Deployed & maintained" },
+  { value: "6", label: "Technical Domains", sub: "End-to-end ownership" },
+  { value: "3000+", label: "End Users Reached", sub: "Real products, real impact" },
+  { value: "99.9%", label: "Uptime Maintained", sub: "Multi-region AWS" },
 ];
 
 const CROSS_DOMAIN = [
-  {
-    title: "Full Stack + AI",
-    integration: "ML-backed SaaS Applications",
-    example: "Resume builder with AI optimization, fake news detector API",
-    value: "Combine web engineering with intelligent features",
-  },
-  {
-    title: "Cloud + Security",
-    integration: "Secure Deployment Pipelines",
-    example: "Zero-trust infrastructure, encrypted secrets management",
-    value: "Build security into infrastructure from day one",
-  },
-  {
-    title: "Blockchain + Full Stack",
-    integration: "Decentralized Applications",
-    example: "NFT minting platform, DeFi staking interface",
-    value: "Bridge Web2 UX with Web3 functionality",
-  },
-  {
-    title: "AI + Cloud",
-    integration: "ML Model Deployment",
-    example: "Scalable inference APIs, containerized model serving",
-    value: "Deploy ML models to production at scale",
-  },
+  { label: "Full Stack + AI", title: "ML-Backed SaaS", body: "Resume builder with AI scoring, fake news detector as a REST API — machine learning embedded in the product layer, not bolted on." },
+  { label: "Cloud + Security", title: "Secure Infrastructure", body: "Zero-trust deployment pipelines, encrypted secrets management, security baked into infrastructure-as-code from day one." },
+  { label: "Blockchain + Full Stack", title: "Decentralised Applications", body: "NFT minting platform bridging Web2 UX patterns with Web3 wallet flows — no wallet confusion, no broken handoffs." },
+  { label: "AI + Cloud", title: "Model Deployment at Scale", body: "Containerised inference APIs with MLflow versioning, auto-scaling, and model monitoring. Not just a notebook — a system." },
 ];
 
 const PHILOSOPHY = [
-  {
-    principle: "Build for clarity before scale",
-    rationale: "Premature optimization is the root of all evil. Start simple, measure, then optimize.",
-  },
-  {
-    principle: "Secure by default",
-    rationale: "Security is not a feature to add later - it's a foundation to build upon.",
-  },
-  {
-    principle: "Measure everything",
-    rationale: "You can't improve what you don't measure. Instrumentation enables informed decisions.",
-  },
-  {
-    principle: "Optimize only after profiling",
-    rationale: "Guessing where bottlenecks are wastes time. Profile first, then optimize hotspots.",
-  },
+  { number: "I", principle: "Build for clarity before scale", detail: "Premature optimisation is the root of all evil. Start simple. Measure the real bottleneck. Then and only then, optimise it." },
+  { number: "II", principle: "Secure by default", detail: "Security is not a feature you add in the last sprint. It is a foundation every architectural decision is laid upon." },
+  { number: "III", principle: "Measure everything", detail: "Gut feelings about performance are almost always wrong. Instrumentation turns opinions into actionable decisions." },
+  { number: "IV", principle: "Profile before optimising", detail: "Guessing where the bottleneck lives wastes engineering cycles. Profile first. Fix exactly what hurts, nothing else." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   CUSTOM CURSOR
+   MAGNETIC CURSOR
 ═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
+function MagneticCursor() {
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
+  const pos = useRef({ x: -100, y: -100 });
+  const ring = useRef({ x: -100, y: -100 });
+  const [isLink, setIsLink] = useState(false);
+  const rafRef = useRef(null);
 
   useEffect(() => {
-    const handleMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-
-      const target = e.target;
-      const isInteractive =
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("[data-hover]");
-      setIsHovering(!!isInteractive);
+    const onMove = (e) => {
+      pos.current = { x: e.clientX, y: e.clientY };
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      setIsLink(!!(el && (el.closest("a") || el.closest("button") || el.closest("[data-cursor]"))));
+      if (dotRef.current) {
+        dotRef.current.style.left = e.clientX + "px";
+        dotRef.current.style.top = e.clientY + "px";
+      }
     };
-
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
+    const animate = () => {
+      ring.current.x += (pos.current.x - ring.current.x) * 0.11;
+      ring.current.y += (pos.current.y - ring.current.y) * 0.11;
+      if (ringRef.current) {
+        ringRef.current.style.left = ring.current.x + "px";
+        ringRef.current.style.top = ring.current.y + "px";
+      }
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    window.addEventListener("mousemove", onMove);
+    rafRef.current = requestAnimationFrame(animate);
+    return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(rafRef.current); };
   }, []);
 
   return (
     <>
-      <div
-        style={{
-          position: "fixed",
-          left: position.x,
-          top: position.y,
-          width: isHovering ? "32px" : "8px",
-          height: isHovering ? "32px" : "8px",
-          borderRadius: "50%",
-          background: isHovering ? "transparent" : C.accent,
-          border: isHovering ? `2px solid ${C.accent}` : "none",
-          pointerEvents: "none",
-          zIndex: 10000,
-          transform: "translate(-50%, -50%)",
-          transition: "width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease",
-          mixBlendMode: "difference",
-        }}
-      />
-      <div
-        style={{
-          position: "fixed",
-          left: position.x,
-          top: position.y,
-          width: isHovering ? "64px" : "48px",
-          height: isHovering ? "64px" : "48px",
-          borderRadius: "50%",
-          background: `radial-gradient(circle, ${C.accent}15 0%, transparent 70%)`,
-          pointerEvents: "none",
-          zIndex: 9999,
-          transform: "translate(-50%, -50%)",
-          transition: "width 0.3s ease, height 0.3s ease",
-        }}
-      />
+      <div ref={dotRef} style={{
+        position: "fixed", pointerEvents: "none", zIndex: 99999,
+        width: isLink ? "8px" : "5px", height: isLink ? "8px" : "5px",
+        borderRadius: "50%", background: isLink ? T.blue : T.ink,
+        transform: "translate(-50%,-50%)",
+        transition: "width 0.2s, height 0.2s, background 0.2s",
+      }} />
+      <div ref={ringRef} style={{
+        position: "fixed", pointerEvents: "none", zIndex: 99998,
+        width: isLink ? "48px" : "30px", height: isLink ? "48px" : "30px",
+        borderRadius: "50%",
+        border: `1.5px solid ${isLink ? T.blue : "rgba(60,60,60,0.45)"}`,
+        transform: "translate(-50%,-50%)",
+        transition: "width 0.35s cubic-bezier(0.16,1,0.3,1), height 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.25s",
+      }} />
     </>
   );
 }
@@ -471,377 +239,117 @@ function CustomCursor() {
    SCROLL PROGRESS
 ═══════════════════════════════════════════════════════════════ */
 function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-
+  const [p, setP] = useState(0);
   useEffect(() => {
-    const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress((window.scrollY / total) * 100);
+    const h = () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      setP(t > 0 ? (window.scrollY / t) * 100 : 0);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
   }, []);
-
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: "2px",
-        background: C.surface2,
-        zIndex: 9998,
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width: `${progress}%`,
-          background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
-          transition: "width 0.1s linear",
-        }}
-      />
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", zIndex: 9900 }}>
+      <div style={{ height: "100%", width: p + "%", background: T.blue, transition: "width 0.08s linear" }} />
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPLIT TEXT WORD REVEAL
+═══════════════════════════════════════════════════════════════ */
+function SplitReveal({ text, tag = "div", style = {}, delay = 0, stagger = 0.045 }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  const words = text.split(" ");
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const Tag = tag;
+  return (
+    <Tag ref={ref} style={{ ...style }}>
+      {words.map((word, i) => (
+        <span key={i} style={{ display: "inline-block", overflow: "hidden", marginRight: "0.27em", verticalAlign: "bottom" }}>
+          <span style={{
+            display: "inline-block",
+            transform: visible ? "translateY(0)" : "translateY(110%)",
+            opacity: visible ? 1 : 0,
+            transition: `transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay + i * stagger}s, opacity 0.5s ease ${delay + i * stagger}s`,
+          }}>{word}</span>
+        </span>
+      ))}
+    </Tag>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
    ANIMATED COUNTER
 ═══════════════════════════════════════════════════════════════ */
-function AnimatedCounter({ value, duration = 2000 }) {
+function Counter({ raw }) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [fired, setFired] = useState(false);
   const ref = useRef(null);
-
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !fired) {
+        setFired(true);
+        const num = parseFloat(raw.replace(/[^0-9.]/g, "")) || 0;
+        const dur = 1800;
+        const start = Date.now();
+        const tick = () => {
+          const prog = Math.min((Date.now() - start) / dur, 1);
+          const eased = prog < 0.5 ? 4 * prog * prog * prog : 1 - Math.pow(-2 * prog + 2, 3) / 2;
+          setCount(Math.floor(num * eased));
+          if (prog < 1) requestAnimationFrame(tick); else setCount(num);
+        };
+        tick();
+      }
+    }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [raw, fired]);
 
-          const numericValue = parseInt(value.toString().replace(/[^0-9]/g, "")) || 0;
-          const start = 0;
-          const end = numericValue;
-          const startTime = Date.now();
-
-          const animate = () => {
-            const now = Date.now();
-            const progress = Math.min((now - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(start + (end - start) * eased));
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              setCount(end);
-            }
-          };
-
-          animate();
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value, duration, hasAnimated]);
-
-  const formatCount = (num) => {
-    if (value.toString().includes("+")) {
-      return `${num}+`;
-    }
-    return num.toString();
-  };
-
-  return <span ref={ref}>{formatCount(count)}</span>;
+  const suffix = raw.includes("%") ? "%" : raw.includes("+") ? "+" : "";
+  return <span ref={ref}>{count}{suffix}</span>;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CAPABILITY CARD
+   FADE UP
 ═══════════════════════════════════════════════════════════════ */
-function CapabilityCard({ capability, index, onClick }) {
-  const [inView, setInView] = useState(false);
-  const [hovered, setHovered] = useState(false);
+function FadeUp({ children, delay = 0, style = {} }) {
+  const [v, setV] = useState(false);
   const ref = useRef(null);
-  const Icon = capability.icon;
-
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
-      },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.08 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
-
   return (
-    <div
-      ref={ref}
-      data-hover
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={() => onClick(capability)}
-      style={{
-        background: C.surface,
-        border: `1px solid ${hovered ? capability.accent + "40" : C.border}`,
-        borderRadius: "16px",
-        overflow: "hidden",
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.08)" : "0 4px 16px rgba(0,0,0,0.04)",
-        opacity: inView ? 1 : 0,
-        animation: inView ? `cardReveal 0.5s cubic-bezier(0.22,1,0.36,1) ${index * 0.1}s both` : "none",
-      }}
-    >
-      {/* Top accent */}
-      <div
-        style={{
-          height: "3px",
-          background: `linear-gradient(90deg, ${capability.accent}, transparent)`,
-        }}
-      />
+    <div ref={ref} style={{
+      ...style,
+      opacity: v ? 1 : 0,
+      transform: v ? "translateY(0)" : "translateY(28px)",
+      transition: `opacity 0.75s ease ${delay}s, transform 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
+    }}>{children}</div>
+  );
+}
 
-      <div style={{ padding: "2rem" }}>
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: "1rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <div
-            style={{
-              width: "56px",
-              height: "56px",
-              borderRadius: "12px",
-              background: capability.accentDim,
-              border: `1px solid ${capability.accent}30`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              transition: "all 0.3s ease",
-              transform: hovered ? "scale(1.05)" : "scale(1)",
-            }}
-          >
-            <Icon size={26} style={{ color: capability.accent }} />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              alignItems: "flex-end",
-            }}
-          >
-            <div
-              style={{
-                padding: "0.4rem 0.9rem",
-                background: C.greenDim,
-                border: `1px solid ${C.green}30`,
-                borderRadius: "6px",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                color: C.green,
-                fontFamily: "'DM Mono', monospace",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}
-            >
-              {capability.depth}
-            </div>
-            <div
-              style={{
-                fontSize: "0.75rem",
-                color: C.muted,
-                fontFamily: "'DM Mono', monospace",
-              }}
-            >
-              Since {capability.since}
-            </div>
-          </div>
-        </div>
-
-        {/* Title */}
-        <h3
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontSize: "1.5rem",
-            fontWeight: 400,
-            color: C.text,
-            lineHeight: 1.2,
-            letterSpacing: "-0.02em",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {capability.title}
-        </h3>
-
-        <div
-          style={{
-            fontSize: "0.875rem",
-            color: capability.accent,
-            fontWeight: 600,
-            marginBottom: "1.5rem",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
-          {capability.domain}
-        </div>
-
-        {/* Problem space */}
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: C.muted2,
-            lineHeight: 1.7,
-            marginBottom: "1.5rem",
-          }}
-        >
-          {capability.problemSpace}
-        </p>
-
-        {/* Engineering focus preview */}
-        <div
-          style={{
-            padding: "1.25rem",
-            background: C.surface2,
-            border: `1px solid ${C.border}`,
-            borderRadius: "10px",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "0.7rem",
-              fontWeight: 700,
-              color: C.muted,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              fontFamily: "'DM Mono', monospace",
-              marginBottom: "0.75rem",
-            }}
-          >
-            Primary Engineering Focus
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-            }}
-          >
-            {capability.engineeringFocus.slice(0, 3).map((focus, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                <ChevronRight size={14} style={{ color: capability.accent, flexShrink: 0 }} />
-                <span
-                  style={{
-                    fontSize: "0.85rem",
-                    color: C.muted2,
-                  }}
-                >
-                  {focus}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Production evidence */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "0.75rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          {Object.entries(capability.productionEvidence).slice(0, 2).map(([key, value]) => (
-            <div
-              key={key}
-              style={{
-                padding: "0.75rem",
-                background: hovered ? capability.accentDim : C.surface2,
-                border: `1px solid ${hovered ? capability.accent + "30" : C.border}`,
-                borderRadius: "8px",
-                transition: "all 0.3s ease",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: C.muted,
-                  marginBottom: "0.25rem",
-                  fontFamily: "'DM Mono', monospace",
-                  textTransform: "uppercase",
-                }}
-              >
-                {key}
-              </div>
-              <div
-                style={{
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                  color: C.text,
-                }}
-              >
-                {value}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* View details */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: "1rem",
-            borderTop: `1px solid ${C.border}`,
-          }}
-        >
-          <span
-            style={{
-              fontSize: "0.8rem",
-              color: C.muted,
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
-            {capability.projects.length} production projects
+/* ═══════════════════════════════════════════════════════════════
+   MARQUEE STRIP
+═══════════════════════════════════════════════════════════════ */
+function MarqueeStrip() {
+  const items = ["Full-Stack Engineering", "Machine Learning", "Cloud Architecture", "Security Engineering", "Blockchain", "Computer Vision", "Production Systems", "System Design", "API Architecture", "DevOps"];
+  const doubled = [...items, ...items];
+  return (
+    <div style={{ overflow: "hidden", borderTop: `1px solid ${T.ink10}`, borderBottom: `1px solid ${T.ink10}`, padding: "18px 0", background: T.ink02 }}>
+      <div style={{ display: "flex", animation: "marquee 32s linear infinite", width: "max-content" }}>
+        {doubled.map((item, i) => (
+          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "28px", padding: "0 36px", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: i % 4 === 0 ? T.blue : T.ink40, whiteSpace: "nowrap" }}>
+            {item}<span style={{ fontSize: "5px", color: T.ink20 }}>◆</span>
           </span>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: hovered ? capability.accent : C.muted,
-              fontFamily: "'DM Mono', monospace",
-              transition: "color 0.2s ease",
-            }}
-          >
-            VIEW DETAILS
-            <ArrowUpRight size={14} />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -850,549 +358,159 @@ function CapabilityCard({ capability, index, onClick }) {
 /* ═══════════════════════════════════════════════════════════════
    DETAIL PANEL
 ═══════════════════════════════════════════════════════════════ */
-function DetailPanel({ capability, onClose }) {
-  const [open, setOpen] = useState(false);
-  const Icon = capability.icon;
+function DetailPanel({ cap, onClose }) {
+  const [visible, setVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
+  const Icon = cap.icon;
+  const tabs = ["overview", "tradeoffs", "projects"];
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => setOpen(true));
+    const raf = requestAnimationFrame(() => setVisible(true));
     const esc = (e) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", esc);
     document.body.style.overflow = "hidden";
-    return () => {
-      cancelAnimationFrame(raf);
-      document.removeEventListener("keydown", esc);
-      document.body.style.overflow = "";
-    };
+    return () => { cancelAnimationFrame(raf); document.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
   }, [onClose]);
 
+  const PanelSec = ({ label, Icon: SI, children }) => (
+    <div style={{ paddingTop: "32px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+        {SI && <SI size={12} style={{ color: T.ink40 }} />}
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: T.ink40 }}>{label}</span>
+      </div>
+      {children}
+    </div>
+  );
+
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9000,
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(8px)",
-        opacity: open ? 1 : 0,
-        transition: "opacity 0.3s ease",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: "min(680px, 100vw)",
-          background: C.bg,
-          borderLeft: `1px solid ${C.border2}`,
-          display: "flex",
-          flexDirection: "column",
-          transform: open ? "translateX(0)" : "translateX(40px)",
-          opacity: open ? 1 : 0,
-          transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
-          overflowY: "auto",
-        }}
-      >
-        {/* Top accent */}
-        <div
-          style={{
-            height: "3px",
-            background: `linear-gradient(90deg, ${capability.accent}, transparent)`,
-          }}
-        />
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0, zIndex: 9000,
+      background: "rgba(8,8,8,0.5)", backdropFilter: "blur(8px) saturate(0.7)",
+      opacity: visible ? 1 : 0, transition: "opacity 0.3s ease-out",
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(660px, 100vw)", background: T.white,
+        display: "flex", flexDirection: "column",
+        transform: visible ? "translateX(0)" : "translateX(56px)",
+        opacity: visible ? 1 : 0,
+        transition: "transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease-out",
+        boxShadow: "-48px 0 128px rgba(0,0,0,0.14)",
+        overflowY: "auto",
+      }}>
+        <div style={{ height: "3px", background: `linear-gradient(90deg, ${T.blue} 0%, transparent 55%)`, flexShrink: 0 }} />
 
         {/* Header */}
-        <div
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            background: C.bg,
-            borderBottom: `1px solid ${C.border}`,
-            padding: "2rem 2.5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-            <div
-              style={{
-                width: "52px",
-                height: "52px",
-                borderRadius: "12px",
-                background: capability.accentDim,
-                border: `1px solid ${capability.accent}40`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Icon size={24} style={{ color: capability.accent }} />
+        <div style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.96)", backdropFilter: "blur(12px)", padding: "28px 40px", borderBottom: `1px solid ${T.ink10}`, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: T.ink05, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Icon size={22} style={{ color: T.ink80 }} />
             </div>
             <div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                  fontFamily: "'DM Mono', monospace",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                {capability.domain}
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontSize: "1.5rem",
-                  fontWeight: 400,
-                  color: C.text,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {capability.title}
-              </div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>{cap.domain}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "22px", fontWeight: 600, color: T.ink, lineHeight: 1.15 }}>{cap.title}</div>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            data-hover
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              border: `1px solid ${C.border}`,
-              background: "transparent",
-              color: C.muted,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = C.border3;
-              e.currentTarget.style.color = C.text;
-              e.currentTarget.style.background = C.surface;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = C.border;
-              e.currentTarget.style.color = C.muted;
-              e.currentTarget.style.background = "transparent";
-            }}
-          >
-            <X size={18} />
+          <button onClick={onClose} data-cursor style={{ width: "36px", height: "36px", border: `1px solid ${T.ink10}`, borderRadius: "8px", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: T.ink60, transition: "all 0.15s ease-out" }}
+            onMouseEnter={e => { e.currentTarget.style.background = T.ink05; e.currentTarget.style.borderColor = T.ink20; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = T.ink10; }}>
+            <X size={16} />
           </button>
         </div>
 
+        {/* Tabs */}
+        <div style={{ display: "flex", padding: "0 40px", borderBottom: `1px solid ${T.ink10}`, flexShrink: 0 }}>
+          {tabs.map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} data-cursor style={{ padding: "16px 20px 13px", background: "transparent", border: "none", borderBottom: `2px solid ${activeTab === tab ? T.ink : "transparent"}`, cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: activeTab === tab ? T.ink : T.ink40, transition: "all 0.18s ease-out" }}>
+              {tab}
+            </button>
+          ))}
+        </div>
+
         {/* Body */}
-        <div style={{ padding: "2.5rem", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-          {/* Meta grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1rem",
-            }}
-          >
-            {[
-              { label: "Depth", value: capability.depth },
-              { label: "Since", value: capability.since },
-              { label: "Maturity", value: capability.maturity },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  padding: "1.25rem",
-                  background: C.surface,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "0.7rem",
-                    color: C.muted,
-                    marginBottom: "0.5rem",
-                    fontFamily: "'DM Mono', monospace",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {item.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    color: C.text,
-                  }}
-                >
-                  {item.value}
-                </div>
+        <div style={{ padding: "40px", display: "flex", flexDirection: "column", gap: 0 }}>
+          {/* Meta chips */}
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "32px" }}>
+            {[["Depth", cap.depth], ["Since", cap.since], ["Maturity", cap.maturity]].map(([k, v]) => (
+              <div key={k} style={{ padding: "8px 16px", background: T.ink02, borderRadius: "100px", display: "flex", gap: "8px", alignItems: "center" }}>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.08em" }}>{k}</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 700, color: T.ink80 }}>{v}</span>
               </div>
             ))}
           </div>
 
-          {/* Problem Space */}
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <Box size={16} style={{ color: capability.accent }} />
-              <h4
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                }}
-              >
-                Problem Space
-              </h4>
+          {activeTab === "overview" && (
+            <div style={{ animation: "panelIn 0.3s ease-out" }}>
+              <PanelSec label="Problem Space" Icon={Box}>
+                <p style={{ fontSize: "17px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: T.ink60, lineHeight: 1.8, paddingLeft: "20px", borderLeft: `2px solid ${T.ink10}` }}>{cap.problemSpace}</p>
+              </PanelSec>
+              <PanelSec label="Architectural Patterns" Icon={Layers}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                  {cap.architecturalPatterns.map(p => (
+                    <div key={p} style={{ padding: "12px 14px", borderRadius: "8px", fontSize: "14px", color: T.ink60, background: T.ink02, cursor: "default", transition: "all 0.15s" }}
+                      onMouseEnter={e => { e.currentTarget.style.background = T.blueMid; e.currentTarget.style.color = T.blue; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = T.ink02; e.currentTarget.style.color = T.ink60; }}>
+                      {p}
+                    </div>
+                  ))}
+                </div>
+              </PanelSec>
+              <PanelSec label="Production Evidence" Icon={CheckCircle2}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
+                  {Object.entries(cap.productionEvidence).map(([k, v]) => (
+                    <div key={k} style={{ padding: "20px", background: T.blueSubtle, borderRadius: "10px" }}>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>{k}</div>
+                      <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "28px", fontWeight: 600, color: T.blue, lineHeight: 1 }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+              </PanelSec>
+              <PanelSec label="Tech Stack">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {cap.stack.map(s => (
+                    <span key={s} style={{ padding: "6px 14px", background: T.ink05, borderRadius: "6px", fontFamily: "'DM Mono', monospace", fontSize: "12px", color: T.ink60 }}>{s}</span>
+                  ))}
+                </div>
+              </PanelSec>
             </div>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: C.muted2,
-                lineHeight: 1.8,
-                paddingLeft: "2rem",
-                borderLeft: `2px solid ${capability.accent}40`,
-              }}
-            >
-              {capability.problemSpace}
-            </p>
-          </div>
+          )}
 
-          {/* Architectural Patterns */}
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <Layers size={16} style={{ color: capability.accent }} />
-              <h4
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                }}
-              >
-                Architectural Patterns Used
-              </h4>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "0.75rem",
-              }}
-            >
-              {capability.architecturalPatterns.map((pattern) => (
-                <div
-                  key={pattern}
-                  style={{
-                    padding: "0.875rem 1rem",
-                    background: C.surface,
-                    border: `1px solid ${C.border}`,
-                    borderRadius: "8px",
-                    fontSize: "0.85rem",
-                    color: C.muted2,
-                    fontWeight: 500,
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = capability.accentDim;
-                    e.currentTarget.style.borderColor = capability.accent + "40";
-                    e.currentTarget.style.color = C.text;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = C.surface;
-                    e.currentTarget.style.borderColor = C.border;
-                    e.currentTarget.style.color = C.muted2;
-                  }}
-                >
-                  {pattern}
+          {activeTab === "tradeoffs" && (
+            <div style={{ animation: "panelIn 0.3s ease-out" }}>
+              {cap.tradeoffs.map((t, i) => (
+                <div key={i} style={{ padding: "24px 0", borderBottom: `1px solid ${T.ink10}`, animation: `panelIn 0.4s ease-out ${i * 0.07}s both` }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "21px", fontWeight: 600, color: T.ink, marginBottom: "10px", lineHeight: 1.2 }}>{t.decision}</div>
+                  <div style={{ fontSize: "15px", color: T.ink60, lineHeight: 1.7 }}>{t.rationale}</div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
 
-          {/* Tradeoffs Managed */}
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <TrendingUp size={16} style={{ color: capability.accent }} />
-              <h4
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                }}
-              >
-                Tradeoffs Managed
-              </h4>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {capability.tradeoffs.map((tradeoff, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "1.25rem",
-                    background: C.surface,
-                    border: `1px solid ${C.border}`,
-                    borderRadius: "10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "0.95rem",
-                      fontWeight: 600,
-                      color: C.text,
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    {tradeoff.decision}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "0.875rem",
-                      color: C.muted2,
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {tradeoff.rationale}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Production Evidence */}
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <CheckCircle2 size={16} style={{ color: capability.accent }} />
-              <h4
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                }}
-              >
-                Production Evidence
-              </h4>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: "1rem",
-              }}
-            >
-              {Object.entries(capability.productionEvidence).map(([key, value]) => (
-                <div
-                  key={key}
-                  style={{
-                    padding: "1.25rem",
-                    background: capability.accentDim,
-                    border: `1px solid ${capability.accent}30`,
-                    borderRadius: "10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "0.7rem",
-                      color: C.muted,
-                      marginBottom: "0.5rem",
-                      fontFamily: "'DM Mono', monospace",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {key}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "'Instrument Serif', serif",
-                      fontSize: "1.5rem",
-                      fontWeight: 400,
-                      color: capability.accent,
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    {value}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Projects */}
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <Database size={16} style={{ color: capability.accent }} />
-              <h4
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                }}
-              >
-                Production Projects
-              </h4>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {capability.projects.map((project, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "1.5rem",
-                    background: C.surface,
-                    border: `1px solid ${C.border}`,
-                    borderRadius: "10px",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = capability.accent + "40";
-                    e.currentTarget.style.transform = "translateX(4px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = C.border;
-                    e.currentTarget.style.transform = "translateX(0)";
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "1.05rem",
-                      fontWeight: 600,
-                      color: C.text,
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    {project.name}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "0.875rem",
-                      color: C.muted2,
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {project.impact}
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        style={{
-                          padding: "0.35rem 0.75rem",
-                          background: C.surface2,
-                          border: `1px solid ${C.border}`,
-                          borderRadius: "6px",
-                          fontSize: "0.75rem",
-                          color: C.muted2,
-                          fontFamily: "'DM Mono', monospace",
-                        }}
-                      >
-                        {tech}
-                      </span>
+          {activeTab === "projects" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px", animation: "panelIn 0.3s ease-out" }}>
+              {cap.projects.map((proj, i) => (
+                <div key={i} style={{ padding: "24px", borderRadius: "12px", background: T.ink02, transition: "transform 0.2s ease-out, background 0.2s", cursor: "default", animation: `panelIn 0.4s ease-out ${i * 0.08}s both` }}
+                  onMouseEnter={e => { e.currentTarget.style.background = T.ink05; e.currentTarget.style.transform = "translateX(6px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = T.ink02; e.currentTarget.style.transform = "translateX(0)"; }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "22px", fontWeight: 600, color: T.ink, marginBottom: "6px" }}>{proj.name}</div>
+                  <div style={{ fontSize: "14px", color: T.ink60, marginBottom: "16px", lineHeight: 1.6 }}>{proj.impact}</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                    {proj.tech.map(tech => (
+                      <span key={tech} style={{ padding: "3px 10px", background: T.white, border: `1px solid ${T.ink10}`, borderRadius: "4px", fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink60 }}>{tech}</span>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
 
-          {/* GitHub CTA */}
-          <a
-            href="https://github.com/bhagavan444"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-hover
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.75rem",
-              padding: "1.125rem",
-              background: C.surface,
-              border: `1px solid ${C.border2}`,
-              borderRadius: "10px",
-              color: C.text,
-              textDecoration: "none",
-              fontFamily: "'DM Mono', monospace",
-              fontSize: "0.875rem",
-              fontWeight: 600,
-              letterSpacing: "0.08em",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = capability.accentDim;
-              e.currentTarget.style.borderColor = capability.accent + "40";
-              e.currentTarget.style.color = capability.accent;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = C.surface;
-              e.currentTarget.style.borderColor = C.border2;
-              e.currentTarget.style.color = C.text;
-            }}
-          >
-            <Github size={18} />
-            VIEW ON GITHUB
-            <ExternalLink size={16} />
-          </a>
+          <div style={{ marginTop: "40px", paddingTop: "32px", borderTop: `1px solid ${T.ink10}` }}>
+            <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" data-cursor style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "14px 24px", border: `1px solid ${T.ink10}`, borderRadius: "10px", color: T.ink60, textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", background: T.white, transition: "all 0.18s ease-out" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = T.ink; e.currentTarget.style.color = T.ink; e.currentTarget.style.background = T.ink02; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = T.ink10; e.currentTarget.style.color = T.ink60; e.currentTarget.style.background = T.white; }}>
+              <Github size={16} /> VIEW ON GITHUB <ExternalLink size={14} />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1400,756 +518,280 @@ function DetailPanel({ capability, onClose }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAIN COMPONENT
+   CAPABILITY ROW
+═══════════════════════════════════════════════════════════════ */
+function CapabilityRow({ cap, index, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  const Icon = cap.icon;
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.08 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} onClick={() => onClick(cap)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      data-cursor
+      style={{
+        display: "grid", gridTemplateColumns: "72px 1fr auto",
+        alignItems: "center", gap: "40px",
+        padding: "36px 0", borderBottom: `1px solid ${T.ink10}`,
+        cursor: "pointer", position: "relative",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateX(0)" : "translateX(-24px)",
+        transition: `opacity 0.55s ease ${index * 0.07}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${index * 0.07}s`,
+      }}>
+      {/* Index + icon */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "10px" }}>
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink20, letterSpacing: "0.05em" }}>{cap.index}</span>
+        <div style={{ width: "46px", height: "46px", borderRadius: "12px", background: hovered ? T.ink : T.ink05, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.25s ease-out, transform 0.25s ease-out", transform: hovered ? "scale(1.08) rotate(-4deg)" : "scale(1) rotate(0deg)" }}>
+          <Icon size={20} style={{ color: hovered ? T.white : T.ink60, transition: "color 0.2s" }} />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "8px", flexWrap: "wrap" }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 600, color: T.ink, lineHeight: 1.1, letterSpacing: "-0.01em" }}>{cap.title}</h3>
+          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "12px", color: T.ink40 }}>{cap.domain}</span>
+        </div>
+        <p style={{ fontSize: "15px", color: T.ink60, lineHeight: 1.65, maxWidth: "540px" }}>{cap.tagline}</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: hovered ? "48px" : "0", marginTop: hovered ? "16px" : "0", overflow: "hidden", opacity: hovered ? 1 : 0, transition: "max-height 0.35s cubic-bezier(0.16,1,0.3,1), margin-top 0.3s ease, opacity 0.2s ease" }}>
+          {cap.stack.slice(0, 5).map(s => (
+            <span key={s} style={{ padding: "4px 12px", background: T.ink05, border: `1px solid ${T.ink10}`, borderRadius: "4px", fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink60 }}>{s}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Right */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px", flexShrink: 0 }}>
+        <span style={{ padding: "5px 14px", borderRadius: "100px", background: hovered ? T.ink : T.ink05, fontFamily: "'DM Mono', monospace", fontSize: "10px", color: hovered ? T.white : T.ink60, letterSpacing: "0.07em", transition: "all 0.22s ease-out" }}>{cap.depth}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "5px", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 700, color: hovered ? T.blue : T.ink20, transition: "color 0.2s ease-out" }}>
+          OPEN
+          <ArrowUpRight size={14} style={{ transform: hovered ? "translate(3px,-3px)" : "none", transition: "transform 0.25s cubic-bezier(0.16,1,0.3,1)" }} />
+        </div>
+      </div>
+
+      {/* Animated underline sweep */}
+      <div style={{ position: "absolute", bottom: "-1px", left: 0, height: "1px", background: T.ink, width: hovered ? "100%" : "0%", transition: "width 0.45s cubic-bezier(0.16,1,0.3,1)" }} />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CROSS CARD
+═══════════════════════════════════════════════════════════════ */
+function CrossCard({ item, index }) {
+  const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ padding: "32px 28px", background: hovered ? T.white : T.ink02, border: `1px solid ${hovered ? T.ink10 : "transparent"}`, borderRadius: "14px", cursor: "default", boxShadow: hovered ? "0 8px 40px rgba(0,0,0,0.06)" : "none", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: `all 0.4s ease ${index * 0.09}s` }}>
+      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.blue, letterSpacing: "0.14em", fontWeight: 700, marginBottom: "14px", textTransform: "uppercase" }}>{item.label}</div>
+      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "26px", fontWeight: 600, color: T.ink, lineHeight: 1.25, letterSpacing: "-0.01em", marginBottom: "16px" }}>{item.title}</h3>
+      <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75 }}>{item.body}</p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PHILOSOPHY CARD
+═══════════════════════════════════════════════════════════════ */
+function PhiloCard({ item, index }) {
+  const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ padding: "32px", background: T.white, border: `1px solid ${hovered ? T.ink20 : T.ink10}`, borderRadius: "14px", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: `opacity 0.55s ease ${index * 0.1}s, transform 0.55s cubic-bezier(0.16,1,0.3,1) ${index * 0.1}s, border-color 0.2s` }}>
+      <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "56px", fontWeight: 400, color: hovered ? T.blue : T.ink10, lineHeight: 1, marginBottom: "20px", userSelect: "none", transition: "color 0.3s ease-out" }}>{item.number}</div>
+      <h3 style={{ fontSize: "18px", fontWeight: 600, color: T.ink80, lineHeight: 1.4, marginBottom: "12px" }}>{item.principle}</h3>
+      <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75 }}>{item.detail}</p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CTA BUTTON
+═══════════════════════════════════════════════════════════════ */
+function CTABtn({ href, primary, icon, label }) {
+  const [h, setH] = useState(false);
+  return (
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} data-cursor
+      style={{ display: "inline-flex", alignItems: "center", gap: "9px", padding: "13px 26px", background: primary ? (h ? T.ink60 : T.ink) : T.white, border: primary ? "none" : `1px solid ${h ? T.ink40 : T.ink10}`, borderRadius: "9px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: primary ? T.white : (h ? T.ink : T.ink60), textDecoration: "none", fontFamily: "'DM Mono', monospace", transition: "all 0.18s ease-out", transform: h ? "translateY(-2px)" : "none", boxShadow: primary && h ? "0 8px 32px rgba(0,0,0,0.22)" : "none" }}>
+      {icon}{label}
+    </a>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN
 ═══════════════════════════════════════════════════════════════ */
 export default function Workshops() {
   const [activeCapability, setActiveCapability] = useState(null);
-  const [headerInView, setHeaderInView] = useState(false);
-  const [metricsInView, setMetricsInView] = useState(false);
-  const [gridInView, setGridInView] = useState(false);
-  const [crossDomainInView, setCrossDomainInView] = useState(false);
-  const [philosophyInView, setPhilosophyInView] = useState(false);
-
-  const headerRef = useRef(null);
-  const metricsRef = useRef(null);
-  const gridRef = useRef(null);
-  const crossDomainRef = useRef(null);
-  const philosophyRef = useRef(null);
+  const [heroReady, setHeroReady] = useState(false);
 
   useEffect(() => {
-    const observers = [
-      { ref: headerRef, setter: setHeaderInView },
-      { ref: metricsRef, setter: setMetricsInView },
-      { ref: gridRef, setter: setGridInView },
-      { ref: crossDomainRef, setter: setCrossDomainInView },
-      { ref: philosophyRef, setter: setPhilosophyInView },
-    ];
-
-    const observerInstances = observers.map(({ ref, setter }) => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setter(true);
-        },
-        { threshold: 0.2 }
-      );
-      if (ref.current) observer.observe(ref.current);
-      return observer;
-    });
-
-    return () => observerInstances.forEach((obs) => obs.disconnect());
+    const t = setTimeout(() => setHeroReady(true), 100);
+    return () => clearTimeout(t);
   }, []);
 
   return (
     <>
-      {/* ═══════ GLOBAL STYLES ═══════ */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600&display=swap');
 
-        *, *::before, *::after {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        html {
-          scroll-behavior: smooth;
-        }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
           font-family: 'Geist', system-ui, sans-serif;
-          background: ${C.bg};
-          color: ${C.text};
+          background: ${T.bg};
+          color: ${T.ink};
           -webkit-font-smoothing: antialiased;
           cursor: none;
         }
+        ::selection { background: ${T.blueMid}; color: ${T.ink}; }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: ${T.ink10}; border-radius: 2px; }
 
-        ::selection {
-          background: ${C.accentDim};
-          color: ${C.text};
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
         }
-
-        ::-webkit-scrollbar {
-          width: 6px;
+        @keyframes panelIn {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-
-        ::-webkit-scrollbar-track {
-          background: ${C.bg};
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: ${C.border3};
-          border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: ${C.muted};
-        }
-
-        @keyframes cardReveal {
-          from {
-            opacity: 0;
-            transform: translateY(24px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes lineGrow {
+        @keyframes lineExpand {
           from { width: 0; }
-          to { width: 240px; }
+          to   { width: 100%; }
         }
 
-        @media (max-width: 768px) {
-          body {
-            cursor: auto;
-          }
-        }
-
-        @media (max-width: 1024px) {
-          .capability-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .capability-grid {
-            grid-template-columns: 1fr !important;
-          }
+        @media (max-width: 800px) {
+          body { cursor: auto; }
         }
       `}</style>
 
-      {/* Custom cursor */}
-      <CustomCursor />
-
-      {/* Scroll progress */}
+      <MagneticCursor />
       <ScrollProgress />
 
-      {/* Background texture */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
+      <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "0 clamp(24px, 5vw, 60px)" }}>
 
-      {/* ═══════ PAGE WRAPPER ═══════ */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-        {/* ═══════ HERO HEADER ═══════ */}
-        <header
-          ref={headerRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "10rem 2rem 6rem",
-            borderBottom: `1px solid ${C.border}`,
-            position: "relative",
-            opacity: headerInView ? 1 : 0,
-            transform: headerInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
-          }}
-        >
-          {/* Background glow */}
-          <div
-            style={{
-              position: "absolute",
-              top: "30%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "800px",
-              height: "400px",
-              borderRadius: "50%",
-              background: `radial-gradient(circle, ${C.accent}08 0%, transparent 70%)`,
-              filter: "blur(100px)",
-              pointerEvents: "none",
-            }}
-          />
-
-          {/* Overline */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              marginBottom: "2rem",
-            }}
-          >
-            <div style={{ width: "48px", height: "2px", background: C.accent }} />
-            <span
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.7rem",
-                fontWeight: 600,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: C.accent,
-              }}
-            >
-              Technical Depth · System-Level Thinking
-            </span>
+        {/* ═══ HERO ═══ */}
+        <header style={{ padding: "clamp(100px, 14vw, 160px) 0 clamp(80px, 10vw, 120px)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "48px", opacity: heroReady ? 1 : 0, transform: heroReady ? "none" : "translateY(14px)", transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s" }}>
+            <div style={{ width: "32px", height: "1px", background: T.blue }} />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: T.blue }}>Technical Depth — System-Level Thinking</span>
           </div>
 
-          {/* Main headline - Two lines */}
-          <div style={{ marginBottom: "1rem" }}>
-            <h1
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(3.5rem, 8vw, 7rem)",
-                fontWeight: 400,
-                color: C.text,
-                lineHeight: 1.05,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              ENGINEERING
-            </h1>
-            <h1
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(3.5rem, 8vw, 7rem)",
-                fontWeight: 400,
-                color: "transparent",
-                WebkitTextStroke: `2px ${C.border3}`,
-                lineHeight: 1.05,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              CAPABILITIES
-            </h1>
+          <div style={{ marginBottom: "28px" }}>
+            <SplitReveal text="Engineering" tag="div" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(60px, 11vw, 120px)", fontWeight: 600, color: T.ink, lineHeight: 0.92, letterSpacing: "-0.04em" }} delay={0.18} />
+            <SplitReveal text="Capabilities" tag="div" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(60px, 11vw, 120px)", fontWeight: 600, color: "transparent", WebkitTextStroke: `1.5px ${T.ink20}`, lineHeight: 0.92, letterSpacing: "-0.04em" }} delay={0.26} />
           </div>
 
-          {/* Animated underline */}
-          <div
-            style={{
-              width: "240px",
-              height: "4px",
-              background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
-              borderRadius: "2px",
-              marginBottom: "2.5rem",
-              animation: headerInView ? "lineGrow 0.8s ease 0.2s both" : "none",
-            }}
-          />
+          <div style={{ height: "1px", background: T.ink, animation: heroReady ? "lineExpand 1s cubic-bezier(0.16,1,0.3,1) 0.7s both" : "none", marginBottom: "40px" }} />
 
-          {/* Subheadline */}
-          <p
-            style={{
-              fontSize: "1.25rem",
-              color: C.muted2,
-              lineHeight: 1.8,
-              maxWidth: "800px",
-            }}
-          >
-            Production-ready systems across Full Stack, AI, Cloud and Security — built, deployed, and maintained.
-          </p>
+          <FadeUp delay={0.85}>
+            <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: T.ink40, lineHeight: 1.75, maxWidth: "580px" }}>
+              Production systems across Full Stack, AI/ML, Cloud, and Security —
+              built, deployed, and maintained in real environments. Not demos.
+            </p>
+          </FadeUp>
         </header>
+      </div>
 
-        {/* ═══════ ENGINEERING METRICS BAR ═══════ */}
-        <section
-          ref={metricsRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "3rem 2rem",
-            opacity: metricsInView ? 1 : 0,
-            transform: metricsInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {[
-              { value: "30+", label: "Production Systems", desc: "Deployed applications" },
-              { value: "6", label: "Core Domains", desc: "Technical expertise areas" },
-              { value: "12+", label: "Deployments", desc: "Cloud & containerized" },
-              { value: "3", label: "Cloud Environments", desc: "AWS, Azure, GCP" },
-              { value: "Active", label: "Open Source", desc: "GitHub contributions" },
-            ].map((metric, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "1.5rem",
-                  background: C.surface,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: "12px",
-                  textAlign: "center",
-                  opacity: metricsInView ? 1 : 0,
-                  transform: metricsInView ? "translateY(0)" : "translateY(20px)",
-                  transition: `all 0.6s ease ${i * 0.1}s`,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontSize: "2rem",
-                    fontWeight: 400,
-                    color: C.text,
-                    lineHeight: 1,
-                    marginBottom: "0.5rem",
-                    letterSpacing: "-0.03em",
-                  }}
-                >
-                  {typeof metric.value === "number" ? (
-                    <AnimatedCounter value={metric.value} />
-                  ) : (
-                    metric.value
-                  )}
+      <MarqueeStrip />
+
+      <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "0 clamp(24px, 5vw, 60px)" }}>
+
+        {/* ═══ METRICS ═══ */}
+        <section style={{ padding: "96px 0", borderBottom: `1px solid ${T.ink10}` }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 0, borderLeft: `1px solid ${T.ink10}` }}>
+            {METRICS.map((m, i) => (
+              <FadeUp key={i} delay={i * 0.1} style={{ padding: "0 clamp(24px, 4vw, 48px) 0 clamp(20px, 3vw, 40px)", borderRight: `1px solid ${T.ink10}` }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 68px)", fontWeight: 600, color: T.ink, lineHeight: 1, letterSpacing: "-0.04em", marginBottom: "12px" }}>
+                  <Counter raw={m.value} />
                 </div>
-                <div
-                  style={{
-                    fontSize: "0.875rem",
-                    fontWeight: 600,
-                    color: C.text,
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  {metric.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: C.muted,
-                    fontFamily: "'DM Mono', monospace",
-                  }}
-                >
-                  {metric.desc}
-                </div>
-              </div>
+                <div style={{ fontSize: "15px", fontWeight: 600, color: T.ink80, marginBottom: "4px" }}>{m.label}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink40, letterSpacing: "0.05em" }}>{m.sub}</div>
+              </FadeUp>
             ))}
           </div>
         </section>
 
-        {/* ═══════ DOMAIN ARCHITECTURE GRID ═══════ */}
-        <section
-          ref={gridRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "6rem 2rem",
-            borderTop: `1px solid ${C.border}`,
-            opacity: gridInView ? 1 : 0,
-            transform: gridInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
-          }}
-        >
-          <div style={{ marginBottom: "3rem" }}>
-            <div
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: C.muted,
-                marginBottom: "1rem",
-              }}
-            >
-              Engineering Capability Matrix
+        {/* ═══ CAPABILITIES ═══ */}
+        <section style={{ padding: "96px 0" }}>
+          <FadeUp style={{ marginBottom: "64px" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "24px" }}>
+              <div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Engineering Capability Matrix</div>
+                <SplitReveal text="Domain Architecture" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05 }} delay={0.05} stagger={0.05} />
+              </div>
+              <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "340px" }}>Click any row for architectural decisions, trade-offs, and production evidence.</p>
             </div>
-            <h2
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 400,
-                color: C.text,
-                letterSpacing: "-0.02em",
-                marginBottom: "0.75rem",
-              }}
-            >
-              Domain Architecture
-            </h2>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: C.muted2,
-                lineHeight: 1.8,
-                maxWidth: "720px",
-              }}
-            >
-              Each domain represents production-ready capabilities with architectural decisions,
-              tradeoffs managed, and measurable outcomes.
-            </p>
-          </div>
-
-          <div
-            className="capability-grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1.5rem",
-            }}
-          >
-            {CAPABILITIES.map((capability, i) => (
-              <CapabilityCard
-                key={capability.id}
-                capability={capability}
-                index={i}
-                onClick={setActiveCapability}
-              />
-            ))}
+          </FadeUp>
+          <div style={{ borderTop: `1px solid ${T.ink10}` }}>
+            {CAPABILITIES.map((cap, i) => <CapabilityRow key={cap.id} cap={cap} index={i} onClick={setActiveCapability} />)}
           </div>
         </section>
 
-        {/* ═══════ CROSS-DOMAIN INTEGRATION ═══════ */}
-        <section
-          ref={crossDomainRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "6rem 2rem",
-            borderTop: `1px solid ${C.border}`,
-            opacity: crossDomainInView ? 1 : 0,
-            transform: crossDomainInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
-          }}
-        >
-          <div style={{ marginBottom: "3rem" }}>
-            <div
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: C.muted,
-                marginBottom: "1rem",
-              }}
-            >
-              Systems Thinking
-            </div>
-            <h2
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 400,
-                color: C.text,
-                letterSpacing: "-0.02em",
-                marginBottom: "0.75rem",
-              }}
-            >
-              Cross-Domain Engineering
-            </h2>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: C.muted2,
-                lineHeight: 1.8,
-                maxWidth: "720px",
-              }}
-            >
-              Real engineering problems don't fit in boxes. These integrations show how domains
-              connect to solve complex challenges.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {CROSS_DOMAIN.map((integration, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "2rem",
-                  background: C.surface,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: "16px",
-                  transition: "all 0.3s ease",
-                  opacity: crossDomainInView ? 1 : 0,
-                  animation: crossDomainInView
-                    ? `cardReveal 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`
-                    : "none",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = C.accent + "40";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.08)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = C.border;
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    color: C.accent,
-                    marginBottom: "0.75rem",
-                    fontFamily: "'DM Mono', monospace",
-                  }}
-                >
-                  {integration.title}
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontSize: "1.25rem",
-                    fontWeight: 400,
-                    color: C.text,
-                    lineHeight: 1.3,
-                    marginBottom: "1rem",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {integration.integration}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "0.875rem",
-                    color: C.muted2,
-                    lineHeight: 1.6,
-                    marginBottom: "1rem",
-                  }}
-                >
-                  {integration.example}
-                </p>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    fontSize: "0.8rem",
-                    color: C.muted,
-                    fontStyle: "italic",
-                  }}
-                >
-                  <Zap size={14} style={{ color: C.accent }} />
-                  {integration.value}
-                </div>
-              </div>
-            ))}
+        {/* ═══ CROSS-DOMAIN ═══ */}
+        <section style={{ padding: "96px 0", borderTop: `1px solid ${T.ink10}` }}>
+          <FadeUp style={{ marginBottom: "64px" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Systems Thinking</div>
+            <SplitReveal text="Cross-Domain Engineering" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
+            <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "500px" }}>Real problems don't fit single domains. These integrations show how capabilities combine.</p>
+          </FadeUp>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+            {CROSS_DOMAIN.map((item, i) => <CrossCard key={i} item={item} index={i} />)}
           </div>
         </section>
 
-        {/* ═══════ ENGINEERING PHILOSOPHY ═══════ */}
-        <section
-          ref={philosophyRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "6rem 2rem 8rem",
-            borderTop: `1px solid ${C.border}`,
-            opacity: philosophyInView ? 1 : 0,
-            transform: philosophyInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
-          }}
-        >
-          <div style={{ marginBottom: "3rem" }}>
-            <div
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: C.muted,
-                marginBottom: "1rem",
-              }}
-            >
-              Engineering Mindset
-            </div>
-            <h2
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 400,
-                color: C.text,
-                letterSpacing: "-0.02em",
-                marginBottom: "0.75rem",
-              }}
-            >
-              How I Approach Systems
-            </h2>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: C.muted2,
-                lineHeight: 1.8,
-                maxWidth: "720px",
-              }}
-            >
-              Principles that guide technical decision-making and system design
-            </p>
+        {/* ═══ PHILOSOPHY ═══ */}
+        <section style={{ padding: "96px 0", borderTop: `1px solid ${T.ink10}` }}>
+          <FadeUp style={{ marginBottom: "64px" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Engineering Mindset</div>
+            <SplitReveal text="How I Approach Systems" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
+            <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "440px" }}>Principles that guide every technical decision, trade-off, and system design choice.</p>
+          </FadeUp>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+            {PHILOSOPHY.map((item, i) => <PhiloCard key={i} item={item} index={i} />)}
           </div>
+        </section>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {PHILOSOPHY.map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: "2rem",
-                  background: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.surface} 100%)`,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: "16px",
-                  opacity: philosophyInView ? 1 : 0,
-                  animation: philosophyInView
-                    ? `cardReveal 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both`
-                    : "none",
-                }}
-              >
-                <div
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "10px",
-                    background: C.accentDim,
-                    border: `1px solid ${C.accent}30`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: "1.5rem",
-                  }}
-                >
-                  <CheckCircle2 size={20} style={{ color: C.accent }} />
-                </div>
-                <h3
-                  style={{
-                    fontSize: "1.125rem",
-                    fontWeight: 600,
-                    color: C.text,
-                    marginBottom: "0.75rem",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {item.principle}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "0.875rem",
-                    color: C.muted2,
-                    lineHeight: 1.7,
-                  }}
-                >
-                  {item.rationale}
-                </p>
+        {/* ═══ CTA ═══ */}
+        <section style={{ padding: "96px 0 clamp(100px, 14vw, 160px)", borderTop: `1px solid ${T.ink10}` }}>
+          <FadeUp>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "48px" }}>
+              <div style={{ maxWidth: "560px" }}>
+                <SplitReveal text="All implementations live on GitHub." tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 5vw, 60px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
+                <p style={{ fontSize: "17px", color: T.ink40, lineHeight: 1.75 }}>Source code, deployment configs, CI/CD pipelines, and production evidence. Not descriptions — implementations.</p>
               </div>
-            ))}
-          </div>
-
-          {/* GitHub CTA */}
-          <div
-            style={{
-              marginTop: "4rem",
-              padding: "3rem",
-              background: C.surface,
-              border: `1px solid ${C.border}`,
-              borderRadius: "20px",
-              textAlign: "center",
-            }}
-          >
-            <h3
-              style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "1.75rem",
-                fontWeight: 400,
-                color: C.text,
-                marginBottom: "1rem",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              All Implementations on GitHub
-            </h3>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: C.muted2,
-                lineHeight: 1.8,
-                maxWidth: "560px",
-                margin: "0 auto 2rem",
-              }}
-            >
-              Source code, deployment configs, and production evidence — not just descriptions.
-            </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-              <a
-                href="https://github.com/bhagavan444"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-hover
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "1rem 2rem",
-                  background: C.accent,
-                  borderRadius: "12px",
-                  fontSize: "0.95rem",
-                  fontWeight: 600,
-                  color: "#fff",
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                  fontFamily: "'Geist', sans-serif",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 8px 28px rgba(79,127,255,0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <Github size={18} />
-                VIEW GITHUB
-              </a>
-              <a
-                href="mailto:g.sivasatyasaibhagavan@gmail.com"
-                data-hover
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "1rem 2rem",
-                  background: "transparent",
-                  border: `2px solid ${C.border2}`,
-                  borderRadius: "12px",
-                  fontSize: "0.95rem",
-                  fontWeight: 600,
-                  color: C.text,
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                  fontFamily: "'Geist', sans-serif",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = C.border3;
-                  e.currentTarget.style.background = C.surface;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = C.border2;
-                  e.currentTarget.style.background = "transparent";
-                }}
-              >
-                GET IN TOUCH
-                <ArrowUpRight size={18} />
-              </a>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                <CTABtn href="https://github.com/bhagavan444" primary icon={<Github size={16} />} label="GITHUB" />
+                <CTABtn href="mailto:g.sivasatyasaibhagavan@gmail.com" icon={<ArrowUpRight size={16} />} label="GET IN TOUCH" />
+              </div>
             </div>
-          </div>
+          </FadeUp>
         </section>
       </div>
 
-      {/* Detail Panel */}
-      {activeCapability && (
-        <DetailPanel capability={activeCapability} onClose={() => setActiveCapability(null)} />
-      )}
+      {activeCapability && <DetailPanel cap={activeCapability} onClose={() => setActiveCapability(null)} />}
     </>
   );
 }

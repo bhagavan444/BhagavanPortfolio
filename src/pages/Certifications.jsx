@@ -1341,7 +1341,7 @@ export default function Certifications() {
           >
             <StatChip value={totalCerts} label="Certifications" icon={Award} />
             <StatChip value={5} label="Technical Domains" icon={TrendingUp} />
-            <StatChip value="10+" label="Production Projects" icon={CheckCircle2} />
+            <StatChip value="5+" label="Projects" icon={CheckCircle2} />
           </div>
         </header>
 
