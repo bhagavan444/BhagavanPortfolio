@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  ChevronDown, Menu, X, FileText,
+  ChevronDown, FileText,
   GraduationCap, Trophy, Shield, Award,
 } from "lucide-react";
 
@@ -31,8 +31,10 @@ const DS = {
 
   // Motion — tight and intentional
   ease:   "cubic-bezier(0.16, 1, 0.3, 1)",
+  easeOut: "cubic-bezier(0.33, 1, 0.68, 1)",
   ms:     "190ms",
   msFast: "140ms",
+  msSlow: "280ms",
 
   // Grid helper
   sp: (n) => `${n * 8}px`,
@@ -71,13 +73,17 @@ const GLOBAL = `
     from { opacity: 0; transform: translateY(-5px) scale(0.985); }
     to   { opacity: 1; transform: translateY(0)    scale(1);     }
   }
-  @keyframes __sheetIn {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0);    }
+  @keyframes __panelIn {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0);    }
   }
   @keyframes __backdropIn {
     from { opacity: 0; }
     to   { opacity: 1; }
+  }
+  @keyframes __itemStagger {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0);    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -404,9 +410,10 @@ function ResumeButton({ onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   HAMBURGER - IMPROVED FOR MOBILE
+   ANIMATED MENU BUTTON (HAMBURGER → X)
+   Premium morphing animation. Linear/Vercel quality.
 ───────────────────────────────────────────────────────────────── */
-function HamburgerButton({ onClick, isOpen }) {
+function AnimatedMenuButton({ isOpen, onClick }) {
   const [press, setPress] = useState(false);
 
   const handleClick = (e) => {
@@ -419,44 +426,111 @@ function HamburgerButton({ onClick, isOpen }) {
       onClick={handleClick}
       onMouseDown={() => setPress(true)}
       onMouseUp={() => setPress(false)}
+      onTouchStart={() => setPress(true)}
+      onTouchEnd={() => setPress(false)}
       onMouseLeave={() => setPress(false)}
       aria-label={isOpen ? "Close navigation" : "Open navigation"}
       aria-expanded={isOpen}
       style={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "40px",
-        height: "40px",
+        width: "44px",
+        height: "44px",
         background: press || isOpen ? DS.surfActive : "transparent",
-        border: `1.5px solid ${press || isOpen ? DS.accent + "40" : "rgba(0,0,0,0.08)"}`,
-        borderRadius: "8px",
+        border: `1.5px solid ${isOpen ? DS.accent + "30" : "rgba(0,0,0,0.07)"}`,
+        borderRadius: "9px",
         cursor: "pointer",
-        color: press || isOpen ? DS.accent : DS.inkMid,
-        transform: press ? "scale(0.92)" : "scale(1)",
+        transform: press ? "scale(0.94)" : "scale(1)",
         transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
         WebkitTapHighlightColor: "transparent",
         touchAction: "manipulation",
       }}
     >
-      {isOpen ? <X size={19} strokeWidth={2} /> : <Menu size={19} strokeWidth={2} />}
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          color: isOpen ? DS.accent : DS.inkMid,
+          transition: `color ${DS.msFast} ${DS.ease}`,
+        }}
+      >
+        {/* Top line → Top part of X */}
+        <line
+          x1="3"
+          y1="5"
+          x2="17"
+          y2="5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          style={{
+            transformOrigin: "center",
+            transform: isOpen ? "rotate(45deg) translateY(5px)" : "rotate(0deg) translateY(0)",
+            transition: `transform ${DS.ms} ${DS.ease}`,
+          }}
+        />
+        
+        {/* Middle line → Fades out */}
+        <line
+          x1="3"
+          y1="10"
+          x2="17"
+          y2="10"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          style={{
+            opacity: isOpen ? 0 : 1,
+            transition: `opacity ${DS.msFast} ${DS.ease}`,
+          }}
+        />
+        
+        {/* Bottom line → Bottom part of X */}
+        <line
+          x1="3"
+          y1="15"
+          x2="17"
+          y2="15"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          style={{
+            transformOrigin: "center",
+            transform: isOpen ? "rotate(-45deg) translateY(-5px)" : "rotate(0deg) translateY(0)",
+            transition: `transform ${DS.ms} ${DS.ease}`,
+          }}
+        />
+      </svg>
     </button>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   MOBILE BOTTOM SHEET - FIXED ROUTING
-   iOS Settings-sheet feel. Sparse. Touch-native.
+   FULL-SCREEN SLIDE PANEL (Mobile)
+   Slides from right. Staggered item animations. Premium feel.
 ───────────────────────────────────────────────────────────────── */
-function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
-  const startY  = useRef(0);
-  const [dragY, setDragY] = useState(0);
-  const [drag,  setDrag]  = useState(false);
-
+function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (open) {
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
   }, [open]);
 
   useEffect(() => {
@@ -466,127 +540,142 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
     return () => document.removeEventListener("keydown", fn);
   }, [open, onClose]);
 
-  const onTouchStart = (e) => { startY.current = e.touches[0].clientY; setDrag(true);  };
-  const onTouchMove  = (e) => { const d = e.touches[0].clientY - startY.current; if (d > 0) setDragY(d); };
-  const onTouchEnd   = ()  => { setDrag(false); if (dragY > 72) onClose(); setDragY(0); };
-
   if (!open) return null;
 
   return (
     <>
-      {/* Scrim */}
+      {/* Backdrop */}
       <div
         onClick={onClose}
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(0,0,0,0.26)",
+          background: "rgba(0,0,0,0.36)",
+          backdropFilter: "blur(2px)",
+          WebkitBackdropFilter: "blur(2px)",
           zIndex: 9998,
           animation: `__backdropIn ${DS.ms} ${DS.ease}`,
         }}
       />
 
-      {/* Sheet */}
+      {/* Panel */}
       <div
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation"
+        aria-label="Navigation menu"
         style={{
           position: "fixed",
-          left: 0, right: 0, bottom: 0,
-          maxHeight: "88vh",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "min(340px, 85vw)",
           background: DS.white,
-          borderTopLeftRadius: "14px",
-          borderTopRightRadius: "14px",
-          borderTop: "1px solid rgba(0,0,0,0.07)",
+          borderLeft: "1px solid rgba(0,0,0,0.06)",
+          boxShadow: "-8px 0 32px rgba(0,0,0,0.08)",
           overflowY: "auto",
-          paddingBottom: "env(safe-area-inset-bottom, 20px)",
           zIndex: 9999,
-          animation: drag ? "none" : `__sheetIn ${DS.ms} ${DS.ease}`,
-          transform: `translateY(${dragY}px)`,
-          transition: drag ? "none" : `transform ${DS.ms} ${DS.ease}`,
+          animation: `__panelIn ${DS.msSlow} ${DS.easeOut}`,
         }}
       >
-        {/* Drag pill */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 6px" }}>
-          <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(0,0,0,0.1)" }} />
-        </div>
-
         {/* Header */}
         <div style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: `${DS.sp(1)} ${DS.sp(3)} ${DS.sp(2)}`,
+          padding: `${DS.sp(3)} ${DS.sp(3)} ${DS.sp(2)}`,
           borderBottom: "1px solid rgba(0,0,0,0.05)",
         }}>
-          <span style={{
-            fontFamily: DS.fontSans,
-            fontSize: "14px",
-            fontWeight: 600,
-            color: DS.ink,
-            letterSpacing: "-0.02em",
-          }}>
-            Navigation
-          </span>
+          <div>
+            <div style={{
+              fontFamily: DS.fontSans,
+              fontSize: "17px",
+              fontWeight: 600,
+              color: DS.ink,
+              letterSpacing: "-0.02em",
+              marginBottom: "2px",
+            }}>
+              Navigation
+            </div>
+            <div style={{
+              fontFamily: DS.fontMono,
+              fontSize: "11px",
+              fontWeight: 400,
+              color: DS.inkFaint,
+              letterSpacing: "0",
+            }}>
+              ./bhagavan
+            </div>
+          </div>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onClose();
             }}
-            aria-label="Close"
+            aria-label="Close menu"
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "28px",
-              height: "28px",
+              width: "36px",
+              height: "36px",
               background: "rgba(0,0,0,0.04)",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "7px",
               cursor: "pointer",
               color: DS.inkMid,
               outline: "none",
               WebkitTapHighlightColor: "transparent",
+              touchAction: "manipulation",
             }}
           >
-            <X size={14} strokeWidth={2} />
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
 
         {/* Content */}
-        <div style={{ padding: `${DS.sp(2)} ${DS.sp(2)} ${DS.sp(1)}` }}>
+        <div style={{ padding: `${DS.sp(3)} ${DS.sp(2.5)}` }}>
 
-          {/* Primary */}
-          <SheetGroupLabel>Main</SheetGroupLabel>
-          {PRIMARY.map(({ label, path }) => (
-            <SheetRow
-              key={path}
-              label={label}
-              active={currentRoute === path}
-              onClick={() => onNavigate(path)}
-            />
-          ))}
+          {/* Primary Navigation */}
+          <PanelSection label="Main">
+            {PRIMARY.map(({ label, path }, i) => (
+              <PanelItem
+                key={path}
+                label={label}
+                active={currentRoute === path}
+                onClick={() => onNavigate(path)}
+                delay={i * 35}
+              />
+            ))}
+          </PanelSection>
 
-          <div style={{ height: "1px", background: "rgba(0,0,0,0.05)", margin: `${DS.sp(1.5)} ${DS.sp(1)}` }} />
+          {/* Divider */}
+          <div style={{
+            height: "1px",
+            background: "rgba(0,0,0,0.06)",
+            margin: `${DS.sp(2.5)} ${DS.sp(1)}`,
+          }} />
 
-          {/* Secondary */}
-          <SheetGroupLabel>More</SheetGroupLabel>
-          {SECONDARY.map(({ label, path, Icon }) => (
-            <SheetRow
-              key={path}
-              label={label}
-              Icon={Icon}
-              active={currentRoute === path}
-              onClick={() => onNavigate(path)}
-            />
-          ))}
+          {/* Secondary Navigation */}
+          <PanelSection label="More">
+            {SECONDARY.map(({ label, path, Icon }, i) => (
+              <PanelItem
+                key={path}
+                label={label}
+                Icon={Icon}
+                active={currentRoute === path}
+                onClick={() => onNavigate(path)}
+                delay={(PRIMARY.length + i) * 35}
+              />
+            ))}
+          </PanelSection>
 
           {/* CTA */}
-          <div style={{ padding: `${DS.sp(2)} ${DS.sp(1)} ${DS.sp(1)}` }}>
+          <div style={{
+            padding: `${DS.sp(3)} ${DS.sp(1)} ${DS.sp(1)}`,
+            animation: `__itemStagger ${DS.msSlow} ${DS.easeOut} ${(PRIMARY.length + SECONDARY.length) * 35}ms backwards`,
+          }}>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -598,21 +687,23 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
                 justifyContent: "center",
                 gap: "8px",
                 width: "100%",
-                minHeight: "44px",
+                minHeight: "48px",
                 background: DS.accent,
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: "9px",
                 cursor: "pointer",
                 fontFamily: DS.fontSans,
-                fontSize: "14px",
+                fontSize: "14.5px",
                 fontWeight: 500,
                 color: "#fff",
                 letterSpacing: "-0.01em",
                 outline: "none",
                 WebkitTapHighlightColor: "transparent",
+                touchAction: "manipulation",
+                boxShadow: "0 1px 3px rgba(0,102,255,0.15)",
               }}
             >
-              <FileText size={15} strokeWidth={2} />
+              <FileText size={16} strokeWidth={2} />
               View Resume
             </button>
           </div>
@@ -622,23 +713,26 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
   );
 }
 
-function SheetGroupLabel({ children }) {
+function PanelSection({ label, children }) {
   return (
-    <p style={{
-      fontFamily: DS.fontMono,
-      fontSize: "10px",
-      fontWeight: 500,
-      letterSpacing: "0.07em",
-      color: DS.inkGhost,
-      textTransform: "uppercase",
-      padding: `0 ${DS.sp(1)} ${DS.sp(0.75)}`,
-    }}>
+    <div style={{ marginBottom: DS.sp(1) }}>
+      <div style={{
+        fontFamily: DS.fontMono,
+        fontSize: "10px",
+        fontWeight: 500,
+        letterSpacing: "0.08em",
+        color: DS.inkGhost,
+        textTransform: "uppercase",
+        padding: `0 ${DS.sp(1)} ${DS.sp(1.25)}`,
+      }}>
+        {label}
+      </div>
       {children}
-    </p>
+    </div>
   );
 }
 
-function SheetRow({ label, Icon, active, onClick }) {
+function PanelItem({ label, Icon, active, onClick, delay }) {
   const [press, setPress] = useState(false);
 
   const handleClick = (e) => {
@@ -652,43 +746,51 @@ function SheetRow({ label, Icon, active, onClick }) {
       onClick={handleClick}
       onMouseDown={() => setPress(true)}
       onMouseUp={() => setPress(false)}
+      onTouchStart={() => setPress(true)}
+      onTouchEnd={() => setPress(false)}
       onMouseLeave={() => setPress(false)}
       aria-current={active ? "page" : undefined}
       style={{
         display: "flex",
         alignItems: "center",
-        gap: DS.sp(1.5),
+        gap: DS.sp(1.75),
         width: "100%",
-        minHeight: "44px",
-        padding: `${DS.sp(1.25)} ${DS.sp(1)}`,
-        marginBottom: "1px",
+        minHeight: "48px",
+        padding: `${DS.sp(1.5)} ${DS.sp(1.25)}`,
+        marginBottom: "2px",
         background: active ? DS.surfActive : press ? DS.surfHover : "transparent",
-        border: active ? "1px solid rgba(0,102,255,0.1)" : "1px solid transparent",
-        borderRadius: "8px",
+        border: active ? "1px solid rgba(0,102,255,0.12)" : "1px solid transparent",
+        borderRadius: "9px",
         cursor: "pointer",
         fontFamily: DS.fontSans,
-        fontSize: "14px",
+        fontSize: "15px",
         fontWeight: active ? 500 : 400,
         color: active ? DS.accent : DS.ink,
         textAlign: "left",
-        letterSpacing: "-0.01em",
-        lineHeight: 1,
-        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}`,
+        letterSpacing: "-0.015em",
+        lineHeight: 1.2,
+        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}, border-color ${DS.msFast} ${DS.ease}`,
         outline: "none",
         WebkitTapHighlightColor: "transparent",
         touchAction: "manipulation",
+        animation: `__itemStagger ${DS.msSlow} ${DS.easeOut} ${delay}ms backwards`,
       }}
     >
-      {Icon
-        ? <Icon size={16} strokeWidth={1.75} style={{ flexShrink: 0, opacity: active ? 0.9 : 0.32 }} />
-        : <span style={{ width: "16px", flexShrink: 0 }} />
-      }
+      {Icon ? (
+        <Icon
+          size={17}
+          strokeWidth={1.75}
+          style={{ flexShrink: 0, opacity: active ? 0.95 : 0.35 }}
+        />
+      ) : (
+        <span style={{ width: "17px", flexShrink: 0 }} />
+      )}
       {label}
       {active && (
         <span style={{
           marginLeft: "auto",
-          width: "5px",
-          height: "5px",
+          width: "6px",
+          height: "6px",
           borderRadius: "50%",
           background: DS.accent,
           flexShrink: 0,
@@ -769,24 +871,24 @@ export default function Navbar() {
       return;
     }
     
-    // Close mobile menu first
+    // Close menus
     setMobileOpen(false);
     setMoreOpen(false);
     
     // Navigate
     navigate(path);
     
-    // Scroll to top after a brief delay
+    // Scroll to top
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 100);
   }, [navigate]);
 
   /* ── Computed values ── */
-  const navH   = scrolled ? (isTiny ? "56px" : "62px") : (isTiny ? "62px" : "72px");
-  const bg     = scrolled ? "rgba(255,255,255,0.94)" : "rgba(255,255,255,0.82)";
-  const border = scrolled ? "rgba(0,0,0,0.07)"       : "rgba(0,0,0,0)";
-  const blur   = scrolled ? "blur(12px)"              : "blur(6px)";
+  const navH   = scrolled ? (isTiny ? "60px" : "66px") : (isTiny ? "68px" : "76px");
+  const bg     = scrolled ? "rgba(255,255,255,0.96)" : "rgba(255,255,255,0.86)";
+  const border = scrolled ? "rgba(0,0,0,0.08)"       : "rgba(0,0,0,0.03)";
+  const blur   = scrolled ? "blur(14px)"              : "blur(8px)";
   const padX   = isTiny   ? "20px"                    : "40px";
 
   return (
@@ -849,7 +951,7 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Right — More + divider + CTA */}
+          {/* Right — More + divider + CTA (desktop) / Menu button (mobile) */}
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: DS.sp(0.75) }}>
             {!isMobile && (
               <>
@@ -881,18 +983,18 @@ export default function Navbar() {
             )}
 
             {isMobile && (
-              <HamburgerButton 
-                onClick={() => setMobileOpen(prev => !prev)} 
+              <AnimatedMenuButton 
                 isOpen={mobileOpen}
+                onClick={() => setMobileOpen(prev => !prev)}
               />
             )}
           </div>
         </div>
       </nav>
 
-      {/* Mobile sheet */}
+      {/* Mobile panel */}
       {isMobile && (
-        <BottomSheet
+        <MobilePanel
           open={mobileOpen}
           currentRoute={route}
           onNavigate={go}
