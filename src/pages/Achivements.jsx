@@ -348,6 +348,7 @@ function MetricCard({ metric, index }) {
   return (
     <div
       ref={ref}
+      className="metric-card"
       style={{
         background: "#fff",
         border: `1.5px solid ${T.line}`,
@@ -386,6 +387,7 @@ function MetricCard({ metric, index }) {
         <metric.icon size={28} style={{ color: metric.color }} />
       </div>
       <div
+        className="metric-value"
         style={{
           fontFamily: "'Fraunces', serif",
           fontSize: "36px",
@@ -398,6 +400,7 @@ function MetricCard({ metric, index }) {
         {count.toFixed(count < 10 ? 1 : 0)}{metric.suffix}
       </div>
       <div
+        className="metric-label"
         style={{
           fontSize: "15px",
           fontWeight: 600,
@@ -408,6 +411,7 @@ function MetricCard({ metric, index }) {
         {metric.label}
       </div>
       <div
+        className="metric-desc"
         style={{
           fontSize: "13px",
           color: T.inkMute,
@@ -475,10 +479,266 @@ export default function Achievements() {
         ::-webkit-scrollbar-thumb:hover {
           background: rgba(0,0,0,0.15);
         }
+
+        /* Mobile Optimizations */
+        @media (max-width: 1024px) {
+          .main-container {
+            padding: 100px 32px 80px !important;
+          }
+          
+          .hero-section {
+            margin-bottom: 60px !important;
+          }
+          
+          .metrics-grid {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+            gap: 16px !important;
+          }
+          
+          .achievements-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+          
+          .principles-grid {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .main-container {
+            padding: 80px 24px 60px !important;
+          }
+          
+          .hero-title {
+            font-size: clamp(36px, 10vw, 56px) !important;
+            line-height: 1.1 !important;
+          }
+          
+          .hero-description {
+            font-size: 16px !important;
+            padding: 0 !important;
+          }
+          
+          .hero-buttons {
+            flex-direction: column !important;
+            width: 100% !important;
+          }
+          
+          .hero-buttons a,
+          .hero-buttons button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          
+          .metric-card {
+            padding: 20px 16px !important;
+          }
+          
+          .metric-value {
+            font-size: 28px !important;
+          }
+          
+          .metric-label {
+            font-size: 13px !important;
+          }
+          
+          .metric-desc {
+            font-size: 11px !important;
+          }
+          
+          .achievement-card {
+            border-radius: 16px !important;
+          }
+          
+          .achievement-header {
+            height: 140px !important;
+          }
+          
+          .achievement-icon-wrapper {
+            width: 70px !important;
+            height: 70px !important;
+          }
+          
+          .achievement-icon-wrapper svg {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          
+          .achievement-content {
+            padding: 20px !important;
+          }
+          
+          .achievement-title {
+            font-size: 18px !important;
+          }
+          
+          .achievement-event {
+            font-size: 13px !important;
+          }
+          
+          .achievement-description {
+            font-size: 14px !important;
+          }
+          
+          .metrics-row {
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 8px !important;
+          }
+          
+          .metric-box {
+            padding: 10px 8px !important;
+          }
+          
+          .metric-box-value {
+            font-size: 13px !important;
+          }
+          
+          .metric-box-label {
+            font-size: 9px !important;
+          }
+          
+          .tech-stack {
+            gap: 6px !important;
+          }
+          
+          .tech-badge {
+            padding: 4px 10px !important;
+            font-size: 11px !important;
+          }
+          
+          .view-details-btn {
+            padding: 12px !important;
+            font-size: 13px !important;
+          }
+          
+          .section-title {
+            font-size: clamp(28px, 6vw, 36px) !important;
+            margin-bottom: 12px !important;
+          }
+          
+          .section-description {
+            font-size: 14px !important;
+            margin-bottom: 40px !important;
+          }
+          
+          .principle-card {
+            padding: 24px 20px !important;
+          }
+          
+          .principle-icon-wrapper {
+            width: 48px !important;
+            height: 48px !important;
+            margin-bottom: 16px !important;
+          }
+          
+          .principle-icon-wrapper svg {
+            width: 24px !important;
+            height: 24px !important;
+          }
+          
+          .principle-title {
+            font-size: 18px !important;
+            margin-bottom: 10px !important;
+          }
+          
+          .principle-description {
+            font-size: 14px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .main-container {
+            padding: 70px 20px 50px !important;
+          }
+          
+          .hero-badge {
+            font-size: 11px !important;
+            padding: 6px 14px !important;
+          }
+          
+          .metrics-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+          
+          .metrics-row {
+            grid-template-columns: 1fr !important;
+            gap: 6px !important;
+          }
+          
+          .principles-grid {
+            grid-template-columns: 1fr !important;
+          }
+          
+          .modal-content {
+            border-radius: 20px !important;
+            max-height: 85vh !important;
+          }
+          
+          .modal-header {
+            padding: 24px 20px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          
+          .modal-close-btn {
+            position: absolute !important;
+            top: 20px !important;
+            right: 20px !important;
+          }
+          
+          .modal-body {
+            padding: 24px 20px !important;
+          }
+          
+          .modal-section {
+            margin-bottom: 24px !important;
+          }
+          
+          .modal-section-title {
+            font-size: 18px !important;
+            margin-bottom: 10px !important;
+          }
+          
+          .modal-section-text {
+            font-size: 14px !important;
+          }
+          
+          .decision-item,
+          .risk-item {
+            padding: 12px !important;
+          }
+          
+          .decision-item span,
+          .risk-item span {
+            font-size: 13px !important;
+          }
+          
+          .tech-tags {
+            gap: 8px !important;
+          }
+          
+          .tech-tag {
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
       `}</style>
 
       <div style={{ minHeight: "100vh", background: T.bg }}>
         <div
+          className="main-container"
           style={{
             maxWidth: "1400px",
             margin: "0 auto",
@@ -488,6 +748,7 @@ export default function Achievements() {
           {/* HERO SECTION */}
           <div
             ref={heroRef}
+            className="hero-section"
             style={{
               textAlign: "center",
               marginBottom: "100px",
@@ -497,6 +758,7 @@ export default function Achievements() {
             }}
           >
             <div
+              className="hero-badge"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -517,6 +779,7 @@ export default function Achievements() {
             </div>
 
             <h1
+              className="hero-title"
               style={{
                 fontFamily: "'Fraunces', serif",
                 fontSize: "clamp(48px, 7vw, 80px)",
@@ -554,6 +817,7 @@ export default function Achievements() {
             </h1>
 
             <p
+              className="hero-description"
               style={{
                 fontSize: "18px",
                 lineHeight: 1.7,
@@ -569,6 +833,7 @@ export default function Achievements() {
             </p>
 
             <div
+              className="hero-buttons"
               style={{
                 display: "flex",
                 gap: "16px",
@@ -677,6 +942,7 @@ export default function Achievements() {
 
           {/* METRICS DASHBOARD */}
           <div
+            className="metrics-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -692,6 +958,7 @@ export default function Achievements() {
           {/* ACHIEVEMENTS SECTION */}
           <div style={{ marginBottom: "100px" }}>
             <h2
+              className="section-title"
               style={{
                 fontFamily: "'Fraunces', serif",
                 fontSize: "clamp(32px, 4vw, 42px)",
@@ -705,6 +972,7 @@ export default function Achievements() {
               Case Study Achievements
             </h2>
             <p
+              className="section-description"
               style={{
                 fontSize: "16px",
                 color: T.inkSub,
@@ -719,6 +987,7 @@ export default function Achievements() {
             </p>
 
             <div
+              className="achievements-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
@@ -728,6 +997,7 @@ export default function Achievements() {
               {achievements.map((achievement, index) => (
                 <div
                   key={achievement.id}
+                  className="achievement-card"
                   onMouseEnter={() => setHoveredCard(achievement.id)}
                   onMouseLeave={() => setHoveredCard(null)}
                   onClick={() => setActiveAchievement(achievement)}
@@ -752,6 +1022,7 @@ export default function Achievements() {
                 >
                   {/* Card Header */}
                   <div
+                    className="achievement-header"
                     style={{
                       height: "180px",
                       background: `linear-gradient(135deg, ${achievement.color}12 0%, ${achievement.color}05 100%)`,
@@ -783,6 +1054,7 @@ export default function Achievements() {
                       {achievement.year}
                     </div>
                     <div
+                      className="achievement-icon-wrapper"
                       style={{
                         width: "90px",
                         height: "90px",
@@ -801,7 +1073,7 @@ export default function Achievements() {
                   </div>
 
                   {/* Card Content */}
-                  <div style={{ padding: "28px" }}>
+                  <div className="achievement-content" style={{ padding: "28px" }}>
                     <span
                       style={{
                         display: "inline-block",
@@ -821,6 +1093,7 @@ export default function Achievements() {
                     </span>
 
                     <h3
+                      className="achievement-title"
                       style={{
                         fontFamily: "'Fraunces', serif",
                         fontSize: "22px",
@@ -833,6 +1106,7 @@ export default function Achievements() {
                       {achievement.title}
                     </h3>
                     <p
+                      className="achievement-event"
                       style={{
                         fontSize: "15px",
                         color: T.inkMute,
@@ -843,6 +1117,7 @@ export default function Achievements() {
                       {achievement.event}
                     </p>
                     <p
+                      className="achievement-description"
                       style={{
                         fontSize: "15px",
                         color: T.inkSub,
@@ -855,6 +1130,7 @@ export default function Achievements() {
 
                     {/* Metrics Row */}
                     <div
+                      className="metrics-row"
                       style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(3, 1fr)",
@@ -865,6 +1141,7 @@ export default function Achievements() {
                       {Object.entries(achievement.metrics).map(([key, value]) => (
                         <div
                           key={key}
+                          className="metric-box"
                           style={{
                             padding: "12px",
                             background: T.surface,
@@ -874,6 +1151,7 @@ export default function Achievements() {
                           }}
                         >
                           <div
+                            className="metric-box-value"
                             style={{
                               fontSize: "15px",
                               fontWeight: 700,
@@ -884,6 +1162,7 @@ export default function Achievements() {
                             {value}
                           </div>
                           <div
+                            className="metric-box-label"
                             style={{
                               fontSize: "10px",
                               color: T.inkMute,
@@ -900,6 +1179,7 @@ export default function Achievements() {
 
                     {/* Tech Stack */}
                     <div
+                      className="tech-stack"
                       style={{
                         display: "flex",
                         flexWrap: "wrap",
@@ -910,6 +1190,7 @@ export default function Achievements() {
                       {achievement.tech.slice(0, 4).map((tech, i) => (
                         <span
                           key={i}
+                          className="tech-badge"
                           style={{
                             padding: "5px 12px",
                             background: T.surface,
@@ -925,6 +1206,7 @@ export default function Achievements() {
                       ))}
                       {achievement.tech.length > 4 && (
                         <span
+                          className="tech-badge"
                           style={{
                             padding: "5px 12px",
                             background: T.surface,
@@ -942,6 +1224,7 @@ export default function Achievements() {
 
                     {/* View Details Button */}
                     <button
+                      className="view-details-btn"
                       style={{
                         width: "100%",
                         display: "flex",
@@ -978,6 +1261,7 @@ export default function Achievements() {
           {/* ENGINEERING PRINCIPLES */}
           <div style={{ marginBottom: "100px" }}>
             <h2
+              className="section-title"
               style={{
                 fontFamily: "'Fraunces', serif",
                 fontSize: "clamp(32px, 4vw, 42px)",
@@ -991,6 +1275,7 @@ export default function Achievements() {
               How I Build Systems
             </h2>
             <p
+              className="section-description"
               style={{
                 fontSize: "16px",
                 color: T.inkSub,
@@ -1005,6 +1290,7 @@ export default function Achievements() {
             </p>
 
             <div
+              className="principles-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -1014,6 +1300,7 @@ export default function Achievements() {
               {principles.map((principle, index) => (
                 <div
                   key={index}
+                  className="principle-card"
                   style={{
                     background: "#fff",
                     border: `1.5px solid ${T.line}`,
@@ -1034,6 +1321,7 @@ export default function Achievements() {
                   }}
                 >
                   <div
+                    className="principle-icon-wrapper"
                     style={{
                       width: "56px",
                       height: "56px",
@@ -1048,6 +1336,7 @@ export default function Achievements() {
                     <principle.icon size={28} style={{ color: principle.color }} />
                   </div>
                   <h3
+                    className="principle-title"
                     style={{
                       fontFamily: "'Fraunces', serif",
                       fontSize: "20px",
@@ -1060,6 +1349,7 @@ export default function Achievements() {
                     {principle.title}
                   </h3>
                   <p
+                    className="principle-description"
                     style={{
                       fontSize: "15px",
                       color: T.inkSub,
@@ -1094,6 +1384,7 @@ export default function Achievements() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            className="modal-content"
             style={{
               background: "#fff",
               border: `1.5px solid ${T.lineMd}`,
@@ -1107,21 +1398,9 @@ export default function Achievements() {
               boxShadow: "0 32px 96px rgba(0,0,0,0.2)",
             }}
           >
-            <style>{`
-              @keyframes slideUp {
-                from {
-                  opacity: 0;
-                  transform: translateY(40px) scale(0.95);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0) scale(1);
-                }
-              }
-            `}</style>
-
             {/* Modal Header */}
             <div
+              className="modal-header"
               style={{
                 padding: "36px 40px",
                 borderBottom: `1.5px solid ${T.line}`,
@@ -1167,6 +1446,7 @@ export default function Achievements() {
               </div>
               <button
                 onClick={() => setActiveAchievement(null)}
+                className="modal-close-btn"
                 style={{
                   width: "44px",
                   height: "44px",
@@ -1195,10 +1475,11 @@ export default function Achievements() {
             </div>
 
             {/* Modal Body */}
-            <div style={{ padding: "40px" }}>
+            <div className="modal-body" style={{ padding: "40px" }}>
               {/* Context */}
-              <div style={{ marginBottom: "32px" }}>
+              <div className="modal-section" style={{ marginBottom: "32px" }}>
                 <h3
+                  className="modal-section-title"
                   style={{
                     fontFamily: "'Fraunces', serif",
                     fontSize: "20px",
@@ -1211,6 +1492,7 @@ export default function Achievements() {
                   Context
                 </h3>
                 <p
+                  className="modal-section-text"
                   style={{
                     fontSize: "16px",
                     color: T.inkSub,
@@ -1222,8 +1504,9 @@ export default function Achievements() {
               </div>
 
               {/* Ownership Scope */}
-              <div style={{ marginBottom: "32px" }}>
+              <div className="modal-section" style={{ marginBottom: "32px" }}>
                 <h3
+                  className="modal-section-title"
                   style={{
                     fontFamily: "'Fraunces', serif",
                     fontSize: "20px",
@@ -1236,6 +1519,7 @@ export default function Achievements() {
                   My Ownership Scope
                 </h3>
                 <p
+                  className="modal-section-text"
                   style={{
                     fontSize: "16px",
                     color: T.inkSub,
@@ -1247,8 +1531,9 @@ export default function Achievements() {
               </div>
 
               {/* Technical Decisions */}
-              <div style={{ marginBottom: "32px" }}>
+              <div className="modal-section" style={{ marginBottom: "32px" }}>
                 <h3
+                  className="modal-section-title"
                   style={{
                     fontFamily: "'Fraunces', serif",
                     fontSize: "20px",
@@ -1264,6 +1549,7 @@ export default function Achievements() {
                   {activeAchievement.decisions.map((decision, i) => (
                     <div
                       key={i}
+                      className="decision-item"
                       style={{
                         display: "flex",
                         alignItems: "flex-start",
@@ -1298,8 +1584,9 @@ export default function Achievements() {
 
               {/* Risks Managed */}
               {activeAchievement.risks && (
-                <div style={{ marginBottom: "32px" }}>
+                <div className="modal-section" style={{ marginBottom: "32px" }}>
                   <h3
+                    className="modal-section-title"
                     style={{
                       fontFamily: "'Fraunces', serif",
                       fontSize: "20px",
@@ -1315,6 +1602,7 @@ export default function Achievements() {
                     {activeAchievement.risks.map((risk, i) => (
                       <div
                         key={i}
+                        className="risk-item"
                         style={{
                           display: "flex",
                           alignItems: "flex-start",
@@ -1349,8 +1637,9 @@ export default function Achievements() {
               )}
 
               {/* Outcome */}
-              <div style={{ marginBottom: "32px" }}>
+              <div className="modal-section" style={{ marginBottom: "32px" }}>
                 <h3
+                  className="modal-section-title"
                   style={{
                     fontFamily: "'Fraunces', serif",
                     fontSize: "20px",
@@ -1363,6 +1652,7 @@ export default function Achievements() {
                   Measurable Outcome
                 </h3>
                 <p
+                  className="modal-section-text"
                   style={{
                     fontSize: "16px",
                     color: T.inkSub,
@@ -1374,8 +1664,9 @@ export default function Achievements() {
               </div>
 
               {/* Technologies */}
-              <div style={{ marginBottom: "32px" }}>
+              <div className="modal-section" style={{ marginBottom: "32px" }}>
                 <h3
+                  className="modal-section-title"
                   style={{
                     fontFamily: "'Fraunces', serif",
                     fontSize: "20px",
@@ -1387,10 +1678,11 @@ export default function Achievements() {
                 >
                   Technologies
                 </h3>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                <div className="tech-tags" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                   {activeAchievement.tech.map((tech, i) => (
                     <span
                       key={i}
+                      className="tech-tag"
                       style={{
                         padding: "8px 16px",
                         background: `${activeAchievement.color}10`,

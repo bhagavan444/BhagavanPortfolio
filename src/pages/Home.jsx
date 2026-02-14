@@ -78,12 +78,22 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:#f9f9f8;color:#0c
   .ig{grid-template-columns:1fr 1fr !important;}
   .cp{padding:3rem 1.75rem !important;}
   section{padding:5rem 0 !important;}
+  /* Tech marquee mobile optimization */
+  .tech-marquee{padding:1.8rem 0 !important;}
+  .tech-icon-wrapper{margin:0 1.2rem !important;}
+  .tech-icon-wrapper img{width:32px !important;height:32px !important;}
+  .tech-label{font-size:0.65rem !important;}
 }
 @media(max-width:480px){
   .pg{grid-template-columns:1fr !important;}
   .fc{grid-template-columns:1fr !important;}
   .ig{grid-template-columns:1fr !important;}
   section{padding:4rem 0 !important;}
+  /* Further optimize tech icons for small screens */
+  .tech-marquee{padding:1.5rem 0 !important;}
+  .tech-icon-wrapper{margin:0 1rem !important;}
+  .tech-icon-wrapper img{width:28px !important;height:28px !important;}
+  .tech-label{font-size:0.6rem !important;}
 }
 `;
 
@@ -268,7 +278,24 @@ export default function Home(){
     {q:"During his AI/ML internship, Bhagavan quickly grasped TensorFlow CNN workflows and independently implemented model evaluation pipelines in Flask. Strong self-directed learning mindset.",nm:'Internship Mentor',r:'SmartBridge (Remote) — AI/ML Intern, Smart Sorting Project'},
     {q:"He consistently takes ownership beyond assigned tasks — particularly the OAuth integration and PDF parsing for the ATS Resume Builder. Shows strong initiative and product ownership.",nm:'Project Guide',r:'Faculty Advisor · B.Tech AIDS, Ramachandra College of Engineering'},
   ];
-  const techStack=['React.js','Node.js','Express.js','MongoDB','JavaScript','Python','TensorFlow','Keras','Flask','Scikit-learn','Git','REST APIs','Postman','Java','SQL','OAuth'];
+  
+  // Tech stack with devicon names
+  const techStack=[
+    {name:'React',icon:'react'},
+    {name:'Node.js',icon:'nodejs'},
+    {name:'Express',icon:'express'},
+    {name:'MongoDB',icon:'mongodb'},
+    {name:'JavaScript',icon:'javascript'},
+    {name:'Python',icon:'python'},
+    {name:'TensorFlow',icon:'tensorflow'},
+    {name:'Flask',icon:'flask'},
+    {name:'Git',icon:'git'},
+    {name:'Java',icon:'java'},
+    {name:'MySQL',icon:'mysql'},
+    {name:'GitHub',icon:'github'},
+    {name:'Postman',icon:'postman'},
+    {name:'VSCode',icon:'vscode'},
+  ];
 
   const W={maxWidth:'1120px',margin:'0 auto',padding:'0 2rem'};
   const SH=({label,title})=>(
@@ -424,14 +451,22 @@ export default function Home(){
     </div>
   </section>
 
-  {/* ═══ TECH MARQUEE — dark band ═══ */}
-  <div style={{padding:'1.3rem 0',background:T.ink,overflow:'hidden'}}>
+  {/* ═══ TECH MARQUEE WITH ICONS — dark band ═══ */}
+  <div className="tech-marquee" style={{padding:'2rem 0',background:T.ink,overflow:'hidden'}}>
     <div className="mq">
-      {[...Array(3)].map((_,r)=>techStack.map((t,i)=>(
-        <span key={`${r}-${i}`} style={{display:'inline-flex',alignItems:'center',gap:'1.1rem',margin:'0 1.8rem',whiteSpace:'nowrap'}}>
-          <span className="mono" style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.42)',letterSpacing:'0.14em',textTransform:'uppercase'}}>{t}</span>
-          <span style={{width:'3px',height:'3px',borderRadius:'50%',background:'rgba(255,255,255,0.15)',display:'inline-block'}}/>
-        </span>
+      {[...Array(3)].map((_,r)=>techStack.map((tech,i)=>(
+        <div key={`${r}-${i}`} className="tech-icon-wrapper" style={{display:'inline-flex',flexDirection:'column',alignItems:'center',gap:'0.6rem',margin:'0 1.5rem'}}>
+          <img 
+            src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${tech.icon}/${tech.icon}-original.svg`}
+            alt={tech.name}
+            style={{width:'40px',height:'40px',filter:'invert(1) opacity(0.42)',transition:'filter 0.2s'}}
+            onMouseEnter={e=>e.currentTarget.style.filter='invert(1) opacity(0.82)'}
+            onMouseLeave={e=>e.currentTarget.style.filter='invert(1) opacity(0.42)'}
+          />
+          <span className="mono tech-label" style={{fontSize:'0.68rem',color:'rgba(255,255,255,0.32)',letterSpacing:'0.08em',textTransform:'uppercase',whiteSpace:'nowrap'}}>
+            {tech.name}
+          </span>
+        </div>
       )))}
     </div>
   </div>

@@ -154,7 +154,7 @@ function Logo({ onClick }) {
         letterSpacing: "-0.03em",
         userSelect: "none",
       }}>
-        bhagavan
+        G S S S BHAGAVAN
       </span>
     </button>
   );
