@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BookOpen, Music, Coffee, Dumbbell, Camera, Film, Gamepad2,
   Sparkles, Zap, TrendingUp, Brain, Rocket, Crown,
@@ -14,8 +12,6 @@ const C = {
   surface: "#f9fafb",
   surface2: "#f3f4f6",
   border: "rgba(0,0,0,0.06)",
-  border2: "rgba(0,0,0,0.10)",
-  border3: "rgba(0,0,0,0.14)",
   text: "#0f172a",
   muted: "#64748b",
   muted2: "#475569",
@@ -32,37 +28,7 @@ const C = {
 };
 
 const hobbiesData = [
-  {
-    id: 1,
-    title: "Reading & Research",
-    icon: BookOpen,
-    color: C.accent,
-    colorDim: C.accentDim,
-    category: "Intellectual",
-    rarity: "Legendary",
-    desc: "Deep dives into software architecture, system design, emerging tech, and philosophy.",
-    fullDesc: "Constantly exploring cutting-edge research papers, technical documentation, and thought-provoking literature. Focus areas include distributed systems, AI/ML innovations, quantum computing, and human psychology.",
-    whyItMatters: "Strengthens system-level thinking, pattern recognition, and helps design scalable, maintainable software with a philosophical approach to problem-solving.",
-    learnings: [
-      "Advanced system design patterns",
-      "Clean architecture principles",
-      "Engineering best practices",
-      "Critical thinking frameworks",
-      "Future tech trends"
-    ],
-    impact: [
-      "Improved architectural decision-making by 60%",
-      "Reduced code complexity through better abstractions",
-      "Enhanced ability to predict tech trends"
-    ],
-    stats: [
-      { label: "Books/Year", value: "36+", icon: BookOpen },
-      { label: "Research Papers", value: "100+", icon: Target },
-      { label: "Learning Hours", value: "500+", icon: Timer },
-      { label: "Knowledge Growth", value: "∞", icon: Brain }
-    ],
-    dailyRoutine: "2-3 hours daily: morning reading sessions + late-night deep dives"
-  },
+ 
   {
     id: 2,
     title: "Music Production",
@@ -290,125 +256,6 @@ const rarityConfig = {
   "Rare": { color: C.accent, icon: Star }
 };
 
-function FloatingElements() {
-  return (
-    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-      <div
-        style={{
-          position: "absolute",
-          top: "10%",
-          left: "15%",
-          width: "1px",
-          height: "200px",
-          background: `linear-gradient(180deg, transparent, ${C.accent}08, transparent)`,
-          animation: "floatVertical1 35s ease-in-out infinite",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "40%",
-          right: "20%",
-          width: "1px",
-          height: "280px",
-          background: `linear-gradient(180deg, transparent, ${C.purple}06, transparent)`,
-          animation: "floatVertical2 40s ease-in-out infinite",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "60%",
-          left: "10%",
-          width: "400px",
-          height: "400px",
-          borderRadius: "50%",
-          background: `radial-gradient(circle, ${C.green}04 0%, transparent 70%)`,
-          filter: "blur(60px)",
-          animation: "floatHorizontal1 50s linear infinite",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "20%",
-          right: "5%",
-          width: "500px",
-          height: "300px",
-          borderRadius: "50%",
-          background: `radial-gradient(ellipse, ${C.accent}03 0%, transparent 60%)`,
-          filter: "blur(80px)",
-          animation: "floatHorizontal2 60s linear infinite reverse",
-        }}
-      />
-    </div>
-  );
-}
-
-function MovingTextStrips() {
-  const strip1 = "READING · MUSIC · FITNESS · GAMING · TRAVEL · PHOTOGRAPHY · ";
-  const strip2 = "DISCIPLINE · CREATIVITY · GROWTH · BALANCE · EXCELLENCE · ";
-
-  return (
-    <>
-      <div
-        style={{
-          position: "absolute",
-          top: "30%",
-          left: 0,
-          width: "100%",
-          overflow: "hidden",
-          pointerEvents: "none",
-          opacity: 0.03,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            whiteSpace: "nowrap",
-            animation: "scrollTextRTL 45s linear infinite",
-            fontFamily: "'DM Mono', monospace",
-            fontSize: "3.5rem",
-            fontWeight: 700,
-            letterSpacing: "0.3em",
-            color: C.text,
-            filter: "blur(1px)",
-          }}
-        >
-          {strip1.repeat(10)}
-        </div>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "65%",
-          left: 0,
-          width: "100%",
-          overflow: "hidden",
-          pointerEvents: "none",
-          opacity: 0.025,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            whiteSpace: "nowrap",
-            animation: "scrollTextRTL 60s linear infinite",
-            fontFamily: "'DM Mono', monospace",
-            fontSize: "2.5rem",
-            fontWeight: 600,
-            letterSpacing: "0.25em",
-            color: C.text,
-            filter: "blur(1.5px)",
-          }}
-        >
-          {strip2.repeat(10)}
-        </div>
-      </div>
-    </>
-  );
-}
-
 function ScrollProgress() {
   const [progress, setProgress] = useState(0);
 
@@ -439,233 +286,112 @@ export default function BeyondCoding() {
   const [activeHobby, setActiveHobby] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [filterCategory, setFilterCategory] = useState("All");
-  const [headerInView, setHeaderInView] = useState(false);
-  const [cardsInView, setCardsInView] = useState(false);
-  const headerRef = useRef(null);
-  const cardsRef = useRef(null);
-
-  useEffect(() => {
-    const observers = [
-      { ref: headerRef, setter: setHeaderInView },
-      { ref: cardsRef, setter: setCardsInView },
-    ];
-
-    const observerInstances = observers.map(({ ref, setter }) => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setter(true);
-        },
-        { threshold: 0.2 }
-      );
-      if (ref.current) observer.observe(ref.current);
-      return observer;
-    });
-
-    return () => observerInstances.forEach((obs) => obs.disconnect());
-  }, []);
 
   const filteredHobbies = hobbiesData.filter(
     (h) => filterCategory === "All" || h.category === filterCategory
   );
 
   return (
-    <>
+    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "'Geist', system-ui, sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body {
-          font-family: 'Geist', system-ui, sans-serif;
-          background: ${C.bg};
-          color: ${C.text};
-          -webkit-font-smoothing: antialiased;
-        }
+        body { -webkit-font-smoothing: antialiased; }
 
-        ::selection { background: ${C.accentDim}; color: ${C.text}; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: ${C.bg}; }
-        ::-webkit-scrollbar-thumb { background: ${C.border3}; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: ${C.muted}; }
-
-        @keyframes slideInFromRight {
-          from { opacity: 0; transform: translateX(40px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideInFromBottom {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes scrollTextRTL {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        @keyframes shimmerSweep {
-          0% { left: -100%; }
-          100% { left: 100%; }
-        }
-        @keyframes floatAnimation {
+        @keyframes float {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-12px); }
         }
-        @keyframes floatVertical1 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-40px); }
+        @keyframes shimmer {
+          0% { left: -100%; }
+          100% { left: 100%; }
         }
-        @keyframes floatVertical2 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(60px); }
-        }
-        @keyframes floatHorizontal1 {
-          from { transform: translateX(0); }
-          to { transform: translateX(100vw); }
-        }
-        @keyframes floatHorizontal2 {
-          from { transform: translateX(0); }
-          to { transform: translateX(-100vw); }
-        }
-        @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 20px currentColor; }
-          50% { box-shadow: 0 0 40px currentColor; }
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateX(30px); }
+          to { opacity: 1; transform: translateX(0); }
         }
       `}</style>
 
       <ScrollProgress />
-      <FloatingElements />
-      <MovingTextStrips />
-
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        <header
-          ref={headerRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "8rem 2rem 6rem",
-            borderBottom: `1px solid ${C.border}`,
-            position: "relative",
-            opacity: headerInView ? 1 : 0,
-            transform: headerInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: "30%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "800px",
-              height: "400px",
-              borderRadius: "50%",
-              background: `radial-gradient(circle, ${C.accent}08 0%, transparent 70%)`,
-              filter: "blur(100px)",
-              pointerEvents: "none",
-            }}
-          />
-
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.8rem",
-              padding: "0.7rem 1.8rem",
-              background: C.accentDim,
-              border: `2px solid ${C.accent}40`,
-              borderRadius: "999px",
-              marginBottom: "2rem",
-              animation: "floatAnimation 3s ease-in-out infinite",
-            }}
-          >
-            <Sparkles size={18} color={C.accent} />
-            <span
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: C.accent,
-              }}
-            >
+        {/* Header */}
+        <header style={{ maxWidth: "1240px", margin: "0 auto", padding: "6rem 2rem 4rem", borderBottom: `1px solid ${C.border}` }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.8rem",
+            padding: "0.6rem 1.5rem",
+            background: C.accentDim,
+            border: `2px solid ${C.accent}40`,
+            borderRadius: "999px",
+            marginBottom: "2rem",
+          }}>
+            <Sparkles size={16} color={C.accent} />
+            <span style={{
+              fontFamily: "'Inter', monospace",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: C.accent,
+            }}>
               The Complete Developer
             </span>
-            <Flame size={18} color={C.amber} />
+            <Flame size={16} color={C.amber} />
           </div>
 
-          <h1
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(3rem, 8vw, 6.5rem)",
-              fontWeight: 700,
-              fontStyle: "italic",
-              color: C.text,
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              marginBottom: "1rem",
-              maxWidth: "1000px",
-            }}
-          >
+          <h1 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+            fontWeight: 700,
+            fontStyle: "italic",
+            color: C.text,
+            lineHeight: 1.1,
+            marginBottom: "1rem",
+            maxWidth: "900px",
+          }}>
             Beyond the Code
           </h1>
 
-          <div
-            style={{
-              width: "200px",
-              height: "4px",
-              background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
-              borderRadius: "2px",
-              marginBottom: "2.5rem",
-              animation: headerInView ? "slideInFromRight 0.8s ease 0.2s both" : "none",
-            }}
-          />
+          <div style={{
+            width: "180px",
+            height: "4px",
+            background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+            borderRadius: "2px",
+            marginBottom: "2rem",
+          }} />
 
-          <p
-            style={{
-              fontSize: "1.25rem",
-              color: C.muted2,
-              lineHeight: 1.8,
-              maxWidth: "820px",
-              marginBottom: "4rem",
-            }}
-          >
-            Elite developers aren't machines—they're multidimensional humans who fuel creativity,
+          <p style={{
+            fontSize: "1.15rem",
+            color: C.muted2,
+            lineHeight: 1.7,
+            maxWidth: "750px",
+            marginBottom: "3rem",
+          }}>
+            Elite developers aren&apos;t machines—they&apos;re multidimensional humans who fuel creativity,
             sharpen focus, and sustain excellence through intentional life design.
           </p>
 
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "1rem",
-              marginBottom: "3rem",
-            }}
-          >
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.8rem" }}>
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilterCategory(cat)}
                 style={{
-                  padding: "0.8rem 1.6rem",
+                  padding: "0.7rem 1.4rem",
                   background: filterCategory === cat ? C.accentDim : C.surface,
                   border: `2px solid ${filterCategory === cat ? C.accent + "60" : C.border}`,
                   borderRadius: "999px",
                   color: filterCategory === cat ? C.accent : C.muted2,
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.8rem",
+                  fontFamily: "'Inter', monospace",
+                  fontSize: "0.75rem",
                   fontWeight: 600,
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.04em",
                   cursor: "pointer",
-                  transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                  transition: "all 0.3s ease",
                   textTransform: "uppercase",
                 }}
               >
@@ -675,318 +401,220 @@ export default function BeyondCoding() {
           </div>
         </header>
 
-        <section
-          ref={cardsRef}
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "4rem 2rem",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(min(360px, 100%), 1fr))",
-              gap: "2rem",
-            }}
-          >
-            {filteredHobbies.map((hobby, i) => (
-              <div
-                key={hobby.id}
-                onMouseEnter={() => setHoveredId(hobby.id)}
-                onMouseLeave={() => setHoveredId(null)}
-                onClick={() => setActiveHobby(hobby)}
-                style={{
-                  background: C.surface,
-                  border: `1px solid ${hoveredId === hobby.id ? hobby.color + "40" : C.border}`,
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-                  transform: hoveredId === hobby.id ? "translateY(-8px) translateX(4px)" : "translateY(0)",
-                  boxShadow: hoveredId === hobby.id ? `0 20px 48px ${hobby.color}15` : "0 4px 16px rgba(0,0,0,0.04)",
-                  opacity: cardsInView ? 1 : 0,
-                  animation: cardsInView ? `slideInFromRight 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both` : "none",
-                  position: "relative",
-                }}
-              >
-                {hoveredId === hobby.id && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: "-100%",
-                      width: "100%",
-                      height: "100%",
-                      background: `linear-gradient(90deg, transparent, ${hobby.color}20, transparent)`,
-                      animation: "shimmerSweep 1.5s ease-in-out",
-                      pointerEvents: "none",
-                    }}
-                  />
-                )}
-
+        {/* Cards Section */}
+        <section style={{ maxWidth: "1240px", margin: "0 auto", padding: "3rem 2rem" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(340px, 100%), 1fr))",
+            gap: "2rem",
+          }}>
+            {filteredHobbies.map((hobby, i) => {
+              const IconComponent = hobby.icon;
+              const RarityIcon = rarityConfig[hobby.rarity].icon;
+              
+              return (
                 <div
+                  key={hobby.id}
+                  onMouseEnter={() => setHoveredId(hobby.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  onClick={() => setActiveHobby(hobby)}
                   style={{
-                    height: "200px",
+                    background: C.surface,
+                    border: `1px solid ${hoveredId === hobby.id ? hobby.color + "40" : C.border}`,
+                    borderRadius: "18px",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                    transform: hoveredId === hobby.id ? "translateY(-6px)" : "translateY(0)",
+                    boxShadow: hoveredId === hobby.id ? `0 16px 40px ${hobby.color}20` : "0 2px 12px rgba(0,0,0,0.04)",
+                    position: "relative",
+                    animation: `slideIn 0.6s ease ${i * 0.08}s both`,
+                  }}
+                >
+                  {/* Card Header with Icon */}
+                  <div style={{
+                    height: "180px",
                     background: `linear-gradient(135deg, ${hobby.colorDim}, ${C.surface2})`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: `radial-gradient(circle at 50% 50%, ${hobby.color}20 0%, transparent 70%)`,
-                      animation: hoveredId === hobby.id ? "pulseGlow 2s infinite" : "none",
-                    }}
-                  />
-
-                  <div
-                    style={{
-                      width: "110px",
-                      height: "110px",
+                  }}>
+                    <div style={{
+                      width: "100px",
+                      height: "100px",
                       border: `3px solid ${hobby.color}`,
-                      borderRadius: "20px",
+                      borderRadius: "18px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       background: C.surface,
-                      position: "relative",
-                      zIndex: 1,
-                      animation: hoveredId === hobby.id ? "floatAnimation 2s ease-in-out infinite" : "none",
-                      boxShadow: `0 0 30px ${hobby.color}30`,
-                    }}
-                  >
-                    <hobby.icon
-                      size={56}
-                      color={hobby.color}
-                      style={{
-                        transition: "transform 0.3s ease",
-                        transform: hoveredId === hobby.id ? "scale(1.1) rotate(5deg)" : "scale(1)",
-                      }}
-                    />
-                  </div>
+                      boxShadow: `0 0 25px ${hobby.color}30`,
+                    }}>
+                      <IconComponent size={50} color={hobby.color} />
+                    </div>
 
-                  <div
-                    style={{
+                    <div style={{
                       position: "absolute",
                       top: "1rem",
                       right: "1rem",
-                      padding: "0.4rem 1rem",
+                      padding: "0.35rem 0.9rem",
                       background: `${rarityConfig[hobby.rarity].color}15`,
                       border: `2px solid ${rarityConfig[hobby.rarity].color}`,
                       borderRadius: "999px",
-                      fontSize: "0.7rem",
+                      fontSize: "0.65rem",
                       fontWeight: 700,
                       color: rarityConfig[hobby.rarity].color,
                       display: "flex",
                       alignItems: "center",
-                      gap: "0.4rem",
-                      fontFamily: "'DM Mono', monospace",
+                      gap: "0.35rem",
                       textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    {React.createElement(rarityConfig[hobby.rarity].icon, { size: 14 })}
-                    {hobby.rarity}
+                      letterSpacing: "0.04em",
+                    }}>
+                      <RarityIcon size={12} />
+                      {hobby.rarity}
+                    </div>
                   </div>
-                </div>
 
-                <div style={{ padding: "2rem" }}>
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
+                  {/* Card Content */}
+                  <div style={{ padding: "1.8rem" }}>
+                    <div style={{
+                      fontSize: "0.7rem",
                       color: hobby.color,
-                      fontFamily: "'DM Mono', monospace",
-                      marginBottom: "0.8rem",
+                      marginBottom: "0.7rem",
                       fontWeight: 700,
-                      letterSpacing: "0.1em",
+                      letterSpacing: "0.08em",
                       textTransform: "uppercase",
-                    }}
-                  >
-                    {hobby.category}
-                  </div>
+                    }}>
+                      {hobby.category}
+                    </div>
 
-                  <h3
-                    style={{
+                    <h3 style={{
                       fontFamily: "'Playfair Display', serif",
-                      fontSize: "1.5rem",
+                      fontSize: "1.4rem",
                       fontWeight: 700,
                       fontStyle: "italic",
                       color: C.text,
-                      marginBottom: "1rem",
+                      marginBottom: "0.9rem",
                       lineHeight: 1.3,
-                    }}
-                  >
-                    {hobby.title}
-                  </h3>
+                    }}>
+                      {hobby.title}
+                    </h3>
 
-                  <p
-                    style={{
-                      fontSize: "0.95rem",
+                    <p style={{
+                      fontSize: "0.9rem",
                       color: C.muted2,
                       lineHeight: 1.6,
-                      marginBottom: "1.5rem",
-                    }}
-                  >
-                    {hobby.desc}
-                  </p>
+                      marginBottom: "1.3rem",
+                    }}>
+                      {hobby.desc}
+                    </p>
 
-                  <div
-                    style={{
+                    {/* Stats Grid */}
+                    <div style={{
                       display: "grid",
                       gridTemplateColumns: "repeat(2, 1fr)",
-                      gap: "0.8rem",
-                      marginBottom: "1.5rem",
-                    }}
-                  >
-                    {hobby.stats.slice(0, 4).map((stat, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          padding: "1rem",
-                          background: C.surface2,
-                          border: `1px solid ${C.border}`,
-                          borderRadius: "12px",
-                          textAlign: "center",
-                          transition: "all 0.3s ease",
-                        }}
-                      >
-                        <stat.icon size={18} color={hobby.color} style={{ marginBottom: "0.5rem" }} />
-                        <div
-                          style={{
-                            fontFamily: "'Playfair Display', serif",
-                            fontSize: "1.4rem",
-                            fontWeight: 700,
-                            fontStyle: "italic",
-                            color: hobby.color,
-                          }}
-                        >
-                          {stat.value}
-                        </div>
-                        <div style={{ fontSize: "0.7rem", color: C.muted, marginTop: "0.25rem" }}>
-                          {stat.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      gap: "0.7rem",
+                      marginBottom: "1.3rem",
+                    }}>
+                      {hobby.stats.slice(0, 4).map((stat, idx) => {
+                        const StatIcon = stat.icon;
+                        return (
+                          <div key={idx} style={{
+                            padding: "0.9rem",
+                            background: C.surface2,
+                            border: `1px solid ${C.border}`,
+                            borderRadius: "10px",
+                            textAlign: "center",
+                          }}>
+                            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.4rem" }}>
+                              <StatIcon size={16} color={hobby.color} />
+                            </div>
+                            <div style={{
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: "1.3rem",
+                              fontWeight: 700,
+                              fontStyle: "italic",
+                              color: hobby.color,
+                            }}>
+                              {stat.value}
+                            </div>
+                            <div style={{ fontSize: "0.65rem", color: C.muted, marginTop: "0.2rem" }}>
+                              {stat.label}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
 
-                  <button
-                    style={{
+                    {/* Explore Button */}
+                    <button style={{
                       width: "100%",
-                      padding: "1rem",
+                      padding: "0.9rem",
                       background: hobby.colorDim,
                       border: `2px solid ${hobby.color}40`,
-                      borderRadius: "12px",
+                      borderRadius: "10px",
                       fontWeight: 700,
-                      fontSize: "0.9rem",
+                      fontSize: "0.85rem",
                       color: hobby.color,
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "0.8rem",
-                      transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-                      fontFamily: "'DM Mono', monospace",
+                      gap: "0.7rem",
+                      transition: "all 0.3s ease",
                       textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    <Sparkles size={18} />
-                    Explore Deep Dive
-                    <ArrowRight size={18} />
-                  </button>
+                      letterSpacing: "0.04em",
+                    }}>
+                      <Sparkles size={16} />
+                      Explore Deep Dive
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
-        <section
-          style={{
-            maxWidth: "1240px",
-            margin: "0 auto",
-            padding: "0 2rem 8rem",
-          }}
-        >
-          <div
-            style={{
-              textAlign: "center",
-              padding: "4rem 3rem",
-              background: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%)`,
-              border: `2px solid transparent`,
-              backgroundImage: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%), linear-gradient(90deg, ${C.accent}40, ${C.purple}40)`,
-              backgroundOrigin: "border-box",
-              backgroundClip: "padding-box, border-box",
-              borderRadius: "24px",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "600px",
-                height: "300px",
-                background: `radial-gradient(circle, ${C.accent}15 0%, transparent 70%)`,
-                filter: "blur(80px)",
-                pointerEvents: "none",
-              }}
-            />
-
+        {/* CTA Section */}
+        <section style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 2rem 6rem" }}>
+          <div style={{
+            textAlign: "center",
+            padding: "3.5rem 2.5rem",
+            background: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%)`,
+            border: `2px solid ${C.accent}40`,
+            borderRadius: "22px",
+            position: "relative",
+          }}>
             <div style={{ position: "relative", zIndex: 1 }}>
-              <Rocket
-                size={60}
-                color={C.accent}
-                style={{
-                  margin: "0 auto 1.5rem",
-                  animation: "floatAnimation 3s ease-in-out infinite",
-                  filter: `drop-shadow(0 0 20px ${C.accent})`,
-                }}
-              />
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.3rem" }}>
+                <Rocket size={52} color={C.accent} style={{ animation: "float 3s ease-in-out infinite" }} />
+              </div>
 
-              <h2
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                  fontWeight: 700,
-                  fontStyle: "italic",
-                  color: C.text,
-                  marginBottom: "1.5rem",
-                  letterSpacing: "-0.01em",
-                }}
-              >
+              <h2 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+                fontWeight: 700,
+                fontStyle: "italic",
+                color: C.text,
+                marginBottom: "1.3rem",
+              }}>
                 Build a Legendary Life
               </h2>
 
-              <p
-                style={{
-                  fontSize: "1.2rem",
-                  color: C.muted2,
-                  maxWidth: "720px",
-                  margin: "0 auto 3rem",
-                  lineHeight: 1.8,
-                }}
-              >
-                Great code comes from great people. Let's connect and inspire each other
+              <p style={{
+                fontSize: "1.1rem",
+                color: C.muted2,
+                maxWidth: "650px",
+                margin: "0 auto 2.5rem",
+                lineHeight: 1.7,
+              }}>
+                Great code comes from great people. Let&apos;s connect and inspire each other
                 to build exceptional software AND exceptional lives.
               </p>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "1.5rem",
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                }}
-              >
+              <div style={{ display: "flex", gap: "1.2rem", justifyContent: "center", flexWrap: "wrap" }}>
                 <a
                   href="https://github.com/bhagavan444"
                   target="_blank"
@@ -994,22 +622,21 @@ export default function BeyondCoding() {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "0.8rem",
-                    padding: "1rem 2rem",
+                    gap: "0.7rem",
+                    padding: "0.9rem 1.8rem",
                     background: C.accentDim,
                     border: `2px solid ${C.accent}60`,
-                    borderRadius: "12px",
+                    borderRadius: "10px",
                     color: C.accent,
                     fontWeight: 700,
-                    fontSize: "1rem",
+                    fontSize: "0.95rem",
                     textDecoration: "none",
-                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-                    fontFamily: "'DM Mono', monospace",
+                    transition: "all 0.3s ease",
                     textTransform: "uppercase",
-                    letterSpacing: "0.05em",
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  <Github size={20} />
+                  <Github size={18} />
                   View Projects
                 </a>
 
@@ -1018,23 +645,22 @@ export default function BeyondCoding() {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "0.8rem",
-                    padding: "1rem 2rem",
+                    gap: "0.7rem",
+                    padding: "0.9rem 1.8rem",
                     background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`,
-                    borderRadius: "12px",
+                    borderRadius: "10px",
                     color: "#fff",
                     fontWeight: 700,
-                    fontSize: "1rem",
+                    fontSize: "0.95rem",
                     textDecoration: "none",
-                    boxShadow: `0 15px 40px ${C.accent}40`,
-                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-                    fontFamily: "'DM Mono', monospace",
+                    boxShadow: `0 12px 32px ${C.accent}35`,
+                    transition: "all 0.3s ease",
                     textTransform: "uppercase",
-                    letterSpacing: "0.05em",
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  <Mail size={20} />
-                  Let's Connect
+                  <Mail size={18} />
+                  Let&apos;s Connect
                 </a>
               </div>
             </div>
@@ -1042,225 +668,200 @@ export default function BeyondCoding() {
         </section>
       </div>
 
+      {/* Modal */}
       {activeHobby && (
         <div
           onClick={() => setActiveHobby(null)}
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,0.95)",
-            backdropFilter: "blur(20px)",
+            background: "rgba(0,0,0,0.92)",
+            backdropFilter: "blur(12px)",
             zIndex: 9999,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: "2rem",
             overflowY: "auto",
-            animation: "slideInFromBottom 0.4s ease-out",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              maxWidth: "1100px",
+              maxWidth: "1000px",
               width: "100%",
               maxHeight: "90vh",
               overflowY: "auto",
               background: C.surface,
-              borderRadius: "28px",
+              borderRadius: "24px",
               position: "relative",
               border: `2px solid ${activeHobby.color}40`,
-              boxShadow: `0 0 80px ${activeHobby.color}30`,
+              boxShadow: `0 0 60px ${activeHobby.color}25`,
             }}
           >
             <button
               onClick={() => setActiveHobby(null)}
               style={{
                 position: "absolute",
-                top: "1.5rem",
-                right: "1.5rem",
-                background: "rgba(255,0,0,0.15)",
+                top: "1.3rem",
+                right: "1.3rem",
+                background: "rgba(255,0,0,0.12)",
                 border: "2px solid #ff4444",
                 borderRadius: "50%",
-                width: "48px",
-                height: "48px",
+                width: "44px",
+                height: "44px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#ff4444",
                 cursor: "pointer",
                 zIndex: 10,
-                transition: "all 0.3s ease",
               }}
             >
-              <X size={24} />
+              <X size={22} />
             </button>
 
-            <div style={{ padding: "clamp(2.5rem, 5vw, 4rem)" }}>
-              <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-                <div
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    margin: "0 auto 1.5rem",
-                    border: `3px solid ${activeHobby.color}`,
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: activeHobby.colorDim,
-                    boxShadow: `0 0 40px ${activeHobby.color}40`,
-                    animation: "floatAnimation 3s ease-in-out infinite",
-                  }}
-                >
-                  <activeHobby.icon size={60} color={activeHobby.color} />
+            <div style={{ padding: "3rem 2.5rem" }}>
+              {/* Modal Header */}
+              <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+                <div style={{
+                  width: "110px",
+                  height: "110px",
+                  margin: "0 auto 1.2rem",
+                  border: `3px solid ${activeHobby.color}`,
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: activeHobby.colorDim,
+                  boxShadow: `0 0 35px ${activeHobby.color}35`,
+                }}>
+                  <activeHobby.icon size={55} color={activeHobby.color} />
                 </div>
 
-                <div
-                  style={{
-                    fontSize: "0.9rem",
-                    color: activeHobby.color,
-                    fontWeight: 700,
-                    marginBottom: "1rem",
-                    fontFamily: "'DM Mono', monospace",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                  }}
-                >
+                <div style={{
+                  fontSize: "0.85rem",
+                  color: activeHobby.color,
+                  fontWeight: 700,
+                  marginBottom: "0.9rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                }}>
                   {activeHobby.rarity} • {activeHobby.category}
                 </div>
 
-                <h2
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "clamp(2rem, 5vw, 3.5rem)",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: C.text,
-                    marginBottom: "1rem",
-                  }}
-                >
+                <h2 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "clamp(1.8rem, 4.5vw, 3rem)",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: C.text,
+                  marginBottom: "0.9rem",
+                }}>
                   {activeHobby.title}
                 </h2>
 
-                <p
-                  style={{
-                    fontSize: "1.1rem",
-                    color: C.muted2,
-                    maxWidth: "750px",
-                    margin: "0 auto",
-                    lineHeight: 1.7,
-                  }}
-                >
+                <p style={{
+                  fontSize: "1.05rem",
+                  color: C.muted2,
+                  maxWidth: "700px",
+                  margin: "0 auto",
+                  lineHeight: 1.65,
+                }}>
                   {activeHobby.fullDesc}
                 </p>
               </div>
 
-              <div style={{ marginBottom: "3rem" }}>
-                <h3
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: activeHobby.color,
-                    marginBottom: "1.5rem",
-                    textAlign: "center",
-                  }}
-                >
+              {/* Why It Matters */}
+              <div style={{ marginBottom: "2.5rem" }}>
+                <h3 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.7rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: activeHobby.color,
+                  marginBottom: "1.2rem",
+                  textAlign: "center",
+                }}>
                   Why It Matters
                 </h3>
-                <p
-                  style={{
-                    fontSize: "1.05rem",
-                    color: C.muted2,
-                    lineHeight: 1.7,
-                    textAlign: "center",
-                    maxWidth: "850px",
-                    margin: "0 auto",
-                  }}
-                >
+                <p style={{
+                  fontSize: "1rem",
+                  color: C.muted2,
+                  lineHeight: 1.65,
+                  textAlign: "center",
+                  maxWidth: "800px",
+                  margin: "0 auto",
+                }}>
                   {activeHobby.whyItMatters}
                 </p>
               </div>
 
-              <div style={{ marginBottom: "3rem" }}>
-                <h3
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: activeHobby.color,
-                    marginBottom: "1.5rem",
-                    textAlign: "center",
-                  }}
-                >
+              {/* Key Learnings */}
+              <div style={{ marginBottom: "2.5rem" }}>
+                <h3 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.7rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: activeHobby.color,
+                  marginBottom: "1.2rem",
+                  textAlign: "center",
+                }}>
                   Key Learnings
                 </h3>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "1rem",
-                  }}
-                >
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                  gap: "0.9rem",
+                }}>
                   {activeHobby.learnings.map((item, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: "1.2rem",
-                        background: activeHobby.colorDim,
-                        border: `2px solid ${activeHobby.color}30`,
-                        borderRadius: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "1rem",
-                        transition: "all 0.3s ease",
-                      }}
-                    >
-                      <CheckCircle2 size={20} color={activeHobby.color} style={{ flexShrink: 0 }} />
-                      <span style={{ color: C.text, fontSize: "0.95rem" }}>{item}</span>
+                    <div key={idx} style={{
+                      padding: "1.1rem",
+                      background: activeHobby.colorDim,
+                      border: `2px solid ${activeHobby.color}28`,
+                      borderRadius: "10px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.9rem",
+                    }}>
+                      <CheckCircle2 size={18} color={activeHobby.color} style={{ flexShrink: 0 }} />
+                      <span style={{ color: C.text, fontSize: "0.9rem" }}>{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ marginBottom: "3rem" }}>
-                <h3
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: activeHobby.color,
-                    marginBottom: "1.5rem",
-                    textAlign: "center",
-                  }}
-                >
+              {/* Measurable Impact */}
+              <div style={{ marginBottom: "2.5rem" }}>
+                <h3 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.7rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: activeHobby.color,
+                  marginBottom: "1.2rem",
+                  textAlign: "center",
+                }}>
                   Measurable Impact
                 </h3>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                    gap: "1.5rem",
-                  }}
-                >
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                  gap: "1.2rem",
+                }}>
                   {activeHobby.impact.map((item, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: "1.8rem",
-                        background: C.surface2,
-                        border: `2px solid ${C.border}`,
-                        borderRadius: "14px",
-                        textAlign: "center",
-                        transition: "all 0.3s ease",
-                      }}
-                    >
-                      <Trophy size={32} color={activeHobby.color} style={{ marginBottom: "1rem" }} />
-                      <div style={{ fontSize: "1.1rem", fontWeight: 600, color: C.text, lineHeight: 1.5 }}>
+                    <div key={idx} style={{
+                      padding: "1.6rem",
+                      background: C.surface2,
+                      border: `2px solid ${C.border}`,
+                      borderRadius: "12px",
+                      textAlign: "center",
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.9rem" }}>
+                        <Trophy size={30} color={activeHobby.color} />
+                      </div>
+                      <div style={{ fontSize: "1.05rem", fontWeight: 600, color: C.text, lineHeight: 1.5 }}>
                         {item}
                       </div>
                     </div>
@@ -1268,109 +869,99 @@ export default function BeyondCoding() {
                 </div>
               </div>
 
-              <div style={{ marginBottom: "3rem" }}>
-                <h3
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "1.8rem",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    color: activeHobby.color,
-                    marginBottom: "1.5rem",
-                    textAlign: "center",
-                  }}
-                >
+              {/* Stats Overview */}
+              <div style={{ marginBottom: "2.5rem" }}>
+                <h3 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.7rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: activeHobby.color,
+                  marginBottom: "1.2rem",
+                  textAlign: "center",
+                }}>
                   Stats Overview
                 </h3>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                    gap: "1.5rem",
-                  }}
-                >
-                  {activeHobby.stats.map((stat, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: "1.8rem",
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gap: "1.2rem",
+                }}>
+                  {activeHobby.stats.map((stat, idx) => {
+                    const StatIcon = stat.icon;
+                    return (
+                      <div key={idx} style={{
+                        padding: "1.6rem",
                         background: C.surface2,
                         border: `2px solid ${C.border}`,
-                        borderRadius: "14px",
+                        borderRadius: "12px",
                         textAlign: "center",
-                        transition: "all 0.3s ease",
-                      }}
-                    >
-                      <stat.icon size={28} color={activeHobby.color} style={{ marginBottom: "0.8rem" }} />
-                      <div
-                        style={{
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.7rem" }}>
+                          <StatIcon size={26} color={activeHobby.color} />
+                        </div>
+                        <div style={{
                           fontFamily: "'Playfair Display', serif",
-                          fontSize: "2rem",
+                          fontSize: "1.9rem",
                           fontWeight: 700,
                           fontStyle: "italic",
                           color: activeHobby.color,
-                        }}
-                      >
-                        {stat.value}
+                        }}>
+                          {stat.value}
+                        </div>
+                        <div style={{ color: C.muted, fontSize: "0.85rem", marginTop: "0.4rem" }}>
+                          {stat.label}
+                        </div>
                       </div>
-                      <div style={{ color: C.muted, fontSize: "0.9rem", marginTop: "0.5rem" }}>
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              <div
-                style={{
-                  padding: "2rem",
-                  background: activeHobby.colorDim,
-                  border: `2px solid ${activeHobby.color}40`,
-                  borderRadius: "16px",
-                  marginBottom: "2rem",
-                }}
-              >
-                <h4
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    color: activeHobby.color,
-                    fontSize: "1.4rem",
-                    fontWeight: 700,
-                    fontStyle: "italic",
-                    marginBottom: "1rem",
-                    textAlign: "center",
-                  }}
-                >
+              {/* Daily Routine */}
+              <div style={{
+                padding: "1.8rem",
+                background: activeHobby.colorDim,
+                border: `2px solid ${activeHobby.color}38`,
+                borderRadius: "14px",
+                marginBottom: "1.8rem",
+              }}>
+                <h4 style={{
+                  fontFamily: "'Playfair Display', serif",
+                  color: activeHobby.color,
+                  fontSize: "1.3rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  marginBottom: "0.9rem",
+                  textAlign: "center",
+                }}>
                   Daily Routine
                 </h4>
-                <p
-                  style={{
-                    color: C.text,
-                    textAlign: "center",
-                    lineHeight: 1.6,
-                    fontSize: "1.05rem",
-                  }}
-                >
+                <p style={{
+                  color: C.text,
+                  textAlign: "center",
+                  lineHeight: 1.6,
+                  fontSize: "1rem",
+                }}>
                   {activeHobby.dailyRoutine}
                 </p>
               </div>
 
+              {/* Close Button */}
               <div style={{ textAlign: "center" }}>
                 <button
                   onClick={() => setActiveHobby(null)}
                   style={{
-                    padding: "1rem 3rem",
+                    padding: "0.9rem 2.8rem",
                     background: "rgba(255,100,100,0.1)",
                     border: "2px solid #ff6666",
-                    borderRadius: "12px",
+                    borderRadius: "10px",
                     color: "#ff6666",
                     fontWeight: 700,
-                    fontSize: "1rem",
+                    fontSize: "0.95rem",
                     cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    fontFamily: "'DM Mono', monospace",
                     textTransform: "uppercase",
-                    letterSpacing: "0.05em",
+                    letterSpacing: "0.04em",
                   }}
                 >
                   Close Deep Dive
@@ -1380,6 +971,6 @@ export default function BeyondCoding() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

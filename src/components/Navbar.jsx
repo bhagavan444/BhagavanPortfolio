@@ -55,9 +55,8 @@ const SECONDARY = [
   { label: "Competitions",   path: "/hackathons",     Icon: Trophy        },
   { label: "Achievements",   path: "/achivements",    Icon: Award         },
   { label: "Workshops",      path: "/workshops",      Icon: FileText      },
-  { label: "Beyound Academics",         path: "/beyondcoding", Icon: FileText      },
+  { label: "Beyond Academics", path: "/beyondcoding", Icon: FileText      },
   { label: "Resume",         path: "/resume",         Icon: FileText      },
-  
 ];
 
 /* ─────────────────────────────────────────────────────────────────
@@ -405,39 +404,51 @@ function ResumeButton({ onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   HAMBURGER
+   HAMBURGER - IMPROVED FOR MOBILE
 ───────────────────────────────────────────────────────────────── */
 function HamburgerButton({ onClick }) {
-  const [hov, setHov] = useState(false);
+  const [press, setPress] = useState(false);
 
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        setPress(true);
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        setPress(false);
+        onClick();
+      }}
+      onMouseDown={() => setPress(true)}
+      onMouseUp={() => setPress(false)}
       aria-label="Open navigation"
       style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "34px",
-        height: "34px",
-        background: hov ? DS.surfHover : "transparent",
-        border: `1px solid ${hov ? "rgba(0,0,0,0.08)" : "transparent"}`,
-        borderRadius: "7px",
+        width: "40px",
+        height: "40px",
+        background: press ? DS.surfActive : "transparent",
+        border: `1.5px solid ${press ? DS.accent + "40" : "rgba(0,0,0,0.08)"}`,
+        borderRadius: "8px",
         cursor: "pointer",
-        color: DS.inkMid,
-        transition: `background ${DS.msFast} ${DS.ease}, border-color ${DS.msFast} ${DS.ease}`,
+        color: press ? DS.accent : DS.inkMid,
+        transform: press ? "scale(0.92)" : "scale(1)",
+        transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
+        WebkitTapHighlightColor: "transparent",
+        touchAction: "manipulation",
       }}
     >
-      <Menu size={16} strokeWidth={2} />
+      <Menu size={19} strokeWidth={2} />
     </button>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   MOBILE BOTTOM SHEET
+   MOBILE BOTTOM SHEET - FIXED ROUTING
    iOS Settings-sheet feel. Sparse. Touch-native.
 ───────────────────────────────────────────────────────────────── */
 function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
@@ -538,6 +549,7 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
               cursor: "pointer",
               color: DS.inkMid,
               outline: "none",
+              WebkitTapHighlightColor: "transparent",
             }}
           >
             <X size={14} strokeWidth={2} />
@@ -554,7 +566,7 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
               key={path}
               label={label}
               active={currentRoute === path}
-              onClick={() => { onNavigate(path); onClose(); }}
+              onClick={() => onNavigate(path)}
             />
           ))}
 
@@ -568,14 +580,14 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
               label={label}
               Icon={Icon}
               active={currentRoute === path}
-              onClick={() => { onNavigate(path); onClose(); }}
+              onClick={() => onNavigate(path)}
             />
           ))}
 
           {/* CTA */}
           <div style={{ padding: `${DS.sp(2)} ${DS.sp(1)} ${DS.sp(1)}` }}>
             <button
-              onClick={() => { onNavigate("/resume"); onClose(); }}
+              onClick={() => onNavigate("/resume")}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -593,6 +605,7 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
                 color: "#fff",
                 letterSpacing: "-0.01em",
                 outline: "none",
+                WebkitTapHighlightColor: "transparent",
               }}
             >
               <FileText size={15} strokeWidth={2} />
@@ -622,25 +635,27 @@ function SheetGroupLabel({ children }) {
 }
 
 function SheetRow({ label, Icon, active, onClick }) {
-  const [hov, setHov] = useState(false);
+  const [press, setPress] = useState(false);
 
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+      onTouchStart={() => setPress(true)}
+      onTouchEnd={() => setPress(false)}
+      onMouseDown={() => setPress(true)}
+      onMouseUp={() => setPress(false)}
       aria-current={active ? "page" : undefined}
       style={{
         display: "flex",
         alignItems: "center",
         gap: DS.sp(1.5),
         width: "100%",
-        minHeight: "42px",
-        padding: `${DS.sp(1.125)} ${DS.sp(1)}`,
+        minHeight: "44px",
+        padding: `${DS.sp(1.25)} ${DS.sp(1)}`,
         marginBottom: "1px",
-        background: active ? DS.surfActive : hov ? DS.surfHover : "transparent",
+        background: active ? DS.surfActive : press ? DS.surfHover : "transparent",
         border: active ? "1px solid rgba(0,102,255,0.1)" : "1px solid transparent",
-        borderRadius: "7px",
+        borderRadius: "8px",
         cursor: "pointer",
         fontFamily: DS.fontSans,
         fontSize: "14px",
@@ -651,6 +666,8 @@ function SheetRow({ label, Icon, active, onClick }) {
         lineHeight: 1,
         transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}`,
         outline: "none",
+        WebkitTapHighlightColor: "transparent",
+        touchAction: "manipulation",
       }}
     >
       {Icon
@@ -738,9 +755,15 @@ export default function Navbar() {
   }, [location.pathname]);
 
   const go = useCallback((path) => {
-    if (!path || path === route) return;
+    if (!path || path === route) {
+      setMobileOpen(false);
+      return;
+    }
     navigate(path);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setMobileOpen(false);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 50);
   }, [navigate, route]);
 
   /* ── Computed values ── */
