@@ -58,8 +58,9 @@ const T = {
 ═══════════════════════════════════════════════════════════════ */
 const PRIMARY_NAV = [
   { label: "About", path: "/home", Icon: User },
-  { label: "Projects", path: "/projects", Icon: FolderGit2 },
   { label: "Skills", path: "/myskills", Icon: Code2 },
+  { label: "Projects", path: "/projects", Icon: FolderGit2 },
+  
   { label: "Experience", path: "/internships", Icon: Briefcase },
   { label: "Contact", path: "/contact", Icon: Mail },
 ];
