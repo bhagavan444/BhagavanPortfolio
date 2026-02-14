@@ -1,20 +1,43 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import {
   BookOpen, Music, Coffee, Dumbbell, Camera, Film, Gamepad2,
-  Sparkles, Zap, TrendingUp, Heart, Brain, Code2, Rocket, Crown,
+  Sparkles, Zap, TrendingUp, Brain, Rocket, Crown,
   Flame, Star, Target, Award, Volume2, Timer, Activity, X, CheckCircle2,
-  Headphones, Mountain, Palette, Globe, Users, Lightbulb, Wind,
-  Moon, Sun, Compass, Trophy, Gift, Smile, Eye, Podcast, Radio,
-  Github, Linkedin, Mail, ArrowRight, Play, Pause, Share2
+  Headphones, Compass, Trophy, Eye,
+  Github, Mail, ArrowRight
 } from "lucide-react";
+
+const C = {
+  bg: "#ffffff",
+  surface: "#f9fafb",
+  surface2: "#f3f4f6",
+  border: "rgba(0,0,0,0.06)",
+  border2: "rgba(0,0,0,0.10)",
+  border3: "rgba(0,0,0,0.14)",
+  text: "#0f172a",
+  muted: "#64748b",
+  muted2: "#475569",
+  accent: "#4f7fff",
+  accentDim: "rgba(79,127,255,0.08)",
+  green: "#10b981",
+  greenDim: "rgba(16,185,129,0.08)",
+  purple: "#a78bfa",
+  purpleDim: "rgba(167,139,250,0.08)",
+  amber: "#f59e0b",
+  amberDim: "rgba(245,158,11,0.08)",
+  rose: "#f43f5e",
+  roseDim: "rgba(244,63,94,0.08)",
+};
 
 const hobbiesData = [
   {
     id: 1,
     title: "Reading & Research",
     icon: BookOpen,
-    color: "#00f0ff",
+    color: C.accent,
+    colorDim: C.accentDim,
     category: "Intellectual",
     rarity: "Legendary",
     desc: "Deep dives into software architecture, system design, emerging tech, and philosophy.",
@@ -38,14 +61,14 @@ const hobbiesData = [
       { label: "Learning Hours", value: "500+", icon: Timer },
       { label: "Knowledge Growth", value: "∞", icon: Brain }
     ],
-    dailyRoutine: "2-3 hours daily: morning reading sessions + late-night deep dives",
-    favoriteBooks: ["Designing Data-Intensive Applications", "Clean Architecture", "The Pragmatic Programmer"]
+    dailyRoutine: "2-3 hours daily: morning reading sessions + late-night deep dives"
   },
   {
     id: 2,
-    title: "Music Production & Listening",
+    title: "Music Production",
     icon: Music,
-    color: "#a78bfa",
+    color: C.purple,
+    colorDim: C.purpleDim,
     category: "Creative",
     rarity: "Epic",
     desc: "Curating focus playlists, exploring sound engineering, and using music as a coding catalyst.",
@@ -66,17 +89,17 @@ const hobbiesData = [
     stats: [
       { label: "Daily Hours", value: "6+", icon: Headphones },
       { label: "Playlists Created", value: "50+", icon: Volume2 },
-      { label: "Genres Explored", value: "25+", icon: Radio },
+      { label: "Genres Explored", value: "25+", icon: Music },
       { label: "Focus Boost", value: "200%", icon: Activity }
     ],
-    dailyRoutine: "Ambient for coding • Lo-fi for planning • Electronic for debugging",
-    favoriteGenres: ["Synthwave", "Lo-fi Hip Hop", "Ambient", "Electronic"]
+    dailyRoutine: "Ambient for coding • Lo-fi for planning • Electronic for debugging"
   },
   {
     id: 3,
     title: "Coffee Culture",
     icon: Coffee,
-    color: "#ff61d2",
+    color: C.amber,
+    colorDim: C.amberDim,
     category: "Lifestyle",
     rarity: "Epic",
     desc: "Mastering the art of coffee for sustained energy, focus, and hackathon endurance.",
@@ -97,17 +120,17 @@ const hobbiesData = [
     stats: [
       { label: "Cups/Day", value: "4+", icon: Coffee },
       { label: "Brewing Methods", value: "5", icon: Zap },
-      { label: "Late Night Sprints", value: "∞", icon: Moon },
+      { label: "Late Night Sprints", value: "∞", icon: Flame },
       { label: "Energy Level", value: "MAX", icon: Rocket }
     ],
-    dailyRoutine: "Morning espresso • Afternoon cold brew • Evening pour-over",
-    favoriteBrands: ["Ethiopian Single Origin", "Colombian Medium Roast", "Vietnamese Robusta"]
+    dailyRoutine: "Morning espresso • Afternoon cold brew • Evening pour-over"
   },
   {
     id: 4,
     title: "Strategic Gaming",
     icon: Gamepad2,
-    color: "#00ff88",
+    color: C.green,
+    colorDim: C.greenDim,
     category: "Mental Training",
     rarity: "Epic",
     desc: "Competitive gaming to sharpen decision-making, reflexes, and strategic thinking.",
@@ -131,14 +154,14 @@ const hobbiesData = [
       { label: "Focus Level", value: "94%", icon: Target },
       { label: "Win Rate", value: "72%", icon: Trophy }
     ],
-    dailyRoutine: "Evening strategy sessions • Weekend competitive matches",
-    favoriteGames: ["StarCraft II", "Chess", "Civilization VI", "Valorant"]
+    dailyRoutine: "Evening strategy sessions • Weekend competitive matches"
   },
   {
     id: 5,
     title: "Cinema & Storytelling",
     icon: Film,
-    color: "#ffd700",
+    color: C.rose,
+    colorDim: C.roseDim,
     category: "Creative",
     rarity: "Rare",
     desc: "Analyzing cinematography, narrative structure, and visual storytelling techniques.",
@@ -162,14 +185,14 @@ const hobbiesData = [
       { label: "Directors Studied", value: "50+", icon: Eye },
       { label: "UX Insights", value: "∞", icon: Brain }
     ],
-    dailyRoutine: "Weekend film marathons • Evening director study sessions",
-    favoriteDirectors: ["Christopher Nolan", "Denis Villeneuve", "Quentin Tarantino"]
+    dailyRoutine: "Weekend film marathons • Evening director study sessions"
   },
   {
     id: 6,
     title: "Fitness & Discipline",
     icon: Dumbbell,
     color: "#ff6b6b",
+    colorDim: "rgba(255,107,107,0.08)",
     category: "Physical",
     rarity: "Epic",
     desc: "Building physical resilience, mental discipline, and sustainable high performance.",
@@ -193,14 +216,14 @@ const hobbiesData = [
       { label: "Endurance", value: "92%", icon: Activity },
       { label: "Mental Clarity", value: "100%", icon: Brain }
     ],
-    dailyRoutine: "Morning strength training • Evening cardio • Daily stretching",
-    focusAreas: ["Compound Lifts", "HIIT", "Yoga", "Recovery"]
+    dailyRoutine: "Morning strength training • Evening cardio • Daily stretching"
   },
   {
     id: 7,
     title: "Photography & Visual Arts",
     icon: Camera,
     color: "#ff9500",
+    colorDim: "rgba(255,149,0,0.08)",
     category: "Creative",
     rarity: "Rare",
     desc: "Capturing moments with precision, exploring composition, lighting, and visual balance.",
@@ -220,18 +243,18 @@ const hobbiesData = [
     ],
     stats: [
       { label: "Photos Taken", value: "1000+", icon: Camera },
-      { label: "Style", value: "Urban/Tech", icon: Star },
+      { label: "Style", value: "Urban", icon: Star },
       { label: "Equipment", value: "Pro", icon: Award },
       { label: "Skill Level", value: "Expert", icon: Trophy }
     ],
-    dailyRoutine: "Weekend photo walks • Golden hour sessions • Evening editing",
-    favoriteSubjects: ["Architecture", "Urban Landscapes", "Technology", "Minimalism"]
+    dailyRoutine: "Weekend photo walks • Golden hour sessions • Evening editing"
   },
   {
     id: 8,
     title: "Travel & Exploration",
-    icon: Globe,
+    icon: Compass,
     color: "#00d4ff",
+    colorDim: "rgba(0,212,255,0.08)",
     category: "Experiential",
     rarity: "Legendary",
     desc: "Exploring new cultures, perspectives, and expanding worldview through travel.",
@@ -251,961 +274,993 @@ const hobbiesData = [
     ],
     stats: [
       { label: "Places Visited", value: "15+", icon: Compass },
-      { label: "Cultures Explored", value: "10+", icon: Users },
-      { label: "Languages", value: "3", icon: Globe },
-      { label: "Perspective Gain", value: "∞", icon: Lightbulb }
+      { label: "Cultures Explored", value: "10+", icon: Star },
+      { label: "Languages", value: "3", icon: BookOpen },
+      { label: "Perspective Gain", value: "∞", icon: Brain }
     ],
-    dailyRoutine: "Planning next adventure • Virtual cultural exploration • Language learning",
-    bucketList: ["Japan (Tech Culture)", "Silicon Valley", "Iceland", "New Zealand"]
+    dailyRoutine: "Planning next adventure • Virtual cultural exploration • Language learning"
   }
 ];
 
 const categories = ["All", "Intellectual", "Creative", "Physical", "Lifestyle", "Mental Training", "Experiential"];
 
-const rarityColors = {
-  "Legendary": "#ffd700",
-  "Epic": "#a78bfa",
-  "Rare": "#00f0ff"
+const rarityConfig = {
+  "Legendary": { color: C.amber, icon: Crown },
+  "Epic": { color: C.purple, icon: Sparkles },
+  "Rare": { color: C.accent, icon: Star }
 };
 
-export default function EliteBeyondCoding() {
+function FloatingElements() {
+  return (
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "15%",
+          width: "1px",
+          height: "200px",
+          background: `linear-gradient(180deg, transparent, ${C.accent}08, transparent)`,
+          animation: "floatVertical1 35s ease-in-out infinite",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "40%",
+          right: "20%",
+          width: "1px",
+          height: "280px",
+          background: `linear-gradient(180deg, transparent, ${C.purple}06, transparent)`,
+          animation: "floatVertical2 40s ease-in-out infinite",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "60%",
+          left: "10%",
+          width: "400px",
+          height: "400px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${C.green}04 0%, transparent 70%)`,
+          filter: "blur(60px)",
+          animation: "floatHorizontal1 50s linear infinite",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "20%",
+          right: "5%",
+          width: "500px",
+          height: "300px",
+          borderRadius: "50%",
+          background: `radial-gradient(ellipse, ${C.accent}03 0%, transparent 60%)`,
+          filter: "blur(80px)",
+          animation: "floatHorizontal2 60s linear infinite reverse",
+        }}
+      />
+    </div>
+  );
+}
+
+function MovingTextStrips() {
+  const strip1 = "READING · MUSIC · FITNESS · GAMING · TRAVEL · PHOTOGRAPHY · ";
+  const strip2 = "DISCIPLINE · CREATIVITY · GROWTH · BALANCE · EXCELLENCE · ";
+
+  return (
+    <>
+      <div
+        style={{
+          position: "absolute",
+          top: "30%",
+          left: 0,
+          width: "100%",
+          overflow: "hidden",
+          pointerEvents: "none",
+          opacity: 0.03,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            whiteSpace: "nowrap",
+            animation: "scrollTextRTL 45s linear infinite",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "3.5rem",
+            fontWeight: 700,
+            letterSpacing: "0.3em",
+            color: C.text,
+            filter: "blur(1px)",
+          }}
+        >
+          {strip1.repeat(10)}
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "65%",
+          left: 0,
+          width: "100%",
+          overflow: "hidden",
+          pointerEvents: "none",
+          opacity: 0.025,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            whiteSpace: "nowrap",
+            animation: "scrollTextRTL 60s linear infinite",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "2.5rem",
+            fontWeight: 600,
+            letterSpacing: "0.25em",
+            color: C.text,
+            filter: "blur(1.5px)",
+          }}
+        >
+          {strip2.repeat(10)}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ScrollProgress() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress((window.scrollY / total) * 100);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: C.surface2, zIndex: 9998 }}>
+      <div
+        style={{
+          height: "100%",
+          width: `${progress}%`,
+          background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+          transition: "width 0.1s linear",
+        }}
+      />
+    </div>
+  );
+}
+
+export default function BeyondCoding() {
   const [activeHobby, setActiveHobby] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
   const [filterCategory, setFilterCategory] = useState("All");
-  const [scrollY, setScrollY] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
-  const canvasRef = useRef(null);
+  const [headerInView, setHeaderInView] = useState(false);
+  const [cardsInView, setCardsInView] = useState(false);
+  const headerRef = useRef(null);
+  const cardsRef = useRef(null);
 
   useEffect(() => {
-    setIsVisible(true);
+    const observers = [
+      { ref: headerRef, setter: setHeaderInView },
+      { ref: cardsRef, setter: setCardsInView },
+    ];
+
+    const observerInstances = observers.map(({ ref, setter }) => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setter(true);
+        },
+        { threshold: 0.2 }
+      );
+      if (ref.current) observer.observe(ref.current);
+      return observer;
+    });
+
+    return () => observerInstances.forEach((obs) => obs.disconnect());
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animationId;
-    let time = 0;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.size = Math.random() * 2 + 1;
-        this.color = ['#00f0ff', '#a78bfa', '#ff61d2', '#ffd700'][Math.floor(Math.random() * 4)];
-        this.opacity = Math.random() * 0.5 + 0.3;
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-
-      draw() {
-        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 6);
-        gradient.addColorStop(0, `${this.color}${Math.floor(this.opacity * 255).toString(16).padStart(2, '0')}`);
-        gradient.addColorStop(1, 'transparent');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * 6, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    const particles = Array.from({ length: 60 }, () => new Particle());
-
-    const animate = () => {
-      ctx.fillStyle = 'rgba(0,0,0,0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach(particle => {
-        particle.update();
-        particle.draw();
-      });
-
-      ctx.strokeStyle = 'rgba(0,240,255,0.1)';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 150) {
-            ctx.globalAlpha = (1 - distance / 150) * 0.3;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      ctx.globalAlpha = 1;
-
-      time += 1;
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate();
-    window.addEventListener('resize', resize);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  const filteredHobbies = hobbiesData
-    .filter(h => filterCategory === "All" || h.category === filterCategory);
+  const filteredHobbies = hobbiesData.filter(
+    (h) => filterCategory === "All" || h.category === filterCategory
+  );
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { 
-          background: linear-gradient(180deg, #00f0ff, #a78bfa); 
-          border-radius: 10px;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          overflow-x: hidden;
+          font-family: 'Geist', system-ui, sans-serif;
+          background: ${C.bg};
+          color: ${C.text};
+          -webkit-font-smoothing: antialiased;
         }
 
-        @keyframes fadeInUp { 
-          from { opacity: 0; transform: translateY(40px); } 
-          to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        @keyframes glowPulse { 
-          0%, 100% { opacity: 1; filter: brightness(1); } 
-          50% { opacity: 0.8; filter: brightness(1.2); } 
-        }
-        
-        @keyframes floatAnimation { 
-          0%, 100% { transform: translateY(0) rotate(0deg); } 
-          50% { transform: translateY(-12px) rotate(3deg); } 
-        }
-        
-        @keyframes shimmerAnimation { 
-          0% { background-position: -200% center; } 
-          100% { background-position: 200% center; } 
-        }
-        
-        @keyframes rotateAnimation { 
-          from { transform: rotate(0deg); } 
-          to { transform: rotate(360deg); } 
-        }
+        ::selection { background: ${C.accentDim}; color: ${C.text}; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: ${C.bg}; }
+        ::-webkit-scrollbar-thumb { background: ${C.border3}; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: ${C.muted}; }
 
-        @keyframes scaleIn { 
-          0% { transform: scale(0.9); opacity: 0; } 
-          100% { transform: scale(1); opacity: 1; } 
+        @keyframes slideInFromRight {
+          from { opacity: 0; transform: translateX(40px); }
+          to { opacity: 1; transform: translateX(0); }
         }
-
-        @keyframes neonGlow {
-          0%, 100% { 
-            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor; 
-          }
-          50% { 
-            box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; 
-          }
+        @keyframes slideInFromBottom {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
-        .hobby-card {
-          position: relative;
-          background: linear-gradient(135deg, rgba(15,15,35,0.98) 0%, rgba(25,15,45,0.95) 100%);
-          border: 2px solid rgba(0,240,255,0.2);
-          border-radius: 24px;
-          overflow: hidden;
-          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-          backdrop-filter: blur(20px);
+        @keyframes scrollTextRTL {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
         }
-
-        .hobby-card:hover {
-          transform: translateY(-12px) scale(1.02);
-          border-color: var(--card-color);
-          box-shadow: 0 20px 60px rgba(0,240,255,0.4);
+        @keyframes shimmerSweep {
+          0% { left: -100%; }
+          100% { left: 100%; }
         }
-
-        .hobby-card::before {
-          content: '';
-          position: absolute;
-          inset: -2px;
-          background: linear-gradient(135deg, transparent 30%, var(--card-color-alpha) 50%, transparent 70%);
-          background-size: 300% 300%;
-          animation: shimmerAnimation 4s infinite;
-          pointer-events: none;
-          border-radius: 24px;
-          opacity: 0;
-          transition: opacity 0.5s;
+        @keyframes floatAnimation {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-12px); }
         }
-
-        .hobby-card:hover::before {
-          opacity: 1;
+        @keyframes floatVertical1 {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-40px); }
         }
-
-        .filter-btn {
-          padding: 0.7rem 1.5rem;
-          background: rgba(10,10,30,0.8);
-          border: 2px solid rgba(0,240,255,0.2);
-          border-radius: 999px;
-          color: #fff;
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          font-family: 'Inter', sans-serif;
-          font-size: 0.85rem;
-          font-weight: 600;
-          position: relative;
-          overflow: hidden;
+        @keyframes floatVertical2 {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(60px); }
         }
-
-        .filter-btn::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2);
-          opacity: 0;
-          transition: opacity 0.3s;
+        @keyframes floatHorizontal1 {
+          from { transform: translateX(0); }
+          to { transform: translateX(100vw); }
         }
-
-        .filter-btn:hover, .filter-btn.active {
-          background: rgba(0,240,255,0.15);
-          border-color: #00f0ff;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(0,240,255,0.3);
+        @keyframes floatHorizontal2 {
+          from { transform: translateX(0); }
+          to { transform: translateX(-100vw); }
         }
-
-        .filter-btn.active::before {
-          opacity: 1;
-        }
-
-        .modal-content {
-          background: linear-gradient(135deg, rgba(10,10,30,0.98) 0%, rgba(20,10,40,0.95) 100%);
-          border-radius: 28px;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .modal-content::before {
-          content: '';
-          position: absolute;
-          inset: -2px;
-          background: conic-gradient(from 0deg, #00f0ff, #a78bfa, #ff61d2, #00f0ff);
-          animation: rotateAnimation 8s linear infinite;
-          z-index: -1;
-        }
-
-        .modal-content::after {
-          content: '';
-          position: absolute;
-          inset: 3px;
-          background: linear-gradient(135deg, rgba(10,10,30,0.98) 0%, rgba(20,10,40,0.95) 100%);
-          border-radius: 25px;
-          z-index: -1;
-        }
-
-        @media (max-width: 768px) {
-          .hobby-grid { 
-            grid-template-columns: 1fr !important;
-            padding: 0 0.5rem;
-          }
-          .modal-content { 
-            margin: 1rem;
-            max-height: 90vh !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .hobby-grid { gap: 2rem !important; }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 20px currentColor; }
+          50% { box-shadow: 0 0 40px currentColor; }
         }
       `}</style>
 
-      <div style={{
-        minHeight: '100vh',
-        background: '#000000',
-        color: '#e8e8f0',
-        position: 'relative',
-        overflow: 'hidden',
-        padding: 'clamp(3rem, 8vw, 6rem) 1.5rem 5rem',
-        fontFamily: "'Inter', sans-serif"
-      }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `
-            radial-gradient(ellipse at 15% 25%, rgba(0,240,255,0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 85% 75%, rgba(167,139,250,0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(255,97,210,0.04) 0%, transparent 50%)
-          `,
-          pointerEvents: 'none',
-          opacity: 0.7
-        }} />
+      <ScrollProgress />
+      <FloatingElements />
+      <MovingTextStrips />
 
-        <canvas ref={canvasRef} style={{
-          position: 'absolute',
+      <div
+        style={{
+          position: "fixed",
           inset: 0,
-          pointerEvents: 'none',
-          zIndex: 1
-        }} />
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
 
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(circle 500px at ${mousePos.x}px ${mousePos.y}px, rgba(0,240,255,0.06) 0%, transparent 50%)`,
-          pointerEvents: 'none',
-          opacity: 0.5
-        }} />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <header
+          ref={headerRef}
+          style={{
+            maxWidth: "1240px",
+            margin: "0 auto",
+            padding: "8rem 2rem 6rem",
+            borderBottom: `1px solid ${C.border}`,
+            position: "relative",
+            opacity: headerInView ? 1 : 0,
+            transform: headerInView ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "30%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "800px",
+              height: "400px",
+              borderRadius: "50%",
+              background: `radial-gradient(circle, ${C.accent}08 0%, transparent 70%)`,
+              filter: "blur(100px)",
+              pointerEvents: "none",
+            }}
+          />
 
-        <div style={{
-          position: 'relative',
-          zIndex: 10,
-          maxWidth: '1400px',
-          margin: '0 auto',
-          opacity: isVisible ? 1 : 0,
-          transition: 'opacity 0.6s ease-out'
-        }}>
-          <div style={{ 
-            textAlign: 'center', 
-            marginBottom: '5rem',
-            transform: `translateY(${scrollY * 0.2}px)`
-          }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.8rem',
-              padding: '0.7rem 1.8rem',
-              background: 'rgba(0,240,255,0.12)',
-              border: '2px solid rgba(0,240,255,0.4)',
-              borderRadius: '999px',
-              marginBottom: '1.5rem',
-              animation: 'scaleIn 0.6s ease-out, glowPulse 3s infinite',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 0 30px rgba(0,240,255,0.2)'
-            }}>
-              <Flame size={20} color="#ffd700" style={{ animation: 'floatAnimation 2s ease-in-out infinite' }} />
-              <span style={{ 
-                fontFamily: "'Space Grotesk', sans-serif", 
-                fontSize: '0.85rem', 
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.8rem",
+              padding: "0.7rem 1.8rem",
+              background: C.accentDim,
+              border: `2px solid ${C.accent}40`,
+              borderRadius: "999px",
+              marginBottom: "2rem",
+              animation: "floatAnimation 3s ease-in-out infinite",
+            }}
+          >
+            <Sparkles size={18} color={C.accent} />
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: "0.75rem",
                 fontWeight: 700,
-                letterSpacing: '2px',
-                background: 'linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                THE COMPLETE DEVELOPER
-              </span>
-              <Flame size={20} color="#ffd700" style={{ animation: 'floatAnimation 2s ease-in-out infinite' }} />
-            </div>
-
-            <h1 style={{
-              fontSize: 'clamp(3.5rem, 10vw, 7rem)',
-              fontWeight: 900,
-              background: 'linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              letterSpacing: '3px',
-              marginBottom: '1.5rem',
-              textTransform: 'uppercase',
-              fontFamily: "'Space Grotesk', sans-serif",
-              animation: 'fadeInUp 0.8s ease-out',
-              lineHeight: 1.1
-            }}>
-              BEYOND THE<br />CODE
-            </h1>
-
-            <p style={{
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
-              color: '#b8b8d8',
-              maxWidth: '900px',
-              margin: '0 auto',
-              lineHeight: 1.8,
-              animation: 'fadeInUp 1s ease-out',
-              fontWeight: 400,
-              letterSpacing: '0.3px'
-            }}>
-              Elite developers aren't machines—they're multidimensional humans who fuel creativity,
-              sharpen focus, and sustain excellence through intentional life design.
-            </p>
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: C.accent,
+              }}
+            >
+              The Complete Developer
+            </span>
+            <Flame size={18} color={C.amber} />
           </div>
 
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: '1rem',
-            marginBottom: '4rem',
-            animation: 'fadeInUp 1.2s ease-out'
-          }}>
-            {categories.map(cat => (
+          <h1
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "clamp(3rem, 8vw, 6.5rem)",
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: C.text,
+              lineHeight: 1.05,
+              letterSpacing: "-0.02em",
+              marginBottom: "1rem",
+              maxWidth: "1000px",
+            }}
+          >
+            Beyond the Code
+          </h1>
+
+          <div
+            style={{
+              width: "200px",
+              height: "4px",
+              background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+              borderRadius: "2px",
+              marginBottom: "2.5rem",
+              animation: headerInView ? "slideInFromRight 0.8s ease 0.2s both" : "none",
+            }}
+          />
+
+          <p
+            style={{
+              fontSize: "1.25rem",
+              color: C.muted2,
+              lineHeight: 1.8,
+              maxWidth: "820px",
+              marginBottom: "4rem",
+            }}
+          >
+            Elite developers aren't machines—they're multidimensional humans who fuel creativity,
+            sharpen focus, and sustain excellence through intentional life design.
+          </p>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "1rem",
+              marginBottom: "3rem",
+            }}
+          >
+            {categories.map((cat) => (
               <button
                 key={cat}
-                className={`filter-btn ${filterCategory === cat ? 'active' : ''}`}
                 onClick={() => setFilterCategory(cat)}
+                style={{
+                  padding: "0.8rem 1.6rem",
+                  background: filterCategory === cat ? C.accentDim : C.surface,
+                  border: `2px solid ${filterCategory === cat ? C.accent + "60" : C.border}`,
+                  borderRadius: "999px",
+                  color: filterCategory === cat ? C.accent : C.muted2,
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                  textTransform: "uppercase",
+                }}
               >
-                <span style={{ position: 'relative', zIndex: 1 }}>{cat}</span>
+                {cat}
               </button>
             ))}
           </div>
+        </header>
 
-          <div className="hobby-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(380px, 100%), 1fr))',
-            gap: '2.5rem',
-            marginBottom: '6rem',
-            width: '100%'
-          }}>
+        <section
+          ref={cardsRef}
+          style={{
+            maxWidth: "1240px",
+            margin: "0 auto",
+            padding: "4rem 2rem",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(360px, 100%), 1fr))",
+              gap: "2rem",
+            }}
+          >
             {filteredHobbies.map((hobby, i) => (
               <div
                 key={hobby.id}
-                className="hobby-card"
                 onMouseEnter={() => setHoveredId(hobby.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 onClick={() => setActiveHobby(hobby)}
-                style={{ 
-                  animation: `fadeInUp ${0.4 + i * 0.08}s ease-out`,
-                  animationDelay: `${i * 0.04}s`,
-                  animationFillMode: 'both',
-                  '--card-color': hobby.color,
-                  '--card-color-alpha': `${hobby.color}30`
+                style={{
+                  background: C.surface,
+                  border: `1px solid ${hoveredId === hobby.id ? hobby.color + "40" : C.border}`,
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                  transform: hoveredId === hobby.id ? "translateY(-8px) translateX(4px)" : "translateY(0)",
+                  boxShadow: hoveredId === hobby.id ? `0 20px 48px ${hobby.color}15` : "0 4px 16px rgba(0,0,0,0.04)",
+                  opacity: cardsInView ? 1 : 0,
+                  animation: cardsInView ? `slideInFromRight 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 0.1}s both` : "none",
+                  position: "relative",
                 }}
               >
-                <div style={{
-                  height: '200px',
-                  background: `linear-gradient(135deg, ${hobby.color}20, rgba(0,0,0,0.6))`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: `radial-gradient(circle at 50% 50%, ${hobby.color}30 0%, transparent 70%)`,
-                    animation: hoveredId === hobby.id ? 'scaleIn 2s ease-in-out infinite' : 'none'
-                  }} />
+                {hoveredId === hobby.id && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: "-100%",
+                      width: "100%",
+                      height: "100%",
+                      background: `linear-gradient(90deg, transparent, ${hobby.color}20, transparent)`,
+                      animation: "shimmerSweep 1.5s ease-in-out",
+                      pointerEvents: "none",
+                    }}
+                  />
+                )}
 
-                  <div style={{
-                    width: '120px',
-                    height: '120px',
-                    border: `3px solid ${hobby.color}`,
-                    borderRadius: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    zIndex: 1,
-                    animation: hoveredId === hobby.id ? 'floatAnimation 2s ease-in-out infinite' : 'none',
-                    boxShadow: hoveredId === hobby.id ? `0 0 50px ${hobby.color}` : `0 0 15px ${hobby.color}`
-                  }}>
-                    <hobby.icon size={60} color={hobby.color} style={{ filter: `drop-shadow(0 0 8px ${hobby.color})` }} />
+                <div
+                  style={{
+                    height: "200px",
+                    background: `linear-gradient(135deg, ${hobby.colorDim}, ${C.surface2})`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: `radial-gradient(circle at 50% 50%, ${hobby.color}20 0%, transparent 70%)`,
+                      animation: hoveredId === hobby.id ? "pulseGlow 2s infinite" : "none",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      width: "110px",
+                      height: "110px",
+                      border: `3px solid ${hobby.color}`,
+                      borderRadius: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: C.surface,
+                      position: "relative",
+                      zIndex: 1,
+                      animation: hoveredId === hobby.id ? "floatAnimation 2s ease-in-out infinite" : "none",
+                      boxShadow: `0 0 30px ${hobby.color}30`,
+                    }}
+                  >
+                    <hobby.icon
+                      size={56}
+                      color={hobby.color}
+                      style={{
+                        transition: "transform 0.3s ease",
+                        transform: hoveredId === hobby.id ? "scale(1.1) rotate(5deg)" : "scale(1)",
+                      }}
+                    />
                   </div>
 
-                  <div style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    left: '1rem',
-                    padding: '0.4rem 1rem',
-                    background: `${rarityColors[hobby.rarity]}20`,
-                    border: `2px solid ${rarityColors[hobby.rarity]}`,
-                    borderRadius: '999px',
-                    fontSize: '0.7rem',
-                    fontWeight: 800,
-                    color: rarityColors[hobby.rarity],
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    animation: 'neonGlow 2s infinite'
-                  }}>
-                    <Star size={14} fill={rarityColors[hobby.rarity]} />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "1rem",
+                      right: "1rem",
+                      padding: "0.4rem 1rem",
+                      background: `${rarityConfig[hobby.rarity].color}15`,
+                      border: `2px solid ${rarityConfig[hobby.rarity].color}`,
+                      borderRadius: "999px",
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: rarityConfig[hobby.rarity].color,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.4rem",
+                      fontFamily: "'DM Mono', monospace",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {React.createElement(rarityConfig[hobby.rarity].icon, { size: 14 })}
                     {hobby.rarity}
                   </div>
                 </div>
 
-                <div style={{ padding: '2rem' }}>
-                  <div style={{
-                    fontSize: '0.8rem',
-                    color: hobby.color,
-                    fontFamily: "'Fira Code', monospace",
-                    marginBottom: '0.8rem',
-                    fontWeight: 700,
-                    letterSpacing: '1.2px',
-                    textTransform: 'uppercase'
-                  }}>
+                <div style={{ padding: "2rem" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: hobby.color,
+                      fontFamily: "'DM Mono', monospace",
+                      marginBottom: "0.8rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {hobby.category}
                   </div>
 
-                  <h3 style={{
-                    fontSize: '1.6rem',
-                    fontWeight: 800,
-                    color: '#fff',
-                    marginBottom: '1rem',
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    lineHeight: 1.3
-                  }}>
+                  <h3
+                    style={{
+                      fontFamily: "'Playfair Display', serif",
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      fontStyle: "italic",
+                      color: C.text,
+                      marginBottom: "1rem",
+                      lineHeight: 1.3,
+                    }}
+                  >
                     {hobby.title}
                   </h3>
 
-                  <p style={{
-                    fontSize: '0.95rem',
-                    color: '#b8b8d8',
-                    lineHeight: 1.6,
-                    marginBottom: '1.5rem'
-                  }}>
+                  <p
+                    style={{
+                      fontSize: "0.95rem",
+                      color: C.muted2,
+                      lineHeight: 1.6,
+                      marginBottom: "1.5rem",
+                    }}
+                  >
                     {hobby.desc}
                   </p>
 
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: '0.8rem',
-                    marginBottom: '1.5rem'
-                  }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2, 1fr)",
+                      gap: "0.8rem",
+                      marginBottom: "1.5rem",
+                    }}
+                  >
                     {hobby.stats.slice(0, 4).map((stat, idx) => (
                       <div
                         key={idx}
                         style={{
-                          padding: '0.8rem',
-                          background: 'rgba(10,10,30,0.6)',
-                          borderRadius: '12px',
-                          border: `1px solid ${hobby.color}25`,
-                          textAlign: 'center'
+                          padding: "1rem",
+                          background: C.surface2,
+                          border: `1px solid ${C.border}`,
+                          borderRadius: "12px",
+                          textAlign: "center",
+                          transition: "all 0.3s ease",
                         }}
                       >
-                        <stat.icon size={18} color={hobby.color} style={{ marginBottom: '0.4rem' }} />
-                        <div style={{ fontSize: '1.2rem', fontWeight: 900, color: hobby.color, fontFamily: "'Space Grotesk', sans-serif" }}>
+                        <stat.icon size={18} color={hobby.color} style={{ marginBottom: "0.5rem" }} />
+                        <div
+                          style={{
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: "1.4rem",
+                            fontWeight: 700,
+                            fontStyle: "italic",
+                            color: hobby.color,
+                          }}
+                        >
                           {stat.value}
                         </div>
-                        <div style={{ fontSize: '0.7rem', color: '#666' }}>
+                        <div style={{ fontSize: "0.7rem", color: C.muted, marginTop: "0.25rem" }}>
                           {stat.label}
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  <button style={{
-                    width: '100%',
-                    padding: '1rem',
-                    background: `linear-gradient(90deg, ${hobby.color}, ${hobby.color}CC)`,
-                    color: '#000',
-                    border: 'none',
-                    borderRadius: '999px',
-                    fontWeight: 900,
-                    fontSize: '0.95rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.8rem',
-                    transition: 'all 0.3s',
-                    fontFamily: "'Inter', sans-serif",
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    boxShadow: `0 8px 25px ${hobby.color}35`
-                  }}>
-                    <Sparkles size={20} />
+                  <button
+                    style={{
+                      width: "100%",
+                      padding: "1rem",
+                      background: hobby.colorDim,
+                      border: `2px solid ${hobby.color}40`,
+                      borderRadius: "12px",
+                      fontWeight: 700,
+                      fontSize: "0.9rem",
+                      color: hobby.color,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.8rem",
+                      transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                      fontFamily: "'DM Mono', monospace",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    <Sparkles size={18} />
                     Explore Deep Dive
-                    <ArrowRight size={20} />
+                    <ArrowRight size={18} />
                   </button>
                 </div>
               </div>
             ))}
           </div>
+        </section>
 
-          <div style={{
-            padding: '4rem 2.5rem',
-            background: 'linear-gradient(135deg, rgba(10,10,30,0.95) 0%, rgba(25,15,45,0.85) 100%)',
-            border: '3px solid rgba(0,240,255,0.3)',
-            borderRadius: '32px',
-            textAlign: 'center',
-            position: 'relative',
-            overflow: 'hidden',
-            animation: 'fadeInUp 2s ease-out'
-          }}>
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2)',
-              opacity: 0.06,
-              pointerEvents: 'none',
-              animation: 'shimmerAnimation 5s infinite'
-            }} />
-
-            <Rocket 
-              size={70} 
-              color="#00f0ff" 
-              style={{ 
-                margin: '0 auto 1.8rem',
-                animation: 'floatAnimation 3s ease-in-out infinite',
-                filter: 'drop-shadow(0 0 25px #00f0ff)'
-              }} 
+        <section
+          style={{
+            maxWidth: "1240px",
+            margin: "0 auto",
+            padding: "0 2rem 8rem",
+          }}
+        >
+          <div
+            style={{
+              textAlign: "center",
+              padding: "4rem 3rem",
+              background: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%)`,
+              border: `2px solid transparent`,
+              backgroundImage: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%), linear-gradient(90deg, ${C.accent}40, ${C.purple}40)`,
+              backgroundOrigin: "border-box",
+              backgroundClip: "padding-box, border-box",
+              borderRadius: "24px",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "600px",
+                height: "300px",
+                background: `radial-gradient(circle, ${C.accent}15 0%, transparent 70%)`,
+                filter: "blur(80px)",
+                pointerEvents: "none",
+              }}
             />
 
-            <h2 style={{
-              fontSize: 'clamp(2.5rem, 7vw, 4.5rem)',
-              fontWeight: 900,
-              background: 'linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '1.8rem',
-              fontFamily: "'Space Grotesk', sans-serif",
-              letterSpacing: '3px'
-            }}>
-              BUILD A LEGENDARY LIFE
-            </h2>
-
-            <p style={{
-              fontSize: '1.3rem',
-              color: '#b8b8d8',
-              maxWidth: '750px',
-              margin: '0 auto 3.5rem',
-              lineHeight: 1.9,
-              fontWeight: 400
-            }}>
-              Great code comes from great people. Let's connect and inspire each other
-              to build exceptional software AND exceptional lives.
-            </p>
-
-            <div style={{
-              display: 'flex',
-              gap: '1.8rem',
-              justifyContent: 'center',
-              flexWrap: 'wrap'
-            }}>
-              <a 
-                href="https://github.com/bhagavan444" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <Rocket
+                size={60}
+                color={C.accent}
                 style={{
-                  padding: '1.3rem 3rem',
-                  background: 'rgba(0,240,255,0.12)',
-                  border: '2px solid #00f0ff',
-                  borderRadius: '999px',
-                  color: '#00f0ff',
-                  fontWeight: 900,
-                  fontSize: '1.1rem',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.9rem',
-                  transition: 'all 0.3s',
-                  fontFamily: "'Inter', sans-serif",
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase',
-                  backdropFilter: 'blur(10px)'
+                  margin: "0 auto 1.5rem",
+                  animation: "floatAnimation 3s ease-in-out infinite",
+                  filter: `drop-shadow(0 0 20px ${C.accent})`,
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,240,255,0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
+              />
+
+              <h2
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                  color: C.text,
+                  marginBottom: "1.5rem",
+                  letterSpacing: "-0.01em",
                 }}
               >
-                <Github size={24} />
-                View Projects
-              </a>
+                Build a Legendary Life
+              </h2>
 
-              <a 
-                href="mailto:g.sivasatyasaibhagavan@gmail.com" 
+              <p
                 style={{
-                  padding: '1.3rem 3rem',
-                  background: 'linear-gradient(135deg, #00f0ff, #a78bfa, #ff61d2)',
-                  borderRadius: '999px',
-                  color: '#000',
-                  fontWeight: 900,
-                  fontSize: '1.1rem',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.9rem',
-                  boxShadow: '0 15px 40px rgba(0,240,255,0.5)',
-                  transition: 'all 0.3s',
-                  fontFamily: "'Inter', sans-serif",
-                  letterSpacing: '0.5px',
-                  textTransform: 'uppercase'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 25px 60px rgba(0,240,255,0.7)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,240,255,0.5)';
+                  fontSize: "1.2rem",
+                  color: C.muted2,
+                  maxWidth: "720px",
+                  margin: "0 auto 3rem",
+                  lineHeight: 1.8,
                 }}
               >
-                <Mail size={24} />
-                Let's Connect
-              </a>
+                Great code comes from great people. Let's connect and inspire each other
+                to build exceptional software AND exceptional lives.
+              </p>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1.5rem",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <a
+                  href="https://github.com/bhagavan444"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.8rem",
+                    padding: "1rem 2rem",
+                    background: C.accentDim,
+                    border: `2px solid ${C.accent}60`,
+                    borderRadius: "12px",
+                    color: C.accent,
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                    textDecoration: "none",
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    fontFamily: "'DM Mono', monospace",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  <Github size={20} />
+                  View Projects
+                </a>
+
+                <a
+                  href="mailto:g.sivasatyasaibhagavan@gmail.com"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.8rem",
+                    padding: "1rem 2rem",
+                    background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`,
+                    borderRadius: "12px",
+                    color: "#fff",
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                    textDecoration: "none",
+                    boxShadow: `0 15px 40px ${C.accent}40`,
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    fontFamily: "'DM Mono', monospace",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  <Mail size={20} />
+                  Let's Connect
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
 
       {activeHobby && (
         <div
           onClick={() => setActiveHobby(null)}
           style={{
-            position: 'fixed',
+            position: "fixed",
             inset: 0,
-            background: 'rgba(0,0,0,0.98)',
-            backdropFilter: 'blur(20px)',
+            background: "rgba(0,0,0,0.95)",
+            backdropFilter: "blur(20px)",
             zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1.5rem',
-            overflowY: 'auto',
-            animation: 'fadeInUp 0.4s ease-out'
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "2rem",
+            overflowY: "auto",
+            animation: "slideInFromBottom 0.4s ease-out",
           }}
         >
           <div
-            onClick={e => e.stopPropagation()}
-            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
             style={{
-              maxWidth: '1200px',
-              width: '100%',
-              maxHeight: '95vh',
-              overflowY: 'auto',
-              boxShadow: `0 0 80px ${activeHobby.color}99`,
-              position: 'relative'
+              maxWidth: "1100px",
+              width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              background: C.surface,
+              borderRadius: "28px",
+              position: "relative",
+              border: `2px solid ${activeHobby.color}40`,
+              boxShadow: `0 0 80px ${activeHobby.color}30`,
             }}
           >
             <button
               onClick={() => setActiveHobby(null)}
               style={{
-                position: 'absolute',
-                top: '1.8rem',
-                right: '1.8rem',
-                background: 'rgba(255,0,0,0.25)',
-                border: '2px solid #ff4444',
-                borderRadius: '50%',
-                width: '50px',
-                height: '50px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ff4444',
-                cursor: 'pointer',
+                position: "absolute",
+                top: "1.5rem",
+                right: "1.5rem",
+                background: "rgba(255,0,0,0.15)",
+                border: "2px solid #ff4444",
+                borderRadius: "50%",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ff4444",
+                cursor: "pointer",
                 zIndex: 10,
-                transition: 'all 0.3s',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)';
-                e.currentTarget.style.background = 'rgba(255,0,0,0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-                e.currentTarget.style.background = 'rgba(255,0,0,0.25)';
+                transition: "all 0.3s ease",
               }}
             >
               <X size={24} />
             </button>
 
-            <div style={{ padding: 'clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem)' }}>
-              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <div style={{
-                  width: '140px',
-                  height: '140px',
-                  margin: '0 auto 1.5rem',
-                  border: `4px solid ${activeHobby.color}`,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: `${activeHobby.color}20`,
-                  boxShadow: `0 0 60px ${activeHobby.color}`,
-                  animation: 'floatAnimation 3s ease-in-out infinite'
-                }}>
-                  <activeHobby.icon size={70} color={activeHobby.color} />
+            <div style={{ padding: "clamp(2.5rem, 5vw, 4rem)" }}>
+              <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+                <div
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    margin: "0 auto 1.5rem",
+                    border: `3px solid ${activeHobby.color}`,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: activeHobby.colorDim,
+                    boxShadow: `0 0 40px ${activeHobby.color}40`,
+                    animation: "floatAnimation 3s ease-in-out infinite",
+                  }}
+                >
+                  <activeHobby.icon size={60} color={activeHobby.color} />
                 </div>
 
-                <div style={{
-                  fontSize: '1.2rem',
-                  color: activeHobby.color,
-                  fontWeight: 700,
-                  marginBottom: '0.8rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem',
-                  flexWrap: 'wrap'
-                }}>
-                  <Star size={22} fill={rarityColors[activeHobby.rarity]} color={rarityColors[activeHobby.rarity]} />
+                <div
+                  style={{
+                    fontSize: "0.9rem",
+                    color: activeHobby.color,
+                    fontWeight: 700,
+                    marginBottom: "1rem",
+                    fontFamily: "'DM Mono', monospace",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}
+                >
                   {activeHobby.rarity} • {activeHobby.category}
                 </div>
 
-                <h2 style={{
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                  fontWeight: 900,
-                  background: `linear-gradient(135deg, ${activeHobby.color}, #ffffff)`,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  marginBottom: '1rem',
-                  fontFamily: "'Space Grotesk', sans-serif"
-                }}>
+                <h2
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: C.text,
+                    marginBottom: "1rem",
+                  }}
+                >
                   {activeHobby.title}
                 </h2>
 
-                <p style={{
-                  fontSize: '1.2rem',
-                  color: '#d8d8f8',
-                  maxWidth: '800px',
-                  margin: '0 auto',
-                  lineHeight: 1.7
-                }}>
+                <p
+                  style={{
+                    fontSize: "1.1rem",
+                    color: C.muted2,
+                    maxWidth: "750px",
+                    margin: "0 auto",
+                    lineHeight: 1.7,
+                  }}
+                >
                   {activeHobby.fullDesc}
                 </p>
               </div>
 
-              <div style={{ marginBottom: '3rem' }}>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  color: activeHobby.color,
-                  marginBottom: '1.5rem',
-                  textAlign: 'center',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800
-                }}>
+              <div style={{ marginBottom: "3rem" }}>
+                <h3
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: activeHobby.color,
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
                   Why It Matters
                 </h3>
-                <p style={{
-                  fontSize: '1.1rem',
-                  color: '#e8e8f8',
-                  lineHeight: 1.7,
-                  textAlign: 'center',
-                  maxWidth: '900px',
-                  margin: '0 auto'
-                }}>
+                <p
+                  style={{
+                    fontSize: "1.05rem",
+                    color: C.muted2,
+                    lineHeight: 1.7,
+                    textAlign: "center",
+                    maxWidth: "850px",
+                    margin: "0 auto",
+                  }}
+                >
                   {activeHobby.whyItMatters}
                 </p>
               </div>
 
-              <div style={{ marginBottom: '3rem' }}>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  color: activeHobby.color,
-                  marginBottom: '1.5rem',
-                  textAlign: 'center',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800
-                }}>
+              <div style={{ marginBottom: "3rem" }}>
+                <h3
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: activeHobby.color,
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
                   Key Learnings
                 </h3>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '1.2rem'
-                }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "1rem",
+                  }}
+                >
                   {activeHobby.learnings.map((item, idx) => (
-                    <div key={idx} style={{
-                      padding: '1.2rem',
-                      background: `${activeHobby.color}12`,
-                      border: `2px solid ${activeHobby.color}35`,
-                      borderRadius: '14px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      transition: 'all 0.3s'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateX(6px)';
-                      e.currentTarget.style.borderColor = activeHobby.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateX(0)';
-                      e.currentTarget.style.borderColor = `${activeHobby.color}35`;
-                    }}
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "1.2rem",
+                        background: activeHobby.colorDim,
+                        border: `2px solid ${activeHobby.color}30`,
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                        transition: "all 0.3s ease",
+                      }}
                     >
-                      <CheckCircle2 size={22} color={activeHobby.color} style={{ flexShrink: 0 }} />
-                      <span style={{ color: '#e8e8f8', fontSize: '0.95rem' }}>{item}</span>
+                      <CheckCircle2 size={20} color={activeHobby.color} style={{ flexShrink: 0 }} />
+                      <span style={{ color: C.text, fontSize: "0.95rem" }}>{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '3rem' }}>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  color: activeHobby.color,
-                  marginBottom: '1.5rem',
-                  textAlign: 'center',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800
-                }}>
+              <div style={{ marginBottom: "3rem" }}>
+                <h3
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: activeHobby.color,
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
                   Measurable Impact
                 </h3>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                  gap: '1.5rem'
-                }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                    gap: "1.5rem",
+                  }}
+                >
                   {activeHobby.impact.map((item, idx) => (
-                    <div key={idx} style={{
-                      padding: '1.8rem',
-                      background: 'rgba(10,10,30,0.6)',
-                      border: `2px solid ${activeHobby.color}45`,
-                      borderRadius: '16px',
-                      textAlign: 'center',
-                      transition: 'all 0.3s'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-6px)';
-                      e.currentTarget.style.borderColor = activeHobby.color;
-                      e.currentTarget.style.boxShadow = `0 15px 35px ${activeHobby.color}35`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = `${activeHobby.color}45`;
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "1.8rem",
+                        background: C.surface2,
+                        border: `2px solid ${C.border}`,
+                        borderRadius: "14px",
+                        textAlign: "center",
+                        transition: "all 0.3s ease",
+                      }}
                     >
-                      <Trophy size={32} color={activeHobby.color} style={{ marginBottom: '0.8rem' }} />
-                      <div style={{
-                        fontSize: '1.2rem',
-                        fontWeight: 700,
-                        color: '#e8e8f8',
-                        lineHeight: 1.5
-                      }}>
+                      <Trophy size={32} color={activeHobby.color} style={{ marginBottom: "1rem" }} />
+                      <div style={{ fontSize: "1.1rem", fontWeight: 600, color: C.text, lineHeight: 1.5 }}>
                         {item}
                       </div>
                     </div>
@@ -1213,54 +1268,52 @@ export default function EliteBeyondCoding() {
                 </div>
               </div>
 
-              <div style={{ marginBottom: '3rem' }}>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  color: activeHobby.color,
-                  marginBottom: '1.5rem',
-                  textAlign: 'center',
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800
-                }}>
-                  Quantitative Stats
+              <div style={{ marginBottom: "3rem" }}>
+                <h3
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "1.8rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    color: activeHobby.color,
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Stats Overview
                 </h3>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                  gap: '1.5rem'
-                }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                    gap: "1.5rem",
+                  }}
+                >
                   {activeHobby.stats.map((stat, idx) => (
-                    <div key={idx} style={{
-                      padding: '1.8rem',
-                      background: 'rgba(10,10,30,0.6)',
-                      border: `2px solid ${activeHobby.color}45`,
-                      borderRadius: '16px',
-                      textAlign: 'center',
-                      transition: 'all 0.3s'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-6px)';
-                      e.currentTarget.style.borderColor = activeHobby.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.borderColor = `${activeHobby.color}45`;
-                    }}
+                    <div
+                      key={idx}
+                      style={{
+                        padding: "1.8rem",
+                        background: C.surface2,
+                        border: `2px solid ${C.border}`,
+                        borderRadius: "14px",
+                        textAlign: "center",
+                        transition: "all 0.3s ease",
+                      }}
                     >
-                      <stat.icon size={32} color={activeHobby.color} style={{ marginBottom: '0.8rem' }} />
-                      <div style={{
-                        fontSize: '2rem',
-                        fontWeight: 900,
-                        color: activeHobby.color,
-                        fontFamily: "'Space Grotesk', sans-serif"
-                      }}>
+                      <stat.icon size={28} color={activeHobby.color} style={{ marginBottom: "0.8rem" }} />
+                      <div
+                        style={{
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: "2rem",
+                          fontWeight: 700,
+                          fontStyle: "italic",
+                          color: activeHobby.color,
+                        }}
+                      >
                         {stat.value}
                       </div>
-                      <div style={{
-                        color: '#c8c8e8',
-                        fontSize: '0.95rem',
-                        marginTop: '0.5rem'
-                      }}>
+                      <div style={{ color: C.muted, fontSize: "0.9rem", marginTop: "0.5rem" }}>
                         {stat.label}
                       </div>
                     </div>
@@ -1268,93 +1321,56 @@ export default function EliteBeyondCoding() {
                 </div>
               </div>
 
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: window.innerWidth > 768 ? '1fr 1fr' : '1fr',
-                gap: '2rem',
-                marginBottom: '3rem'
-              }}>
-                <div style={{
-                  padding: '2rem',
-                  background: `${activeHobby.color}10`,
+              <div
+                style={{
+                  padding: "2rem",
+                  background: activeHobby.colorDim,
                   border: `2px solid ${activeHobby.color}40`,
-                  borderRadius: '20px'
-                }}>
-                  <h4 style={{
+                  borderRadius: "16px",
+                  marginBottom: "2rem",
+                }}
+              >
+                <h4
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
                     color: activeHobby.color,
-                    fontSize: '1.5rem',
-                    marginBottom: '1rem',
-                    textAlign: 'center',
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontWeight: 700
-                  }}>
-                    Daily Routine
-                  </h4>
-                  <p style={{
-                    color: '#e8e8f8',
-                    textAlign: 'center',
+                    fontSize: "1.4rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
+                    marginBottom: "1rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Daily Routine
+                </h4>
+                <p
+                  style={{
+                    color: C.text,
+                    textAlign: "center",
                     lineHeight: 1.6,
-                    fontSize: '1.05rem'
-                  }}>
-                    {activeHobby.dailyRoutine}
-                  </p>
-                </div>
-
-                {activeHobby.favoriteBooks && (
-                  <div style={{
-                    padding: '2rem',
-                    background: `${activeHobby.color}10`,
-                    border: `2px solid ${activeHobby.color}40`,
-                    borderRadius: '20px'
-                  }}>
-                    <h4 style={{
-                      color: activeHobby.color,
-                      fontSize: '1.5rem',
-                      marginBottom: '1rem',
-                      textAlign: 'center',
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 700
-                    }}>
-                      Favorite Books
-                    </h4>
-                    <ul style={{
-                      listStyle: 'none',
-                      color: '#e8e8f8',
-                      lineHeight: 1.7,
-                      fontSize: '1.05rem',
-                      padding: 0
-                    }}>
-                      {activeHobby.favoriteBooks.map((book, idx) => (
-                        <li key={idx} style={{ marginBottom: '0.5rem' }}>• {book}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                    fontSize: "1.05rem",
+                  }}
+                >
+                  {activeHobby.dailyRoutine}
+                </p>
               </div>
 
-              <div style={{ textAlign: 'center' }}>
+              <div style={{ textAlign: "center" }}>
                 <button
                   onClick={() => setActiveHobby(null)}
                   style={{
-                    padding: '1.3rem 3.5rem',
-                    background: 'rgba(255,100,100,0.2)',
-                    border: '2px solid #ff6666',
-                    borderRadius: '999px',
-                    color: '#ff6666',
-                    fontWeight: 800,
-                    fontSize: '1.1rem',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    fontFamily: "'Inter', sans-serif",
-                    textTransform: 'uppercase'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.background = 'rgba(255,100,100,0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.background = 'rgba(255,100,100,0.2)';
+                    padding: "1rem 3rem",
+                    background: "rgba(255,100,100,0.1)",
+                    border: "2px solid #ff6666",
+                    borderRadius: "12px",
+                    color: "#ff6666",
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    fontFamily: "'DM Mono', monospace",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
                   }}
                 >
                   Close Deep Dive

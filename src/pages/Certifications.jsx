@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ExternalLink, CheckCircle2, Calendar, Award, Code2, Cloud, Brain, Database, Terminal, Shield, ArrowRight, TrendingUp } from "lucide-react";
+import { ExternalLink, CheckCircle2, Calendar, Award, Code2, Cloud, Brain, Database, Terminal, Shield, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
    DESIGN TOKENS — WHITE BACKGROUND PREMIUM
@@ -25,6 +25,95 @@ const C = {
   purpleDim: "rgba(167,139,250,0.08)",
   amber: "#f59e0b",
   amberDim: "rgba(245,158,11,0.08)",
+  rose: "#f43f5e",
+  roseDim: "rgba(244,63,94,0.08)",
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILL ICON MAPPING (DevIcons with colored variants)
+═══════════════════════════════════════════════════════════════ */
+const skillIcons = {
+  // Web Development - using colored icons
+  "React": "devicon-react-original colored",
+  "Node.js": "devicon-nodejs-plain colored",
+  "MongoDB": "devicon-mongodb-plain colored",
+  "Express": "devicon-express-original",
+  "Hooks": "devicon-react-original colored",
+  "Context API": "devicon-react-original colored",
+  "Performance": "devicon-react-original colored",
+  "ES6+": "devicon-javascript-plain colored",
+  "Async/Await": "devicon-javascript-plain colored",
+  "Closures": "devicon-javascript-plain colored",
+  "Prototypes": "devicon-javascript-plain colored",
+  "Django": "devicon-django-plain colored",
+  "ORM": "devicon-django-plain colored",
+  "REST API": "devicon-fastapi-plain colored",
+  "PostgreSQL": "devicon-postgresql-plain colored",
+  "HTML5": "devicon-html5-plain colored",
+  "Accessibility": "devicon-html5-plain colored",
+  "SEO": "devicon-html5-plain colored",
+  "Web Standards": "devicon-html5-plain colored",
+  "Flexbox": "devicon-css3-plain colored",
+  "Grid": "devicon-css3-plain colored",
+  "Animations": "devicon-css3-plain colored",
+  "Responsive Design": "devicon-css3-plain colored",
+  
+  // Cloud & DevOps - colored
+  "AWS": "devicon-amazonwebservices-plain-wordmark colored",
+  "EC2": "devicon-amazonwebservices-plain-wordmark colored",
+  "S3": "devicon-amazonwebservices-plain-wordmark colored",
+  "Lambda": "devicon-amazonwebservices-plain-wordmark colored",
+  "Azure": "devicon-azure-plain colored",
+  "VMs": "devicon-azure-plain colored",
+  "Storage": "devicon-azure-plain colored",
+  "Networking": "devicon-azure-plain colored",
+  "Distributed Systems": "devicon-kubernetes-plain colored",
+  "Scalability": "devicon-kubernetes-plain colored",
+  "Fault Tolerance": "devicon-kubernetes-plain colored",
+  "Jenkins": "devicon-jenkins-plain colored",
+  "Docker": "devicon-docker-plain colored",
+  "Git": "devicon-git-plain colored",
+  "Automation": "devicon-jenkins-plain colored",
+  "Kubernetes": "devicon-kubernetes-plain colored",
+  "Model Deployment": "devicon-kubernetes-plain colored",
+  "Monitoring": "devicon-prometheus-original colored",
+  
+  // AI & ML - colored
+  "Python": "devicon-python-plain colored",
+  "Scikit-learn": "devicon-scikitlearn-plain colored",
+  "TensorFlow": "devicon-tensorflow-original colored",
+  "Keras": "devicon-keras-plain colored",
+  "Model Tuning": "devicon-python-plain colored",
+  "Neural Networks": "devicon-tensorflow-original colored",
+  "CNN": "devicon-tensorflow-original colored",
+  "RNN": "devicon-tensorflow-original colored",
+  "Transfer Learning": "devicon-tensorflow-original colored",
+  "GPT": "devicon-openai-plain",
+  "Prompt Engineering": "devicon-openai-plain",
+  "Fine-tuning": "devicon-openai-plain",
+  "Embeddings": "devicon-openai-plain",
+  
+  // Programming - colored
+  "OOP": "devicon-python-plain colored",
+  "Data Structures": "devicon-python-plain colored",
+  "Algorithms": "devicon-python-plain colored",
+  "Clean Code": "devicon-python-plain colored",
+  "Java": "devicon-java-plain colored",
+  "Spring Boot": "devicon-spring-plain colored",
+  "Maven": "devicon-maven-plain colored",
+  "Microservices": "devicon-spring-plain colored",
+  "Problem Solving": "devicon-cplusplus-plain colored",
+  "Optimization": "devicon-cplusplus-plain colored",
+  "Design Patterns": "devicon-cplusplus-plain colored",
+  "R": "devicon-r-plain colored",
+  "Statistical Computing": "devicon-r-plain colored",
+  "ggplot2": "devicon-r-plain colored",
+  "Data Viz": "devicon-r-plain colored",
+  
+  // Data Science - colored
+  "Pandas": "devicon-pandas-plain colored",
+  "NumPy": "devicon-numpy-plain colored",
+  "Data Analysis": "devicon-pandas-plain colored",
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -279,6 +368,210 @@ const certificationsData = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
+   FLOATING BACKGROUND ELEMENTS (ENHANCED)
+═══════════════════════════════════════════════════════════════ */
+function FloatingElements() {
+  return (
+    <>
+      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+        {/* Vertical drifting lines */}
+        <div
+          style={{
+            position: "absolute",
+            top: "10%",
+            left: "15%",
+            width: "1px",
+            height: "200px",
+            background: `linear-gradient(180deg, transparent, ${C.accent}08, transparent)`,
+            animation: "floatVertical1 35s ease-in-out infinite",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            right: "20%",
+            width: "1px",
+            height: "280px",
+            background: `linear-gradient(180deg, transparent, ${C.purple}06, transparent)`,
+            animation: "floatVertical2 40s ease-in-out infinite",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "70%",
+            left: "40%",
+            width: "1px",
+            height: "180px",
+            background: `linear-gradient(180deg, transparent, ${C.green}05, transparent)`,
+            animation: "floatVertical1 45s ease-in-out infinite reverse",
+          }}
+        />
+
+        {/* Circular floating shapes */}
+        <div
+          style={{
+            position: "absolute",
+            top: "60%",
+            left: "10%",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${C.green}04 0%, transparent 70%)`,
+            filter: "blur(60px)",
+            animation: "floatHorizontal1 50s linear infinite",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "20%",
+            right: "5%",
+            width: "500px",
+            height: "300px",
+            borderRadius: "50%",
+            background: `radial-gradient(ellipse, ${C.accent}03 0%, transparent 60%)`,
+            filter: "blur(80px)",
+            animation: "floatHorizontal2 60s linear infinite reverse",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "15%",
+            right: "30%",
+            width: "350px",
+            height: "350px",
+            borderRadius: "50%",
+            background: `radial-gradient(circle, ${C.purple}03 0%, transparent 65%)`,
+            filter: "blur(70px)",
+            animation: "floatHorizontal1 55s linear infinite",
+          }}
+        />
+
+        {/* Diagonal moving lines */}
+        <div
+          style={{
+            position: "absolute",
+            top: "25%",
+            left: "50%",
+            width: "300px",
+            height: "1px",
+            background: `linear-gradient(90deg, transparent, ${C.amber}06, transparent)`,
+            transform: "rotate(-15deg)",
+            animation: "floatDiagonal1 50s ease-in-out infinite",
+          }}
+        />
+      </div>
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOVING TEXT STRIPS (MULTIPLE LAYERS)
+═══════════════════════════════════════════════════════════════ */
+function MovingTextStrips() {
+  const strip1 = "CERTIFIED · PRODUCTION · VERIFIED · DEPLOYED · ARCHITECTED · ";
+  const strip2 = "FULL STACK · MACHINE LEARNING · CLOUD NATIVE · DEVOPS · ";
+  const strip3 = "REACT · PYTHON · AWS · KUBERNETES · TENSORFLOW · ";
+
+  return (
+    <>
+      {/* Primary strip */}
+      <div
+        style={{
+          position: "absolute",
+          top: "35%",
+          left: 0,
+          width: "100%",
+          overflow: "hidden",
+          pointerEvents: "none",
+          opacity: 0.04,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            whiteSpace: "nowrap",
+            animation: "scrollTextRTL 40s linear infinite",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "4rem",
+            fontWeight: 700,
+            letterSpacing: "0.3em",
+            color: C.text,
+            filter: "blur(1px)",
+          }}
+        >
+          {strip1.repeat(10)}
+        </div>
+      </div>
+
+      {/* Secondary strip (slower, offset) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "60%",
+          left: 0,
+          width: "100%",
+          overflow: "hidden",
+          pointerEvents: "none",
+          opacity: 0.03,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            whiteSpace: "nowrap",
+            animation: "scrollTextRTL 55s linear infinite",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "3rem",
+            fontWeight: 600,
+            letterSpacing: "0.25em",
+            color: C.text,
+            filter: "blur(1.5px)",
+          }}
+        >
+          {strip2.repeat(10)}
+        </div>
+      </div>
+
+      {/* Tech stack strip (vertical, right side) */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: "5%",
+          height: "100%",
+          overflow: "hidden",
+          pointerEvents: "none",
+          opacity: 0.025,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            whiteSpace: "nowrap",
+            animation: "scrollTextTTB 35s linear infinite",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "2rem",
+            fontWeight: 600,
+            letterSpacing: "0.2em",
+            color: C.text,
+            filter: "blur(1px)",
+          }}
+        >
+          {strip3.repeat(20).split(' · ').map((word, i) => (
+            <div key={i} style={{ padding: "1rem 0" }}>{word}</div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    CUSTOM CURSOR
 ═══════════════════════════════════════════════════════════════ */
 function CustomCursor() {
@@ -432,9 +725,9 @@ function AnimatedCounter({ value, duration = 2000 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   STAT CHIP
+   STAT CHIP (with right-to-left entry)
 ═══════════════════════════════════════════════════════════════ */
-function StatChip({ value, label, icon: Icon }) {
+function StatChip({ value, label, icon: Icon, delay = 0 }) {
   const [inView, setInView] = useState(false);
   const ref = useRef(null);
 
@@ -461,8 +754,8 @@ function StatChip({ value, label, icon: Icon }) {
         border: `1px solid ${C.border}`,
         borderRadius: "12px",
         opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(20px)",
-        transition: "all 0.6s ease",
+        transform: inView ? "translateX(0)" : "translateX(40px)",
+        transition: `all 0.7s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
       }}
     >
       {Icon && (
@@ -485,13 +778,14 @@ function StatChip({ value, label, icon: Icon }) {
       <div>
         <div
           style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontSize: "1.5rem",
-            fontWeight: 400,
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "1.6rem",
+            fontWeight: 600,
+            fontStyle: "italic",
             color: C.text,
             lineHeight: 1,
             marginBottom: "0.25rem",
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.01em",
           }}
         >
           <AnimatedCounter value={value} />
@@ -511,12 +805,87 @@ function StatChip({ value, label, icon: Icon }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FLAGSHIP CERTIFICATE CARD
+   SKILL TAG WITH COLORED DEVICON
+═══════════════════════════════════════════════════════════════ */
+function SkillTag({ skill, accent, isHovered, onHover, onLeave }) {
+  const iconClass = skillIcons[skill] || "devicon-code-plain";
+
+  return (
+    <span
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "0.5rem",
+        padding: "0.5rem 1rem",
+        background: isHovered ? accent + "15" : C.surface2,
+        border: `1px solid ${isHovered ? accent + "40" : C.border}`,
+        borderRadius: "8px",
+        fontSize: "0.8rem",
+        fontWeight: 500,
+        color: isHovered ? C.text : C.muted2,
+        fontFamily: "'DM Mono', monospace",
+        transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+        transform: isHovered ? "translateX(6px)" : "translateX(0)",
+        position: "relative",
+        overflow: "hidden",
+        cursor: "default",
+      }}
+    >
+      {/* Colored DevIcon */}
+      <i
+        className={iconClass}
+        style={{
+          fontSize: "1.2rem",
+          transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+          transform: isHovered ? "scale(1.15) rotate(5deg)" : "scale(1)",
+        }}
+      />
+      
+      {/* Skill name */}
+      {skill}
+
+      {/* Animated underline */}
+      {isHovered && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            height: "2px",
+            background: accent,
+            animation: "underlineSweep 0.4s ease-out both",
+          }}
+        />
+      )}
+
+      {/* Shimmer effect */}
+      {isHovered && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "-100%",
+            width: "100%",
+            height: "100%",
+            background: `linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)`,
+            animation: "shimmerSweep 0.8s ease-out",
+          }}
+        />
+      )}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FLAGSHIP CERTIFICATE CARD (Enhanced with Colored DevIcons)
 ═══════════════════════════════════════════════════════════════ */
 function FlagshipCard({ cert, index }) {
   const [inView, setInView] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+  const [hoveredSkill, setHoveredSkill] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -554,27 +923,38 @@ function FlagshipCard({ cert, index }) {
         border: `1px solid ${hovered ? cert.accent + "40" : C.border}`,
         borderRadius: "20px",
         overflow: "hidden",
-        transition: "all 0.3s ease",
+        transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${hovered ? "-8px" : "0"})`,
         boxShadow: hovered ? "0 20px 48px rgba(0,0,0,0.08)" : "0 4px 16px rgba(0,0,0,0.04)",
         opacity: inView ? 1 : 0,
-        animation: inView ? `cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 0.15}s both` : "none",
+        animation: inView ? `slideInFromRight 0.7s cubic-bezier(0.22,1,0.36,1) ${index * 0.15}s both` : "none",
       }}
     >
-      {/* Top accent */}
+      {/* Top accent with shimmer */}
       <div
         style={{
           height: "3px",
           background: `linear-gradient(90deg, ${cert.accent}, transparent)`,
-        }}
-      />
-
-      <div
-        style={{
-          padding: "2.5rem",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        {/* Header */}
+        {hovered && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "-100%",
+              width: "100%",
+              height: "100%",
+              background: `linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)`,
+              animation: "shimmerSweep 1.5s ease-in-out",
+            }}
+          />
+        )}
+      </div>
+
+      <div style={{ padding: "2.5rem" }}>
         <div
           style={{
             display: "flex",
@@ -633,12 +1013,13 @@ function FlagshipCard({ cert, index }) {
 
             <h3
               style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "1.75rem",
-                fontWeight: 400,
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "2rem",
+                fontWeight: 700,
+                fontStyle: "italic",
                 color: C.text,
                 lineHeight: 1.2,
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.01em",
                 marginBottom: "0.5rem",
               }}
             >
@@ -665,42 +1046,24 @@ function FlagshipCard({ cert, index }) {
               <span>{cert.duration}</span>
             </div>
 
-            {/* Skills */}
+            {/* Skills with Colored DevIcons */}
             <div
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: "0.5rem",
+                gap: "0.6rem",
                 marginBottom: "2rem",
               }}
             >
-              {cert.skills.map((skill) => (
-                <span
+              {cert.skills.map((skill, skillIndex) => (
+                <SkillTag
                   key={skill}
-                  style={{
-                    padding: "0.4rem 0.9rem",
-                    background: C.surface2,
-                    border: `1px solid ${C.border}`,
-                    borderRadius: "6px",
-                    fontSize: "0.8rem",
-                    fontWeight: 500,
-                    color: C.muted2,
-                    fontFamily: "'DM Mono', monospace",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = cert.accentDim;
-                    e.currentTarget.style.borderColor = cert.accent + "40";
-                    e.currentTarget.style.color = C.text;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = C.surface2;
-                    e.currentTarget.style.borderColor = C.border;
-                    e.currentTarget.style.color = C.muted2;
-                  }}
-                >
-                  {skill}
-                </span>
+                  skill={skill}
+                  accent={cert.accent}
+                  isHovered={hoveredSkill === skillIndex}
+                  onHover={() => setHoveredSkill(skillIndex)}
+                  onLeave={() => setHoveredSkill(null)}
+                />
               ))}
             </div>
 
@@ -737,12 +1100,13 @@ function FlagshipCard({ cert, index }) {
               >
                 <div
                   style={{
-                    fontFamily: "'Instrument Serif', serif",
-                    fontSize: "2.5rem",
-                    fontWeight: 400,
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "2.75rem",
+                    fontWeight: 700,
+                    fontStyle: "italic",
                     color: cert.accent,
                     lineHeight: 1,
-                    letterSpacing: "-0.03em",
+                    letterSpacing: "-0.02em",
                   }}
                 >
                   {cert.impact.metric}
@@ -820,22 +1184,28 @@ function FlagshipCard({ cert, index }) {
                 fontWeight: 600,
                 color: cert.accent,
                 textDecoration: "none",
-                transition: "all 0.2s ease",
+                transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
                 fontFamily: "'DM Mono', monospace",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = cert.accent + "20";
                 e.currentTarget.style.borderColor = cert.accent + "60";
-                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.transform = "translateX(4px)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = cert.accentDim;
                 e.currentTarget.style.borderColor = cert.accent + "40";
-                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.transform = "translateX(0)";
               }}
             >
               <ExternalLink size={16} />
               View Credential
+              <ArrowRight
+                size={14}
+                style={{
+                  transition: "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+              />
             </a>
           </div>
         </div>
@@ -845,10 +1215,11 @@ function FlagshipCard({ cert, index }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DOMAIN SECTION
+   DOMAIN SECTION (Elastic expansion with Colored DevIcons)
 ═══════════════════════════════════════════════════════════════ */
 function DomainSection({ domain, data, isActive, onClick }) {
   const Icon = data.icon;
+  const [hoveredCert, setHoveredCert] = useState(null);
 
   return (
     <div>
@@ -865,19 +1236,21 @@ function DomainSection({ domain, data, isActive, onClick }) {
           border: `1px solid ${isActive ? data.accent + "30" : C.border}`,
           borderRadius: "16px",
           cursor: "pointer",
-          transition: "all 0.3s ease",
+          transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
           marginBottom: isActive ? "1.5rem" : 0,
         }}
         onMouseEnter={(e) => {
           if (!isActive) {
             e.currentTarget.style.background = C.surface2;
             e.currentTarget.style.borderColor = C.border2;
+            e.currentTarget.style.transform = "translateX(4px)";
           }
         }}
         onMouseLeave={(e) => {
           if (!isActive) {
             e.currentTarget.style.background = C.surface;
             e.currentTarget.style.borderColor = C.border;
+            e.currentTarget.style.transform = "translateX(0)";
           }
         }}
       >
@@ -892,7 +1265,8 @@ function DomainSection({ domain, data, isActive, onClick }) {
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
-            transition: "all 0.3s ease",
+            transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+            transform: isActive ? "rotate(5deg)" : "rotate(0)",
           }}
         >
           <Icon size={22} style={{ color: isActive ? data.accent : C.muted }} />
@@ -901,9 +1275,10 @@ function DomainSection({ domain, data, isActive, onClick }) {
         <div style={{ flex: 1 }}>
           <div
             style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontSize: "1.25rem",
-              fontWeight: 400,
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "1.4rem",
+              fontWeight: 700,
+              fontStyle: "italic",
               color: C.text,
               marginBottom: "0.25rem",
               letterSpacing: "-0.01em",
@@ -927,51 +1302,46 @@ function DomainSection({ domain, data, isActive, onClick }) {
           style={{
             color: isActive ? data.accent : C.muted,
             transform: isActive ? "rotate(90deg)" : "rotate(0)",
-            transition: "all 0.3s ease",
+            transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         />
       </div>
 
-      {/* Certificates grid */}
+      {/* Certificates grid with elastic reveal */}
       {isActive && (
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
             gap: "1.25rem",
             marginBottom: "2rem",
-            animation: "expandDown 0.4s ease both",
+            animation: "elasticExpand 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
           }}
         >
           {data.certs.map((cert, i) => (
             <div
               key={i}
               data-hover
+              onMouseEnter={() => setHoveredCert(i)}
+              onMouseLeave={() => setHoveredCert(null)}
               style={{
                 padding: "1.75rem",
                 background: C.surface,
-                border: `1px solid ${C.border}`,
+                border: `1px solid ${hoveredCert === i ? data.accent + "40" : C.border}`,
                 borderRadius: "14px",
-                transition: "all 0.3s ease",
+                transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
                 opacity: 0,
-                animation: `cardReveal 0.5s ease ${i * 0.08}s both`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = data.accent + "40";
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = C.border;
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
+                animation: `slideInFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.08}s both`,
+                transform: hoveredCert === i ? "translateY(-4px) translateX(4px)" : "translateY(0) translateX(0)",
+                boxShadow: hoveredCert === i ? "0 12px 32px rgba(0,0,0,0.08)" : "none",
               }}
             >
               <h4
                 style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontSize: "1.125rem",
-                  fontWeight: 400,
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
                   color: C.text,
                   marginBottom: "0.75rem",
                   letterSpacing: "-0.01em",
@@ -995,31 +1365,50 @@ function DomainSection({ domain, data, isActive, onClick }) {
                 <span>{cert.year}</span>
               </div>
 
+              {/* Skills with Colored DevIcons */}
               <div
                 style={{
                   display: "flex",
                   flexWrap: "wrap",
-                  gap: "0.4rem",
+                  gap: "0.5rem",
                   marginBottom: "1.25rem",
                 }}
               >
-                {cert.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    style={{
-                      padding: "0.35rem 0.75rem",
-                      background: C.surface2,
-                      border: `1px solid ${C.border}`,
-                      borderRadius: "6px",
-                      fontSize: "0.75rem",
-                      fontWeight: 500,
-                      color: C.muted2,
-                      fontFamily: "'DM Mono', monospace",
-                    }}
-                  >
-                    {skill}
-                  </span>
-                ))}
+                {cert.skills.map((skill) => {
+                  const iconClass = skillIcons[skill] || "devicon-code-plain";
+                  return (
+                    <span
+                      key={skill}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        padding: "0.4rem 0.8rem",
+                        background: C.surface2,
+                        border: `1px solid ${C.border}`,
+                        borderRadius: "6px",
+                        fontSize: "0.75rem",
+                        fontWeight: 500,
+                        color: C.muted2,
+                        fontFamily: "'DM Mono', monospace",
+                        transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = data.accent + "10";
+                        e.currentTarget.style.borderColor = data.accent + "30";
+                        e.currentTarget.style.transform = "translateX(3px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = C.surface2;
+                        e.currentTarget.style.borderColor = C.border;
+                        e.currentTarget.style.transform = "translateX(0)";
+                      }}
+                    >
+                      <i className={iconClass} style={{ fontSize: "1rem" }} />
+                      {skill}
+                    </span>
+                  );
+                })}
               </div>
 
               <div
@@ -1073,20 +1462,23 @@ function DomainSection({ domain, data, isActive, onClick }) {
                   fontWeight: 600,
                   color: C.text,
                   textDecoration: "none",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
                   fontFamily: "'DM Mono', monospace",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = C.surface2;
                   e.currentTarget.style.borderColor = C.border3;
+                  e.currentTarget.style.transform = "translateX(4px)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = "transparent";
                   e.currentTarget.style.borderColor = C.border2;
+                  e.currentTarget.style.transform = "translateX(0)";
                 }}
               >
                 <ExternalLink size={14} />
                 View Credential
+                <ArrowRight size={12} />
               </a>
             </div>
           ))}
@@ -1105,11 +1497,25 @@ export default function Certifications() {
   const [featuredInView, setFeaturedInView] = useState(false);
   const [domainsInView, setDomainsInView] = useState(false);
   const [summaryInView, setSummaryInView] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState("down");
+  const lastScrollY = useRef(0);
 
   const headerRef = useRef(null);
   const featuredRef = useRef(null);
   const domainsRef = useRef(null);
   const summaryRef = useRef(null);
+
+  // Track scroll direction
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrollDirection(currentScrollY > lastScrollY.current ? "down" : "up");
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const observers = [
@@ -1122,7 +1528,9 @@ export default function Certifications() {
     const observerInstances = observers.map(({ ref, setter }) => {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setter(true);
+          if (entry.isIntersecting && scrollDirection === "down") {
+            setter(true);
+          }
         },
         { threshold: 0.2 }
       );
@@ -1131,7 +1539,7 @@ export default function Certifications() {
     });
 
     return () => observerInstances.forEach((obs) => obs.disconnect());
-  }, []);
+  }, [scrollDirection]);
 
   const totalCerts = Object.values(certificationsData.domains).reduce((sum, d) => sum + d.certs.length, 0);
 
@@ -1139,7 +1547,8 @@ export default function Certifications() {
     <>
       {/* ═══════ GLOBAL STYLES ═══════ */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css');
 
         *, *::before, *::after {
           margin: 0;
@@ -1181,31 +1590,116 @@ export default function Certifications() {
           background: ${C.muted};
         }
 
-        @keyframes cardReveal {
+        /* ═══════ ELITE ANIMATIONS ═══════ */
+        @keyframes slideInFromRight {
           from {
             opacity: 0;
-            transform: translateY(24px);
+            transform: translateX(40px);
           }
           to {
             opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes elasticExpand {
+          0% {
+            opacity: 0;
+            transform: translateY(-12px) scaleY(0.95);
+          }
+          60% {
+            transform: translateY(0) scaleY(1.02);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scaleY(1);
+          }
+        }
+
+        @keyframes scrollTextRTL {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        @keyframes scrollTextTTB {
+          from {
             transform: translateY(0);
+          }
+          to {
+            transform: translateY(-50%);
+          }
+        }
+
+        @keyframes shimmerSweep {
+          0% {
+            left: -100%;
+          }
+          100% {
+            left: 100%;
+          }
+        }
+
+        @keyframes underlineSweep {
+          from {
+            width: 0;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        @keyframes floatVertical1 {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-40px);
+          }
+        }
+
+        @keyframes floatVertical2 {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(60px);
+          }
+        }
+
+        @keyframes floatHorizontal1 {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(100vw);
+          }
+        }
+
+        @keyframes floatHorizontal2 {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-100vw);
+          }
+        }
+
+        @keyframes floatDiagonal1 {
+          0%, 100% {
+            transform: translate(0, 0) rotate(-15deg);
+          }
+          50% {
+            transform: translate(-30px, 20px) rotate(-15deg);
           }
         }
 
         @keyframes lineGrow {
           from { width: 0; }
           to { width: 200px; }
-        }
-
-        @keyframes expandDown {
-          from {
-            opacity: 0;
-            transform: translateY(-12px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
         }
 
         @media (max-width: 768px) {
@@ -1220,6 +1714,9 @@ export default function Certifications() {
 
       {/* Scroll progress */}
       <ScrollProgress />
+
+      {/* Floating ambient elements */}
+      <FloatingElements />
 
       {/* Background texture */}
       <div
@@ -1245,10 +1742,13 @@ export default function Certifications() {
             position: "relative",
             opacity: headerInView ? 1 : 0,
             transform: headerInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          {/* Background glow */}
+          {/* Moving text strips */}
+          <MovingTextStrips />
+
+          {/* Background glow with parallax */}
           <div
             style={{
               position: "absolute",
@@ -1288,15 +1788,16 @@ export default function Certifications() {
             </span>
           </div>
 
-          {/* Main headline */}
+          {/* Main headline with cursive font */}
           <h1
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Playfair Display', serif",
               fontSize: "clamp(3.5rem, 8vw, 6.5rem)",
-              fontWeight: 400,
+              fontWeight: 700,
+              fontStyle: "italic",
               color: C.text,
               lineHeight: 1.05,
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.02em",
               marginBottom: "1rem",
               maxWidth: "1000px",
             }}
@@ -1330,7 +1831,7 @@ export default function Certifications() {
             cloud infrastructure, and machine learning — all applied to production systems.
           </p>
 
-          {/* Stat chips */}
+          {/* Stat chips with RTL entry */}
           <div
             style={{
               display: "grid",
@@ -1339,9 +1840,9 @@ export default function Certifications() {
               maxWidth: "900px",
             }}
           >
-            <StatChip value={totalCerts} label="Certifications" icon={Award} />
-            <StatChip value={5} label="Technical Domains" icon={TrendingUp} />
-            <StatChip value="5+" label="Projects" icon={CheckCircle2} />
+            <StatChip value={totalCerts} label="Certifications" icon={Award} delay={0} />
+            <StatChip value={5} label="Technical Domains" icon={TrendingUp} delay={0.1} />
+            <StatChip value="5+" label="Projects" icon={CheckCircle2} delay={0.2} />
           </div>
         </header>
 
@@ -1354,7 +1855,7 @@ export default function Certifications() {
             padding: "6rem 2rem",
             opacity: featuredInView ? 1 : 0,
             transform: featuredInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div style={{ marginBottom: "3rem" }}>
@@ -1382,11 +1883,12 @@ export default function Certifications() {
             </div>
             <h2
               style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 400,
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontWeight: 700,
+                fontStyle: "italic",
                 color: C.text,
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.01em",
                 marginBottom: "0.75rem",
               }}
             >
@@ -1427,7 +1929,7 @@ export default function Certifications() {
             borderTop: `1px solid ${C.border}`,
             opacity: domainsInView ? 1 : 0,
             transform: domainsInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div style={{ marginBottom: "3rem" }}>
@@ -1446,11 +1948,12 @@ export default function Certifications() {
             </div>
             <h2
               style={{
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: "clamp(2rem, 4vw, 2.75rem)",
-                fontWeight: 400,
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontWeight: 700,
+                fontStyle: "italic",
                 color: C.text,
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.01em",
                 marginBottom: "0.75rem",
               }}
             >
@@ -1489,7 +1992,7 @@ export default function Certifications() {
             padding: "0 2rem 8rem",
             opacity: summaryInView ? 1 : 0,
             transform: summaryInView ? "translateY(0)" : "translateY(40px)",
-            transition: "opacity 0.8s ease, transform 0.8s ease",
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div
@@ -1524,13 +2027,14 @@ export default function Certifications() {
             <div style={{ position: "relative", zIndex: 1 }}>
               <div
                 style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontSize: "4rem",
-                  fontWeight: 400,
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "4.5rem",
+                  fontWeight: 700,
+                  fontStyle: "italic",
                   color: C.text,
                   lineHeight: 1,
                   marginBottom: "1rem",
-                  letterSpacing: "-0.03em",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 <AnimatedCounter value={totalCerts} />
@@ -1571,15 +2075,15 @@ export default function Certifications() {
                   fontWeight: 600,
                   color: "#fff",
                   textDecoration: "none",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
                   fontFamily: "'Geist', sans-serif",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.transform = "translateY(-2px) translateX(4px)";
                   e.currentTarget.style.boxShadow = "0 8px 28px rgba(79,127,255,0.4)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.transform = "translateY(0) translateX(0)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >

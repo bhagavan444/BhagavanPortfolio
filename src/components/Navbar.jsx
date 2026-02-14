@@ -1,779 +1,601 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  User, Briefcase, Code2, FolderGit2, Mail,
-  ChevronDown, Menu, X, FileText, Award,
-  GraduationCap, Trophy, Shield
+  ChevronDown, Menu, X, FileText,
+  GraduationCap, Trophy, Shield, Award,
 } from "lucide-react";
 
-/* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS - UNIFIED SYSTEM
-═══════════════════════════════════════════════════════════════ */
-const T = {
-  // Colors
-  accent: "#5b7fff",
-  accentDark: "#4c6fe8",
-  bg: "#ffffff",
-  bgGlass: "rgba(255, 255, 255, 0.95)",
-  border: "rgba(0, 0, 0, 0.08)",
-  text: "#000000",
-  textMuted: "#4a4a52",
-  textLight: "#7a7a85",
-  shadow: "rgba(0, 0, 0, 0.04)",
-  shadowMd: "rgba(0, 0, 0, 0.08)",
-  
-  // Motion System - UNIFIED
-  ease: "cubic-bezier(0.16, 1, 0.3, 1)",
-  duration: "300ms",
-  
-  // Spacing System (8px base)
-  space: {
-    xs: "8px",
-    sm: "12px",
-    md: "16px",
-    lg: "24px",
-    xl: "32px",
-  },
-  
-  // Border Radius Scale
-  radius: {
-    sm: "8px",
-    md: "10px",
-    lg: "12px",
-    xl: "16px",
-  },
-  
-  // Shadows - REDUCED OPACITY
-  shadows: {
-    sm: "0 2px 8px rgba(0, 0, 0, 0.04)",
-    md: "0 4px 16px rgba(0, 0, 0, 0.06)",
-    lg: "0 8px 24px rgba(0, 0, 0, 0.08)",
-  },
+/* ─────────────────────────────────────────────────────────────────
+   DESIGN SYSTEM
+   Every value is intentional. Nothing is decorative.
+───────────────────────────────────────────────────────────────── */
+const DS = {
+  // Palette — derived from Vercel/Linear's restraint
+  white:       "#ffffff",
+  ink:         "#0d0d0d",        // near-black, softer than pure #000
+  inkMid:      "#454545",        // secondary text
+  inkFaint:    "#8c8c96",        // tertiary / labels
+  inkGhost:    "#c8c8d0",        // decorative lines
+  accent:      "#0066ff",        // single saturated accent
+  accentPress: "#004fd6",
+
+  // Surface states
+  surfHover:  "rgba(0,0,0,0.032)",
+  surfActive: "rgba(0,102,255,0.055)",
+
+  // Type
+  fontSans: "'DM Sans', system-ui, sans-serif",
+  fontMono: "'DM Mono', ui-monospace, monospace",
+
+  // Motion — tight and intentional
+  ease:   "cubic-bezier(0.16, 1, 0.3, 1)",
+  ms:     "190ms",
+  msFast: "140ms",
+
+  // Grid helper
+  sp: (n) => `${n * 8}px`,
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   NAVIGATION DATA
-═══════════════════════════════════════════════════════════════ */
-const PRIMARY_NAV = [
-  { label: "About", path: "/home", Icon: User },
-  { label: "Skills", path: "/myskills", Icon: Code2 },
-  { label: "Projects", path: "/projects", Icon: FolderGit2 },
-  
-  { label: "Experience", path: "/internships", Icon: Briefcase },
-  { label: "Contact", path: "/contact", Icon: Mail },
+/* ─────────────────────────────────────────────────────────────────
+   NAV STRUCTURE
+───────────────────────────────────────────────────────────────── */
+const PRIMARY = [
+  { label: "About",      path: "/home"        },
+  { label: "Skills",     path: "/myskills"    },
+  { label: "Projects",   path: "/projects"    },
+  { label: "Experience", path: "/internships" },
+  { label: "Contact",    path: "/contact"     },
 ];
 
-const SECONDARY_NAV = [
-  { label: "Education", path: "/education", Icon: GraduationCap },
-  { label: "Certifications", path: "/certifications", Icon: Shield },
-  { label: "Competitions", path: "/hackathons", Icon: Trophy },
-  { label: "Achievements", path: "/achivements", Icon: Award },
-  { label: "Workshops", path: "/workshops", Icon: FileText },
-  { label: "Resume", path: "/resume", Icon: FileText },
+const SECONDARY = [
+  { label: "Education",      path: "/education",      Icon: GraduationCap },
+  { label: "Certifications", path: "/certifications", Icon: Shield        },
+  { label: "Competitions",   path: "/hackathons",     Icon: Trophy        },
+  { label: "Achievements",   path: "/achivements",    Icon: Award         },
+  { label: "Workshops",      path: "/workshops",      Icon: FileText      },
+  { label: "Beyound Academics",         path: "/beyondcoding", Icon: FileText      },
+  { label: "Resume",         path: "/resume",         Icon: FileText      },
+  
 ];
 
-/* ═══════════════════════════════════════════════════════════════
-   GLOBAL STYLES - CLEANED UP
-═══════════════════════════════════════════════════════════════ */
-const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ─────────────────────────────────────────────────────────────────
+   GLOBAL STYLES
+───────────────────────────────────────────────────────────────── */
+const GLOBAL = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @keyframes __menuIn {
+    from { opacity: 0; transform: translateY(-5px) scale(0.985); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);     }
   }
-  
-  @keyframes fadeIn {
+  @keyframes __sheetIn {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0);    }
+  }
+  @keyframes __backdropIn {
     from { opacity: 0; }
-    to { opacity: 1; }
+    to   { opacity: 1; }
   }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(100%);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.15);
-  }
-  
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
   }
 `;
 
-/* ═══════════════════════════════════════════════════════════════
-   UTILITY HOOKS
-═══════════════════════════════════════════════════════════════ */
-function useMediaQuery(query) {
-  const [matches, setMatches] = useState(false);
-  
+/* ─────────────────────────────────────────────────────────────────
+   HOOKS
+───────────────────────────────────────────────────────────────── */
+function useMQ(query) {
+  const [match, setMatch] = useState(false);
   useEffect(() => {
-    const media = window.matchMedia(query);
-    setMatches(media.matches);
-    
-    const listener = (e) => setMatches(e.matches);
-    media.addEventListener("change", listener);
-    
-    return () => media.removeEventListener("change", listener);
+    const mq = window.matchMedia(query);
+    setMatch(mq.matches);
+    const cb = (e) => setMatch(e.matches);
+    mq.addEventListener("change", cb);
+    return () => mq.removeEventListener("change", cb);
   }, [query]);
-  
-  return matches;
+  return match;
 }
 
-function useReducedMotion() {
-  return useMediaQuery("(prefers-reduced-motion: reduce)");
-}
+/* ─────────────────────────────────────────────────────────────────
+   LOGO
+   Typographic only. The "./" is a quiet engineering signal.
+───────────────────────────────────────────────────────────────── */
+function Logo({ onClick }) {
+  const [hov, setHov] = useState(false);
 
-/* ═══════════════════════════════════════════════════════════════
-   CUSTOM CURSOR - REFINED & CONDITIONAL
-═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const cursorDotRef = useRef(null);
-  const cursorGlowRef = useRef(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const reducedMotion = useReducedMotion();
-  const isTouch = useMediaQuery("(pointer: coarse)");
-  
-  useEffect(() => {
-    // Don't render cursor for reduced motion or touch devices
-    if (reducedMotion || isTouch) return;
-    
-    const moveCursor = (e) => {
-      const { clientX: x, clientY: y } = e;
-      
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.left = `${x}px`;
-        cursorDotRef.current.style.top = `${y}px`;
-      }
-      
-      if (cursorGlowRef.current) {
-        cursorGlowRef.current.style.left = `${x}px`;
-        cursorGlowRef.current.style.top = `${y}px`;
-      }
-    };
-    
-    const handleHoverStart = () => setIsHovering(true);
-    const handleHoverEnd = () => setIsHovering(false);
-    
-    window.addEventListener("mousemove", moveCursor);
-    
-    const interactiveElements = document.querySelectorAll("a, button, [role='button']");
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleHoverStart);
-      el.addEventListener("mouseleave", handleHoverEnd);
-    });
-    
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleHoverStart);
-        el.removeEventListener("mouseleave", handleHoverEnd);
-      });
-    };
-  }, [reducedMotion, isTouch]);
-  
-  if (reducedMotion || isTouch) return null;
-  
-  return (
-    <>
-      <div
-        ref={cursorGlowRef}
-        style={{
-          position: "fixed",
-          width: isHovering ? "32px" : "28px",
-          height: isHovering ? "32px" : "28px",
-          borderRadius: "50%",
-          background: `radial-gradient(circle, ${T.accent}12, transparent 70%)`,
-          pointerEvents: "none",
-          transform: "translate(-50%, -50%)",
-          transition: `width ${T.duration} ${T.ease}, height ${T.duration} ${T.ease}`,
-          zIndex: 10001,
-          mixBlendMode: "multiply",
-        }}
-      />
-      
-      <div
-        ref={cursorDotRef}
-        style={{
-          position: "fixed",
-          width: isHovering ? "6px" : "5px",
-          height: isHovering ? "6px" : "5px",
-          borderRadius: "50%",
-          background: T.accent,
-          pointerEvents: "none",
-          transform: "translate(-50%, -50%)",
-          transition: `width ${T.duration} ${T.ease}, height ${T.duration} ${T.ease}`,
-          zIndex: 10002,
-        }}
-      />
-    </>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   LOGO COMPONENT - SIMPLIFIED
-═══════════════════════════════════════════════════════════════ */
-function Logo({ onClick, isScrolled }) {
-  const [isHovered, setIsHovered] = useState(false);
-  
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      aria-label="Navigate to home"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-label="Home"
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: T.space.sm,
         background: "none",
         border: "none",
         cursor: "pointer",
-        padding: 0,
-        transition: `transform ${T.duration} ${T.ease}`,
-        transform: isHovered ? "scale(1.01)" : "scale(1)",
+        padding: "0",
+        display: "flex",
+        alignItems: "baseline",
+        gap: "1px",
+        lineHeight: 1,
+        opacity: hov ? 0.55 : 1,
+        transition: `opacity ${DS.msFast} ${DS.ease}`,
+        outline: "none",
       }}
     >
-      <div
-        style={{
-          width: isScrolled ? "32px" : "36px",
-          height: isScrolled ? "32px" : "36px",
-          borderRadius: T.radius.md,
-          background: `linear-gradient(135deg, ${T.accent} 0%, ${T.accentDark} 100%)`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: isHovered ? T.shadows.md : T.shadows.sm,
-          transition: `all ${T.duration} ${T.ease}`,
-        }}
-      >
-        <Code2 
-          size={isScrolled ? 16 : 18} 
-          color="#ffffff" 
-          strokeWidth={2.5}
-          style={{ transition: `all ${T.duration} ${T.ease}` }}
-        />
-      </div>
-      <span
-        style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: isScrolled ? "16px" : "17px",
-          fontWeight: 700,
-          color: T.text,
-          letterSpacing: "-0.02em",
-          transition: `all ${T.duration} ${T.ease}`,
-        }}
-      >
-        Bhagavan - Developer
+      <span style={{
+        fontFamily: DS.fontMono,
+        fontSize: "12.5px",
+        fontWeight: 400,
+        color: DS.inkFaint,
+        letterSpacing: "0",
+        userSelect: "none",
+      }}>
+        ./
+      </span>
+      <span style={{
+        fontFamily: DS.fontSans,
+        fontSize: "14.5px",
+        fontWeight: 600,
+        color: DS.ink,
+        letterSpacing: "-0.03em",
+        userSelect: "none",
+      }}>
+        bhagavan
       </span>
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   NAV LINK - REDUCED MAGNETIC EFFECT
-═══════════════════════════════════════════════════════════════ */
-function NavLink({ item, active, onClick }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const linkRef = useRef(null);
-  const isTouch = useMediaQuery("(pointer: coarse)");
-  
-  const handleMouseMove = (e) => {
-    if (!linkRef.current || isTouch) return;
-    
-    const rect = linkRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    
-    const distance = Math.sqrt(x * x + y * y);
-    const maxDistance = 40; // Reduced from 60
-    
-    if (distance < maxDistance) {
-      const strength = (maxDistance - distance) / maxDistance;
-      const moveX = x * strength * 0.075; // Reduced by 50%
-      const moveY = y * strength * 0.075;
-      linkRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    }
-  };
-  
-  const handleMouseLeave = () => {
-    if (linkRef.current) {
-      linkRef.current.style.transform = "translate(0, 0)";
-    }
-    setIsHovered(false);
-  };
-  
+/* ─────────────────────────────────────────────────────────────────
+   NAV ITEM
+   Active = weight 500, full color, visible underline.
+   Hover  = color shift + partial underline preview.
+   No pill. No background fill. Typography does the work.
+───────────────────────────────────────────────────────────────── */
+function NavItem({ label, active, onClick }) {
+  const [hov, setHov] = useState(false);
+
   return (
     <button
-      ref={linkRef}
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       aria-current={active ? "page" : undefined}
       style={{
         position: "relative",
-        padding: `${T.space.sm} 18px`,
+        padding: `${DS.sp(1)} ${DS.sp(1.75)}`,
         background: "none",
         border: "none",
-        color: active ? T.text : T.textMuted,
-        fontSize: "15px",
-        fontWeight: active ? 600 : 500,
-        fontFamily: "'Inter', sans-serif",
         cursor: "pointer",
-        transition: `color ${T.duration} ${T.ease}, transform ${T.duration} ${T.ease}`,
+        fontFamily: DS.fontSans,
+        fontSize: "13.5px",
+        fontWeight: active ? 500 : 400,
+        color: active ? DS.ink : hov ? DS.inkMid : DS.inkFaint,
+        letterSpacing: "-0.01em",
+        lineHeight: 1,
         whiteSpace: "nowrap",
+        transition: `color ${DS.ms} ${DS.ease}`,
+        outline: "none",
       }}
     >
-      {item.label}
-      
-      <div
+      {label}
+
+      {/* Underline — center-out animation */}
+      <span
+        aria-hidden="true"
         style={{
           position: "absolute",
-          bottom: "6px",
+          bottom: "2px",
           left: "50%",
-          width: active ? "50%" : isHovered ? "30%" : "0%",
-          height: "2px",
-          background: T.accent,
-          borderRadius: "2px",
           transform: "translateX(-50%)",
-          transition: `width ${T.duration} ${T.ease}`,
+          display: "block",
+          height: "1.5px",
+          width: active ? "calc(100% - 28px)" : hov ? "38%" : "0",
+          background: active ? DS.ink : DS.inkGhost,
+          borderRadius: "1px",
+          transition: `width ${DS.ms} ${DS.ease}`,
         }}
       />
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DROPDOWN MENU - REFINED
-═══════════════════════════════════════════════════════════════ */
-function Dropdown({ isOpen, currentRoute, onNavigate }) {
+/* ─────────────────────────────────────────────────────────────────
+   MORE TRIGGER
+───────────────────────────────────────────────────────────────── */
+function MoreTrigger({ open, onClick }) {
+  const [hov, setHov] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-expanded={open}
+      aria-haspopup="menu"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "3px",
+        padding: `${DS.sp(1)} ${DS.sp(1.75)}`,
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        fontFamily: DS.fontSans,
+        fontSize: "13.5px",
+        fontWeight: 400,
+        color: open ? DS.inkMid : hov ? DS.inkMid : DS.inkFaint,
+        letterSpacing: "-0.01em",
+        lineHeight: 1,
+        transition: `color ${DS.ms} ${DS.ease}`,
+        outline: "none",
+      }}
+    >
+      More
+      <ChevronDown
+        size={12}
+        strokeWidth={2}
+        style={{
+          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          transition: `transform ${DS.ms} ${DS.ease}`,
+          opacity: 0.45,
+        }}
+      />
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   COMMAND MENU DROPDOWN
+   Feels like a product command palette, not a website dropdown.
+───────────────────────────────────────────────────────────────── */
+function CommandMenu({ open, currentRoute, onSelect }) {
   useEffect(() => {
-    if (!isOpen) return;
-    
-    const handleEscape = (e) => {
-      if (e.key === "Escape") {
-        onNavigate(null);
-      }
-    };
-    
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onNavigate]);
-  
-  if (!isOpen) return null;
-  
+    if (!open) return;
+    const fn = (e) => { if (e.key === "Escape") onSelect(null); };
+    document.addEventListener("keydown", fn);
+    return () => document.removeEventListener("keydown", fn);
+  }, [open, onSelect]);
+
+  if (!open) return null;
+
   return (
     <div
       role="menu"
-      aria-label="More navigation options"
+      aria-label="More pages"
       style={{
         position: "absolute",
-        top: "calc(100% + 12px)",
+        top: "calc(100% + 8px)",
         right: 0,
-        width: "240px",
-        background: "rgba(255, 255, 255, 0.98)",
-        backdropFilter: "blur(16px) saturate(180%)",
-        border: `1px solid ${T.border}`,
-        borderRadius: T.radius.xl,
-        boxShadow: T.shadows.lg,
+        minWidth: "208px",
+        background: DS.white,
+        border: "1px solid rgba(0,0,0,0.09)",
+        borderRadius: "10px",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04)",
         overflow: "hidden",
-        animation: `slideDown ${T.duration} ${T.ease}`,
-        zIndex: 100,
+        animation: `__menuIn ${DS.ms} ${DS.ease}`,
+        zIndex: 300,
       }}
     >
-      <div
-        style={{
-          padding: `${T.space.sm} ${T.space.md} ${T.space.xs}`,
-          fontSize: "11px",
-          fontWeight: 700,
-          letterSpacing: "0.08em",
-          color: T.textLight,
-          textTransform: "uppercase",
-          borderBottom: `1px solid ${T.border}`,
-        }}
-      >
-        More
+      {/* Section label */}
+      <div style={{
+        padding: `${DS.sp(1.25)} ${DS.sp(2)} ${DS.sp(1)}`,
+        fontFamily: DS.fontMono,
+        fontSize: "10px",
+        fontWeight: 500,
+        color: DS.inkGhost,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        borderBottom: "1px solid rgba(0,0,0,0.05)",
+      }}>
+        Pages
       </div>
-      
-      {SECONDARY_NAV.map((item) => (
-        <DropdownItem
-          key={item.path}
-          item={item}
-          active={currentRoute === item.path}
-          onClick={() => onNavigate(item.path)}
+
+      {SECONDARY.map(({ label, path, Icon }) => (
+        <MenuRow
+          key={path}
+          label={label}
+          Icon={Icon}
+          active={currentRoute === path}
+          onClick={() => onSelect(path)}
         />
       ))}
     </div>
   );
 }
 
-function DropdownItem({ item, active, onClick }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const { Icon } = item;
-  
+function MenuRow({ label, Icon, active, onClick }) {
+  const [hov, setHov] = useState(false);
+
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       role="menuitem"
-      aria-current={active ? "page" : undefined}
       style={{
         display: "flex",
         alignItems: "center",
-        gap: T.space.sm,
+        gap: DS.sp(1.25),
         width: "100%",
-        padding: `${T.space.sm} ${T.space.md}`,
-        background: active 
-          ? `${T.accent}06` 
-          : isHovered 
-          ? "rgba(0, 0, 0, 0.02)" 
-          : "transparent",
+        padding: `${DS.sp(1.125)} ${DS.sp(2)}`,
+        background: active ? DS.surfActive : hov ? DS.surfHover : "transparent",
         border: "none",
-        color: active ? T.accent : T.text,
-        fontSize: "14.5px",
-        fontWeight: active ? 600 : 500,
-        textAlign: "left",
         cursor: "pointer",
-        transition: `all ${T.duration} ${T.ease}`,
-        transform: isHovered && !active ? "translateX(3px)" : "translateX(0)",
+        fontFamily: DS.fontSans,
+        fontSize: "13px",
+        fontWeight: active ? 500 : 400,
+        color: active ? DS.accent : hov ? DS.ink : DS.inkMid,
+        textAlign: "left",
+        letterSpacing: "-0.01em",
+        lineHeight: 1,
+        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}`,
+        outline: "none",
       }}
     >
-      <Icon 
-        size={16} 
-        strokeWidth={2}
-        style={{ 
-          flexShrink: 0,
-          opacity: active ? 1 : 0.6,
-          transition: `opacity ${T.duration} ${T.ease}`,
-        }} 
+      <Icon
+        size={13}
+        strokeWidth={1.75}
+        style={{ flexShrink: 0, opacity: active ? 0.9 : 0.38 }}
       />
-      <span>{item.label}</span>
-      
+      {label}
       {active && (
-        <div
-          style={{
-            marginLeft: "auto",
-            width: "5px",
-            height: "5px",
-            borderRadius: "50%",
-            background: T.accent,
-          }}
-        />
+        <span style={{
+          marginLeft: "auto",
+          width: "4px",
+          height: "4px",
+          borderRadius: "50%",
+          background: DS.accent,
+          flexShrink: 0,
+        }} />
       )}
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MOBILE BOTTOM SHEET - NEXT-GEN REDESIGN
-═══════════════════════════════════════════════════════════════ */
-function MobileBottomSheet({ isOpen, currentRoute, onNavigate, onClose }) {
+/* ─────────────────────────────────────────────────────────────────
+   RESUME CTA
+   Solid fill. No gradient. No shadow. Scale on press.
+───────────────────────────────────────────────────────────────── */
+function ResumeButton({ onClick }) {
+  const [hov,   setHov]   = useState(false);
+  const [press, setPress] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => { setHov(false); setPress(false); }}
+      onMouseDown={() => setPress(true)}
+      onMouseUp={() => setPress(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        padding: "7px 14px",
+        background: DS.accent,
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontFamily: DS.fontSans,
+        fontSize: "13px",
+        fontWeight: 500,
+        color: "#fff",
+        letterSpacing: "-0.01em",
+        lineHeight: 1,
+        opacity: hov && !press ? 0.88 : 1,
+        transform: press ? "scale(0.965)" : "scale(1)",
+        transition: `opacity ${DS.msFast} ${DS.ease}, transform ${DS.msFast} ${DS.ease}`,
+        outline: "none",
+      }}
+    >
+      <FileText size={12} strokeWidth={2.5} />
+      Resume
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   HAMBURGER
+───────────────────────────────────────────────────────────────── */
+function HamburgerButton({ onClick }) {
+  const [hov, setHov] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-label="Open navigation"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "34px",
+        height: "34px",
+        background: hov ? DS.surfHover : "transparent",
+        border: `1px solid ${hov ? "rgba(0,0,0,0.08)" : "transparent"}`,
+        borderRadius: "7px",
+        cursor: "pointer",
+        color: DS.inkMid,
+        transition: `background ${DS.msFast} ${DS.ease}, border-color ${DS.msFast} ${DS.ease}`,
+        outline: "none",
+      }}
+    >
+      <Menu size={16} strokeWidth={2} />
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   MOBILE BOTTOM SHEET
+   iOS Settings-sheet feel. Sparse. Touch-native.
+───────────────────────────────────────────────────────────────── */
+function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
+  const startY  = useRef(0);
   const [dragY, setDragY] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const startY = useRef(0);
-  const sheetRef = useRef(null);
-  
+  const [drag,  setDrag]  = useState(false);
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-  
-  // Handle drag gestures
-  const handleTouchStart = (e) => {
-    startY.current = e.touches[0].clientY;
-    setIsDragging(true);
-  };
-  
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    
-    const currentY = e.touches[0].clientY;
-    const deltaY = currentY - startY.current;
-    
-    if (deltaY > 0) {
-      setDragY(deltaY);
-    }
-  };
-  
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    
-    if (dragY > 100) {
-      onClose();
-    }
-    
-    setDragY(0);
-  };
-  
-  // ESC key to close
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   useEffect(() => {
-    if (!isOpen) return;
-    
-    const handleEscape = (e) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-    
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose]);
-  
-  if (!isOpen) return null;
-  
+    if (!open) return;
+    const fn = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", fn);
+    return () => document.removeEventListener("keydown", fn);
+  }, [open, onClose]);
+
+  const onTouchStart = (e) => { startY.current = e.touches[0].clientY; setDrag(true);  };
+  const onTouchMove  = (e) => { const d = e.touches[0].clientY - startY.current; if (d > 0) setDragY(d); };
+  const onTouchEnd   = ()  => { setDrag(false); if (dragY > 72) onClose(); setDragY(0); };
+
+  if (!open) return null;
+
   return (
     <>
-      {/* Backdrop */}
+      {/* Scrim */}
       <div
         onClick={onClose}
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(0, 0, 0, 0.4)",
-          backdropFilter: "blur(4px)",
+          background: "rgba(0,0,0,0.26)",
           zIndex: 9998,
-          animation: `fadeIn ${T.duration} ${T.ease}`,
+          animation: `__backdropIn ${DS.ms} ${DS.ease}`,
         }}
       />
-      
-      {/* Bottom Sheet */}
+
+      {/* Sheet */}
       <div
-        ref={sheetRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation menu"
+        aria-label="Navigation"
         style={{
           position: "fixed",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          maxHeight: "85vh",
-          background: "#ffffff",
-          borderTopLeftRadius: T.radius.xl,
-          borderTopRightRadius: T.radius.xl,
-          boxShadow: "0 -4px 24px rgba(0, 0, 0, 0.12)",
-          zIndex: 9999,
+          left: 0, right: 0, bottom: 0,
+          maxHeight: "88vh",
+          background: DS.white,
+          borderTopLeftRadius: "14px",
+          borderTopRightRadius: "14px",
+          borderTop: "1px solid rgba(0,0,0,0.07)",
           overflowY: "auto",
           paddingBottom: "env(safe-area-inset-bottom, 20px)",
-          animation: `slideUp ${T.duration} ${T.ease}`,
+          zIndex: 9999,
+          animation: drag ? "none" : `__sheetIn ${DS.ms} ${DS.ease}`,
           transform: `translateY(${dragY}px)`,
-          transition: isDragging ? "none" : `transform ${T.duration} ${T.ease}`,
+          transition: drag ? "none" : `transform ${DS.ms} ${DS.ease}`,
         }}
       >
-        {/* Drag Handle */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: `${T.space.sm} 0`,
-            position: "sticky",
-            top: 0,
-            background: "#ffffff",
-            zIndex: 1,
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "4px",
-              borderRadius: "2px",
-              background: "rgba(0, 0, 0, 0.15)",
-            }}
-          />
+        {/* Drag pill */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 6px" }}>
+          <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(0,0,0,0.1)" }} />
         </div>
-        
+
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: `0 ${T.space.lg} ${T.space.md}`,
-            borderBottom: `1px solid ${T.border}`,
-          }}
-        >
-          <span
-            style={{
-              fontSize: "18px",
-              fontWeight: 700,
-              color: T.text,
-              fontFamily: "'Space Grotesk', sans-serif",
-              letterSpacing: "-0.01em",
-            }}
-          >
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: `${DS.sp(1)} ${DS.sp(3)} ${DS.sp(2)}`,
+          borderBottom: "1px solid rgba(0,0,0,0.05)",
+        }}>
+          <span style={{
+            fontFamily: DS.fontSans,
+            fontSize: "14px",
+            fontWeight: 600,
+            color: DS.ink,
+            letterSpacing: "-0.02em",
+          }}>
             Navigation
           </span>
           <button
             onClick={onClose}
-            aria-label="Close menu"
+            aria-label="Close"
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "40px",
-              height: "40px",
-              background: "rgba(0, 0, 0, 0.04)",
+              width: "28px",
+              height: "28px",
+              background: "rgba(0,0,0,0.04)",
               border: "none",
-              borderRadius: T.radius.md,
-              color: T.text,
+              borderRadius: "6px",
               cursor: "pointer",
-              transition: `all ${T.duration} ${T.ease}`,
+              color: DS.inkMid,
+              outline: "none",
             }}
           >
-            <X size={20} strokeWidth={2.5} />
+            <X size={14} strokeWidth={2} />
           </button>
         </div>
-        
+
         {/* Content */}
-        <div style={{ padding: T.space.lg }}>
-          {/* Primary Nav */}
-          <div style={{ marginBottom: T.space.xl }}>
-            <div
-              style={{
-                fontSize: "11px",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: T.textLight,
-                textTransform: "uppercase",
-                marginBottom: T.space.md,
-                paddingLeft: T.space.xs,
-              }}
-            >
-              Main
-            </div>
-            {PRIMARY_NAV.map((item) => (
-              <MobileMenuItem
-                key={item.path}
-                item={item}
-                active={currentRoute === item.path}
-                onClick={() => {
-                  onNavigate(item.path);
-                  onClose();
-                }}
-              />
-            ))}
-          </div>
-          
-          {/* Divider */}
-          <div
-            style={{
-              height: "1px",
-              background: T.border,
-              margin: `${T.space.lg} 0`,
-            }}
-          />
-          
-          {/* Secondary Nav */}
-          <div>
-            <div
-              style={{
-                fontSize: "11px",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                color: T.textLight,
-                textTransform: "uppercase",
-                marginBottom: T.space.md,
-                paddingLeft: T.space.xs,
-              }}
-            >
-              More
-            </div>
-            {SECONDARY_NAV.map((item) => (
-              <MobileMenuItem
-                key={item.path}
-                item={item}
-                active={currentRoute === item.path}
-                onClick={() => {
-                  onNavigate(item.path);
-                  onClose();
-                }}
-              />
-            ))}
-          </div>
-          
+        <div style={{ padding: `${DS.sp(2)} ${DS.sp(2)} ${DS.sp(1)}` }}>
+
+          {/* Primary */}
+          <SheetGroupLabel>Main</SheetGroupLabel>
+          {PRIMARY.map(({ label, path }) => (
+            <SheetRow
+              key={path}
+              label={label}
+              active={currentRoute === path}
+              onClick={() => { onNavigate(path); onClose(); }}
+            />
+          ))}
+
+          <div style={{ height: "1px", background: "rgba(0,0,0,0.05)", margin: `${DS.sp(1.5)} ${DS.sp(1)}` }} />
+
+          {/* Secondary */}
+          <SheetGroupLabel>More</SheetGroupLabel>
+          {SECONDARY.map(({ label, path, Icon }) => (
+            <SheetRow
+              key={path}
+              label={label}
+              Icon={Icon}
+              active={currentRoute === path}
+              onClick={() => { onNavigate(path); onClose(); }}
+            />
+          ))}
+
           {/* CTA */}
-          <div 
-            style={{ 
-              marginTop: T.space.xl,
-              paddingTop: T.space.lg,
-              borderTop: `1px solid ${T.border}`,
-            }}
-          >
+          <div style={{ padding: `${DS.sp(2)} ${DS.sp(1)} ${DS.sp(1)}` }}>
             <button
-              onClick={() => {
-                onNavigate("/resume");
-                onClose();
-              }}
+              onClick={() => { onNavigate("/resume"); onClose(); }}
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: T.space.sm,
+                gap: "8px",
                 width: "100%",
-                minHeight: "48px",
-                padding: `14px ${T.space.md}`,
-                background: `linear-gradient(135deg, ${T.accent} 0%, ${T.accentDark} 100%)`,
+                minHeight: "44px",
+                background: DS.accent,
                 border: "none",
-                borderRadius: T.radius.lg,
-                color: "#ffffff",
-                fontSize: "16px",
-                fontWeight: 600,
+                borderRadius: "8px",
                 cursor: "pointer",
-                boxShadow: T.shadows.md,
-                transition: `all ${T.duration} ${T.ease}`,
+                fontFamily: DS.fontSans,
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "#fff",
+                letterSpacing: "-0.01em",
+                outline: "none",
               }}
             >
-              <FileText size={20} strokeWidth={2.5} />
+              <FileText size={15} strokeWidth={2} />
               View Resume
             </button>
           </div>
@@ -783,341 +605,255 @@ function MobileBottomSheet({ isOpen, currentRoute, onNavigate, onClose }) {
   );
 }
 
-function MobileMenuItem({ item, active, onClick }) {
-  const { Icon } = item;
-  
+function SheetGroupLabel({ children }) {
+  return (
+    <p style={{
+      fontFamily: DS.fontMono,
+      fontSize: "10px",
+      fontWeight: 500,
+      letterSpacing: "0.07em",
+      color: DS.inkGhost,
+      textTransform: "uppercase",
+      padding: `0 ${DS.sp(1)} ${DS.sp(0.75)}`,
+    }}>
+      {children}
+    </p>
+  );
+}
+
+function SheetRow({ label, Icon, active, onClick }) {
+  const [hov, setHov] = useState(false);
+
   return (
     <button
       onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       aria-current={active ? "page" : undefined}
       style={{
         display: "flex",
         alignItems: "center",
-        gap: T.space.md,
+        gap: DS.sp(1.5),
         width: "100%",
-        minHeight: "48px",
-        padding: `${T.space.md} ${T.space.md}`,
-        marginBottom: T.space.xs,
-        background: active ? `${T.accent}06` : "transparent",
-        border: active ? `1.5px solid ${T.accent}20` : "1.5px solid transparent",
-        borderRadius: T.radius.lg,
-        color: active ? T.accent : T.text,
-        fontSize: "16px",
-        fontWeight: active ? 600 : 500,
-        textAlign: "left",
+        minHeight: "42px",
+        padding: `${DS.sp(1.125)} ${DS.sp(1)}`,
+        marginBottom: "1px",
+        background: active ? DS.surfActive : hov ? DS.surfHover : "transparent",
+        border: active ? "1px solid rgba(0,102,255,0.1)" : "1px solid transparent",
+        borderRadius: "7px",
         cursor: "pointer",
-        transition: `all ${T.duration} ${T.ease}`,
+        fontFamily: DS.fontSans,
+        fontSize: "14px",
+        fontWeight: active ? 500 : 400,
+        color: active ? DS.accent : DS.ink,
+        textAlign: "left",
+        letterSpacing: "-0.01em",
+        lineHeight: 1,
+        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}`,
+        outline: "none",
       }}
     >
-      <Icon 
-        size={20} 
-        strokeWidth={2}
-        style={{ 
-          flexShrink: 0,
-          opacity: active ? 1 : 0.6,
-        }} 
-      />
-      <span>{item.label}</span>
-      
+      {Icon
+        ? <Icon size={16} strokeWidth={1.75} style={{ flexShrink: 0, opacity: active ? 0.9 : 0.32 }} />
+        : <span style={{ width: "16px", flexShrink: 0 }} />
+      }
+      {label}
       {active && (
-        <div
-          style={{
-            marginLeft: "auto",
-            width: "6px",
-            height: "6px",
-            borderRadius: "50%",
-            background: T.accent,
-          }}
-        />
+        <span style={{
+          marginLeft: "auto",
+          width: "5px",
+          height: "5px",
+          borderRadius: "50%",
+          background: DS.accent,
+          flexShrink: 0,
+        }} />
       )}
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MAIN NAVBAR - NEXT-GEN
-═══════════════════════════════════════════════════════════════ */
-export default function NextGenNavbar() {
+/* ─────────────────────────────────────────────────────────────────
+   ROOT NAVBAR
+───────────────────────────────────────────────────────────────── */
+export default function Navbar() {
   const location = useLocation();
-  const navigate = useNavigate();
-  
-  const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [moreOpen, setMoreOpen] = useState(false);
+  const navigate  = useNavigate();
+
+  const [scrolled,   setScrolled]   = useState(false);
+  const [visible,    setVisible]    = useState(true);
+  const [moreOpen,   setMoreOpen]   = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [navVisible, setNavVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  
+
+  const prevY   = useRef(0);
+  const rafId   = useRef(null);
   const moreRef = useRef(null);
-  const currentRoute = location.pathname === "/" ? "/home" : location.pathname;
-  
-  const isMobile = useMediaQuery("(max-width: 1023px)");
-  const isSmallMobile = useMediaQuery("(max-width: 639px)");
-  
-  /* ───────────────────────────────────────────────────────────
-     SCROLL EFFECTS - SMART HIDE/SHOW
-  ─────────────────────────────────────────────────────────── */
+
+  const isMobile = useMQ("(max-width: 1023px)");
+  const isTiny   = useMQ("(max-width: 599px)");
+
+  const route = location.pathname === "/" ? "/home" : location.pathname;
+
+  /* ── Scroll ── */
   useEffect(() => {
-    let ticking = false;
-    
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = (scrollTop / docHeight) * 100;
-          
-          setScrolled(scrollTop > 30);
-          setScrollProgress(progress);
-          
-          // Smart hide/show on mobile
-          if (isMobile) {
-            if (scrollTop < 10) {
-              setNavVisible(true);
-            } else if (scrollTop < lastScrollY || Math.abs(scrollTop - lastScrollY) < 5) {
-              // Scrolling up or minimal movement
-              setNavVisible(true);
-            } else if (scrollTop > lastScrollY && scrollTop > 100) {
-              // Scrolling down
-              setNavVisible(false);
-            }
-          } else {
-            setNavVisible(true);
-          }
-          
-          setLastScrollY(scrollTop);
-          ticking = false;
-        });
-        
-        ticking = true;
-      }
+    const onScroll = () => {
+      if (rafId.current) return;
+      rafId.current = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setScrolled(y > 20);
+
+        if (isMobile) {
+          if      (y < 8)                setVisible(true);
+          else if (y < prevY.current - 2) setVisible(true);
+          else if (y > prevY.current + 2 && y > 60) setVisible(false);
+        } else {
+          setVisible(true);
+        }
+
+        prevY.current = y;
+        rafId.current = null;
+      });
     };
-    
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    
+
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", onScroll);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [lastScrollY, isMobile]);
-  
-  /* ───────────────────────────────────────────────────────────
-     CLOSE DROPDOWN ON OUTSIDE CLICK
-  ─────────────────────────────────────────────────────────── */
+  }, [isMobile]);
+
+  /* ── Outside click ── */
   useEffect(() => {
     if (!moreOpen) return;
-    
-    const handleClick = (e) => {
-      if (moreRef.current && !moreRef.current.contains(e.target)) {
-        setMoreOpen(false);
-      }
+    const fn = (e) => {
+      if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false);
     };
-    
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
   }, [moreOpen]);
-  
-  /* ───────────────────────────────────────────────────────────
-     CLOSE MENUS ON ROUTE CHANGE
-  ─────────────────────────────────────────────────────────── */
+
+  /* ── Route change ── */
   useEffect(() => {
     setMoreOpen(false);
     setMobileOpen(false);
   }, [location.pathname]);
-  
-  const handleNavigate = (path) => {
-    if (path && path !== currentRoute) {
-      navigate(path);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-  
-  const navHeight = scrolled 
-    ? (isSmallMobile ? "60px" : "68px")
-    : (isSmallMobile ? "72px" : "80px");
-  
-  const navBlur = scrolled 
-    ? (isSmallMobile ? "12px" : "16px")
-    : (isSmallMobile ? "8px" : "12px");
-  
+
+  const go = useCallback((path) => {
+    if (!path || path === route) return;
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [navigate, route]);
+
+  /* ── Computed values ── */
+  const navH   = scrolled ? (isTiny ? "56px" : "62px") : (isTiny ? "62px" : "72px");
+  const bg     = scrolled ? "rgba(255,255,255,0.94)" : "rgba(255,255,255,0.82)";
+  const border = scrolled ? "rgba(0,0,0,0.07)"       : "rgba(0,0,0,0)";
+  const blur   = scrolled ? "blur(12px)"              : "blur(6px)";
+  const padX   = isTiny   ? "20px"                    : "40px";
+
   return (
     <>
-      {/* Global Styles */}
-      <style>{GLOBAL_STYLES}</style>
-      
-      {/* Custom Cursor (Desktop Only, No Reduced Motion) */}
-      {!isMobile && <CustomCursor />}
-      
-      {/* Scroll Progress Bar */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: `${scrollProgress}%`,
-          height: "2px",
-          background: `linear-gradient(90deg, ${T.accent}, ${T.accentDark})`,
-          zIndex: 10000,
-          transition: "width 0.1s linear",
-        }}
-      />
-      
-      {/* Navbar */}
+      <style>{GLOBAL}</style>
+
       <nav
         role="navigation"
         aria-label="Main navigation"
         style={{
           position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: navHeight,
-          background: scrolled 
-            ? "rgba(255, 255, 255, 0.95)"
-            : "rgba(255, 255, 255, 0.85)",
-          backdropFilter: `blur(${navBlur}) saturate(180%)`,
-          borderBottom: `1px solid ${scrolled ? T.border : "rgba(0, 0, 0, 0.04)"}`,
-          boxShadow: scrolled ? T.shadows.md : T.shadows.sm,
-          transition: `all ${T.duration} ${T.ease}, transform ${T.duration} ${T.ease}`,
-          transform: navVisible ? "translateY(0)" : "translateY(-100%)",
-          zIndex: 9000,
+          inset: "0 0 auto 0",
+          height: navH,
+          background: bg,
+          backdropFilter: blur,
+          WebkitBackdropFilter: blur,
+          borderBottom: `1px solid ${border}`,
+          transform: visible ? "translateY(0)" : "translateY(-100%)",
+          transition: [
+            `height ${DS.ms} ${DS.ease}`,
+            `background ${DS.ms} ${DS.ease}`,
+            `border-color ${DS.ms} ${DS.ease}`,
+            `transform ${DS.ms} ${DS.ease}`,
+          ].join(", "),
+          zIndex: 8000,
         }}
       >
-        <div
-          style={{
-            maxWidth: "1440px",
-            height: "100%",
-            margin: "0 auto",
-            padding: isSmallMobile ? "0 20px" : "0 36px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: isSmallMobile ? T.space.lg : "56px",
-          }}
-        >
-          {/* Logo */}
-          <Logo onClick={() => handleNavigate("/home")} isScrolled={scrolled} />
-          
-          {/* Desktop Navigation */}
+        <div style={{
+          maxWidth: "1280px",
+          height: "100%",
+          margin: "0 auto",
+          padding: `0 ${padX}`,
+          display: "flex",
+          alignItems: "center",
+          position: "relative",
+        }}>
+
+          {/* Left — Logo */}
+          <Logo onClick={() => go("/home")} />
+
+          {/* Center — Primary nav (absolutely centered) */}
           {!isMobile && (
-            <>
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: T.space.xs,
-                }}
-              >
-                {PRIMARY_NAV.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    item={item}
-                    active={currentRoute === item.path}
-                    onClick={() => handleNavigate(item.path)}
+            <div style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "flex",
+              alignItems: "center",
+              gap: "0px",
+            }}>
+              {PRIMARY.map(({ label, path }) => (
+                <NavItem
+                  key={path}
+                  label={label}
+                  active={route === path}
+                  onClick={() => go(path)}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Right — More + divider + CTA */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: DS.sp(0.75) }}>
+            {!isMobile && (
+              <>
+                {/* More dropdown */}
+                <div ref={moreRef} style={{ position: "relative" }}>
+                  <MoreTrigger
+                    open={moreOpen}
+                    onClick={() => setMoreOpen(p => !p)}
                   />
-                ))}
-              </div>
-              
-              <div style={{ display: "flex", alignItems: "center", gap: T.space.md }}>
-                {/* More Dropdown */}
-                <div style={{ position: "relative" }} ref={moreRef}>
-                  <button
-                    onClick={() => setMoreOpen(!moreOpen)}
-                    aria-expanded={moreOpen}
-                    aria-haspopup="menu"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      padding: `${T.space.sm} ${T.space.md}`,
-                      background: moreOpen ? "rgba(0, 0, 0, 0.04)" : "transparent",
-                      border: "none",
-                      borderRadius: T.radius.md,
-                      color: T.textMuted,
-                      fontSize: "15px",
-                      fontWeight: 500,
-                      cursor: "pointer",
-                      transition: `all ${T.duration} ${T.ease}`,
-                    }}
-                  >
-                    More
-                    <ChevronDown
-                      size={16}
-                      strokeWidth={2.5}
-                      style={{
-                        transform: moreOpen ? "rotate(180deg)" : "rotate(0deg)",
-                        transition: `transform ${T.duration} ${T.ease}`,
-                      }}
-                    />
-                  </button>
-                  
-                  <Dropdown
-                    isOpen={moreOpen}
-                    currentRoute={currentRoute}
-                    onNavigate={handleNavigate}
+                  <CommandMenu
+                    open={moreOpen}
+                    currentRoute={route}
+                    onSelect={(p) => { setMoreOpen(false); if (p) go(p); }}
                   />
                 </div>
-                
-                {/* Resume CTA - MATURED */}
-                <button
-                  onClick={() => handleNavigate("/resume")}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: T.space.sm,
-                    padding: `11px 22px`,
-                    background: `linear-gradient(135deg, ${T.accent} 0%, ${T.accentDark} 100%)`,
-                    border: "none",
-                    borderRadius: T.radius.lg,
-                    color: "#ffffff",
-                    fontSize: "14.5px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    boxShadow: T.shadows.md,
-                    transition: `all ${T.duration} ${T.ease}`,
-                  }}
-                >
-                  <FileText size={16} strokeWidth={2.5} />
-                  Resume
-                </button>
-              </div>
-            </>
-          )}
-          
-          {/* Mobile Menu Button */}
-          {isMobile && (
-            <button
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open navigation menu"
-              aria-expanded={mobileOpen}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "44px",
-                height: "44px",
-                background: "rgba(0, 0, 0, 0.04)",
-                border: "none",
-                borderRadius: T.radius.lg,
-                color: T.text,
-                cursor: "pointer",
-                transition: `all ${T.duration} ${T.ease}`,
-              }}
-            >
-              <Menu size={22} strokeWidth={2.5} />
-            </button>
-          )}
+
+                {/* Pipe divider */}
+                <span aria-hidden="true" style={{
+                  display: "inline-block",
+                  width: "1px",
+                  height: "16px",
+                  background: DS.inkGhost,
+                  margin: `0 ${DS.sp(0.5)}`,
+                  opacity: 0.4,
+                }} />
+
+                <ResumeButton onClick={() => go("/resume")} />
+              </>
+            )}
+
+            {isMobile && (
+              <HamburgerButton onClick={() => setMobileOpen(true)} />
+            )}
+          </div>
         </div>
       </nav>
-      
-      {/* Mobile Bottom Sheet */}
+
+      {/* Mobile sheet */}
       {isMobile && (
-        <MobileBottomSheet
-          isOpen={mobileOpen}
-          currentRoute={currentRoute}
-          onNavigate={handleNavigate}
+        <BottomSheet
+          open={mobileOpen}
+          currentRoute={route}
+          onNavigate={go}
           onClose={() => setMobileOpen(false)}
         />
       )}
