@@ -406,35 +406,33 @@ function ResumeButton({ onClick }) {
 /* ─────────────────────────────────────────────────────────────────
    HAMBURGER - IMPROVED FOR MOBILE
 ───────────────────────────────────────────────────────────────── */
-function HamburgerButton({ onClick }) {
+function HamburgerButton({ onClick, isOpen }) {
   const [press, setPress] = useState(false);
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onClick();
+  };
 
   return (
     <button
-      onClick={onClick}
-      onTouchStart={(e) => {
-        e.preventDefault();
-        setPress(true);
-      }}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        setPress(false);
-        onClick();
-      }}
+      onClick={handleClick}
       onMouseDown={() => setPress(true)}
       onMouseUp={() => setPress(false)}
-      aria-label="Open navigation"
+      onMouseLeave={() => setPress(false)}
+      aria-label={isOpen ? "Close navigation" : "Open navigation"}
+      aria-expanded={isOpen}
       style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "40px",
         height: "40px",
-        background: press ? DS.surfActive : "transparent",
-        border: `1.5px solid ${press ? DS.accent + "40" : "rgba(0,0,0,0.08)"}`,
+        background: press || isOpen ? DS.surfActive : "transparent",
+        border: `1.5px solid ${press || isOpen ? DS.accent + "40" : "rgba(0,0,0,0.08)"}`,
         borderRadius: "8px",
         cursor: "pointer",
-        color: press ? DS.accent : DS.inkMid,
+        color: press || isOpen ? DS.accent : DS.inkMid,
         transform: press ? "scale(0.92)" : "scale(1)",
         transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
@@ -442,7 +440,7 @@ function HamburgerButton({ onClick }) {
         touchAction: "manipulation",
       }}
     >
-      <Menu size={19} strokeWidth={2} />
+      {isOpen ? <X size={19} strokeWidth={2} /> : <Menu size={19} strokeWidth={2} />}
     </button>
   );
 }
@@ -535,7 +533,10 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
             Navigation
           </span>
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
             aria-label="Close"
             style={{
               display: "flex",
@@ -587,7 +588,10 @@ function BottomSheet({ open, currentRoute, onNavigate, onClose }) {
           {/* CTA */}
           <div style={{ padding: `${DS.sp(2)} ${DS.sp(1)} ${DS.sp(1)}` }}>
             <button
-              onClick={() => onNavigate("/resume")}
+              onClick={(e) => {
+                e.stopPropagation();
+                onNavigate("/resume");
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -637,13 +641,18 @@ function SheetGroupLabel({ children }) {
 function SheetRow({ label, Icon, active, onClick }) {
   const [press, setPress] = useState(false);
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    setPress(false);
+    onClick();
+  };
+
   return (
     <button
-      onClick={onClick}
-      onTouchStart={() => setPress(true)}
-      onTouchEnd={() => setPress(false)}
+      onClick={handleClick}
       onMouseDown={() => setPress(true)}
       onMouseUp={() => setPress(false)}
+      onMouseLeave={() => setPress(false)}
       aria-current={active ? "page" : undefined}
       style={{
         display: "flex",
@@ -755,16 +764,23 @@ export default function Navbar() {
   }, [location.pathname]);
 
   const go = useCallback((path) => {
-    if (!path || path === route) {
+    if (!path) {
       setMobileOpen(false);
       return;
     }
-    navigate(path);
+    
+    // Close mobile menu first
     setMobileOpen(false);
+    setMoreOpen(false);
+    
+    // Navigate
+    navigate(path);
+    
+    // Scroll to top after a brief delay
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 50);
-  }, [navigate, route]);
+    }, 100);
+  }, [navigate]);
 
   /* ── Computed values ── */
   const navH   = scrolled ? (isTiny ? "56px" : "62px") : (isTiny ? "62px" : "72px");
@@ -865,7 +881,10 @@ export default function Navbar() {
             )}
 
             {isMobile && (
-              <HamburgerButton onClick={() => setMobileOpen(true)} />
+              <HamburgerButton 
+                onClick={() => setMobileOpen(prev => !prev)} 
+                isOpen={mobileOpen}
+              />
             )}
           </div>
         </div>
