@@ -2,796 +2,853 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Cpu, Brain, Cloud, Shield, Network, Terminal,
-  Github, ExternalLink, X, ArrowUpRight,
-  CheckCircle2, Layers, Box, TrendingUp, Database
+  ExternalLink, CheckCircle2, Calendar, Award,
+  Code2, Cloud, Brain, Database, Terminal,
+  Shield, ArrowRight, TrendingUp, BookOpen, Users, Cpu,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS
+   DESIGN TOKENS  — identical to Certifications
 ═══════════════════════════════════════════════════════════════ */
-const T = {
-  bg: "#F8F7F4",
-  white: "#FFFFFF",
-  ink: "#0C0C0C",
-  ink80: "#1C1C1C",
-  ink60: "#3A3A3A",
-  ink40: "#737373",
-  ink20: "#B8B8B8",
-  ink10: "#E0E0E0",
-  ink05: "#EDEDED",
-  ink02: "#F5F4F1",
-  blue: "#1A56FF",
-  blueMid: "rgba(26,86,255,0.10)",
-  blueSubtle: "rgba(26,86,255,0.06)",
+const C = {
+  bg:        "#ffffff",
+  surface:   "#f9fafb",
+  surface2:  "#f3f4f6",
+  surface3:  "#e5e7eb",
+  border:    "rgba(0,0,0,0.06)",
+  border2:   "rgba(0,0,0,0.10)",
+  border3:   "rgba(0,0,0,0.14)",
+  text:      "#0f172a",
+  muted:     "#64748b",
+  muted2:    "#475569",
+  accent:    "#4f7fff",
+  accentDim: "rgba(79,127,255,0.08)",
+  green:     "#10b981",
+  greenDim:  "rgba(16,185,129,0.08)",
+  purple:    "#a78bfa",
+  purpleDim: "rgba(167,139,250,0.08)",
+  amber:     "#f59e0b",
+  amberDim:  "rgba(245,158,11,0.08)",
+  rose:      "#f43f5e",
+  roseDim:   "rgba(244,63,94,0.08)",
+  indigo:    "#6366f1",
+  indigoDim: "rgba(99,102,241,0.08)",
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   DATA
+   SKILL ICON MAPPING  — same DevIcon map as Certifications
 ═══════════════════════════════════════════════════════════════ */
-const CAPABILITIES = [
-  {
-    id: "fullstack", icon: Cpu, index: "01",
-    title: "Full-Stack Engineering", domain: "MERN · Production",
-    tagline: "End-to-end product ownership from schema to deployed UI.",
-    problemSpace: "Complete system control without hand-offs. Building products where every layer — database, API, state, UI — is understood and owned.",
-    architecturalPatterns: ["MVC Architecture", "REST API Design", "JWT + OAuth 2.0", "Server-Side Rendering", "Client State Management", "Schema Design"],
-    engineeringFocus: ["API architecture & endpoint design", "Auth & session strategy", "MongoDB schema optimization", "Performance & caching layers", "Security best practices", "Deployment automation"],
-    tradeoffs: [
-      { decision: "MongoDB vs PostgreSQL", rationale: "MongoDB for flexible schema evolution in early-stage products" },
-      { decision: "JWT vs Sessions", rationale: "JWT for stateless auth in distributed deployments" },
-      { decision: "Monolith vs Microservices", rationale: "Monolith first, extracted to services at real scale" },
-      { decision: "Client vs Server State", rationale: "Redux for complex shared state, Context for local" },
-    ],
-    productionEvidence: { "Deployments": "5 apps", "Active Users": "3,000+", "Scale": "Multi-region AWS", "Impact": "40% latency ↓" },
-    stack: ["React", "Node.js", "Express", "MongoDB", "Redis", "JWT", "Tailwind"],
-    projects: [
-      { name: "ATS Resume Builder", impact: "3k+ users, 2× hire improvement", tech: ["React", "Node.js", "MongoDB"] },
-      { name: "AI Chat Workspace", impact: "Real-time collaboration at scale", tech: ["WebSockets", "Redis", "Express"] },
-      { name: "E-Commerce Platform", impact: "Stripe payments, full cart system", tech: ["Stripe", "MongoDB", "React"] },
-    ],
-  },
-  {
-    id: "aiml", icon: Brain, index: "02",
-    title: "Machine Learning Engineering", domain: "AI / ML · Applied",
-    tagline: "ML systems that solve business problems — not notebook accuracy.",
-    problemSpace: "Reliability and production pipelines over experimentation. Every model ships with monitoring, drift detection, and a defined fallback.",
-    architecturalPatterns: ["ETL Pipelines", "Feature Engineering", "Model Versioning", "A/B Testing", "Real-time Inference API", "Batch Prediction Jobs"],
-    engineeringFocus: ["Model training & evaluation", "Feature engineering pipelines", "Serving strategy", "Drift detection", "Data validation", "SHAP explainability"],
-    tradeoffs: [
-      { decision: "Complexity vs Interpretability", rationale: "Simpler models where explainability matters — healthcare, finance" },
-      { decision: "Real-time vs Batch", rationale: "Batch for cost efficiency, real-time only when latency is critical" },
-      { decision: "Cloud ML vs Self-hosted", rationale: "Self-hosted for cost control at scale" },
-      { decision: "SQL vs NoSQL for Features", rationale: "PostgreSQL for structured features, Redis for real-time lookups" },
-    ],
-    productionEvidence: { "Models Deployed": "6", "Predictions Served": "1M+", "Accuracy": "95%", "Inference": "50ms" },
-    stack: ["Python", "Scikit-learn", "TensorFlow", "FastAPI", "Pandas", "Docker", "MLflow"],
-    projects: [
-      { name: "Fake News Detector", impact: "95% accuracy across 1M+ articles", tech: ["TF-IDF", "Logistic Regression", "FastAPI"] },
-      { name: "Price Prediction Engine", impact: "Real estate forecasting model", tech: ["XGBoost", "Feature Engineering"] },
-      { name: "Churn Detection System", impact: "SHAP-explainable predictions", tech: ["Scikit-learn", "Streamlit"] },
-    ],
-  },
-  {
-    id: "cloud", icon: Cloud, index: "03",
-    title: "Cloud Architecture", domain: "DevOps · Infrastructure",
-    tagline: "Reliable, cost-efficient infrastructure. Reproducibility by default.",
-    problemSpace: "Automated deployments, zero-downtime releases, and infrastructure that costs less than it should — without sacrificing uptime.",
-    architecturalPatterns: ["Infrastructure as Code", "Blue-Green Deployment", "Load Balancing", "Container Orchestration", "CI/CD Pipelines", "Alerting"],
-    engineeringFocus: ["AWS service architecture", "Docker containerization", "CI/CD automation", "Cost optimization", "Security group config", "Zero-downtime deploys"],
-    tradeoffs: [
-      { decision: "EC2 vs Lambda", rationale: "EC2 for predictable workloads, Lambda for traffic spikes" },
-      { decision: "Kubernetes vs Compose", rationale: "Docker Compose for simplicity until scale demands K8s" },
-      { decision: "Multi-cloud vs Single", rationale: "AWS-first for team expertise — multi-cloud complexity rarely pays off early" },
-      { decision: "Cost vs Availability", rationale: "Reserved instances for baseline, spot instances for batch" },
-    ],
-    productionEvidence: { "Deployments": "7", "Uptime": "99.9%", "Regions": "3", "Cost Saving": "40% ↓" },
-    stack: ["AWS", "Docker", "Terraform", "GitHub Actions", "Nginx", "EC2", "S3"],
-    projects: [
-      { name: "Multi-region Infrastructure", impact: "Global availability with failover", tech: ["AWS", "Terraform", "ALB"] },
-      { name: "CI/CD Pipeline", impact: "10min end-to-end deploy time", tech: ["GitHub Actions", "Docker"] },
-      { name: "Cost Optimization", impact: "40% monthly cost reduction", tech: ["Reserved Instances", "Spot"] },
-    ],
-  },
-  {
-    id: "security", icon: Shield, index: "04",
-    title: "Security Engineering", domain: "Cybersecurity · Applied",
-    tagline: "Secure systems by design, not by audit.",
-    problemSpace: "Identifying vulnerabilities before attackers do. Applied in CTF environments and integrated as a first-class concern at every layer.",
-    architecturalPatterns: ["Defense in Depth", "Zero Trust", "Secure by Default", "Rate Limiting", "Input Validation", "Security Monitoring"],
-    engineeringFocus: ["OWASP Top 10 mitigation", "Penetration testing", "Secure auth flows", "Network security", "Vulnerability scanning", "Audit practices"],
-    tradeoffs: [
-      { decision: "Security vs Usability", rationale: "MFA where critical, passwordless where it improves both" },
-      { decision: "Client vs Server Validation", rationale: "Both layers — never trust client-side alone" },
-      { decision: "Encrypted vs Plaintext Logs", rationale: "PII encrypted, operational logs plain for debuggability" },
-      { decision: "Rate Limit Strictness", rationale: "Aggressive on auth endpoints, lenient on public read APIs" },
-    ],
-    productionEvidence: { "Projects": "6", "CTF Challenges": "15+", "Auth Systems": "Hardened", "Coverage": "OWASP Top 10" },
-    stack: ["Kali Linux", "Burp Suite", "Metasploit", "Wireshark", "Nmap", "OWASP ZAP"],
-    projects: [
-      { name: "Secure Auth System", impact: "JWT + Redis rate limiting", tech: ["Node.js", "Redis"] },
-      { name: "Vulnerability Scanner", impact: "Automated port analysis tool", tech: ["Python", "Nmap"] },
-      { name: "CTF Write-ups", impact: "15+ documented solutions", tech: ["Web Exploitation", "Crypto"] },
-    ],
-  },
-  {
-    id: "blockchain", icon: Network, index: "05",
-    title: "Blockchain Engineering", domain: "Web3 · Builder",
-    tagline: "Smart contracts that are auditable, upgradeable, and gas-efficient.",
-    problemSpace: "Decentralized applications with real UX. Smart contracts reviewed for security, wallet flows that don't confuse users.",
-    architecturalPatterns: ["Smart Contract Design", "Gas Optimization", "Event-driven", "IPFS Storage", "Wallet Integration", "On-chain Governance"],
-    engineeringFocus: ["Solidity development", "Security audits", "Gas optimization", "Ethers.js integration", "MetaMask flows", "Hardhat testing"],
-    tradeoffs: [
-      { decision: "Layer 1 vs Layer 2", rationale: "Polygon for lower gas costs in production DApps" },
-      { decision: "On-chain vs Off-chain", rationale: "IPFS for large data, only content hashes on-chain" },
-      { decision: "Upgradeable vs Immutable", rationale: "Proxy pattern for upgradeability with transparent governance" },
-      { decision: "ERC-20 vs ERC-721", rationale: "Token standard chosen by use case, not default" },
-    ],
-    productionEvidence: { "Testnet Contracts": "5", "Gas Optimized": "Yes", "Test Coverage": "100%", "Standards": "ERC-20/721" },
-    stack: ["Solidity", "Hardhat", "Ethers.js", "IPFS", "MetaMask", "OpenZeppelin", "React"],
-    projects: [
-      { name: "NFT Minting Platform", impact: "ERC-721 with IPFS metadata", tech: ["Solidity", "React", "IPFS"] },
-      { name: "Decentralized Voting", impact: "On-chain governance protocol", tech: ["Solidity", "Hardhat"] },
-      { name: "Token Staking DeFi", impact: "Yield simulation with APY calc", tech: ["ERC-20", "Hardhat"] },
-    ],
-  },
-  {
-    id: "vision", icon: Terminal, index: "06",
-    title: "Deep Learning", domain: "Computer Vision · Research",
-    tagline: "CNN architectures and real-time inference for real-world image data.",
-    problemSpace: "Not toy demos. Transfer learning on real datasets, object detection at 30FPS, model optimization for edge deployment without accuracy collapse.",
-    architecturalPatterns: ["Transfer Learning", "Data Augmentation", "Model Compression", "Ensemble Methods", "Real-time Inference", "Active Learning"],
-    engineeringFocus: ["CNN architecture design", "Transfer learning", "Augmentation pipelines", "Model pruning", "YOLO inference", "Edge deployment"],
-    tradeoffs: [
-      { decision: "Accuracy vs Speed", rationale: "MobileNet for edge devices, ResNet where accuracy is non-negotiable" },
-      { decision: "Pretrained vs Scratch", rationale: "Transfer learning as default — scratch only for genuinely novel domains" },
-      { decision: "Data Quantity vs Quality", rationale: "Quality annotations consistently beat raw quantity" },
-      { decision: "GPU vs CPU Inference", rationale: "GPU for batch processing, CPU-optimized for real-time edge" },
-    ],
-    productionEvidence: { "CV Models": "4", "Training Images": "50k+", "Inference": "30 FPS", "Detection": "Real-time" },
-    stack: ["PyTorch", "TensorFlow", "OpenCV", "YOLOv5", "ResNet", "MobileNet"],
-    projects: [
-      { name: "Face Mask Detector", impact: "Real-time webcam detection", tech: ["MobileNetV2", "OpenCV"] },
-      { name: "Plant Disease Classifier", impact: "50k+ leaf image dataset", tech: ["CNN", "PyTorch"] },
-      { name: "Object Counter Pipeline", impact: "Production YOLO deployment", tech: ["YOLOv5", "Python"] },
-    ],
-  },
-];
-
-const METRICS = [
-  { value: "30+", label: "Production Systems", sub: "Deployed & maintained" },
-  { value: "6", label: "Technical Domains", sub: "End-to-end ownership" },
-  { value: "3000+", label: "End Users Reached", sub: "Real products, real impact" },
-  { value: "99.9%", label: "Uptime Maintained", sub: "Multi-region AWS" },
-];
-
-const CROSS_DOMAIN = [
-  { label: "Full Stack + AI", title: "ML-Backed SaaS", body: "Resume builder with AI scoring, fake news detector as a REST API — machine learning embedded in the product layer, not bolted on." },
-  { label: "Cloud + Security", title: "Secure Infrastructure", body: "Zero-trust deployment pipelines, encrypted secrets management, security baked into infrastructure-as-code from day one." },
-  { label: "Blockchain + Full Stack", title: "Decentralised Applications", body: "NFT minting platform bridging Web2 UX patterns with Web3 wallet flows — no wallet confusion, no broken handoffs." },
-  { label: "AI + Cloud", title: "Model Deployment at Scale", body: "Containerised inference APIs with MLflow versioning, auto-scaling, and model monitoring. Not just a notebook — a system." },
-];
-
-const PHILOSOPHY = [
-  { number: "I", principle: "Build for clarity before scale", detail: "Premature optimisation is the root of all evil. Start simple. Measure the real bottleneck. Then and only then, optimise it." },
-  { number: "II", principle: "Secure by default", detail: "Security is not a feature you add in the last sprint. It is a foundation every architectural decision is laid upon." },
-  { number: "III", principle: "Measure everything", detail: "Gut feelings about performance are almost always wrong. Instrumentation turns opinions into actionable decisions." },
-  { number: "IV", principle: "Profile before optimising", detail: "Guessing where the bottleneck lives wastes engineering cycles. Profile first. Fix exactly what hurts, nothing else." },
-];
+const skillIcons = {
+  "Python":           "devicon-python-plain colored",
+  "TensorFlow":       "devicon-tensorflow-original colored",
+  "Keras":            "devicon-keras-plain colored",
+  "Scikit-learn":     "devicon-scikitlearn-plain colored",
+  "NumPy":            "devicon-numpy-plain colored",
+  "Pandas":           "devicon-pandas-plain colored",
+  "OpenCV":           "devicon-opencv-plain colored",
+  "PyTorch":          "devicon-pytorch-plain colored",
+  "Docker":           "devicon-docker-plain colored",
+  "AWS":              "devicon-amazonwebservices-plain-wordmark colored",
+  "Azure":            "devicon-azure-plain colored",
+  "Git":              "devicon-git-plain colored",
+  "GitHub":           "devicon-github-original",
+  "Linux":            "devicon-linux-plain colored",
+  "Bash":             "devicon-bash-plain colored",
+  "React":            "devicon-react-original colored",
+  "Node.js":          "devicon-nodejs-plain colored",
+  "MongoDB":          "devicon-mongodb-plain colored",
+  "MySQL":            "devicon-mysql-plain colored",
+  "PostgreSQL":       "devicon-postgresql-plain colored",
+  "Java":             "devicon-java-plain colored",
+  "C++":              "devicon-cplusplus-plain colored",
+  "JavaScript":       "devicon-javascript-plain colored",
+  "HTML":             "devicon-html5-plain colored",
+  "CSS":              "devicon-css3-plain colored",
+  "Flask":            "devicon-flask-original",
+  "Django":           "devicon-django-plain colored",
+  "Solidity":         "devicon-solidity-plain colored",
+  "Ethereum":         "devicon-ethereum-original colored",
+  "Kali Linux":       "devicon-linux-plain colored",
+  "Wireshark":        "devicon-linux-plain colored",
+  "Metasploit":       "devicon-linux-plain colored",
+  "YOLO":             "devicon-python-plain colored",
+  "CNN":              "devicon-tensorflow-original colored",
+  "NLP":              "devicon-python-plain colored",
+  "Streamlit":        "devicon-python-plain colored",
+  "R":                "devicon-r-plain colored",
+  "Tableau":          "devicon-python-plain colored",
+  "Power BI":         "devicon-python-plain colored",
+};
 
 /* ═══════════════════════════════════════════════════════════════
-   MAGNETIC CURSOR
+   WORKSHOP DATA
+   Tone: honest, factual, concise. Exposure ≠ mastery.
 ═══════════════════════════════════════════════════════════════ */
-function MagneticCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const pos = useRef({ x: -100, y: -100 });
-  const ring = useRef({ x: -100, y: -100 });
-  const [isLink, setIsLink] = useState(false);
-  const rafRef = useRef(null);
+const workshopsData = {
 
-  useEffect(() => {
-    const onMove = (e) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      setIsLink(!!(el && (el.closest("a") || el.closest("button") || el.closest("[data-cursor]"))));
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top = e.clientY + "px";
-      }
-    };
-    const animate = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.11;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.11;
-      if (ringRef.current) {
-        ringRef.current.style.left = ring.current.x + "px";
-        ringRef.current.style.top = ring.current.y + "px";
-      }
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    window.addEventListener("mousemove", onMove);
-    rafRef.current = requestAnimationFrame(animate);
-    return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(rafRef.current); };
-  }, []);
+  /* Three "highlight" workshops — shown as cards at the top.
+     Chosen for technical relevance, not prestige.             */
+  featured: [
+    {
+      id: "dl-workshop",
+      title: "Deep Learning Fundamentals",
+      organizer: "APSSDC",
+      year: "2024",
+      duration: "3 days",
+      format: "Hands-on",
+      skills: ["Python", "TensorFlow", "Keras", "CNN"],
+      accent:    C.purple,
+      accentDim: C.purpleDim,
+      description: "Attended a 3-day workshop covering neural network basics, activation functions, and model training. Practiced building simple image classifiers using Keras on provided datasets.",
+      connection:  "Provided introductory exposure that supported later coursework on classification models.",
+    },
+    {
+      id: "cloud-devops",
+      title: "Cloud Computing & DevOps Basics",
+      organizer: "NASSCOM FutureSkills",
+      year: "2024",
+      duration: "2 days",
+      format: "Demonstration",
+      skills: ["AWS", "Docker", "Git", "Linux"],
+      accent:    C.green,
+      accentDim: C.greenDim,
+      description: "Participated in sessions introducing AWS fundamentals, containerisation with Docker, and basic CI/CD concepts through guided demonstrations.",
+      connection:  "Helped contextualise cloud concepts covered in AWS Cloud Practitioner coursework.",
+    },
+    {
+      id: "cv-workshop",
+      title: "Computer Vision with OpenCV",
+      organizer: "IIT Hyderabad Outreach",
+      year: "2023",
+      duration: "2 days",
+      format: "Hands-on",
+      skills: ["Python", "OpenCV", "CNN", "YOLO"],
+      accent:    C.accent,
+      accentDim: C.accentDim,
+      description: "Explored image processing basics, edge detection, and object detection concepts using OpenCV. Followed along with a simple face detection demo.",
+      connection:  "Introduced foundational computer vision ideas referenced in subsequent deep learning study.",
+    },
+  ],
 
+  /* Domain-grouped list of all workshops */
+  domains: {
+    "AI & Machine Learning": {
+      icon:   Brain,
+      accent: C.purple,
+      workshops: [
+        {
+          title:      "Deep Learning Fundamentals",
+          organizer:  "APSSDC",
+          year:       "2024",
+          duration:   "3 days",
+          skills:     ["Python", "TensorFlow", "Keras", "CNN"],
+          description: "Covered neural network architecture basics and practiced training simple models using Keras on image datasets.",
+        },
+        {
+          title:      "Natural Language Processing Overview",
+          organizer:  "Analytics Vidhya",
+          year:       "2024",
+          duration:   "1 day",
+          skills:     ["Python", "NLP", "Scikit-learn"],
+          description: "Attended a session introducing tokenisation, text vectorisation, and basic sentiment classification techniques.",
+        },
+        {
+          title:      "Computer Vision with OpenCV",
+          organizer:  "IIT Hyderabad Outreach",
+          year:       "2023",
+          duration:   "2 days",
+          skills:     ["Python", "OpenCV", "CNN", "YOLO"],
+          description: "Explored image processing fundamentals and followed along with object detection demonstrations using OpenCV and YOLO.",
+        },
+        {
+          title:      "Machine Learning Model Deployment",
+          organizer:  "Great Learning",
+          year:       "2024",
+          duration:   "1 day",
+          skills:     ["Python", "Flask", "Streamlit"],
+          description: "Introduced to basic model serving patterns using Flask and Streamlit through guided walkthroughs.",
+        },
+      ],
+    },
+
+    "Cloud & DevOps": {
+      icon:   Cloud,
+      accent: C.green,
+      workshops: [
+        {
+          title:      "Cloud Computing & DevOps Basics",
+          organizer:  "NASSCOM FutureSkills",
+          year:       "2024",
+          duration:   "2 days",
+          skills:     ["AWS", "Docker", "Git", "Linux"],
+          description: "Participated in demonstrations covering AWS core services, Docker basics, and introductory CI/CD pipeline concepts.",
+        },
+        {
+          title:      "Linux & Shell Scripting",
+          organizer:  "APSSDC",
+          year:       "2023",
+          duration:   "2 days",
+          skills:     ["Linux", "Bash", "Git"],
+          description: "Covered Linux filesystem navigation, basic shell scripting, and version control fundamentals using Git.",
+        },
+      ],
+    },
+
+    "Cybersecurity": {
+      icon:   Shield,
+      accent: C.rose,
+      workshops: [
+        {
+          title:      "Ethical Hacking Fundamentals",
+          organizer:  "EC-Council Academia",
+          year:       "2024",
+          duration:   "2 days",
+          skills:     ["Kali Linux", "Wireshark", "Metasploit"],
+          description: "Introduced to penetration testing concepts, network scanning, and basic vulnerability identification in a lab environment.",
+        },
+        {
+          title:      "Web Application Security",
+          organizer:  "OWASP Student Chapter",
+          year:       "2023",
+          duration:   "1 day",
+          skills:     ["JavaScript", "Linux", "Python"],
+          description: "Attended a session covering OWASP Top 10 vulnerabilities with demonstrations of common web security issues.",
+        },
+      ],
+    },
+
+    "Web Development": {
+      icon:   Code2,
+      accent: C.accent,
+      workshops: [
+        {
+          title:      "Full-Stack Web Development Bootcamp",
+          organizer:  "APSSDC",
+          year:       "2023",
+          duration:   "3 days",
+          skills:     ["React", "Node.js", "MongoDB", "HTML", "CSS"],
+          description: "Participated in guided sessions on MERN stack fundamentals, building a simple CRUD application as a hands-on exercise.",
+        },
+        {
+          title:      "React.js Component Architecture",
+          organizer:  "Scaler School of Technology",
+          year:       "2024",
+          duration:   "1 day",
+          skills:     ["React", "JavaScript"],
+          description: "Attended a session covering React component design, props, state, and basic hooks through coding exercises.",
+        },
+      ],
+    },
+
+    "Data Science": {
+      icon:   Database,
+      accent: C.indigo,
+      workshops: [
+        {
+          title:      "Data Analysis with Python",
+          organizer:  "Internshala Trainings",
+          year:       "2023",
+          duration:   "2 days",
+          skills:     ["Python", "Pandas", "NumPy", "Tableau"],
+          description: "Covered data cleaning, exploratory analysis, and basic visualisation using Pandas and Tableau in guided exercises.",
+        },
+        {
+          title:      "Statistics for Data Science",
+          organizer:  "Analytics Vidhya",
+          year:       "2023",
+          duration:   "1 day",
+          skills:     ["Python", "R", "NumPy"],
+          description: "Participated in a session introducing descriptive statistics, probability distributions, and hypothesis testing concepts.",
+        },
+      ],
+    },
+
+    "Blockchain & Web3": {
+      icon:   Cpu,
+      accent: C.amber,
+      workshops: [
+        {
+          title:      "Blockchain Technology Introduction",
+          organizer:  "IEEE Student Branch",
+          year:       "2024",
+          duration:   "1 day",
+          skills:     ["Solidity", "Ethereum"],
+          description: "Attended an introductory session on blockchain architecture, consensus mechanisms, and a basic smart contract demonstration.",
+        },
+      ],
+    },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   FLOATING BACKGROUND  — identical to Certifications
+═══════════════════════════════════════════════════════════════ */
+function FloatingElements() {
+  return (
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: "10%",  left: "15%",  width: "1px", height: "200px", background: `linear-gradient(180deg, transparent, ${C.accent}08, transparent)`,  animation: "floatV1 35s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", top: "40%",  right: "20%", width: "1px", height: "280px", background: `linear-gradient(180deg, transparent, ${C.purple}06, transparent)`,  animation: "floatV2 40s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", top: "70%",  left: "40%",  width: "1px", height: "180px", background: `linear-gradient(180deg, transparent, ${C.green}05, transparent)`,   animation: "floatV1 45s ease-in-out infinite reverse" }} />
+      <div style={{ position: "absolute", top: "60%",  left: "10%",  width: "400px", height: "400px", borderRadius: "50%", background: `radial-gradient(circle, ${C.green}04 0%, transparent 70%)`,  filter: "blur(60px)", animation: "floatH1 50s linear infinite" }} />
+      <div style={{ position: "absolute", top: "20%",  right: "5%",  width: "500px", height: "300px", borderRadius: "50%", background: `radial-gradient(ellipse, ${C.accent}03 0%, transparent 60%)`, filter: "blur(80px)", animation: "floatH2 60s linear infinite reverse" }} />
+      <div style={{ position: "absolute", bottom: "15%", right: "30%", width: "350px", height: "350px", borderRadius: "50%", background: `radial-gradient(circle, ${C.purple}03 0%, transparent 65%)`, filter: "blur(70px)", animation: "floatH1 55s linear infinite" }} />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOVING TEXT STRIPS  — identical to Certifications
+═══════════════════════════════════════════════════════════════ */
+function MovingTextStrips() {
+  const s1 = "WORKSHOP · LEARNING · EXPOSURE · FUNDAMENTALS · TRAINING · ";
+  const s2 = "DEEP LEARNING · CLOUD · SECURITY · WEB · DATA SCIENCE · ";
   return (
     <>
-      <div ref={dotRef} style={{
-        position: "fixed", pointerEvents: "none", zIndex: 99999,
-        width: isLink ? "8px" : "5px", height: isLink ? "8px" : "5px",
-        borderRadius: "50%", background: isLink ? T.blue : T.ink,
-        transform: "translate(-50%,-50%)",
-        transition: "width 0.2s, height 0.2s, background 0.2s",
-      }} />
-      <div ref={ringRef} style={{
-        position: "fixed", pointerEvents: "none", zIndex: 99998,
-        width: isLink ? "48px" : "30px", height: isLink ? "48px" : "30px",
-        borderRadius: "50%",
-        border: `1.5px solid ${isLink ? T.blue : "rgba(60,60,60,0.45)"}`,
-        transform: "translate(-50%,-50%)",
-        transition: "width 0.35s cubic-bezier(0.16,1,0.3,1), height 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.25s",
-      }} />
+      <div style={{ position: "absolute", top: "35%", left: 0, width: "100%", overflow: "hidden", pointerEvents: "none", opacity: 0.04 }}>
+        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "scrollRTL 40s linear infinite", fontFamily: "'DM Mono', monospace", fontSize: "4rem", fontWeight: 700, letterSpacing: "0.3em", color: C.text, filter: "blur(1px)" }}>
+          {s1.repeat(10)}
+        </div>
+      </div>
+      <div style={{ position: "absolute", top: "60%", left: 0, width: "100%", overflow: "hidden", pointerEvents: "none", opacity: 0.03 }}>
+        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "scrollRTL 55s linear infinite", fontFamily: "'DM Mono', monospace", fontSize: "3rem", fontWeight: 600, letterSpacing: "0.25em", color: C.text, filter: "blur(1.5px)" }}>
+          {s2.repeat(10)}
+        </div>
+      </div>
     </>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SCROLL PROGRESS
+   CUSTOM CURSOR  — identical to Certifications
+═══════════════════════════════════════════════════════════════ */
+function CustomCursor() {
+  const [pos, setPos]   = useState({ x: 0, y: 0 });
+  const [hov, setHov]   = useState(false);
+  useEffect(() => {
+    const fn = (e) => {
+      setPos({ x: e.clientX, y: e.clientY });
+      const t = e.target;
+      setHov(!!(t.tagName === "A" || t.tagName === "BUTTON" || t.closest("[data-magnetic]") || t.closest("[data-hover]")));
+    };
+    window.addEventListener("mousemove", fn);
+    return () => window.removeEventListener("mousemove", fn);
+  }, []);
+  return (
+    <>
+      <div style={{ position: "fixed", left: pos.x, top: pos.y, width: hov ? "32px" : "8px", height: hov ? "32px" : "8px", borderRadius: "50%", background: hov ? "transparent" : C.accent, border: hov ? `2px solid ${C.accent}` : "none", pointerEvents: "none", zIndex: 10000, transform: "translate(-50%,-50%)", transition: "width .2s,height .2s,background .2s,border .2s", mixBlendMode: "difference" }} />
+      <div style={{ position: "fixed", left: pos.x, top: pos.y, width: hov ? "64px" : "48px", height: hov ? "64px" : "48px", borderRadius: "50%", background: `radial-gradient(circle,${C.accent}15 0%,transparent 70%)`, pointerEvents: "none", zIndex: 9999, transform: "translate(-50%,-50%)", transition: "width .3s,height .3s" }} />
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL PROGRESS  — identical to Certifications
 ═══════════════════════════════════════════════════════════════ */
 function ScrollProgress() {
   const [p, setP] = useState(0);
   useEffect(() => {
-    const h = () => {
-      const t = document.documentElement.scrollHeight - window.innerHeight;
-      setP(t > 0 ? (window.scrollY / t) * 100 : 0);
+    const fn = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setP(total > 0 ? (window.scrollY / total) * 100 : 0);
     };
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", zIndex: 9900 }}>
-      <div style={{ height: "100%", width: p + "%", background: T.blue, transition: "width 0.08s linear" }} />
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: C.surface2, zIndex: 9998 }}>
+      <div style={{ height: "100%", width: `${p}%`, background: `linear-gradient(90deg,${C.accent},${C.purple},${C.green})`, transition: "width .1s linear" }} />
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SPLIT TEXT WORD REVEAL
+   ANIMATED COUNTER  — identical to Certifications
 ═══════════════════════════════════════════════════════════════ */
-function SplitReveal({ text, tag = "div", style = {}, delay = 0, stagger = 0.045 }) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef(null);
-  const words = text.split(" ");
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  const Tag = tag;
-  return (
-    <Tag ref={ref} style={{ ...style }}>
-      {words.map((word, i) => (
-        <span key={i} style={{ display: "inline-block", overflow: "hidden", marginRight: "0.27em", verticalAlign: "bottom" }}>
-          <span style={{
-            display: "inline-block",
-            transform: visible ? "translateY(0)" : "translateY(110%)",
-            opacity: visible ? 1 : 0,
-            transition: `transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay + i * stagger}s, opacity 0.5s ease ${delay + i * stagger}s`,
-          }}>{word}</span>
-        </span>
-      ))}
-    </Tag>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ANIMATED COUNTER
-═══════════════════════════════════════════════════════════════ */
-function Counter({ raw }) {
+function AnimatedCounter({ value, duration = 2000 }) {
   const [count, setCount] = useState(0);
   const [fired, setFired] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !fired) {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !fired) {
         setFired(true);
-        const num = parseFloat(raw.replace(/[^0-9.]/g, "")) || 0;
-        const dur = 1800;
+        const num = parseInt(value.toString().replace(/[^0-9]/g, "")) || 0;
         const start = Date.now();
         const tick = () => {
-          const prog = Math.min((Date.now() - start) / dur, 1);
-          const eased = prog < 0.5 ? 4 * prog * prog * prog : 1 - Math.pow(-2 * prog + 2, 3) / 2;
+          const prog = Math.min((Date.now() - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - prog, 3);
           setCount(Math.floor(num * eased));
           if (prog < 1) requestAnimationFrame(tick); else setCount(num);
         };
         tick();
       }
-    }, { threshold: 0.4 });
+    }, { threshold: 0.3 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [raw, fired]);
-
-  const suffix = raw.includes("%") ? "%" : raw.includes("+") ? "+" : "";
-  return <span ref={ref}>{count}{suffix}</span>;
+  }, [value, duration, fired]);
+  const fmt = (n) => value.toString().includes("+") ? `${n}+` : `${n}`;
+  return <span ref={ref}>{fmt(count)}</span>;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FADE UP
+   STAT CHIP  — identical to Certifications
 ═══════════════════════════════════════════════════════════════ */
-function FadeUp({ children, delay = 0, style = {} }) {
-  const [v, setV] = useState(false);
+function StatChip({ value, label, icon: Icon, delay = 0 }) {
+  const [inView, setInView] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.08 });
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.3 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
   return (
-    <div ref={ref} style={{
-      ...style,
-      opacity: v ? 1 : 0,
-      transform: v ? "translateY(0)" : "translateY(28px)",
-      transition: `opacity 0.75s ease ${delay}s, transform 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
-    }}>{children}</div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   MARQUEE STRIP
-═══════════════════════════════════════════════════════════════ */
-function MarqueeStrip() {
-  const items = ["Full-Stack Engineering", "Machine Learning", "Cloud Architecture", "Security Engineering", "Blockchain", "Computer Vision", "Production Systems", "System Design", "API Architecture", "DevOps"];
-  const doubled = [...items, ...items];
-  return (
-    <div style={{ overflow: "hidden", borderTop: `1px solid ${T.ink10}`, borderBottom: `1px solid ${T.ink10}`, padding: "18px 0", background: T.ink02 }}>
-      <div style={{ display: "flex", animation: "marquee 32s linear infinite", width: "max-content" }}>
-        {doubled.map((item, i) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "28px", padding: "0 36px", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: i % 4 === 0 ? T.blue : T.ink40, whiteSpace: "nowrap" }}>
-            {item}<span style={{ fontSize: "5px", color: T.ink20 }}>◆</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DETAIL PANEL
-═══════════════════════════════════════════════════════════════ */
-function DetailPanel({ cap, onClose }) {
-  const [visible, setVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
-  const Icon = cap.icon;
-  const tabs = ["overview", "tradeoffs", "projects"];
-
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setVisible(true));
-    const esc = (e) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", esc);
-    document.body.style.overflow = "hidden";
-    return () => { cancelAnimationFrame(raf); document.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
-  }, [onClose]);
-
-  const PanelSec = ({ label, Icon: SI, children }) => (
-    <div style={{ paddingTop: "32px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-        {SI && <SI size={12} style={{ color: T.ink40 }} />}
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: T.ink40 }}>{label}</span>
-      </div>
-      {children}
-    </div>
-  );
-
-  return (
-    <div onClick={onClose} style={{
-      position: "fixed", inset: 0, zIndex: 9000,
-      background: "rgba(8,8,8,0.5)", backdropFilter: "blur(8px) saturate(0.7)",
-      opacity: visible ? 1 : 0, transition: "opacity 0.3s ease-out",
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        position: "fixed", top: 0, right: 0, bottom: 0,
-        width: "min(660px, 100vw)", background: T.white,
-        display: "flex", flexDirection: "column",
-        transform: visible ? "translateX(0)" : "translateX(56px)",
-        opacity: visible ? 1 : 0,
-        transition: "transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease-out",
-        boxShadow: "-48px 0 128px rgba(0,0,0,0.14)",
-        overflowY: "auto",
-      }}>
-        <div style={{ height: "3px", background: `linear-gradient(90deg, ${T.blue} 0%, transparent 55%)`, flexShrink: 0 }} />
-
-        {/* Header */}
-        <div style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.96)", backdropFilter: "blur(12px)", padding: "28px 40px", borderBottom: `1px solid ${T.ink10}`, display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: T.ink05, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Icon size={22} style={{ color: T.ink80 }} />
-            </div>
-            <div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4px" }}>{cap.domain}</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "22px", fontWeight: 600, color: T.ink, lineHeight: 1.15 }}>{cap.title}</div>
-            </div>
-          </div>
-          <button onClick={onClose} data-cursor style={{ width: "36px", height: "36px", border: `1px solid ${T.ink10}`, borderRadius: "8px", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: T.ink60, transition: "all 0.15s ease-out" }}
-            onMouseEnter={e => { e.currentTarget.style.background = T.ink05; e.currentTarget.style.borderColor = T.ink20; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = T.ink10; }}>
-            <X size={16} />
-          </button>
+    <div ref={ref} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1.25rem 1.75rem", background: C.surface, border: `1px solid ${C.border}`, borderRadius: "12px", opacity: inView ? 1 : 0, transform: inView ? "translateX(0)" : "translateX(40px)", transition: `all .7s cubic-bezier(.22,1,.36,1) ${delay}s` }}>
+      {Icon && (
+        <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: C.accentDim, border: `1px solid ${C.accent}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <Icon size={18} color={C.accent} />
         </div>
-
-        {/* Tabs */}
-        <div style={{ display: "flex", padding: "0 40px", borderBottom: `1px solid ${T.ink10}`, flexShrink: 0 }}>
-          {tabs.map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} data-cursor style={{ padding: "16px 20px 13px", background: "transparent", border: "none", borderBottom: `2px solid ${activeTab === tab ? T.ink : "transparent"}`, cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: activeTab === tab ? T.ink : T.ink40, transition: "all 0.18s ease-out" }}>
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: "40px", display: "flex", flexDirection: "column", gap: 0 }}>
-          {/* Meta chips */}
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "32px" }}>
-            {[["Depth", cap.depth], ["Since", cap.since], ["Maturity", cap.maturity]].map(([k, v]) => (
-              <div key={k} style={{ padding: "8px 16px", background: T.ink02, borderRadius: "100px", display: "flex", gap: "8px", alignItems: "center" }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.08em" }}>{k}</span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 700, color: T.ink80 }}>{v}</span>
-              </div>
-            ))}
-          </div>
-
-          {activeTab === "overview" && (
-            <div style={{ animation: "panelIn 0.3s ease-out" }}>
-              <PanelSec label="Problem Space" Icon={Box}>
-                <p style={{ fontSize: "17px", fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: T.ink60, lineHeight: 1.8, paddingLeft: "20px", borderLeft: `2px solid ${T.ink10}` }}>{cap.problemSpace}</p>
-              </PanelSec>
-              <PanelSec label="Architectural Patterns" Icon={Layers}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                  {cap.architecturalPatterns.map(p => (
-                    <div key={p} style={{ padding: "12px 14px", borderRadius: "8px", fontSize: "14px", color: T.ink60, background: T.ink02, cursor: "default", transition: "all 0.15s" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = T.blueMid; e.currentTarget.style.color = T.blue; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = T.ink02; e.currentTarget.style.color = T.ink60; }}>
-                      {p}
-                    </div>
-                  ))}
-                </div>
-              </PanelSec>
-              <PanelSec label="Production Evidence" Icon={CheckCircle2}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }}>
-                  {Object.entries(cap.productionEvidence).map(([k, v]) => (
-                    <div key={k} style={{ padding: "20px", background: T.blueSubtle, borderRadius: "10px" }}>
-                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.ink40, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>{k}</div>
-                      <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "28px", fontWeight: 600, color: T.blue, lineHeight: 1 }}>{v}</div>
-                    </div>
-                  ))}
-                </div>
-              </PanelSec>
-              <PanelSec label="Tech Stack">
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                  {cap.stack.map(s => (
-                    <span key={s} style={{ padding: "6px 14px", background: T.ink05, borderRadius: "6px", fontFamily: "'DM Mono', monospace", fontSize: "12px", color: T.ink60 }}>{s}</span>
-                  ))}
-                </div>
-              </PanelSec>
-            </div>
-          )}
-
-          {activeTab === "tradeoffs" && (
-            <div style={{ animation: "panelIn 0.3s ease-out" }}>
-              {cap.tradeoffs.map((t, i) => (
-                <div key={i} style={{ padding: "24px 0", borderBottom: `1px solid ${T.ink10}`, animation: `panelIn 0.4s ease-out ${i * 0.07}s both` }}>
-                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "21px", fontWeight: 600, color: T.ink, marginBottom: "10px", lineHeight: 1.2 }}>{t.decision}</div>
-                  <div style={{ fontSize: "15px", color: T.ink60, lineHeight: 1.7 }}>{t.rationale}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === "projects" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "14px", animation: "panelIn 0.3s ease-out" }}>
-              {cap.projects.map((proj, i) => (
-                <div key={i} style={{ padding: "24px", borderRadius: "12px", background: T.ink02, transition: "transform 0.2s ease-out, background 0.2s", cursor: "default", animation: `panelIn 0.4s ease-out ${i * 0.08}s both` }}
-                  onMouseEnter={e => { e.currentTarget.style.background = T.ink05; e.currentTarget.style.transform = "translateX(6px)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = T.ink02; e.currentTarget.style.transform = "translateX(0)"; }}>
-                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "22px", fontWeight: 600, color: T.ink, marginBottom: "6px" }}>{proj.name}</div>
-                  <div style={{ fontSize: "14px", color: T.ink60, marginBottom: "16px", lineHeight: 1.6 }}>{proj.impact}</div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    {proj.tech.map(tech => (
-                      <span key={tech} style={{ padding: "3px 10px", background: T.white, border: `1px solid ${T.ink10}`, borderRadius: "4px", fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink60 }}>{tech}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div style={{ marginTop: "40px", paddingTop: "32px", borderTop: `1px solid ${T.ink10}` }}>
-            <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" data-cursor style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "14px 24px", border: `1px solid ${T.ink10}`, borderRadius: "10px", color: T.ink60, textDecoration: "none", fontFamily: "'DM Mono', monospace", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", background: T.white, transition: "all 0.18s ease-out" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = T.ink; e.currentTarget.style.color = T.ink; e.currentTarget.style.background = T.ink02; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = T.ink10; e.currentTarget.style.color = T.ink60; e.currentTarget.style.background = T.white; }}>
-              <Github size={16} /> VIEW ON GITHUB <ExternalLink size={14} />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CAPABILITY ROW
-═══════════════════════════════════════════════════════════════ */
-function CapabilityRow({ cap, index, onClick }) {
-  const [hovered, setHovered] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const ref = useRef(null);
-  const Icon = cap.icon;
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.08 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div ref={ref} onClick={() => onClick(cap)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      data-cursor
-      style={{
-        display: "grid", gridTemplateColumns: "72px 1fr auto",
-        alignItems: "center", gap: "40px",
-        padding: "36px 0", borderBottom: `1px solid ${T.ink10}`,
-        cursor: "pointer", position: "relative",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateX(0)" : "translateX(-24px)",
-        transition: `opacity 0.55s ease ${index * 0.07}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${index * 0.07}s`,
-      }}>
-      {/* Index + icon */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "10px" }}>
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink20, letterSpacing: "0.05em" }}>{cap.index}</span>
-        <div style={{ width: "46px", height: "46px", borderRadius: "12px", background: hovered ? T.ink : T.ink05, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.25s ease-out, transform 0.25s ease-out", transform: hovered ? "scale(1.08) rotate(-4deg)" : "scale(1) rotate(0deg)" }}>
-          <Icon size={20} style={{ color: hovered ? T.white : T.ink60, transition: "color 0.2s" }} />
-        </div>
-      </div>
-
-      {/* Content */}
+      )}
       <div>
-        <div style={{ display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "8px", flexWrap: "wrap" }}>
-          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 600, color: T.ink, lineHeight: 1.1, letterSpacing: "-0.01em" }}>{cap.title}</h3>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "12px", color: T.ink40 }}>{cap.domain}</span>
+        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 600, fontStyle: "italic", color: C.text, lineHeight: 1, marginBottom: ".25rem", letterSpacing: "-0.01em" }}>
+          <AnimatedCounter value={value} />
         </div>
-        <p style={{ fontSize: "15px", color: T.ink60, lineHeight: 1.65, maxWidth: "540px" }}>{cap.tagline}</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: hovered ? "48px" : "0", marginTop: hovered ? "16px" : "0", overflow: "hidden", opacity: hovered ? 1 : 0, transition: "max-height 0.35s cubic-bezier(0.16,1,0.3,1), margin-top 0.3s ease, opacity 0.2s ease" }}>
-          {cap.stack.slice(0, 5).map(s => (
-            <span key={s} style={{ padding: "4px 12px", background: T.ink05, border: `1px solid ${T.ink10}`, borderRadius: "4px", fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink60 }}>{s}</span>
+        <div style={{ fontSize: "0.8rem", color: C.muted, fontFamily: "'DM Mono', monospace" }}>{label}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILL TAG  — identical to Certifications
+═══════════════════════════════════════════════════════════════ */
+function SkillTag({ skill, accent, isHovered, onHover, onLeave }) {
+  const iconClass = skillIcons[skill] || "devicon-code-plain";
+  return (
+    <span
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: ".5rem 1rem", background: isHovered ? accent + "15" : C.surface2, border: `1px solid ${isHovered ? accent + "40" : C.border}`, borderRadius: "8px", fontSize: ".8rem", fontWeight: 500, color: isHovered ? C.text : C.muted2, fontFamily: "'DM Mono', monospace", transition: "all .35s cubic-bezier(.22,1,.36,1)", transform: isHovered ? "translateX(6px)" : "none", position: "relative", overflow: "hidden", cursor: "default" }}
+    >
+      <i className={iconClass} style={{ fontSize: "1.2rem", transition: "all .35s cubic-bezier(.22,1,.36,1)", transform: isHovered ? "scale(1.15) rotate(5deg)" : "none" }} />
+      {skill}
+      {isHovered && <div style={{ position: "absolute", bottom: 0, left: 0, height: "2px", background: accent, animation: "underlineSweep .4s ease-out both" }} />}
+      {isHovered && <div style={{ position: "absolute", top: 0, left: "-100%", width: "100%", height: "100%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent)", animation: "shimmerSweep .8s ease-out" }} />}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FEATURED WORKSHOP CARD
+   Same structure as FlagshipCard in Certifications.
+   Badge says "Workshop Attended" instead of "Training Completed".
+═══════════════════════════════════════════════════════════════ */
+function FeaturedCard({ ws, index }) {
+  const [inView,  setInView]  = useState(false);
+  const [tilt,    setTilt]    = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+  const [hovSkill,setHovSkill]= useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.2 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  const onMouseMove = (e) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    setTilt({ x: ((e.clientY - r.top)  / r.height - 0.5) * 3,
+              y: -((e.clientX - r.left) / r.width  - 0.5) * 3 });
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setHovered(false); }}
+      style={{ background: C.surface, border: `1px solid ${hovered ? ws.accent + "40" : C.border}`, borderRadius: "20px", overflow: "hidden", transition: "all .4s cubic-bezier(.22,1,.36,1)", transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${hovered ? "-8px" : "0"})`, boxShadow: hovered ? "0 20px 48px rgba(0,0,0,0.08)" : "0 4px 16px rgba(0,0,0,0.04)", opacity: inView ? 1 : 0, animation: inView ? `slideInFromRight .7s cubic-bezier(.22,1,.36,1) ${index * .15}s both` : "none" }}
+    >
+      {/* Top accent bar */}
+      <div style={{ height: "3px", background: `linear-gradient(90deg,${ws.accent},transparent)`, position: "relative", overflow: "hidden" }}>
+        {hovered && <div style={{ position: "absolute", top: 0, left: "-100%", width: "100%", height: "100%", background: "linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)", animation: "shimmerSweep 1.5s ease-in-out" }} />}
+      </div>
+
+      <div style={{ padding: "2.5rem" }}>
+        {/* Badge row */}
+        <div style={{ display: "flex", alignItems: "center", gap: ".75rem", marginBottom: "1rem" }}>
+          <div style={{ padding: ".4rem .9rem", background: ws.accentDim, border: `1px solid ${ws.accent}30`, borderRadius: "6px", fontSize: ".7rem", fontWeight: 700, color: ws.accent, fontFamily: "'DM Mono', monospace", letterSpacing: ".08em", textTransform: "uppercase" }}>
+            Workshop Attended
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: ".4rem", padding: ".4rem .9rem", background: C.greenDim, border: `1px solid ${C.green}30`, borderRadius: "6px", fontSize: ".7rem", fontWeight: 700, color: C.green, fontFamily: "'DM Mono', monospace" }}>
+            {ws.format}
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1.2, letterSpacing: "-0.01em", marginBottom: ".5rem" }}>
+          {ws.title}
+        </h3>
+
+        {/* Meta */}
+        <div style={{ display: "flex", alignItems: "center", gap: ".75rem", fontSize: ".875rem", color: C.muted, marginBottom: "1.5rem", flexWrap: "wrap" }}>
+          <span>{ws.organizer}</span>
+          <span>•</span>
+          <div style={{ display: "flex", alignItems: "center", gap: ".4rem" }}>
+            <Calendar size={14} />{ws.year}
+          </div>
+          <span>•</span>
+          <span>{ws.duration}</span>
+        </div>
+
+        {/* Skill tags */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: ".6rem", marginBottom: "2rem" }}>
+          {ws.skills.map((skill, i) => (
+            <SkillTag key={skill} skill={skill} accent={ws.accent}
+              isHovered={hovSkill === i}
+              onHover={() => setHovSkill(i)}
+              onLeave={() => setHovSkill(null)} />
           ))}
         </div>
-      </div>
 
-      {/* Right */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "10px", flexShrink: 0 }}>
-        <span style={{ padding: "5px 14px", borderRadius: "100px", background: hovered ? T.ink : T.ink05, fontFamily: "'DM Mono', monospace", fontSize: "10px", color: hovered ? T.white : T.ink60, letterSpacing: "0.07em", transition: "all 0.22s ease-out" }}>{cap.depth}</span>
-        <div style={{ display: "flex", alignItems: "center", gap: "5px", fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 700, color: hovered ? T.blue : T.ink20, transition: "color 0.2s ease-out" }}>
-          OPEN
-          <ArrowUpRight size={14} style={{ transform: hovered ? "translate(3px,-3px)" : "none", transition: "transform 0.25s cubic-bezier(0.16,1,0.3,1)" }} />
+        {/* Description block */}
+        <div style={{ padding: "1.5rem", background: `linear-gradient(135deg,${ws.accentDim} 0%,transparent 100%)`, border: `1px solid ${ws.accent}20`, borderRadius: "12px", marginBottom: "1.5rem" }}>
+          <div style={{ fontSize: ".7rem", fontWeight: 700, color: C.muted, letterSpacing: ".1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: ".75rem" }}>
+            What Was Covered
+          </div>
+          <div style={{ fontSize: ".9rem", color: C.muted2, lineHeight: 1.7 }}>{ws.description}</div>
+        </div>
+
+        {/* Connection block */}
+        <div style={{ padding: "1.25rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "10px" }}>
+          <div style={{ fontSize: ".7rem", fontWeight: 700, color: C.muted, letterSpacing: ".1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: ".5rem" }}>
+            How It Connects
+          </div>
+          <div style={{ fontSize: ".9rem", color: C.muted2, lineHeight: 1.6 }}>{ws.connection}</div>
         </div>
       </div>
-
-      {/* Animated underline sweep */}
-      <div style={{ position: "absolute", bottom: "-1px", left: 0, height: "1px", background: T.ink, width: hovered ? "100%" : "0%", transition: "width 0.45s cubic-bezier(0.16,1,0.3,1)" }} />
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CROSS CARD
+   DOMAIN SECTION  — same accordion as Certifications DomainSection
 ═══════════════════════════════════════════════════════════════ */
-function CrossCard({ item, index }) {
-  const [hovered, setHovered] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
+function DomainSection({ domain, data, isActive, onClick }) {
+  const Icon = data.icon;
+  const [hovIdx, setHovIdx] = useState(null);
+
   return (
-    <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ padding: "32px 28px", background: hovered ? T.white : T.ink02, border: `1px solid ${hovered ? T.ink10 : "transparent"}`, borderRadius: "14px", cursor: "default", boxShadow: hovered ? "0 8px 40px rgba(0,0,0,0.06)" : "none", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: `all 0.4s ease ${index * 0.09}s` }}>
-      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", color: T.blue, letterSpacing: "0.14em", fontWeight: 700, marginBottom: "14px", textTransform: "uppercase" }}>{item.label}</div>
-      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "26px", fontWeight: 600, color: T.ink, lineHeight: 1.25, letterSpacing: "-0.01em", marginBottom: "16px" }}>{item.title}</h3>
-      <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75 }}>{item.body}</p>
+    <div>
+      {/* Header row */}
+      <div
+        onClick={onClick}
+        data-hover
+        style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1.5rem 2rem", background: isActive ? `${data.accent}08` : C.surface, border: `1px solid ${isActive ? data.accent + "30" : C.border}`, borderRadius: "16px", cursor: "pointer", transition: "all .3s cubic-bezier(.22,1,.36,1)", marginBottom: isActive ? "1.5rem" : 0 }}
+        onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background = C.surface2; e.currentTarget.style.borderColor = C.border2; e.currentTarget.style.transform = "translateX(4px)"; } }}
+        onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background = C.surface; e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; } }}
+      >
+        <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: isActive ? `${data.accent}15` : C.surface2, border: `1px solid ${isActive ? data.accent + "40" : C.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .3s cubic-bezier(.22,1,.36,1)", transform: isActive ? "rotate(5deg)" : "none" }}>
+          <Icon size={22} style={{ color: isActive ? data.accent : C.muted }} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.4rem", fontWeight: 700, fontStyle: "italic", color: C.text, marginBottom: ".25rem", letterSpacing: "-0.01em" }}>{domain}</div>
+          <div style={{ fontSize: ".8rem", color: C.muted, fontFamily: "'DM Mono', monospace" }}>
+            {data.workshops.length} {data.workshops.length === 1 ? "workshop" : "workshops"}
+          </div>
+        </div>
+        <ArrowRight size={20} style={{ color: isActive ? data.accent : C.muted, transform: isActive ? "rotate(90deg)" : "none", transition: "all .4s cubic-bezier(.22,1,.36,1)" }} />
+      </div>
+
+      {/* Workshop cards grid */}
+      {isActive && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px,1fr))", gap: "1.25rem", marginBottom: "2rem", animation: "elasticExpand .5s cubic-bezier(.22,1,.36,1) both" }}>
+          {data.workshops.map((ws, i) => (
+            <WorkshopCard key={i} ws={ws} data={data} index={i}
+              hovered={hovIdx === i}
+              onHover={() => setHovIdx(i)}
+              onLeave={() => setHovIdx(null)} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PHILOSOPHY CARD
+   WORKSHOP CARD  — compact card used inside domain accordion
+   Mirrors Certifications domain cert card exactly.
 ═══════════════════════════════════════════════════════════════ */
-function PhiloCard({ item, index }) {
-  const [hovered, setHovered] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
+function WorkshopCard({ ws, data, index, hovered, onHover, onLeave }) {
   return (
-    <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ padding: "32px", background: T.white, border: `1px solid ${hovered ? T.ink20 : T.ink10}`, borderRadius: "14px", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(24px)", transition: `opacity 0.55s ease ${index * 0.1}s, transform 0.55s cubic-bezier(0.16,1,0.3,1) ${index * 0.1}s, border-color 0.2s` }}>
-      <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "56px", fontWeight: 400, color: hovered ? T.blue : T.ink10, lineHeight: 1, marginBottom: "20px", userSelect: "none", transition: "color 0.3s ease-out" }}>{item.number}</div>
-      <h3 style={{ fontSize: "18px", fontWeight: 600, color: T.ink80, lineHeight: 1.4, marginBottom: "12px" }}>{item.principle}</h3>
-      <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75 }}>{item.detail}</p>
+    <div
+      data-hover
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      style={{ padding: "1.75rem", background: C.surface, border: `1px solid ${hovered ? data.accent + "40" : C.border}`, borderRadius: "14px", transition: "all .35s cubic-bezier(.22,1,.36,1)", opacity: 0, animation: `slideInFromRight .5s cubic-bezier(.22,1,.36,1) ${index * .08}s both`, transform: hovered ? "translateY(-4px) translateX(4px)" : "none", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.08)" : "none" }}
+    >
+      {/* Title */}
+      <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", fontWeight: 700, fontStyle: "italic", color: C.text, marginBottom: ".75rem", letterSpacing: "-0.01em" }}>
+        {ws.title}
+      </h4>
+
+      {/* Meta */}
+      <div style={{ display: "flex", alignItems: "center", gap: ".5rem", fontSize: ".8rem", color: C.muted, marginBottom: "1.25rem", flexWrap: "wrap" }}>
+        <span>{ws.organizer}</span>
+        <span>•</span>
+        <span>{ws.year}</span>
+        <span>•</span>
+        <span>{ws.duration}</span>
+      </div>
+
+      {/* Skills */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: ".5rem", marginBottom: "1.25rem" }}>
+        {ws.skills.map((skill) => {
+          const iconClass = skillIcons[skill] || "devicon-code-plain";
+          return (
+            <span key={skill}
+              style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", padding: ".4rem .8rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "6px", fontSize: ".75rem", fontWeight: 500, color: C.muted2, fontFamily: "'DM Mono', monospace", transition: "all .3s cubic-bezier(.22,1,.36,1)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = data.accent + "10"; e.currentTarget.style.borderColor = data.accent + "30"; e.currentTarget.style.transform = "translateX(3px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = C.surface2; e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; }}
+            >
+              <i className={iconClass} style={{ fontSize: "1rem" }} />
+              {skill}
+            </span>
+          );
+        })}
+      </div>
+
+      {/* Description */}
+      <div style={{ padding: "1rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "8px" }}>
+        <div style={{ fontSize: ".7rem", fontWeight: 700, color: C.muted, letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: ".4rem" }}>
+          What Was Covered
+        </div>
+        <div style={{ fontSize: ".85rem", color: C.muted2, lineHeight: 1.55 }}>{ws.description}</div>
+      </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CTA BUTTON
-═══════════════════════════════════════════════════════════════ */
-function CTABtn({ href, primary, icon, label }) {
-  const [h, setH] = useState(false);
-  return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} data-cursor
-      style={{ display: "inline-flex", alignItems: "center", gap: "9px", padding: "13px 26px", background: primary ? (h ? T.ink60 : T.ink) : T.white, border: primary ? "none" : `1px solid ${h ? T.ink40 : T.ink10}`, borderRadius: "9px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: primary ? T.white : (h ? T.ink : T.ink60), textDecoration: "none", fontFamily: "'DM Mono', monospace", transition: "all 0.18s ease-out", transform: h ? "translateY(-2px)" : "none", boxShadow: primary && h ? "0 8px 32px rgba(0,0,0,0.22)" : "none" }}>
-      {icon}{label}
-    </a>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   MAIN
+   MAIN COMPONENT
 ═══════════════════════════════════════════════════════════════ */
 export default function Workshops() {
-  const [activeCapability, setActiveCapability] = useState(null);
-  const [heroReady, setHeroReady] = useState(false);
+  const [activeDomain, setActiveDomain] = useState(null);
+  const [headerInView,   setHeaderInView]   = useState(false);
+  const [featuredInView, setFeaturedInView] = useState(false);
+  const [domainsInView,  setDomainsInView]  = useState(false);
+  const [summaryInView,  setSummaryInView]  = useState(false);
+  const [scrollDir, setScrollDir] = useState("down");
+  const lastY = useRef(0);
+
+  const headerRef  = useRef(null);
+  const featuredRef = useRef(null);
+  const domainsRef = useRef(null);
+  const summaryRef = useRef(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setHeroReady(true), 100);
-    return () => clearTimeout(t);
+    const fn = () => {
+      const y = window.scrollY;
+      setScrollDir(y > lastY.current ? "down" : "up");
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  useEffect(() => {
+    const pairs = [
+      { ref: headerRef,   setter: setHeaderInView   },
+      { ref: featuredRef, setter: setFeaturedInView  },
+      { ref: domainsRef,  setter: setDomainsInView   },
+      { ref: summaryRef,  setter: setSummaryInView   },
+    ];
+    const instances = pairs.map(({ ref, setter }) => {
+      const obs = new IntersectionObserver(
+        ([e]) => { if (e.isIntersecting && scrollDir === "down") setter(true); },
+        { threshold: 0.2 }
+      );
+      if (ref.current) obs.observe(ref.current);
+      return obs;
+    });
+    return () => instances.forEach(o => o.disconnect());
+  }, [scrollDir]);
+
+  const totalWorkshops = Object.values(workshopsData.domains)
+    .reduce((sum, d) => sum + d.workshops.length, 0);
+
+  const totalDomains = Object.keys(workshopsData.domains).length;
+
+  const fade = (inView) => ({
+    opacity: inView ? 1 : 0,
+    transform: inView ? "translateY(0)" : "translateY(40px)",
+    transition: "opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1)",
+  });
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css');
 
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-          font-family: 'Geist', system-ui, sans-serif;
-          background: ${T.bg};
-          color: ${T.ink};
-          -webkit-font-smoothing: antialiased;
-          cursor: none;
-        }
-        ::selection { background: ${T.blueMid}; color: ${T.ink}; }
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: ${T.ink10}; border-radius: 2px; }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{font-family:'Geist',system-ui,sans-serif;background:${C.bg};color:${C.text};-webkit-font-smoothing:antialiased;cursor:none;}
+        ::selection{background:${C.accentDim};color:${C.text};}
+        ::-webkit-scrollbar{width:6px;}
+        ::-webkit-scrollbar-track{background:${C.bg};}
+        ::-webkit-scrollbar-thumb{background:${C.border3};border-radius:3px;}
+        ::-webkit-scrollbar-thumb:hover{background:${C.muted};}
 
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        @keyframes panelIn {
-          from { opacity: 0; transform: translateY(14px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes lineExpand {
-          from { width: 0; }
-          to   { width: 100%; }
-        }
+        @keyframes slideInFromRight{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+        @keyframes elasticExpand{0%{opacity:0;transform:translateY(-12px) scaleY(.95);}60%{transform:translateY(0) scaleY(1.02);}100%{opacity:1;transform:translateY(0) scaleY(1);}}
+        @keyframes scrollRTL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+        @keyframes shimmerSweep{0%{left:-100%;}100%{left:100%;}}
+        @keyframes underlineSweep{from{width:0;}to{width:100%;}}
+        @keyframes floatV1{0%,100%{transform:translateY(0);}50%{transform:translateY(-40px);}}
+        @keyframes floatV2{0%,100%{transform:translateY(0);}50%{transform:translateY(60px);}}
+        @keyframes floatH1{from{transform:translateX(0);}to{transform:translateX(100vw);}}
+        @keyframes floatH2{from{transform:translateX(0);}to{transform:translateX(-100vw);}}
+        @keyframes lineGrow{from{width:0;}to{width:200px;}}
 
-        @media (max-width: 800px) {
-          body { cursor: auto; }
-        }
+        @media(max-width:768px){body{cursor:auto;}}
       `}</style>
 
-      <MagneticCursor />
+      <CustomCursor />
       <ScrollProgress />
+      <FloatingElements />
 
-      <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "0 clamp(24px, 5vw, 60px)" }}>
+      {/* Dot grid texture */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, pointerEvents: "none", zIndex: 0 }} />
 
-        {/* ═══ HERO ═══ */}
-        <header style={{ padding: "clamp(100px, 14vw, 160px) 0 clamp(80px, 10vw, 120px)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "48px", opacity: heroReady ? 1 : 0, transform: heroReady ? "none" : "translateY(14px)", transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s" }}>
-            <div style={{ width: "32px", height: "1px", background: T.blue }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: T.blue }}>Technical Depth — System-Level Thinking</span>
+      <div style={{ position: "relative", zIndex: 1 }}>
+
+        {/* ═══ HERO HEADER ═══ */}
+        <header
+          ref={headerRef}
+          style={{ maxWidth: "1240px", margin: "0 auto", padding: "10rem 2rem 6rem", borderBottom: `1px solid ${C.border}`, position: "relative", ...fade(headerInView) }}
+        >
+          <MovingTextStrips />
+          <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: "800px", height: "400px", borderRadius: "50%", background: `radial-gradient(circle,${C.accent}08 0%,transparent 70%)`, filter: "blur(100px)", pointerEvents: "none" }} />
+
+          {/* Overline */}
+          <div style={{ display: "flex", alignItems: "center", gap: ".75rem", marginBottom: "2rem" }}>
+            <div style={{ width: "48px", height: "2px", background: C.accent }} />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: ".7rem", fontWeight: 600, letterSpacing: ".2em", textTransform: "uppercase", color: C.accent }}>
+              Workshops & Training
+            </span>
           </div>
 
-          <div style={{ marginBottom: "28px" }}>
-            <SplitReveal text="Engineering" tag="div" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(60px, 11vw, 120px)", fontWeight: 600, color: T.ink, lineHeight: 0.92, letterSpacing: "-0.04em" }} delay={0.18} />
-            <SplitReveal text="Capabilities" tag="div" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(60px, 11vw, 120px)", fontWeight: 600, color: "transparent", WebkitTextStroke: `1.5px ${T.ink20}`, lineHeight: 0.92, letterSpacing: "-0.04em" }} delay={0.26} />
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(3.5rem,8vw,6.5rem)", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: "1rem", maxWidth: "1000px" }}>
+            Structured Learning
+          </h1>
+
+          {/* Gradient underline */}
+          <div style={{ width: "200px", height: "4px", background: `linear-gradient(90deg,${C.accent},${C.purple},${C.green})`, borderRadius: "2px", marginBottom: "2.5rem", animation: headerInView ? "lineGrow .8s ease .2s both" : "none" }} />
+
+          <p style={{ fontSize: "1.25rem", color: C.muted2, lineHeight: 1.8, maxWidth: "720px", marginBottom: "4rem" }}>
+            Short-format workshops and training sessions attended across AI, cloud, security, and web development.
+            These represent structured exposure and introductory practice — not professional proficiency.
+          </p>
+
+          {/* Stat chips */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "1.5rem", maxWidth: "900px" }}>
+            <StatChip value={totalWorkshops} label="Workshops Attended" icon={BookOpen}  delay={0}   />
+            <StatChip value={totalDomains}   label="Technical Areas"   icon={TrendingUp} delay={0.1} />
+            <StatChip value="2023–2024"      label="Period"            icon={Calendar}   delay={0.2} />
           </div>
-
-          <div style={{ height: "1px", background: T.ink, animation: heroReady ? "lineExpand 1s cubic-bezier(0.16,1,0.3,1) 0.7s both" : "none", marginBottom: "40px" }} />
-
-          <FadeUp delay={0.85}>
-            <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: T.ink40, lineHeight: 1.75, maxWidth: "580px" }}>
-              Production systems across Full Stack, AI/ML, Cloud, and Security —
-              built, deployed, and maintained in real environments. Not demos.
-            </p>
-          </FadeUp>
         </header>
-      </div>
 
-      <MarqueeStrip />
+        {/* ═══ FEATURED WORKSHOPS ═══ */}
+        <section
+          ref={featuredRef}
+          style={{ maxWidth: "1240px", margin: "0 auto", padding: "6rem 2rem", ...fade(featuredInView) }}
+        >
+          <div style={{ marginBottom: "3rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: ".75rem", marginBottom: "1rem" }}>
+              <BookOpen size={20} color={C.accent} />
+              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: ".7rem", fontWeight: 700, letterSpacing: ".15em", textTransform: "uppercase", color: C.muted }}>
+                Most Relevant
+              </span>
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 700, fontStyle: "italic", color: C.text, letterSpacing: "-0.01em", marginBottom: ".75rem" }}>
+              Workshops Tied to Project Areas
+            </h2>
+            <p style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8, maxWidth: "680px" }}>
+              Three workshops with the most direct overlap with skills practiced in personal projects.
+            </p>
+          </div>
 
-      <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "0 clamp(24px, 5vw, 60px)" }}>
-
-        {/* ═══ METRICS ═══ */}
-        <section style={{ padding: "96px 0", borderBottom: `1px solid ${T.ink10}` }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 0, borderLeft: `1px solid ${T.ink10}` }}>
-            {METRICS.map((m, i) => (
-              <FadeUp key={i} delay={i * 0.1} style={{ padding: "0 clamp(24px, 4vw, 48px) 0 clamp(20px, 3vw, 40px)", borderRight: `1px solid ${T.ink10}` }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(36px, 5vw, 68px)", fontWeight: 600, color: T.ink, lineHeight: 1, letterSpacing: "-0.04em", marginBottom: "12px" }}>
-                  <Counter raw={m.value} />
-                </div>
-                <div style={{ fontSize: "15px", fontWeight: 600, color: T.ink80, marginBottom: "4px" }}>{m.label}</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "11px", color: T.ink40, letterSpacing: "0.05em" }}>{m.sub}</div>
-              </FadeUp>
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            {workshopsData.featured.map((ws, i) => (
+              <FeaturedCard key={ws.id} ws={ws} index={i} />
             ))}
           </div>
         </section>
 
-        {/* ═══ CAPABILITIES ═══ */}
-        <section style={{ padding: "96px 0" }}>
-          <FadeUp style={{ marginBottom: "64px" }}>
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "24px" }}>
-              <div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Engineering Capability Matrix</div>
-                <SplitReveal text="Domain Architecture" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05 }} delay={0.05} stagger={0.05} />
-              </div>
-              <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "340px" }}>Click any row for architectural decisions, trade-offs, and production evidence.</p>
+        {/* ═══ ALL DOMAINS ═══ */}
+        <section
+          ref={domainsRef}
+          style={{ maxWidth: "1240px", margin: "0 auto", padding: "6rem 2rem", borderTop: `1px solid ${C.border}`, ...fade(domainsInView) }}
+        >
+          <div style={{ marginBottom: "3rem" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: ".7rem", fontWeight: 700, letterSpacing: ".15em", textTransform: "uppercase", color: C.muted, marginBottom: "1rem" }}>
+              Full List
             </div>
-          </FadeUp>
-          <div style={{ borderTop: `1px solid ${T.ink10}` }}>
-            {CAPABILITIES.map((cap, i) => <CapabilityRow key={cap.id} cap={cap} index={i} onClick={setActiveCapability} />)}
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 700, fontStyle: "italic", color: C.text, letterSpacing: "-0.01em", marginBottom: ".75rem" }}>
+              All Workshops by Domain
+            </h2>
+            <p style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8 }}>
+              Organised by technical area. Click a domain to expand.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            {Object.entries(workshopsData.domains).map(([domain, data]) => (
+              <DomainSection
+                key={domain}
+                domain={domain}
+                data={data}
+                isActive={activeDomain === domain}
+                onClick={() => setActiveDomain(activeDomain === domain ? null : domain)}
+              />
+            ))}
           </div>
         </section>
 
-        {/* ═══ CROSS-DOMAIN ═══ */}
-        <section style={{ padding: "96px 0", borderTop: `1px solid ${T.ink10}` }}>
-          <FadeUp style={{ marginBottom: "64px" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Systems Thinking</div>
-            <SplitReveal text="Cross-Domain Engineering" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
-            <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "500px" }}>Real problems don't fit single domains. These integrations show how capabilities combine.</p>
-          </FadeUp>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
-            {CROSS_DOMAIN.map((item, i) => <CrossCard key={i} item={item} index={i} />)}
-          </div>
-        </section>
-
-        {/* ═══ PHILOSOPHY ═══ */}
-        <section style={{ padding: "96px 0", borderTop: `1px solid ${T.ink10}` }}>
-          <FadeUp style={{ marginBottom: "64px" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: T.ink40, marginBottom: "14px" }}>Engineering Mindset</div>
-            <SplitReveal text="How I Approach Systems" tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
-            <p style={{ fontSize: "15px", color: T.ink40, lineHeight: 1.75, maxWidth: "440px" }}>Principles that guide every technical decision, trade-off, and system design choice.</p>
-          </FadeUp>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
-            {PHILOSOPHY.map((item, i) => <PhiloCard key={i} item={item} index={i} />)}
-          </div>
-        </section>
-
-        {/* ═══ CTA ═══ */}
-        <section style={{ padding: "96px 0 clamp(100px, 14vw, 160px)", borderTop: `1px solid ${T.ink10}` }}>
-          <FadeUp>
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "48px" }}>
-              <div style={{ maxWidth: "560px" }}>
-                <SplitReveal text="All implementations live on GitHub." tag="h2" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 5vw, 60px)", fontWeight: 600, color: T.ink, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "20px" }} delay={0.05} stagger={0.04} />
-                <p style={{ fontSize: "17px", color: T.ink40, lineHeight: 1.75 }}>Source code, deployment configs, CI/CD pipelines, and production evidence. Not descriptions — implementations.</p>
+        {/* ═══ SUMMARY FOOTER ═══ */}
+        <section
+          ref={summaryRef}
+          style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 2rem 8rem", ...fade(summaryInView) }}
+        >
+          <div style={{ textAlign: "center", padding: "4rem 3rem", background: `linear-gradient(135deg,${C.accentDim} 0%,${C.purpleDim} 100%)`, border: "2px solid transparent", backgroundImage: `linear-gradient(135deg,${C.accentDim} 0%,${C.purpleDim} 100%),linear-gradient(90deg,${C.accent}40,${C.purple}40)`, backgroundOrigin: "border-box", backgroundClip: "padding-box,border-box", borderRadius: "24px", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "600px", height: "300px", background: `radial-gradient(circle,${C.accent}15 0%,transparent 70%)`, filter: "blur(80px)", pointerEvents: "none" }} />
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "4.5rem", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1, marginBottom: "1rem", letterSpacing: "-0.02em" }}>
+                <AnimatedCounter value={totalWorkshops} />
               </div>
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                <CTABtn href="https://github.com/bhagavan444" primary icon={<Github size={16} />} label="GITHUB" />
-                <CTABtn href="mailto:g.sivasatyasaibhagavan@gmail.com" icon={<ArrowUpRight size={16} />} label="GET IN TOUCH" />
+              <div style={{ fontSize: "1.25rem", fontWeight: 600, color: C.text, marginBottom: ".75rem" }}>
+                Workshops Attended
               </div>
+              <div style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8, maxWidth: "560px", margin: "0 auto 2rem" }}>
+                Short-format learning across six technical domains. These complement self-directed study and academic coursework — not a substitute for project experience.
+              </div>
+              <a
+                href="#projects"
+                data-magnetic
+                style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: ".875rem 1.75rem", background: C.accent, borderRadius: "12px", fontSize: ".9rem", fontWeight: 600, color: "#fff", textDecoration: "none", transition: "all .3s cubic-bezier(.22,1,.36,1)", fontFamily: "'Geist',sans-serif" }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px) translateX(4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(79,127,255,0.3)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) translateX(0)"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                See the Projects
+                <ArrowRight size={16} />
+              </a>
             </div>
-          </FadeUp>
+          </div>
         </section>
+
       </div>
-
-      {activeCapability && <DetailPanel cap={activeCapability} onClose={() => setActiveCapability(null)} />}
     </>
   );
 }

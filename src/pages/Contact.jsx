@@ -2,11 +2,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Mail, Phone, Github, Linkedin, Send, CheckCircle2,
-  ExternalLink, ArrowRight, MapPin, Clock, Download
+  ExternalLink, ArrowRight, MapPin, Clock, Download, Briefcase
 } from "lucide-react";
 import resumePdf from "../assets/bhagavanresume.pdf";
 
-/* ── TOKENS (matches Home.jsx) ── */
+/* ── TOKENS ── */
 const T = {
   bg:      "#f9f9f8",
   white:   "#ffffff",
@@ -37,22 +37,18 @@ body{font-family:'DM Sans',-apple-system,sans-serif;background:#f9f9f8;color:#0c
 .mono{font-family:'DM Mono',monospace;}
 select option{background:#f9f9f8;color:#0c0c0b;}
 
-/* ── KEYFRAMES ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:0.35;}}
 @keyframes lineGrow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
 @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 @keyframes successIn{from{opacity:0;transform:scale(0.94) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
 @keyframes checkPop{0%{transform:scale(0);}70%{transform:scale(1.15);}100%{transform:scale(1);}}
-@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}  }
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}}
 
-/* ── SCROLL REVEAL ── */
 .rv{opacity:0;transform:translateY(22px);transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1);}
 .rv.in{opacity:1;transform:translateY(0);}
 .rv.d1{transition-delay:0.07s;}.rv.d2{transition-delay:0.14s;}.rv.d3{transition-delay:0.21s;}.rv.d4{transition-delay:0.28s;}
 
-/* ── FORM INPUTS ── */
 .fi-wrap{position:relative;width:100%;}
 .fi-wrap input,.fi-wrap textarea,.fi-wrap select{
   width:100%;font-family:'DM Sans',-apple-system,sans-serif;
@@ -62,23 +58,18 @@ select option{background:#f9f9f8;color:#0c0c0b;}
   -webkit-appearance:none;appearance:none;
 }
 .fi-wrap input,.fi-wrap select{height:52px;padding:0.5rem 1rem;}
-.fi-wrap textarea{min-height:160px;padding:0.85rem 1rem;resize:vertical;line-height:1.65;}
+.fi-wrap textarea{min-height:140px;padding:0.85rem 1rem;resize:vertical;line-height:1.65;}
 .fi-wrap input:focus,.fi-wrap textarea:focus,.fi-wrap select:focus{
-  border-color:#1d4ed8;
-  box-shadow:0 0 0 3px rgba(29,78,216,0.1);
+  border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(29,78,216,0.1);
 }
 .fi-wrap input.err,.fi-wrap textarea.err,.fi-wrap select.err{
-  border-color:#dc2626;
-  box-shadow:0 0 0 3px rgba(220,38,38,0.08);
+  border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08);
 }
 .fi-label{display:block;font-size:0.72rem;font-weight:500;color:#6b6b68;
-  font-family:'DM Mono',monospace;letter-spacing:0.07em;text-transform:uppercase;
-  margin-bottom:0.4rem;}
+  font-family:'DM Mono',monospace;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.4rem;}
 .fi-err{font-size:0.75rem;color:#dc2626;margin-top:0.35rem;font-family:'DM Mono',monospace;}
-.fi-count{font-size:0.65rem;color:#6b6b68;font-family:'DM Mono',monospace;
-  text-align:right;margin-top:0.3rem;}
+.fi-count{font-size:0.65rem;color:#6b6b68;font-family:'DM Mono',monospace;text-align:right;margin-top:0.3rem;}
 
-/* ── NAV LINK ── */
 .nav-a{position:relative;text-decoration:none;color:#3d3d3a;font-size:0.875rem;font-weight:450;
   padding:0.28rem 0;transition:color 0.18s;}
 .nav-a::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:1px;
@@ -86,17 +77,14 @@ select option{background:#f9f9f8;color:#0c0c0b;}
   transition:transform 0.22s cubic-bezier(0.16,1,0.3,1);}
 .nav-a:hover{color:#0c0c0b;}.nav-a:hover::after{transform:scaleX(1);}
 
-/* ── CONTACT CARD LINK ── */
 .cc{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.25rem;
   background:#ffffff;border:1px solid rgba(0,0,0,0.07);border-radius:10px;
   text-decoration:none;transition:background 0.18s,border-color 0.18s,transform 0.22s;}
 .cc:hover{background:#f2f1ee;border-color:rgba(0,0,0,0.14);transform:translateY(-2px);}
 
-/* ── SIDEBAR CARD ── */
 .sc{background:#ffffff;border:1px solid rgba(0,0,0,0.07);border-radius:12px;overflow:hidden;}
 .sc-head{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(0,0,0,0.07);background:#f9f9f8;}
 
-/* ── BTN ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:0.45rem;
   font-family:'DM Sans',-apple-system,sans-serif;font-size:0.875rem;font-weight:500;
   padding:0.8rem 1.5rem;border-radius:8px;cursor:pointer;text-decoration:none;
@@ -107,42 +95,66 @@ select option{background:#f9f9f8;color:#0c0c0b;}
 .btn-secondary:hover{background:#f2f1ee;color:#0c0c0b;border-color:rgba(0,0,0,0.18);}
 .btn-full{width:100%;min-height:52px;}
 
+/* ── MOBILE HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:20px;height:1.5px;background:#0c0c0b;border-radius:2px;transition:all 0.25s;}
+.mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;background:rgba(249,249,248,0.97);
+  backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.07);z-index:999;
+  padding:1rem 1.5rem;flex-direction:column;gap:0;}
+.mobile-menu.open{display:flex;}
+.mobile-nav-a{display:block;padding:0.85rem 0;text-decoration:none;color:#3d3d3a;font-size:0.95rem;
+  font-weight:450;border-bottom:1px solid rgba(0,0,0,0.05);transition:color 0.18s;}
+.mobile-nav-a:last-child{border-bottom:none;}
+.mobile-nav-a:hover{color:#0c0c0b;}
+
+/* ── LAYOUT ── */
+.main-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:start;}
+.name-email-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:680px;}
+.role-pills{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.cta-inner{display:flex;align-items:center;justify-content:space-between;gap:2.5rem;flex-wrap:wrap;}
+.cta-btns{display:flex;flex-direction:column;gap:0.7rem;flex-shrink:0;min-width:180px;}
+
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
-  .cg{grid-template-columns:1fr !important;}
+  .main-grid{grid-template-columns:1fr !important;}
   .sidebar{position:static !important;top:auto !important;}
-  .name-email-row{grid-template-columns:1fr !important;}
   .cta-inner{flex-direction:column !important;align-items:stretch !important;}
   .cta-btns{flex-direction:row !important;width:100% !important;}
   .cta-btns .btn{flex:1 !important;}
 }
+
 @media(max-width:768px){
-  .nl{display:none !important;}
-  header{padding:5rem 1.25rem 3rem !important;}
-  .main-section{padding:2.5rem 1.25rem !important;}
+  .desktop-nav{display:none !important;}
+  .hamburger{display:flex !important;}
+  header{padding:5.5rem 1.25rem 3rem !important;}
+  .main-section{padding:2rem 1.25rem !important;}
   .cta-section{padding:0 1.25rem 5rem !important;}
-  footer{padding:2rem 1.25rem !important;}
-  .trust-grid{grid-template-columns:1fr 1fr !important;gap:0.75rem !important;}
+  footer{padding:1.75rem 1.25rem !important;}
+  footer-inner{flex-direction:column !important;gap:0.75rem !important;align-items:flex-start !important;}
+  .trust-grid{grid-template-columns:1fr 1fr !important;gap:0.75rem !important;max-width:100% !important;}
   .form-card{border-radius:12px !important;}
-  .form-body{padding:1.5rem 1.25rem !important;}
+  .form-body{padding:1.25rem !important;}
   .form-head{padding:1.25rem !important;}
   .sc{border-radius:12px !important;}
   .sc-head{padding:1rem 1.25rem !important;}
   .sc-body{padding:1rem 1.25rem !important;}
-  .cc{border-radius:8px !important;}
   .cta-inner{padding:2rem 1.25rem !important;border-radius:12px !important;}
   .cta-btns{flex-direction:column !important;}
   .cta-btns .btn{flex:none !important;width:100% !important;}
-  .hero-title{font-size:clamp(2.4rem,9vw,3.5rem) !important;}
-  .hero-sub{font-size:0.95rem !important;}
-  .sidebar-gap{gap:1.5rem !important;}
+  .hero-title{font-size:clamp(2.2rem,8vw,3.2rem) !important;}
+  .hero-sub{font-size:0.93rem !important;}
+  .name-email-row{grid-template-columns:1fr !important;}
+  .role-pills-wrap{display:none;}
 }
+
 @media(max-width:480px){
-  header{padding:4rem 1.1rem 2.5rem !important;}
-  .main-section{padding:2rem 1.1rem !important;}
-  .cta-section{padding:0 1.1rem 4rem !important;}
-  .hero-title{font-size:clamp(2rem,9vw,3rem) !important;}
+  header{padding:5rem 1rem 2.5rem !important;}
+  .main-section{padding:1.75rem 1rem !important;}
+  .cta-section{padding:0 1rem 4rem !important;}
+  .hero-title{font-size:clamp(2rem,9vw,2.8rem) !important;}
   .trust-grid{grid-template-columns:1fr !important;}
+  .cta-inner{padding:1.75rem 1.25rem !important;}
 }
 `;
 
@@ -158,7 +170,6 @@ function useReveal() {
   });
 }
 
-/* ── SCROLL PROGRESS ── */
 function SBar() {
   const [p, sp] = useState(0);
   useEffect(() => {
@@ -171,21 +182,15 @@ function SBar() {
   </div>;
 }
 
-/* ── SIMPLE INPUT (label above, clean) ── */
 function FInput({ label, error, value, onChange, ...props }) {
   const [focused, setFocused] = useState(false);
   return (
     <div className="fi-wrap">
       <label className="fi-label">{label}</label>
-      <input
-        {...props}
-        value={value}
-        onChange={onChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+      <input {...props} value={value} onChange={onChange}
+        onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         className={error ? 'err' : ''}
-        style={{ borderColor: focused && !error ? T.accent : error ? T.red : undefined }}
-      />
+        style={{ borderColor: focused && !error ? T.accent : error ? T.red : undefined }} />
       {error && <div className="fi-err">↳ {error}</div>}
     </div>
   );
@@ -197,16 +202,10 @@ function FTextarea({ label, error, value, onChange, maxLength, ...props }) {
   return (
     <div className="fi-wrap">
       <label className="fi-label">{label}</label>
-      <textarea
-        {...props}
-        value={value}
-        onChange={onChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        maxLength={maxLength}
+      <textarea {...props} value={value} onChange={onChange} maxLength={maxLength}
+        onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         className={error ? 'err' : ''}
-        style={{ borderColor: focused && !error ? T.accent : error ? T.red : undefined }}
-      />
+        style={{ borderColor: focused && !error ? T.accent : error ? T.red : undefined }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {error ? <div className="fi-err">↳ {error}</div> : <span />}
         {maxLength && <div className="fi-count">{count}/{maxLength}</div>}
@@ -221,28 +220,21 @@ function FSelect({ label, error, value, onChange, children, ...props }) {
     <div className="fi-wrap">
       <label className="fi-label">{label}</label>
       <div style={{ position: 'relative' }}>
-        <select
-          {...props}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
+        <select {...props} value={value} onChange={onChange}
+          onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
           className={error ? 'err' : ''}
           style={{
             paddingRight: '2.5rem',
             borderColor: focused && !error ? T.accent : error ? T.red : undefined,
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b6b68' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 0.85rem center',
-          }}
-        >{children}</select>
+            backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.85rem center',
+          }}>{children}</select>
       </div>
       {error && <div className="fi-err">↳ {error}</div>}
     </div>
   );
 }
 
-/* ── TRUST CHIP ── */
 function TrustChip({ icon: Icon, label, value }) {
   const ref = useRef(null);
   const [v, sv] = useState(false);
@@ -263,20 +255,17 @@ function TrustChip({ icon: Icon, label, value }) {
         <Icon size={15} style={{ color: T.accent }} strokeWidth={1.8} />
       </div>
       <div>
-        <div className="serif" style={{ fontSize: '1.25rem', fontWeight: 400, color: T.ink, lineHeight: 1, marginBottom: '0.2rem' }}>{value}</div>
-        <div className="mono" style={{ fontSize: '0.64rem', color: T.muted, letterSpacing: '0.05em' }}>{label}</div>
+        <div className="serif" style={{ fontSize: '1.2rem', fontWeight: 400, color: T.ink, lineHeight: 1, marginBottom: '0.2rem' }}>{value}</div>
+        <div className="mono" style={{ fontSize: '0.63rem', color: T.muted, letterSpacing: '0.05em' }}>{label}</div>
       </div>
     </div>
   );
 }
 
-/* ── CONTACT CARD ── */
 function ContactCard({ icon: Icon, label, value, href, detail }) {
   return (
-    <a href={href}
-      target={href?.startsWith('http') ? '_blank' : undefined}
-      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-      className="cc">
+    <a href={href} target={href?.startsWith('http') ? '_blank' : undefined}
+      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined} className="cc">
       <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: T.surface,
         border: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <Icon size={17} style={{ color: T.muted2 }} strokeWidth={1.8} />
@@ -291,20 +280,19 @@ function ContactCard({ icon: Icon, label, value, href, detail }) {
   );
 }
 
-/* ── SUCCESS STATE ── */
 function SuccessState({ onReset }) {
   return (
-    <div style={{ textAlign: 'center', padding: '3.5rem 1.5rem', animation: 'successIn 0.6s cubic-bezier(0.16,1,0.3,1) both' }}>
-      <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: T.greenL,
+    <div style={{ textAlign: 'center', padding: '3rem 1.5rem', animation: 'successIn 0.6s cubic-bezier(0.16,1,0.3,1) both' }}>
+      <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: T.greenL,
         border: `1.5px solid rgba(21,128,61,0.25)`, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        margin: '0 auto 1.75rem', animation: 'checkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both' }}>
-        <CheckCircle2 size={34} style={{ color: T.green }} strokeWidth={1.5} />
+        margin: '0 auto 1.5rem', animation: 'checkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both' }}>
+        <CheckCircle2 size={32} style={{ color: T.green }} strokeWidth={1.5} />
       </div>
-      <h3 className="serif" style={{ fontSize: '1.75rem', fontWeight: 400, color: T.ink, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+      <h3 className="serif" style={{ fontSize: '1.6rem', fontWeight: 400, color: T.ink, marginBottom: '0.65rem', letterSpacing: '-0.02em' }}>
         Message received.
       </h3>
-      <p style={{ fontSize: '0.9rem', color: T.muted2, lineHeight: 1.78, maxWidth: '340px', margin: '0 auto 1.75rem' }}>
-        Thank you for reaching out. I'll respond within 24 hours.
+      <p style={{ fontSize: '0.88rem', color: T.muted2, lineHeight: 1.78, maxWidth: '320px', margin: '0 auto 1.5rem' }}>
+        I'll review and respond within 24 hours.
       </p>
       <button onClick={onReset} className="btn btn-secondary" style={{ margin: '0 auto' }}>
         Send another
@@ -320,12 +308,20 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useReveal();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 32);
     window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  // Close menu on route change or outside click
+  useEffect(() => {
+    const fn = (e) => { if (!e.target.closest('nav')) setMenuOpen(false); };
+    document.addEventListener('click', fn);
+    return () => document.removeEventListener('click', fn);
   }, []);
 
   const validate = () => {
@@ -359,13 +355,15 @@ export default function Contact() {
 
   const W = { maxWidth: '1120px', margin: '0 auto' };
 
+  const navLinks = [['Home', '/'], ['Work', '/#work'], ['Skills', '/#skills'], ['Contact', '/contact']];
+
   return <>
     <style>{CSS}</style>
     <SBar />
 
     {/* NAVBAR */}
     <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, height: '62px', padding: '0 2rem',
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, height: '62px', padding: '0 1.5rem',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       background: scrolled ? 'rgba(249,249,248,0.93)' : 'transparent',
       backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
@@ -376,70 +374,111 @@ export default function Contact() {
       <a href="/" className="serif" style={{ fontSize: '1.1rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em', textDecoration: 'none' }}>
         Bhagavan<span style={{ color: T.accent, fontStyle: 'italic' }}>.</span>
       </a>
-      <div className="nl" style={{ display: 'flex', gap: '2.25rem' }}>
-        {[['Home', '/'], ['Work', '/#work'], ['Skills', '/#skills'], ['Contact', '/contact']].map(([l, h]) => (
+
+      {/* Desktop nav */}
+      <div className="desktop-nav" style={{ display: 'flex', gap: '2.25rem' }}>
+        {navLinks.map(([l, h]) => (
           <a key={l} href={h} className="nav-a" style={{ color: h === '/contact' ? T.ink : undefined }}>{l}</a>
         ))}
       </div>
-      <a href={resumePdf} download className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.55rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>
-        <Download size={12} strokeWidth={1.8} /> Resume
-      </a>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <a href={resumePdf} download className="btn btn-secondary"
+          style={{ fontSize: '0.8rem', padding: '0.5rem 0.9rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>
+          <Download size={12} strokeWidth={1.8} /> Resume
+        </a>
+        {/* Hamburger */}
+        <button className="hamburger" onClick={(e) => { e.stopPropagation(); setMenuOpen(o => !o); }}
+          aria-label="Toggle menu" style={{ display: 'none' }}>
+          <span style={{ transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none' }} />
+          <span style={{ opacity: menuOpen ? 0 : 1 }} />
+          <span style={{ transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none' }} />
+        </button>
+      </div>
     </nav>
+
+    {/* Mobile menu */}
+    <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} onClick={e => e.stopPropagation()}>
+      {navLinks.map(([l, h]) => (
+        <a key={l} href={h} className="mobile-nav-a" onClick={() => setMenuOpen(false)}
+          style={{ fontWeight: h === '/contact' ? 600 : 400, color: h === '/contact' ? T.ink : T.muted2 }}>{l}</a>
+      ))}
+    </div>
 
     <div style={{ position: 'relative', background: T.bg, minHeight: '100vh' }}>
 
       {/* ═══════════════ HEADER ═══════════════ */}
-      <header style={{ ...W, padding: '7rem 2rem 4.5rem', borderBottom: `1px solid ${T.border}` }}>
+      <header style={{ ...W, padding: '7rem 2rem 4rem', borderBottom: `1px solid ${T.border}` }}>
         {/* Overline */}
-        <div className="rv" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+        <div className="rv" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem' }}>
           <div style={{ width: '36px', height: '1.5px', background: T.accent }} />
-          <span className="mono" style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.accent }}>Contact</span>
+          <span className="mono" style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.accent }}>Open to Opportunities</span>
         </div>
 
         {/* Headline */}
         <h1 className="serif hero-title rv d1" style={{
-          fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 300, color: T.ink,
-          lineHeight: 1.06, letterSpacing: '-0.03em', marginBottom: '0.4rem',
+          fontSize: 'clamp(2.6rem, 7vw, 5rem)', fontWeight: 300, color: T.ink,
+          lineHeight: 1.08, letterSpacing: '-0.03em', marginBottom: '0.3rem',
         }}>
-          Let's build something
+          Open to Engineering
         </h1>
         <h1 className="serif hero-title rv d2" style={{
-          fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 600, color: T.accent,
-          lineHeight: 1.06, letterSpacing: '-0.03em', fontStyle: 'italic', marginBottom: '1.5rem',
+          fontSize: 'clamp(2.6rem, 7vw, 5rem)', fontWeight: 600, color: T.accent,
+          lineHeight: 1.08, letterSpacing: '-0.03em', fontStyle: 'italic', marginBottom: '1.25rem',
         }}>
-          remarkable together.
+          Roles — 2026 Graduate.
         </h1>
 
-        {/* Animated underline */}
-        <div className="rv d2" style={{ marginBottom: '1.75rem' }}>
+        <div className="rv d2" style={{ marginBottom: '1.5rem' }}>
           <div style={{
-            width: '160px', height: '3px', background: T.accent, borderRadius: '2px',
+            width: '140px', height: '3px', background: T.accent, borderRadius: '2px',
             transformOrigin: 'left', animation: 'lineGrow 0.9s cubic-bezier(0.16,1,0.3,1) 0.3s both',
           }} />
         </div>
 
-        {/* Subtitle */}
+        {/* Subtitle — direct, recruiter-facing */}
         <p className="hero-sub rv d3" style={{
-          fontSize: '1.05rem', color: T.muted2, lineHeight: 1.82, maxWidth: '560px', marginBottom: '2rem',
+          fontSize: '1.02rem', color: T.muted2, lineHeight: 1.82, maxWidth: '520px', marginBottom: '1.75rem',
         }}>
-          Open to software engineering roles, internships, and technical collaborations. I respond to all messages within 24 hours.
+          AI-integrated Full-Stack Engineer. Focused on deployable, production-ready systems.
+          Seeking backend, AI/ML-integrated, or full-stack roles in product-driven teams.
         </p>
 
         {/* Availability badge */}
-        <div className="rv d3" style={{ marginBottom: '2.5rem' }}>
+        <div className="rv d3" style={{ marginBottom: '1.75rem' }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
             padding: '0.4rem 0.9rem', borderRadius: '6px',
             background: T.greenL, border: `1px solid rgba(21,128,61,0.2)`,
             fontSize: '0.78rem', fontWeight: 500, color: T.green,
           }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: T.green, display: 'inline-block', animation: 'pulseDot 2s ease infinite' }} />
-            Available for Immediate Start · 2026 Graduate
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: T.green,
+              display: 'inline-block', animation: 'pulseDot 2s ease infinite' }} />
+            Available for Immediate Start · B.Tech AIDS, 2026
           </span>
         </div>
 
+        {/* Role intent pills */}
+        <div className="rv d3 role-pills-wrap" style={{ marginBottom: '2rem' }}>
+          <div className="mono" style={{ fontSize: '0.62rem', color: T.muted, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+            Currently open to
+          </div>
+          <div className="role-pills">
+            {['Full-Time Software Engineering', 'Backend / AI-Integrated Systems', 'Product-Based Startups', 'Remote or Hybrid'].map((role, i) => (
+              <span key={i} style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.35rem 0.8rem', borderRadius: '6px',
+                background: T.accentL, border: `1px solid rgba(29,78,216,0.15)`,
+                fontSize: '0.78rem', fontWeight: 500, color: T.accent,
+              }}>
+                <Briefcase size={11} strokeWidth={2} /> {role}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Trust chips */}
-        <div className="trust-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', maxWidth: '680px' }}>
+        <div className="trust-grid rv d4">
           <TrustChip icon={CheckCircle2} value="3" label="Industry internships" />
           <TrustChip icon={Clock} value="24h" label="Response time" />
           <TrustChip icon={MapPin} value="AP" label="India · Remote open" />
@@ -447,8 +486,8 @@ export default function Contact() {
       </header>
 
       {/* ═══════════════ MAIN GRID ═══════════════ */}
-      <section className="main-section" style={{ ...W, padding: '4.5rem 2rem' }}>
-        <div className="cg" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '3rem', alignItems: 'start' }}>
+      <section className="main-section" style={{ ...W, padding: '4rem 2rem' }}>
+        <div className="main-grid">
 
           {/* ── FORM ── */}
           <div className="rv">
@@ -457,66 +496,59 @@ export default function Contact() {
               borderRadius: '14px', overflow: 'hidden',
               boxShadow: '0 2px 4px rgba(0,0,0,0.04),0 8px 32px rgba(0,0,0,0.05)',
             }}>
-              {/* Form header */}
               <div className="form-head" style={{
-                padding: '1.75rem 2rem', borderBottom: `1px solid ${T.border}`, background: T.surface,
+                padding: '1.5rem 1.75rem', borderBottom: `1px solid ${T.border}`, background: T.surface,
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
                 <div>
-                  <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.14em', color: T.muted, textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                  <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.14em', color: T.muted, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
                     Direct Message
                   </div>
-                  <div className="serif" style={{ fontSize: '1.4rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>
+                  <div className="serif" style={{ fontSize: '1.35rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>
                     Send a message
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: T.green, display: 'inline-block', animation: 'pulseDot 2s ease infinite' }} />
-                  <span className="mono" style={{ fontSize: '0.62rem', color: T.green, letterSpacing: '0.06em' }}>Online</span>
+                  <span className="mono" style={{ fontSize: '0.62rem', color: T.green, letterSpacing: '0.06em' }}>Active</span>
                 </div>
               </div>
 
-              {/* Form body */}
-              <div className="form-body" style={{ padding: '2rem' }}>
+              <div className="form-body" style={{ padding: '1.75rem' }}>
                 {success ? (
                   <SuccessState onReset={() => setSuccess(false)} />
                 ) : (
                   <form onSubmit={handleSubmit} noValidate>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                      {/* Name + Email row */}
-                      <div className="name-email-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                      <div className="name-email-row">
                         <FInput label="Full Name" name="name" type="text" value={form.name}
                           onChange={handleChange} error={errors.name} autoComplete="name" placeholder="Your name" />
-                        <FInput label="Email Address" name="email" type="email" value={form.email}
-                          onChange={handleChange} error={errors.email} autoComplete="email" placeholder="you@example.com" />
+                        <FInput label="Work Email" name="email" type="email" value={form.email}
+                          onChange={handleChange} error={errors.email} autoComplete="email" placeholder="you@company.com" />
                       </div>
 
-                      {/* Subject */}
-                      <FSelect label="Subject" name="subject" value={form.subject}
+                      <FSelect label="Opportunity Type" name="subject" value={form.subject}
                         onChange={handleChange} error={errors.subject}>
-                        <option value="">Select a topic...</option>
-                        <option value="job">Job Opportunity</option>
+                        <option value="">Select type...</option>
+                        <option value="fulltime">Full-Time Role</option>
                         <option value="internship">Internship</option>
                         <option value="collaboration">Technical Collaboration</option>
                         <option value="inquiry">General Inquiry</option>
                       </FSelect>
 
-                      {/* Message */}
-                      <FTextarea label="Your Message" name="message" value={form.message}
-                        onChange={handleChange} error={errors.message} maxLength={1000}
-                        placeholder="Tell me about the opportunity or how I can help..." />
+                      <FTextarea label="Message" name="message" value={form.message}
+                        onChange={handleChange} error={errors.message} maxLength={800}
+                        placeholder="Briefly describe the role or opportunity..." />
 
-                      {/* Submit */}
                       <button type="submit" disabled={submitting}
                         className="btn btn-primary btn-full"
                         style={{
                           position: 'relative', overflow: 'hidden',
-                          opacity: submitting ? 0.65 : 1,
-                          cursor: submitting ? 'not-allowed' : 'pointer',
+                          opacity: submitting ? 0.65 : 1, cursor: submitting ? 'not-allowed' : 'pointer',
                         }}>
-                        {/* Shimmer */}
                         {!submitting && <div style={{
-                          position: 'absolute', inset: 0, background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)',
+                          position: 'absolute', inset: 0,
+                          background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)',
                           transform: 'translateX(-100%)', animation: 'shimmer 3s ease infinite',
                         }} />}
                         {submitting ? (
@@ -529,9 +561,8 @@ export default function Contact() {
                         )}
                       </button>
 
-                      {/* Privacy note */}
                       <p className="mono" style={{ fontSize: '0.62rem', color: T.muted, textAlign: 'center', letterSpacing: '0.04em', lineHeight: 1.6 }}>
-                        Your message goes directly to my inbox. No third parties.
+                        Message goes directly to my inbox · No intermediaries
                       </p>
                     </div>
                   </form>
@@ -542,7 +573,7 @@ export default function Contact() {
 
           {/* ── SIDEBAR ── */}
           <div className="sidebar rv d2" style={{
-            display: 'flex', flexDirection: 'column', gap: '1.5rem',
+            display: 'flex', flexDirection: 'column', gap: '1.25rem',
             position: 'sticky', top: '5rem',
           }}>
 
@@ -550,11 +581,11 @@ export default function Contact() {
             <div className="sc">
               <div className="sc-head">
                 <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.12em', color: T.muted, textTransform: 'uppercase', marginBottom: '0.3rem' }}>Direct Contact</div>
-                <div className="serif" style={{ fontSize: '1.1rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>Reach me directly</div>
+                <div className="serif" style={{ fontSize: '1.05rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>Reach me directly</div>
               </div>
-              <div className="sc-body" style={{ padding: '1.25rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <ContactCard icon={Mail} label="Email" value="g.sivasatyasaibhagavan@gmail.com"
-                  href="mailto:g.sivasatyasaibhagavan@gmail.com" detail="Preferred · Responds within 24h" />
+              <div className="sc-body" style={{ padding: '1.1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
+                <ContactCard icon={Mail} label="Email · Preferred" value="g.sivasatyasaibhagavan@gmail.com"
+                  href="mailto:g.sivasatyasaibhagavan@gmail.com" detail="Best for interview scheduling" />
                 <ContactCard icon={Phone} label="Phone" value="+91 75692 05626"
                   href="tel:+917569205626" detail="Available 9 AM – 9 PM IST" />
               </div>
@@ -564,14 +595,14 @@ export default function Contact() {
             <div className="sc">
               <div className="sc-head">
                 <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.12em', color: T.muted, textTransform: 'uppercase', marginBottom: '0.3rem' }}>Professional</div>
-                <div className="serif" style={{ fontSize: '1.1rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>Online presence</div>
+                <div className="serif" style={{ fontSize: '1.05rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>Online presence</div>
               </div>
-              <div className="sc-body" style={{ padding: '1.25rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div className="sc-body" style={{ padding: '1.1rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
                 <ContactCard icon={Linkedin} label="LinkedIn" value="Siva Satya Sai Bhagavan"
                   href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/"
                   detail="Work history · Recommendations" />
                 <ContactCard icon={Github} label="GitHub" value="@bhagavan444"
-                  href="https://github.com/bhagavan444" detail="4+ repos · Active contributions" />
+                  href="https://github.com/bhagavan444" detail="Projects · Code quality · Activity" />
               </div>
             </div>
 
@@ -579,39 +610,37 @@ export default function Contact() {
             <div className="sc">
               <div className="sc-head">
                 <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.12em', color: T.muted, textTransform: 'uppercase', marginBottom: '0.3rem' }}>Background</div>
-                <div className="serif" style={{ fontSize: '1.1rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>What I bring</div>
+                <div className="serif" style={{ fontSize: '1.05rem', fontWeight: 400, color: T.ink, letterSpacing: '-0.02em' }}>Technical profile</div>
               </div>
-              <div className="sc-body" style={{ padding: '1.25rem 1.5rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+              <div className="sc-body" style={{ padding: '1.1rem 1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                   {[
                     { l: 'Full-stack engineer', d: 'MERN · REST APIs · Auth systems' },
                     { l: 'AI / ML practitioner', d: 'TensorFlow · Scikit-learn · NLP' },
                     { l: '3 industry internships', d: 'StudyOwl · SmartBridge · Blackbucks' },
-                    { l: 'B.Tech AIDS · 2026', d: 'Ramachandra College of Engineering' },
+                    { l: 'Interview-ready', d: 'DSA · System design · Live coding' },
                   ].map((item, i) => (
                     <div key={i} style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
                       <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: T.accent, flexShrink: 0, marginTop: '7px' }} />
                       <div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: T.ink, marginBottom: '0.12rem' }}>{item.l}</div>
-                        <div className="mono" style={{ fontSize: '0.64rem', color: T.muted, letterSpacing: '0.04em' }}>{item.d}</div>
+                        <div style={{ fontSize: '0.84rem', fontWeight: 600, color: T.ink, marginBottom: '0.1rem' }}>{item.l}</div>
+                        <div className="mono" style={{ fontSize: '0.63rem', color: T.muted, letterSpacing: '0.04em' }}>{item.d}</div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Resume download */}
-                <div style={{ marginTop: '1.4rem', paddingTop: '1.4rem', borderTop: `1px solid ${T.border}` }}>
-                  <a href={resumePdf} download
-                    className="btn btn-secondary"
-                    style={{ width: '100%', fontSize: '0.82rem', textDecoration: 'none', padding: '0.65rem 1rem' }}>
-                    <Download size={13} strokeWidth={1.8} /> Download Resume
+                <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: `1px solid ${T.border}` }}>
+                  <a href={resumePdf} download className="btn btn-secondary"
+                    style={{ width: '100%', fontSize: '0.82rem', textDecoration: 'none', padding: '0.6rem 1rem' }}>
+                    <Download size={13} strokeWidth={1.8} /> Download Resume (ATS-Optimized)
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Response time note */}
-            <div style={{ padding: '1rem 1.25rem', background: T.greenL, border: `1px solid rgba(21,128,61,0.18)`, borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Response note */}
+            <div style={{ padding: '0.9rem 1.1rem', background: T.greenL, border: `1px solid rgba(21,128,61,0.18)`, borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Clock size={15} strokeWidth={1.8} style={{ color: T.green, flexShrink: 0 }} />
               <div>
                 <div style={{ fontSize: '0.82rem', fontWeight: 600, color: T.green, marginBottom: '0.1rem' }}>Responds within 24 hours</div>
@@ -626,29 +655,27 @@ export default function Contact() {
       <section className="cta-section" style={{ ...W, padding: '0 2rem 7rem' }}>
         <div className="rv">
           <div className="cta-inner" style={{
-            background: T.ink, borderRadius: '14px', padding: '3.5rem 3.5rem',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: '2.5rem', flexWrap: 'wrap', position: 'relative', overflow: 'hidden',
+            background: T.ink, borderRadius: '14px', padding: '3rem 3rem',
+            position: 'relative', overflow: 'hidden',
           }}>
-            {/* Subtle corner accent */}
             <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '120px', height: '120px',
               borderRadius: '50%', background: T.accentL, filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-            <div style={{ maxWidth: '520px', position: 'relative', zIndex: 1 }}>
-              <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: '1rem' }}>
+            <div style={{ maxWidth: '500px', position: 'relative', zIndex: 1 }}>
+              <div className="mono" style={{ fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: '0.85rem' }}>
                 2026 Graduate · Immediate Availability
               </div>
-              <h3 className="serif" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', fontWeight: 300, color: '#fff', letterSpacing: '-0.03em', marginBottom: '0.85rem', lineHeight: 1.15 }}>
-                Looking for a full-stack engineer who<br />
+              <h3 className="serif" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.1rem)', fontWeight: 300, color: '#fff', letterSpacing: '-0.03em', marginBottom: '0.75rem', lineHeight: 1.18 }}>
+                Looking for a full-stack engineer who{' '}
                 <em style={{ fontWeight: 600, color: T.accent }}>ships real products?</em>
               </h3>
-              <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.48)', lineHeight: 1.8 }}>
+              <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.8 }}>
                 MERN · Python · AI/ML · 3 internships · ready from day one.
               </p>
             </div>
 
-            <div className="cta-btns" style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', flexShrink: 0, position: 'relative', zIndex: 1, minWidth: '180px' }}>
-              <a href="mailto:g.sivasatyasaibhagavan@gmail.com" className="btn btn-primary" style={{ textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <div className="cta-btns" style={{ position: 'relative', zIndex: 1 }}>
+              <a href="mailto:g.sivasatyasaibhagavan@gmail.com" className="btn btn-primary" style={{ textDecoration: 'none' }}>
                 <Send size={14} strokeWidth={1.8} /> Schedule a Call
               </a>
               <a href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/"
@@ -656,7 +683,6 @@ export default function Contact() {
                 className="btn" style={{
                   borderColor: 'rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.62)',
                   background: 'transparent', border: '1px solid rgba(255,255,255,0.18)', textDecoration: 'none',
-                  transition: 'all 0.2s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.62)'; }}>
@@ -668,8 +694,8 @@ export default function Contact() {
       </section>
 
       {/* ═══════════════ FOOTER ═══════════════ */}
-      <footer style={{ ...W, padding: '2rem 2rem 3rem', borderTop: `1px solid ${T.border}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+      <footer style={{ ...W, padding: '1.75rem 2rem 2.5rem', borderTop: `1px solid ${T.border}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <MapPin size={13} strokeWidth={1.8} style={{ color: T.green }} />
             <span className="mono" style={{ fontSize: '0.72rem', color: T.muted, letterSpacing: '0.05em' }}>
@@ -677,7 +703,7 @@ export default function Contact() {
             </span>
           </div>
           <span className="mono" style={{ fontSize: '0.72rem', color: T.muted, letterSpacing: '0.04em' }}>
-            © 2026 Siva Satya Sai Bhagavan Gopalajosyula
+            © 2026 Siva Satya Sai Bhagavan
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: T.green, display: 'inline-block', animation: 'pulseDot 2s ease infinite' }} />
