@@ -4,8 +4,11 @@ import {
   ExternalLink, Github, ArrowRight, Sparkles, TrendingUp, 
   Zap, Server, Code2, Target, AlertCircle, Eye, MousePointer2, Move
 } from 'lucide-react';
-
-
+import resumeImg from "../assets/resume.jpg";
+import chatImg from "../assets/chat.jpeg";
+import carrerImg from "../assets/carrer.jpg";
+import fakeImg from "../assets/fake.jpg";
+import heartImg from "../assets/heart.jpg";
 // All projects data
 const allProjects = [
   {
@@ -68,7 +71,7 @@ const allProjects = [
     learned:
       "Learned how ATS systems actually tokenize resume content — PDF formatting that looks clean visually can break machine parsing. Choosing semantic HTML structure over CSS-heavy layouts was the right call for parsability.",
 
-    screenshot: "/images/resume.jpg"
+    screenshot: resumeImg
   },
 
   {
@@ -130,7 +133,7 @@ const allProjects = [
     learned:
       "The most important architectural decision was keeping the API layer on the server. It made security, retry logic, and context management all easier to reason about — concerns that are nearly impossible to handle cleanly in pure frontend code.",
 
-    screenshot: "/images/chatbot.jpg"
+    screenshot: chatImg
   },
 
   {
@@ -157,7 +160,7 @@ const allProjects = [
 
     tech: ["Python", "Scikit-learn", "Flask", "React"],
 
-    screenshot: "/images/carrer.jpg"
+    screenshot: carrerImg
   },
 
   {
@@ -184,7 +187,7 @@ const allProjects = [
 
     tech: ["Python", "Scikit-learn", "NLP", "TF-IDF"],
 
-    screenshot: "/images/fake.jpg"
+    screenshot: fakeImg
   },
 
   {
@@ -211,7 +214,7 @@ const allProjects = [
 
     tech: ["Python", "Scikit-learn", "Flask", "SQLite"],
 
-    screenshot: "/images/heart.jpg"
+    screenshot: heartImg
   }
 ];
 
