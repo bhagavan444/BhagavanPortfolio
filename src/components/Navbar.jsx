@@ -10,33 +10,42 @@ import {
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────────
-   ELITE DESIGN SYSTEM
+   FLAGSHIP DARK DESIGN SYSTEM
 ───────────────────────────────────────────────────────────────── */
 const DS = {
-  // Core palette
-  white:        "#ffffff",
-  ink:          "#0a0a0f",
-  inkMid:       "#3d3d4d",
-  inkFaint:     "#7a7a8e",
-  inkGhost:     "#b8b8cc",
+  // Light white base
+  bg:           "#ffffff",
+  bgMid:        "#f8f9ff",
+  bgSurf:       "#f3f4fb",
+  bgCard:       "#ffffff",
+  bgHover:      "#eef0fa",
 
-  // Accent system — blue-violet gradient
+  // Text system
+  textPrimary:  "#000000",
+  textSub:      "#111111",
+  textMuted:    "#111111",
+  textGhost:    "#555555",
+
+  // Accent system — blue + violet
   accent:       "#2563eb",
-  accentLight:  "#3b82f6",
+  accentBright: "#3b7fff",
   accentViolet: "#7c3aed",
+  accentCyan:   "#06b6d4",
   accentGrad:   "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
-  accentSoft:   "rgba(37,99,235,0.09)",
-  accentGlow:   "rgba(37,99,235,0.22)",
+  accentGradH:  "linear-gradient(135deg, #3b7fff 0%, #9b6fff 100%)",
+  accentSoft:   "rgba(37,99,235,0.07)",
+  accentGlow:   "rgba(37,99,235,0.20)",
+  accentGlow2:  "rgba(124,58,237,0.15)",
 
-  // Glass surfaces
-  glassBg:      "rgba(255,255,255,0.78)",
-  glassBgScroll:"rgba(255,255,255,0.92)",
-  glassBorder:  "rgba(255,255,255,0.55)",
-  glassBorderDark:"rgba(0,0,0,0.07)",
-  surfHover:    "rgba(0,0,0,0.028)",
-  surfActive:   "rgba(37,99,235,0.065)",
+  // Glass system (light)
+  glassBg:      "rgba(255,255,255,0.82)",
+  glassBgScroll:"rgba(255,255,255,0.96)",
+  glassBorder:  "rgba(37,99,235,0.10)",
+  glassBorderL: "rgba(0,0,0,0.06)",
+  glassSurf:    "rgba(0,0,0,0.03)",
+  glassHover:   "rgba(0,0,0,0.05)",
 
-  // Typography — Syne + DM Mono
+  // Typography
   fontDisplay:  "'Syne', system-ui, sans-serif",
   fontSans:     "'Plus Jakarta Sans', system-ui, sans-serif",
   fontMono:     "'JetBrains Mono', ui-monospace, monospace",
@@ -46,11 +55,10 @@ const DS = {
   easeOut:      "cubic-bezier(0.33, 1, 0.68, 1)",
   easeIn:       "cubic-bezier(0.55, 0, 1, 0.45)",
   spring:       "cubic-bezier(0.34, 1.56, 0.64, 1)",
-  ms:           "200ms",
-  msFast:       "140ms",
-  msSlow:       "300ms",
+  ms:           "220ms",
+  msFast:       "150ms",
+  msSlow:       "340ms",
 
-  // Spatial
   sp: (n) => `${n * 8}px`,
 };
 
@@ -90,16 +98,14 @@ const PALETTE_ITEMS = [
 ───────────────────────────────────────────────────────────────── */
 const GLOBAL = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Keyframes ── */
   @keyframes __menuIn {
-    from { opacity: 0; transform: translateY(-6px) scale(0.975); filter: blur(2px); }
+    from { opacity: 0; transform: translateY(-8px) scale(0.97); filter: blur(3px); }
     to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
   }
   @keyframes __panelIn {
-    from { transform: translateX(100%); opacity: 0.6; }
+    from { transform: translateX(100%); opacity: 0.7; }
     to   { transform: translateX(0); opacity: 1; }
   }
   @keyframes __backdropIn {
@@ -107,59 +113,90 @@ const GLOBAL = `
     to   { opacity: 1; }
   }
   @keyframes __itemStagger {
-    from { opacity: 0; transform: translateX(14px) scale(0.97); }
+    from { opacity: 0; transform: translateX(18px) scale(0.96); }
     to   { opacity: 1; transform: translateX(0) scale(1); }
   }
   @keyframes __paletteIn {
-    from { opacity: 0; transform: translateY(-10px) scale(0.96); filter: blur(4px); }
+    from { opacity: 0; transform: translateY(-14px) scale(0.95); filter: blur(6px); }
     to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
   }
   @keyframes __pulseRing {
     0%   { transform: scale(1); opacity: 0.6; }
-    70%  { transform: scale(2.4); opacity: 0; }
-    100% { transform: scale(2.4); opacity: 0; }
+    70%  { transform: scale(2.6); opacity: 0; }
+    100% { transform: scale(2.6); opacity: 0; }
   }
   @keyframes __shimmer {
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
+  @keyframes __shimmerSlow {
+    0%   { background-position: -400% center; }
+    100% { background-position: 400% center; }
+  }
   @keyframes __ambientFlow {
-    0%, 100% { opacity: 0.25; transform: translateX(0) scale(1); }
-    50%       { opacity: 0.40; transform: translateX(4px) scale(1.04); }
+    0%, 100% { opacity: 0.35; transform: translateX(0) scale(1); }
+    50%       { opacity: 0.55; transform: translateX(6px) scale(1.06); }
   }
-  @keyframes __glowPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.0); }
-    50%       { box-shadow: 0 0 20px 2px rgba(37,99,235,0.15); }
+  @keyframes __glowBreath {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50%       { opacity: 1; transform: scale(1.04); }
   }
-  @keyframes __indicatorIn {
-    from { opacity: 0; transform: scaleX(0.4); }
-    to   { opacity: 1; transform: scaleX(1); }
+  @keyframes __logoBlurIn {
+    from { opacity: 0; filter: blur(12px); transform: translateY(4px); }
+    to   { opacity: 1; filter: blur(0); transform: translateY(0); }
+  }
+  @keyframes __navStaggerIn {
+    from { opacity: 0; transform: translateY(-6px); filter: blur(4px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes __indicatorGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(79,139,255,0.6), 0 0 20px rgba(155,127,255,0.3); }
+    50%       { box-shadow: 0 0 16px rgba(79,139,255,0.9), 0 0 32px rgba(155,127,255,0.5); }
+  }
+  @keyframes __borderSpin {
+    from { background-position: 0% 50%; }
+    to   { background-position: 200% 50%; }
+  }
+  @keyframes __sparkTrail {
+    0%   { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0; transform: scaleX(0.1); }
+  }
+  @keyframes __grainFloat {
+    0%   { transform: translate(0, 0); }
+    33%  { transform: translate(-2px, 1px); }
+    66%  { transform: translate(1px, -2px); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes __ctaGlow {
+    0%, 100% { box-shadow: 0 0 16px rgba(79,139,255,0.35), 0 4px 20px rgba(79,139,255,0.2), inset 0 1px 0 rgba(255,255,255,0.12); }
+    50%       { box-shadow: 0 0 28px rgba(79,139,255,0.55), 0 4px 32px rgba(155,127,255,0.35), inset 0 1px 0 rgba(255,255,255,0.18); }
+  }
+  @keyframes __sweepLight {
+    0%   { left: -60%; opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { opacity: 0.6; }
+    100% { left: 120%; opacity: 0; }
+  }
+  @keyframes __fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes __meshMove {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33%       { transform: translate(10px, -8px) rotate(0.5deg); }
+    66%       { transform: translate(-6px, 6px) rotate(-0.3deg); }
   }
 
-  /* ── Magnetic hover lift ── */
-  .nav-item-mag { transition: transform 200ms cubic-bezier(0.16,1,0.3,1); }
-  .nav-item-mag:hover { transform: translateY(-1.5px); }
+  .nav-lift:hover { transform: translateY(-2px) !important; }
+  .nav-lift { transition: transform 200ms cubic-bezier(0.34,1.56,0.64,1); }
 
-  /* ── Palette row highlight ── */
-  .palette-row-selected {
-    background: linear-gradient(90deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.06) 100%) !important;
-    color: #2563eb !important;
-  }
-
-  /* ── Scrollbar slim ── */
-  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: rgba(79,139,255,0.25); border-radius: 4px; }
+  :focus-visible { outline: 2px solid #4f8bff; outline-offset: 2px; border-radius: 4px; }
 
-  /* ── Focus visible ── */
-  :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 4px; }
-
-  /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
 `;
 
@@ -215,8 +252,42 @@ function useScrollSpy(items) {
   return active;
 }
 
+function useCursorX() {
+  const [x, setX] = useState(0.5);
+  useEffect(() => {
+    const fn = (e) => setX(e.clientX / window.innerWidth);
+    window.addEventListener("mousemove", fn, { passive: true });
+    return () => window.removeEventListener("mousemove", fn);
+  }, []);
+  return x;
+}
+
 /* ─────────────────────────────────────────────────────────────────
-   SCROLL PROGRESS BAR — gradient animated
+   NOISE GRAIN OVERLAY
+───────────────────────────────────────────────────────────────── */
+function GrainOverlay() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        borderRadius: "inherit",
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+        backgroundSize: "180px 180px",
+        backgroundRepeat: "repeat",
+        opacity: 0.012,
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+        animation: "__grainFloat 8s steps(4) infinite",
+        zIndex: 1,
+      }}
+    />
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SCROLL PROGRESS BAR — cinematic
 ───────────────────────────────────────────────────────────────── */
 function ScrollProgressBar({ progress, visible }) {
   return (
@@ -227,23 +298,105 @@ function ScrollProgressBar({ progress, visible }) {
         bottom: 0,
         left: 0,
         right: 0,
-        height: "2px",
-        background: "rgba(0,0,0,0.05)",
-        overflow: "hidden",
+        height: "1.5px",
+        background: "rgba(0,0,0,0.03)",
+        overflow: "visible",
         opacity: visible && progress > 1 ? 1 : 0,
         transition: `opacity ${DS.ms} ${DS.ease}`,
+        zIndex: 10,
       }}
     >
+      {/* Main bar */}
       <div
         style={{
           height: "100%",
           width: `${progress}%`,
-          background: "linear-gradient(90deg, #2563eb, #7c3aed, #2563eb)",
-          backgroundSize: "200% auto",
+          background: "linear-gradient(90deg, #4f8bff, #9b7fff, #38d9f5, #4f8bff)",
+          backgroundSize: "300% auto",
           borderRadius: "0 2px 2px 0",
           transition: "width 80ms linear",
-          animation: "__shimmer 3s linear infinite",
-          boxShadow: "0 0 10px rgba(37,99,235,0.5), 0 0 20px rgba(124,58,237,0.3)",
+          animation: "__shimmer 2.5s linear infinite",
+          position: "relative",
+        }}
+      >
+        {/* Spark glow at tip */}
+        <div
+          style={{
+            position: "absolute",
+            right: "-2px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            background: "#9b7fff",
+            boxShadow: "0 0 12px 4px rgba(155,127,255,0.8), 0 0 24px 8px rgba(79,139,255,0.4)",
+            filter: "blur(1px)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   ANIMATED GRADIENT MESH BACKGROUND
+───────────────────────────────────────────────────────────────── */
+function GradientMesh({ cursorX }) {
+  const shift = (cursorX - 0.5) * 24;
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        overflow: "hidden",
+        borderRadius: "inherit",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    >
+      {/* Left orb */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-40px",
+          left: `calc(15% + ${shift * 0.3}px)`,
+          width: "300px",
+          height: "120px",
+          background: "radial-gradient(ellipse, rgba(37,99,235,0.07) 0%, transparent 70%)",
+          filter: "blur(20px)",
+          transition: `left 800ms cubic-bezier(0.16,1,0.3,1)`,
+          animation: "__ambientFlow 8s ease-in-out infinite",
+        }}
+      />
+      {/* Right orb */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-30px",
+          right: `calc(15% - ${shift * 0.2}px)`,
+          width: "220px",
+          height: "90px",
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.05) 0%, transparent 70%)",
+          filter: "blur(18px)",
+          transition: `right 800ms cubic-bezier(0.16,1,0.3,1)`,
+          animation: "__ambientFlow 11s ease-in-out infinite reverse",
+        }}
+      />
+      {/* Center orb */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-20px",
+          left: "50%",
+          transform: `translateX(calc(-50% + ${shift * 0.15}px))`,
+          width: "400px",
+          height: "80px",
+          background: "radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, transparent 70%)",
+          filter: "blur(24px)",
+          transition: `transform 600ms cubic-bezier(0.16,1,0.3,1)`,
+          animation: "__meshMove 14s ease-in-out infinite",
         }}
       />
     </div>
@@ -251,27 +404,43 @@ function ScrollProgressBar({ progress, visible }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   AMBIENT GLOW — decorative top accent
+   LIGHT SWEEP EFFECT
 ───────────────────────────────────────────────────────────────── */
-function AmbientGlow({ visible }) {
+function LightSweep({ trigger }) {
+  const [sweeping, setSweeping] = useState(false);
+  useEffect(() => {
+    if (!trigger) return;
+    setSweeping(true);
+    const t = setTimeout(() => setSweeping(false), 1400);
+    return () => clearTimeout(t);
+  }, [trigger]);
+
   return (
     <div
       aria-hidden="true"
       style={{
         position: "absolute",
-        top: "-30px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "60%",
-        height: "60px",
-        background: "radial-gradient(ellipse at center, rgba(37,99,235,0.18) 0%, transparent 70%)",
+        inset: 0,
+        overflow: "hidden",
         pointerEvents: "none",
-        opacity: visible ? 1 : 0,
-        transition: `opacity 500ms ${DS.ease}`,
-        animation: "__ambientFlow 6s ease-in-out infinite",
-        zIndex: -1,
+        zIndex: 2,
+        borderRadius: "inherit",
       }}
-    />
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          width: "60px",
+          background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
+          transform: "skewX(-15deg)",
+          animation: sweeping ? `__sweepLight 1.4s ${DS.ease} forwards` : "none",
+          opacity: sweeping ? 1 : 0,
+          left: "-60%",
+        }}
+      />
+    </div>
   );
 }
 
@@ -280,7 +449,6 @@ function AmbientGlow({ visible }) {
 ───────────────────────────────────────────────────────────────── */
 function AvailabilityBadge() {
   const [showTip, setShowTip] = useState(false);
-
   return (
     <div
       style={{ position: "relative", display: "flex", alignItems: "center" }}
@@ -293,8 +461,8 @@ function AvailabilityBadge() {
           alignItems: "center",
           gap: "7px",
           padding: "5px 11px 5px 8px",
-          background: "linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(16,185,129,0.1) 100%)",
-          border: "1px solid rgba(16,185,129,0.22)",
+          background: "linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.14) 100%)",
+          border: "1px solid rgba(16,185,129,0.25)",
           borderRadius: "20px",
           cursor: "default",
           userSelect: "none",
@@ -309,7 +477,7 @@ function AvailabilityBadge() {
               inset: 0,
               borderRadius: "50%",
               background: "#10b981",
-              animation: "__pulseRing 2.4s ease-out infinite",
+              animation: "__pulseRing 2.2s ease-out infinite",
             }}
           />
           <div
@@ -319,16 +487,16 @@ function AvailabilityBadge() {
               height: "100%",
               borderRadius: "50%",
               background: "#10b981",
-              boxShadow: "0 0 6px rgba(16,185,129,0.6)",
+              boxShadow: "0 0 8px rgba(16,185,129,0.8)",
             }}
           />
         </div>
         <span
           style={{
             fontFamily: DS.fontSans,
-            fontSize: "11.5px",
+            fontSize: "11px",
             fontWeight: 600,
-            color: "#0a7c5c",
+            color: "#047857",
             letterSpacing: "-0.01em",
             lineHeight: 1,
           }}
@@ -345,22 +513,21 @@ function AvailabilityBadge() {
             left: "50%",
             transform: "translateX(-50%)",
             whiteSpace: "nowrap",
-            background: DS.ink,
-            color: "#fff",
+            background: "#1a1f2e",
+            color: "#c8cfe8",
             fontFamily: DS.fontSans,
             fontSize: "12px",
             fontWeight: 400,
             letterSpacing: "-0.01em",
-            padding: "7px 12px",
-            borderRadius: "8px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12)",
+            padding: "7px 13px",
+            borderRadius: "9px",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3), 0 0 0 1px rgba(79,139,255,0.15)",
             pointerEvents: "none",
             animation: `__menuIn ${DS.msFast} ${DS.ease}`,
             zIndex: 9999,
-            border: "1px solid rgba(255,255,255,0.08)",
           }}
         >
-          Open to full-time roles · 2026 Graduate
+          <span style={{ color: DS.textPrimary }}>Open to full-time roles</span> · 2026 Graduate
           <div
             style={{
               position: "absolute",
@@ -369,11 +536,9 @@ function AvailabilityBadge() {
               transform: "translateX(-50%) rotate(45deg)",
               width: "8px",
               height: "8px",
-              background: DS.ink,
+              background: DS.bgCard,
               borderRadius: "1px",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderBottom: "none",
-              borderRight: "none",
+              boxShadow: "-1px -1px 0 rgba(79,139,255,0.15)",
             }}
           />
         </div>
@@ -383,16 +548,28 @@ function AvailabilityBadge() {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   LOGO
+   LOGO — with blur-in reveal + glow
 ───────────────────────────────────────────────────────────────── */
 function Logo({ onClick }) {
   const [hov, setHov] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    setTilt({
+      x: ((e.clientY - cy) / rect.height) * -4,
+      y: ((e.clientX - cx) / rect.width) * 4,
+    });
+  };
 
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+      onMouseLeave={() => { setHov(false); setTilt({ x: 0, y: 0 }); }}
+      onMouseMove={handleMouseMove}
       aria-label="Home"
       style={{
         background: "none",
@@ -404,11 +581,26 @@ function Logo({ onClick }) {
         gap: "2px",
         lineHeight: 1,
         outline: "none",
-        transform: hov ? "translateY(-1px)" : "translateY(0)",
-        transition: `transform ${DS.ms} ${DS.spring}, opacity ${DS.msFast} ${DS.ease}`,
-        opacity: hov ? 0.72 : 1,
+        animation: `__logoBlurIn 600ms ${DS.ease} 100ms backwards`,
+        transform: `perspective(400px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${hov ? -1.5 : 0}px)`,
+        transition: `transform 200ms ${DS.ease}`,
+        position: "relative",
       }}
     >
+      {/* Glow behind logo */}
+      <div
+        style={{
+          position: "absolute",
+          inset: "-8px -16px",
+          background: hov
+            ? "radial-gradient(ellipse, rgba(37,99,235,0.12) 0%, transparent 70%)"
+            : "radial-gradient(ellipse, rgba(37,99,235,0.05) 0%, transparent 70%)",
+          borderRadius: "20px",
+          transition: `opacity ${DS.ms} ${DS.ease}`,
+          pointerEvents: "none",
+          animation: "__glowBreath 4s ease-in-out infinite",
+        }}
+      />
       <span
         style={{
           fontFamily: DS.fontMono,
@@ -417,7 +609,8 @@ function Logo({ onClick }) {
           color: DS.accent,
           letterSpacing: "0",
           userSelect: "none",
-          opacity: 0.7,
+          opacity: 0.8,
+          position: "relative",
         }}
       >
         ./
@@ -427,13 +620,18 @@ function Logo({ onClick }) {
           fontFamily: DS.fontDisplay,
           fontSize: "15px",
           fontWeight: 700,
-          color: DS.ink,
           letterSpacing: "-0.04em",
           userSelect: "none",
-          background: hov ? DS.accentGrad : "none",
+          position: "relative",
+          backgroundImage: hov
+            ? "linear-gradient(135deg, #000000 0%, #2563eb 50%, #7c3aed 100%)"
+            : "none",
+          backgroundSize: hov ? "200% auto" : "100% auto",
           WebkitBackgroundClip: hov ? "text" : "initial",
-          WebkitTextFillColor: hov ? "transparent" : "initial",
+          WebkitTextFillColor: hov ? "transparent" : "#000000",
           backgroundClip: hov ? "text" : "initial",
+          color: hov ? "transparent" : "#000000",
+          animation: hov ? "__shimmerSlow 3s linear infinite" : "none",
           transition: `all ${DS.ms} ${DS.ease}`,
         }}
       >
@@ -444,7 +642,7 @@ function Logo({ onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   SLIDING INDICATOR — gradient pill
+   SLIDING INDICATOR — glowing light system
 ───────────────────────────────────────────────────────────────── */
 function SlidingIndicator({ containerRef, activeIndex, itemRefs }) {
   const [pos, setPos] = useState({ opacity: 0, left: 0, width: 0 });
@@ -468,7 +666,29 @@ function SlidingIndicator({ containerRef, activeIndex, itemRefs }) {
 
   return (
     <>
-      {/* Bottom line indicator */}
+      {/* Capsule background */}
+      <span
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "5px",
+          top: "5px",
+          left: `${pos.left - 16}px`,
+          width: `${pos.width + 32}px`,
+          background: "linear-gradient(135deg, rgba(79,139,255,0.10) 0%, rgba(155,127,255,0.08) 100%)",
+          border: "1px solid rgba(0,0,0,0.08)",
+          borderRadius: "8px",
+          opacity: pos.opacity * 0.85,
+          transition: [
+            `left 300ms ${DS.ease}`,
+            `width 300ms ${DS.ease}`,
+            `opacity 220ms ${DS.ease}`,
+          ].join(", "),
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+      {/* Glowing bottom line */}
       <span
         aria-hidden="true"
         style={{
@@ -477,36 +697,37 @@ function SlidingIndicator({ containerRef, activeIndex, itemRefs }) {
           left: `${pos.left}px`,
           width: `${pos.width}px`,
           height: "2px",
-          background: DS.accentGrad,
+          background: "linear-gradient(90deg, #4f8bff, #9b7fff)",
           borderRadius: "2px",
           opacity: pos.opacity,
           transition: [
-            `left 280ms ${DS.ease}`,
-            `width 280ms ${DS.ease}`,
-            `opacity 200ms ${DS.ease}`,
+            `left 300ms ${DS.ease}`,
+            `width 300ms ${DS.ease}`,
+            `opacity 220ms ${DS.ease}`,
           ].join(", "),
           pointerEvents: "none",
           zIndex: 1,
-          boxShadow: "0 0 8px rgba(37,99,235,0.6), 0 0 16px rgba(124,58,237,0.3)",
+          animation: pos.opacity > 0 ? "__indicatorGlow 3s ease-in-out infinite" : "none",
         }}
       />
-      {/* Soft background pill */}
+      {/* Wide diffuse glow */}
       <span
         aria-hidden="true"
         style={{
           position: "absolute",
-          bottom: "4px",
-          top: "4px",
-          left: `${pos.left - 14}px`,
-          width: `${pos.width + 28}px`,
-          background: DS.accentSoft,
-          borderRadius: "7px",
-          opacity: pos.opacity * 0.7,
+          bottom: "0px",
+          left: `${pos.left - 12}px`,
+          width: `${pos.width + 24}px`,
+          height: "8px",
+          background: "linear-gradient(90deg, rgba(79,139,255,0.5), rgba(155,127,255,0.5))",
+          borderRadius: "4px",
+          opacity: pos.opacity * 0.3,
           transition: [
-            `left 280ms ${DS.ease}`,
-            `width 280ms ${DS.ease}`,
-            `opacity 200ms ${DS.ease}`,
+            `left 300ms ${DS.ease}`,
+            `width 300ms ${DS.ease}`,
+            `opacity 220ms ${DS.ease}`,
           ].join(", "),
+          filter: "blur(6px)",
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -516,9 +737,9 @@ function SlidingIndicator({ containerRef, activeIndex, itemRefs }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   NAV ITEM
+   NAV ITEM — with proximity glow
 ───────────────────────────────────────────────────────────────── */
-function NavItem({ label, active, onClick, itemRef }) {
+function NavItem({ label, active, onClick, itemRef, animDelay }) {
   const [hov, setHov] = useState(false);
 
   return (
@@ -528,7 +749,7 @@ function NavItem({ label, active, onClick, itemRef }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       aria-current={active ? "page" : undefined}
-      className="nav-item-mag"
+      className="nav-lift"
       style={{
         position: "relative",
         zIndex: 2,
@@ -539,14 +760,27 @@ function NavItem({ label, active, onClick, itemRef }) {
         fontFamily: DS.fontSans,
         fontSize: "13.5px",
         fontWeight: active ? 600 : 400,
-        color: active ? DS.ink : hov ? DS.inkMid : DS.inkFaint,
+      color: active ? "#000000" : hov ? "#000000" : "#111111",
         letterSpacing: active ? "-0.025em" : "-0.01em",
         lineHeight: 1,
         whiteSpace: "nowrap",
         transition: `color ${DS.ms} ${DS.ease}, font-weight ${DS.ms} ${DS.ease}`,
         outline: "none",
+        animation: `__navStaggerIn 500ms ${DS.ease} ${animDelay}ms backwards`,
       }}
     >
+      {/* Hover micro glow */}
+      {hov && !active && (
+        <span
+          style={{
+            position: "absolute",
+            inset: "2px 4px",
+            background: "radial-gradient(ellipse, rgba(79,139,255,0.08) 0%, transparent 70%)",
+            borderRadius: "6px",
+            pointerEvents: "none",
+          }}
+        />
+      )}
       {label}
     </button>
   );
@@ -557,7 +791,6 @@ function NavItem({ label, active, onClick, itemRef }) {
 ───────────────────────────────────────────────────────────────── */
 function MoreTrigger({ open, onClick }) {
   const [hov, setHov] = useState(false);
-
   return (
     <button
       onClick={onClick}
@@ -569,19 +802,24 @@ function MoreTrigger({ open, onClick }) {
         display: "flex",
         alignItems: "center",
         gap: "3px",
-        padding: `${DS.sp(1)} ${DS.sp(1.75)}`,
-        background: open ? DS.accentSoft : hov ? DS.surfHover : "none",
-        border: open ? "1px solid rgba(37,99,235,0.15)" : "1px solid transparent",
-        borderRadius: "8px",
+        padding: "7px 13px",
+        background: open
+          ? "linear-gradient(135deg, rgba(79,139,255,0.12) 0%, rgba(155,127,255,0.09) 100%)"
+          : hov
+          ? DS.glassHover
+          : DS.glassSurf,
+        border: `1px solid ${open ? "rgba(79,139,255,0.25)" : "rgba(0,0,0,0.04)"}`,
+        borderRadius: "9px",
         cursor: "pointer",
         fontFamily: DS.fontSans,
-        fontSize: "13.5px",
-        fontWeight: 400,
-        color: open ? DS.accent : hov ? DS.inkMid : DS.inkFaint,
+        fontSize: "13px",
+        fontWeight: 500,
+        color: open ? "#2563eb" : hov ? "#000000" : "#111111",
         letterSpacing: "-0.01em",
         lineHeight: 1,
         transition: `all ${DS.ms} ${DS.ease}`,
         outline: "none",
+        boxShadow: open ? "0 0 12px rgba(79,139,255,0.15), inset 0 1px 0 rgba(255,255,255,0.06)" : "none",
       }}
     >
       More
@@ -600,7 +838,7 @@ function MoreTrigger({ open, onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   COMMAND MENU DROPDOWN
+   COMMAND DROPDOWN
 ───────────────────────────────────────────────────────────────── */
 function CommandMenu({ open, currentRoute, onSelect }) {
   useEffect(() => {
@@ -618,45 +856,60 @@ function CommandMenu({ open, currentRoute, onSelect }) {
       aria-label="More pages"
       style={{
         position: "absolute",
-        top: "calc(100% + 10px)",
+        top: "calc(100% + 12px)",
         right: 0,
-        minWidth: "220px",
-        background: "rgba(255,255,255,0.96)",
-        backdropFilter: "blur(24px) saturate(1.8)",
-        WebkitBackdropFilter: "blur(24px) saturate(1.8)",
+        minWidth: "228px",
+        background: "rgba(255,255,255,0.97)",
+        backdropFilter: "blur(32px) saturate(1.6)",
+        WebkitBackdropFilter: "blur(32px) saturate(1.6)",
         border: "1px solid rgba(0,0,0,0.08)",
-        borderRadius: "14px",
-        boxShadow: "0 8px 40px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+        borderRadius: "15px",
+        boxShadow: [
+          "0 0 0 1px rgba(0,0,0,0.04) inset",
+          "0 12px 40px rgba(0,0,0,0.12)",
+          "0 4px 12px rgba(0,0,0,0.08)",
+          "0 0 30px rgba(37,99,235,0.06)",
+        ].join(", "),
         overflow: "hidden",
         animation: `__menuIn ${DS.ms} ${DS.ease}`,
         zIndex: 300,
       }}
     >
-      {/* Header */}
+      {/* Top glow accent */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0, left: 0, right: 0,
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(79,139,255,0.5) 40%, rgba(155,127,255,0.5) 60%, transparent)",
+        }}
+      />
+
       <div
         style={{
           padding: "10px 16px 8px",
           fontFamily: DS.fontMono,
-          fontSize: "9.5px",
+          fontSize: "9px",
           fontWeight: 500,
-          color: DS.inkGhost,
-          letterSpacing: "0.1em",
+          color: "#8b92ae",
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
-          borderBottom: "1px solid rgba(0,0,0,0.05)",
-          background: "rgba(0,0,0,0.012)",
+          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          background: "rgba(0,0,0,0.015)",
         }}
       >
         Pages
       </div>
 
       <div style={{ padding: "4px 0" }}>
-        {SECONDARY.map(({ label, path, Icon }) => (
+        {SECONDARY.map(({ label, path, Icon }, i) => (
           <MenuRow
             key={path}
             label={label}
             Icon={Icon}
             active={currentRoute === path}
             onClick={() => onSelect(path)}
+            delay={i * 35}
           />
         ))}
       </div>
@@ -664,9 +917,8 @@ function CommandMenu({ open, currentRoute, onSelect }) {
   );
 }
 
-function MenuRow({ label, Icon, active, onClick }) {
+function MenuRow({ label, Icon, active, onClick, delay }) {
   const [hov, setHov] = useState(false);
-
   return (
     <button
       onClick={onClick}
@@ -680,21 +932,23 @@ function MenuRow({ label, Icon, active, onClick }) {
         width: "100%",
         padding: "9px 16px",
         background: active
-          ? "linear-gradient(90deg, rgba(37,99,235,0.07) 0%, rgba(124,58,237,0.05) 100%)"
+          ? "linear-gradient(90deg, rgba(79,139,255,0.1) 0%, rgba(155,127,255,0.06) 100%)"
           : hov
-          ? DS.surfHover
+          ? "rgba(0,0,0,0.03)"
           : "transparent",
         border: "none",
+        borderLeft: active ? "2px solid rgba(79,139,255,0.6)" : "2px solid transparent",
         cursor: "pointer",
         fontFamily: DS.fontSans,
         fontSize: "13px",
-        fontWeight: active ? 600 : 400,
-        color: active ? DS.accent : hov ? DS.ink : DS.inkMid,
+        fontWeight: active ? 700 : 500,
+        color: active ? "#2563eb" : hov ? "#000000" : "#111111",
         textAlign: "left",
         letterSpacing: "-0.01em",
         lineHeight: 1,
-        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}`,
+        transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
+        animation: `__itemStagger ${DS.msSlow} ${DS.easeOut} ${delay}ms backwards`,
       }}
     >
       <div
@@ -705,16 +959,21 @@ function MenuRow({ label, Icon, active, onClick }) {
           width: "24px",
           height: "24px",
           background: active
-            ? "rgba(37,99,235,0.1)"
+            ? "rgba(79,139,255,0.15)"
             : hov
             ? "rgba(0,0,0,0.04)"
             : "rgba(0,0,0,0.03)",
           borderRadius: "6px",
           flexShrink: 0,
-          transition: `background ${DS.msFast} ${DS.ease}`,
+          border: active ? "1px solid rgba(79,139,255,0.25)" : "1px solid rgba(255,255,255,0.05)",
+          transition: `all ${DS.msFast} ${DS.ease}`,
         }}
       >
-        <Icon size={12} strokeWidth={1.75} style={{ opacity: active ? 1 : 0.45 }} />
+        <Icon
+          size={11}
+          strokeWidth={1.75}
+          style={{ color: active ? '#2563eb' : '#111111', opacity: 1 }}
+        />
       </div>
       {label}
       {active && (
@@ -724,8 +983,8 @@ function MenuRow({ label, Icon, active, onClick }) {
             width: "5px",
             height: "5px",
             borderRadius: "50%",
-            background: DS.accentGrad,
-            boxShadow: "0 0 6px rgba(37,99,235,0.5)",
+            background: "linear-gradient(135deg, #4f8bff, #9b7fff)",
+            boxShadow: "0 0 8px rgba(79,139,255,0.7)",
             flexShrink: 0,
           }}
         />
@@ -735,12 +994,12 @@ function MenuRow({ label, Icon, active, onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   COMMAND PALETTE OVERLAY
+   COMMAND PALETTE OVERLAY — premium OS mode
 ───────────────────────────────────────────────────────────────── */
 function CommandPalette({ open, onClose, onNavigate }) {
-  const [query, setQuery]         = useState("");
-  const [selectedIdx, setIdx]     = useState(0);
-  const inputRef                  = useRef(null);
+  const [query, setQuery]     = useState("");
+  const [selectedIdx, setIdx] = useState(0);
+  const inputRef              = useRef(null);
 
   const filtered = query.trim()
     ? PALETTE_ITEMS.filter(i => i.label.toLowerCase().includes(query.toLowerCase()))
@@ -768,10 +1027,10 @@ function CommandPalette({ open, onClose, onNavigate }) {
 
   const handleAction = useCallback((action) => {
     onClose();
-    if (action === "github")         { window.open("https://github.com", "_blank"); return; }
-    if (action === "email")          { window.location.href = "mailto:bhagavan@example.com"; return; }
-    if (action === "resume")         { onNavigate("/resume"); return; }
-    if (action.startsWith("/"))      { onNavigate(action); }
+    if (action === "github")    { window.open("https://github.com", "_blank"); return; }
+    if (action === "email")     { window.location.href = "mailto:bhagavan@example.com"; return; }
+    if (action === "resume")    { onNavigate("/resume"); return; }
+    if (action.startsWith("/")) { onNavigate(action); }
   }, [onClose, onNavigate]);
 
   if (!open) return null;
@@ -784,27 +1043,29 @@ function CommandPalette({ open, onClose, onNavigate }) {
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(5,5,15,0.55)",
-          backdropFilter: "blur(6px) saturate(0.8)",
-          WebkitBackdropFilter: "blur(6px) saturate(0.8)",
+          background: "rgba(0,0,0,0.45)",
+          backdropFilter: "blur(10px) saturate(0.7)",
+          WebkitBackdropFilter: "blur(10px) saturate(0.7)",
           zIndex: 9990,
           animation: `__backdropIn ${DS.msFast} ${DS.ease}`,
         }}
       />
 
-      {/* Spotlight glow behind dialog */}
+      {/* Spotlight radial behind dialog */}
       <div
         aria-hidden="true"
         style={{
           position: "fixed",
-          top: "calc(18% - 60px)",
+          top: "calc(18% - 80px)",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "min(600px, 90vw)",
-          height: "200px",
-          background: "radial-gradient(ellipse at center, rgba(37,99,235,0.25) 0%, transparent 70%)",
+          width: "min(700px, 92vw)",
+          height: "250px",
+          background: "radial-gradient(ellipse at center, rgba(37,99,235,0.12) 0%, rgba(155,127,255,0.09) 40%, transparent 70%)",
           pointerEvents: "none",
           zIndex: 9990,
+          filter: "blur(8px)",
+          animation: "__glowBreath 3s ease-in-out infinite",
         }}
       />
 
@@ -818,46 +1079,50 @@ function CommandPalette({ open, onClose, onNavigate }) {
           top: "18%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "min(560px, 92vw)",
+          width: "min(572px, 92vw)",
           background: "rgba(255,255,255,0.97)",
-          backdropFilter: "blur(32px) saturate(2)",
-          WebkitBackdropFilter: "blur(32px) saturate(2)",
+          backdropFilter: "blur(40px) saturate(2)",
+          WebkitBackdropFilter: "blur(40px) saturate(2)",
           border: "1px solid rgba(37,99,235,0.15)",
-          borderRadius: "18px",
+          borderRadius: "20px",
           boxShadow: [
-            "0 24px 80px rgba(0,0,0,0.18)",
-            "0 8px 24px rgba(0,0,0,0.1)",
-            "0 2px 6px rgba(0,0,0,0.06)",
-            "inset 0 1px 0 rgba(255,255,255,0.95)",
+            "0 0 0 1px rgba(0,0,0,0.04) inset",
+            "0 24px 64px rgba(0,0,0,0.15)",
+            "0 8px 24px rgba(0,0,0,0.08)",
+            "0 0 40px rgba(37,99,235,0.06)",
+            "0 0 120px rgba(155,127,255,0.05)",
           ].join(", "),
           overflow: "hidden",
           zIndex: 9991,
           animation: `__paletteIn ${DS.ms} ${DS.ease}`,
         }}
       >
-        {/* Top accent strip */}
+        {/* Top gradient accent */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             top: 0, left: 0, right: 0,
             height: "2px",
-            background: DS.accentGrad,
-            opacity: 0.7,
+            background: "linear-gradient(90deg, transparent 5%, #4f8bff 30%, #9b7fff 70%, transparent 95%)",
+            opacity: 0.8,
           }}
         />
+        {/* Grain */}
+        <GrainOverlay />
 
-        {/* Search bar */}
+        {/* Search */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "12px",
-            padding: "18px 22px",
-            borderBottom: "1px solid rgba(0,0,0,0.06)",
+            gap: "13px",
+            padding: "20px 24px",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
+            background: "rgba(0,0,0,0.015)",
           }}
         >
-          <Search size={16} strokeWidth={2} style={{ color: DS.accent, flexShrink: 0 }} />
+          <Search size={15} strokeWidth={2} style={{ color: DS.accent, flexShrink: 0 }} />
           <input
             ref={inputRef}
             value={query}
@@ -868,9 +1133,9 @@ function CommandPalette({ open, onClose, onNavigate }) {
               border: "none",
               outline: "none",
               fontFamily: DS.fontSans,
-              fontSize: "15.5px",
+              fontSize: "15px",
               fontWeight: 400,
-              color: DS.ink,
+              color: "#0a0c14",
               letterSpacing: "-0.02em",
               background: "transparent",
               lineHeight: 1,
@@ -881,11 +1146,11 @@ function CommandPalette({ open, onClose, onNavigate }) {
             style={{
               fontFamily: DS.fontMono,
               fontSize: "10px",
-              color: DS.inkFaint,
-              background: "rgba(0,0,0,0.04)",
-              border: "1px solid rgba(0,0,0,0.1)",
+              color: "#5a6280",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.09)",
               borderRadius: "5px",
-              padding: "3px 7px",
+              padding: "3px 8px",
               lineHeight: 1,
               letterSpacing: "0.02em",
             }}
@@ -894,16 +1159,15 @@ function CommandPalette({ open, onClose, onNavigate }) {
           </kbd>
         </div>
 
-        {/* Results */}
         <div style={{ padding: "6px 0 4px" }}>
           <div
             style={{
-              padding: "6px 22px 5px",
+              padding: "6px 24px 6px",
               fontFamily: DS.fontMono,
-              fontSize: "9.5px",
+              fontSize: "9px",
               fontWeight: 500,
-              color: DS.inkGhost,
-              letterSpacing: "0.1em",
+              color: DS.textGhost,
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
             }}
           >
@@ -913,10 +1177,10 @@ function CommandPalette({ open, onClose, onNavigate }) {
           {filtered.length === 0 && (
             <div
               style={{
-                padding: "28px 22px",
+                padding: "32px 24px",
                 fontFamily: DS.fontSans,
                 fontSize: "14px",
-                color: DS.inkFaint,
+                color: "#5a6280",
                 textAlign: "center",
               }}
             >
@@ -935,46 +1199,34 @@ function CommandPalette({ open, onClose, onNavigate }) {
           ))}
         </div>
 
-        {/* Footer */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "16px",
-            padding: "10px 22px",
-            borderTop: "1px solid rgba(0,0,0,0.05)",
-            background: "rgba(0,0,0,0.014)",
+            padding: "10px 24px",
+            borderTop: "1px solid rgba(255,255,255,0.04)",
+            background: "rgba(0,0,0,0.015)",
           }}
         >
-          {[
-            ["↑↓", "navigate"],
-            ["↵",  "select"],
-            ["esc","dismiss"],
-          ].map(([key, desc]) => (
+          {[["↑↓", "navigate"], ["↵", "select"], ["esc", "dismiss"]].map(([key, desc]) => (
             <div key={key} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
               <kbd
                 style={{
                   fontFamily: DS.fontMono,
                   fontSize: "10px",
-                  color: DS.inkMid,
-                  background: DS.white,
-                  border: "1px solid rgba(0,0,0,0.1)",
+                  color: DS.textSub,
+                  background: "rgba(0,0,0,0.04)",
+                  border: "1px solid rgba(255,255,255,0.09)",
                   borderRadius: "5px",
                   padding: "2px 6px",
                   lineHeight: 1.4,
-                  boxShadow: "0 1px 2px rgba(0,0,0,0.06)",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.3)",
                 }}
               >
                 {key}
               </kbd>
-              <span
-                style={{
-                  fontFamily: DS.fontSans,
-                  fontSize: "11px",
-                  color: DS.inkGhost,
-                  lineHeight: 1,
-                }}
-              >
+              <span style={{ fontFamily: DS.fontSans, fontSize: "11px", color: DS.textGhost, lineHeight: 1 }}>
                 {desc}
               </span>
             </div>
@@ -987,7 +1239,6 @@ function CommandPalette({ open, onClose, onNavigate }) {
 
 function PaletteRow({ item, selected, onHover, onClick }) {
   const { label, shortcut, Icon } = item;
-
   return (
     <button
       onClick={onClick}
@@ -997,24 +1248,38 @@ function PaletteRow({ item, selected, onHover, onClick }) {
         alignItems: "center",
         gap: "12px",
         width: "100%",
-        padding: "9px 22px",
+        padding: "10px 24px",
         background: selected
-          ? "linear-gradient(90deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.05) 100%)"
+          ? "linear-gradient(90deg, rgba(79,139,255,0.1) 0%, rgba(155,127,255,0.07) 100%)"
           : "transparent",
         border: "none",
-        borderLeft: selected ? "2px solid rgba(37,99,235,0.5)" : "2px solid transparent",
+        borderLeft: selected ? "2px solid rgba(79,139,255,0.7)" : "2px solid transparent",
         cursor: "pointer",
         fontFamily: DS.fontSans,
         fontSize: "13.5px",
         fontWeight: selected ? 600 : 400,
-        color: selected ? DS.accent : DS.inkMid,
+        color: selected ? "#2563eb" : "#333333",
         textAlign: "left",
         letterSpacing: "-0.01em",
         lineHeight: 1,
-        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}, border-color ${DS.msFast} ${DS.ease}`,
+        transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
+        position: "relative",
       }}
     >
+      {selected && (
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: "40%",
+            background: "linear-gradient(90deg, transparent, rgba(155,127,255,0.04))",
+            pointerEvents: "none",
+          }}
+        />
+      )}
       <div
         style={{
           display: "flex",
@@ -1023,15 +1288,20 @@ function PaletteRow({ item, selected, onHover, onClick }) {
           width: "28px",
           height: "28px",
           background: selected
-            ? "linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(124,58,237,0.1) 100%)"
-            : "rgba(0,0,0,0.04)",
+            ? "linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(155,127,255,0.14) 100%)"
+            : "rgba(0,0,0,0.03)",
           borderRadius: "7px",
           flexShrink: 0,
-          transition: `background ${DS.msFast} ${DS.ease}`,
-          border: selected ? "1px solid rgba(37,99,235,0.2)" : "1px solid transparent",
+          border: selected ? "1px solid rgba(79,139,255,0.3)" : "1px solid rgba(255,255,255,0.06)",
+          transition: `all ${DS.msFast} ${DS.ease}`,
+          boxShadow: selected ? "0 0 12px rgba(79,139,255,0.2)" : "none",
         }}
       >
-        <Icon size={13} strokeWidth={1.75} style={{ opacity: selected ? 0.9 : 0.45 }} />
+        <Icon
+          size={12}
+          strokeWidth={1.75}
+          style={{ color: selected ? "#2563eb" : "#333333", opacity: selected ? 1 : 0.5 }}
+        />
       </div>
       {label}
       <kbd
@@ -1039,9 +1309,9 @@ function PaletteRow({ item, selected, onHover, onClick }) {
           marginLeft: "auto",
           fontFamily: DS.fontMono,
           fontSize: "9.5px",
-          color: selected ? DS.accent : DS.inkGhost,
-          background: selected ? "rgba(37,99,235,0.08)" : "rgba(0,0,0,0.04)",
-          border: `1px solid ${selected ? "rgba(37,99,235,0.2)" : "rgba(0,0,0,0.07)"}`,
+          color: selected ? "#2563eb" : "#111111",
+          background: selected ? "rgba(79,139,255,0.1)" : "rgba(0,0,0,0.03)",
+          border: `1px solid ${selected ? "rgba(79,139,255,0.25)" : "rgba(0,0,0,0.04)"}`,
           borderRadius: "4px",
           padding: "2px 6px",
           lineHeight: 1.4,
@@ -1061,7 +1331,6 @@ function PaletteRow({ item, selected, onHover, onClick }) {
 ───────────────────────────────────────────────────────────────── */
 function PaletteTrigger({ onClick }) {
   const [hov, setHov] = useState(false);
-
   return (
     <button
       onClick={onClick}
@@ -1073,21 +1342,22 @@ function PaletteTrigger({ onClick }) {
         display: "flex",
         alignItems: "center",
         gap: "5px",
-        padding: "6px 11px",
-        background: hov ? DS.accentSoft : "rgba(0,0,0,0.025)",
-        border: `1px solid ${hov ? "rgba(37,99,235,0.2)" : "rgba(0,0,0,0.07)"}`,
-        borderRadius: "8px",
+        padding: "7px 12px",
+        background: hov
+          ? "linear-gradient(135deg, rgba(79,139,255,0.1) 0%, rgba(155,127,255,0.08) 100%)"
+          : DS.glassSurf,
+        border: `1px solid ${hov ? "rgba(79,139,255,0.3)" : "rgba(255,255,255,0.07)"}`,
+        borderRadius: "9px",
         cursor: "pointer",
         fontFamily: DS.fontMono,
-        fontSize: "11.5px",
+        fontSize: "11px",
         fontWeight: 500,
-        color: hov ? DS.accent : DS.inkFaint,
-        letterSpacing: "0.01em",
+        color: hov ? "#2563eb" : "#111111",
+        letterSpacing: "0.02em",
         lineHeight: 1,
         transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        boxShadow: hov ? "0 0 16px rgba(79,139,255,0.12), inset 0 1px 0 rgba(255,255,255,0.06)" : "none",
       }}
     >
       <Command size={11} strokeWidth={2} />
@@ -1097,79 +1367,114 @@ function PaletteTrigger({ onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   RESUME CTA
+   RESUME BUTTON — flagship CTA with animated border
 ───────────────────────────────────────────────────────────────── */
 function ResumeButton({ onClick }) {
   const [hov,   setHov]   = useState(false);
   const [press, setPress] = useState(false);
 
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => { setHov(false); setPress(false); }}
-      onMouseDown={() => setPress(true)}
-      onMouseUp={() => setPress(false)}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "6px",
-        padding: "8px 16px",
-        background: DS.accentGrad,
-        backgroundSize: "200% 100%",
-        backgroundPosition: hov ? "100% 0" : "0 0",
-        border: "none",
-        borderRadius: "9px",
-        cursor: "pointer",
-        fontFamily: DS.fontSans,
-        fontSize: "13px",
-        fontWeight: 600,
-        color: "#fff",
-        letterSpacing: "-0.015em",
-        lineHeight: 1,
-        transform: press ? "scale(0.96)" : hov ? "scale(1.02)" : "scale(1)",
-        boxShadow: hov && !press
-          ? [
-              "0 0 0 3px rgba(37,99,235,0.18)",
-              "0 4px 16px rgba(37,99,235,0.35)",
-              "0 1px 4px rgba(124,58,237,0.2)",
-              "inset 0 1px 0 rgba(255,255,255,0.15)",
-            ].join(", ")
-          : [
-              "0 2px 8px rgba(37,99,235,0.25)",
-              "inset 0 1px 0 rgba(255,255,255,0.1)",
-            ].join(", "),
-        transition: [
-          `transform ${DS.msFast} ${DS.spring}`,
-          `box-shadow ${DS.ms} ${DS.ease}`,
-          `background-position ${DS.msSlow} ${DS.ease}`,
-          `opacity ${DS.msFast} ${DS.ease}`,
-        ].join(", "),
-        opacity: press ? 0.88 : 1,
-        outline: "none",
-      }}
-    >
-      <FileText size={12} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-      Resume
-      <ArrowUpRight
-        size={12}
-        strokeWidth={2.5}
+    <div style={{ position: "relative", display: "inline-flex" }}>
+      {/* Animated border gradient wrapper */}
+      <div
+        aria-hidden="true"
         style={{
-          transform: hov ? "translate(2px, -2px)" : "translate(0,0)",
-          transition: `transform ${DS.ms} ${DS.ease}`,
-          opacity: 0.85,
+          position: "absolute",
+          inset: "-1px",
+          borderRadius: "10px",
+          background: "linear-gradient(135deg, #4f8bff, #9b7fff, #38d9f5, #4f8bff)",
+          backgroundSize: "300% 300%",
+          animation: "__borderSpin 4s linear infinite",
+          opacity: hov ? 0.9 : 0.55,
+          transition: `opacity ${DS.ms} ${DS.ease}`,
         }}
       />
-    </button>
+      <button
+        onClick={onClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => { setHov(false); setPress(false); }}
+        onMouseDown={() => setPress(true)}
+        onMouseUp={() => setPress(false)}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          padding: "8px 16px",
+          background: press
+            ? "rgba(13,17,28,0.98)"
+            : hov
+            ? "rgba(16,20,34,0.96)"
+            : "rgba(12,16,26,0.96)",
+          border: "none",
+          borderRadius: "9px",
+          cursor: "pointer",
+          fontFamily: DS.fontSans,
+          fontSize: "13px",
+          fontWeight: 600,
+          color: "#fff",
+          letterSpacing: "-0.015em",
+          lineHeight: 1,
+          transform: press ? "scale(0.96)" : hov ? "scale(1.02)" : "scale(1)",
+          boxShadow: press
+            ? "none"
+            : hov
+            ? "0 0 24px rgba(79,139,255,0.4), 0 8px 24px rgba(79,139,255,0.2)"
+            : "none",
+          animation: !hov && !press ? "__ctaGlow 3s ease-in-out infinite" : "none",
+          transition: [
+            `transform ${DS.msFast} ${DS.spring}`,
+            `box-shadow ${DS.ms} ${DS.ease}`,
+            `background ${DS.msFast} ${DS.ease}`,
+          ].join(", "),
+          outline: "none",
+          zIndex: 1,
+          overflow: "hidden",
+        }}
+      >
+        {/* Light sweep on hover */}
+        {hov && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0, bottom: 0,
+              left: "-40px",
+              width: "40px",
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)",
+              transform: "skewX(-15deg)",
+              animation: `__sweepLight 1.2s ${DS.ease} forwards`,
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <FileText size={12} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+        <span style={{
+          background: "linear-gradient(90deg, #ffffff, #c8daff)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>
+          Resume
+        </span>
+        <ArrowUpRight
+          size={12}
+          strokeWidth={2.5}
+          style={{
+            transform: hov ? "translate(2px, -2px)" : "translate(0,0)",
+            transition: `transform ${DS.ms} ${DS.ease}`,
+            opacity: 0.85,
+          }}
+        />
+      </button>
+    </div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   ANIMATED HAMBURGER → X
+   ANIMATED HAMBURGER
 ───────────────────────────────────────────────────────────────── */
 function AnimatedMenuButton({ isOpen, onClick }) {
   const [press, setPress] = useState(false);
-
   return (
     <button
       onClick={(e) => { e.stopPropagation(); onClick(); }}
@@ -1188,12 +1493,12 @@ function AnimatedMenuButton({ isOpen, onClick }) {
         width: "44px",
         height: "44px",
         background: isOpen
-          ? "linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(124,58,237,0.08) 100%)"
+          ? "linear-gradient(135deg, rgba(37,99,235,0.07) 0%, rgba(124,58,237,0.05) 100%)"
           : press
-          ? DS.surfHover
-          : "rgba(0,0,0,0.03)",
-        border: `1.5px solid ${isOpen ? "rgba(37,99,235,0.25)" : "rgba(0,0,0,0.08)"}`,
-        borderRadius: "11px",
+          ? DS.glassHover
+          : DS.glassSurf,
+        border: `1.5px solid ${isOpen ? "rgba(79,139,255,0.3)" : "rgba(255,255,255,0.08)"}`,
+        borderRadius: "12px",
         cursor: "pointer",
         transform: press ? "scale(0.93)" : "scale(1)",
         transition: `all ${DS.msFast} ${DS.ease}`,
@@ -1202,44 +1507,32 @@ function AnimatedMenuButton({ isOpen, onClick }) {
         touchAction: "manipulation",
         backdropFilter: "blur(8px)",
         WebkitBackdropFilter: "blur(8px)",
+        boxShadow: isOpen ? "0 0 16px rgba(79,139,255,0.15)" : "none",
       }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{
-          color: isOpen ? DS.accent : DS.inkMid,
-          transition: `color ${DS.msFast} ${DS.ease}`,
-        }}
-      >
-        <line
-          x1="3" y1="5" x2="17" y2="5"
-          stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <line x1="3" y1="5" x2="17" y2="5"
+          stroke={isOpen ? DS.accentBright : DS.textSub} strokeWidth="1.75" strokeLinecap="round"
           style={{
             transformOrigin: "center",
             transform: isOpen ? "rotate(45deg) translateY(5px)" : "rotate(0deg) translateY(0)",
-            transition: `transform ${DS.ms} ${DS.ease}`,
+            transition: `transform ${DS.ms} ${DS.ease}, stroke ${DS.ms} ${DS.ease}`,
           }}
         />
-        <line
-          x1="3" y1="10" x2="17" y2="10"
-          stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        <line x1="3" y1="10" x2="17" y2="10"
+          stroke={isOpen ? DS.accentBright : DS.textSub} strokeWidth="1.75" strokeLinecap="round"
           style={{
             opacity: isOpen ? 0 : 1,
             transform: isOpen ? "scaleX(0)" : "scaleX(1)",
             transition: `opacity ${DS.msFast} ${DS.ease}, transform ${DS.msFast} ${DS.ease}`,
           }}
         />
-        <line
-          x1="3" y1="15" x2="17" y2="15"
-          stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        <line x1="3" y1="15" x2="17" y2="15"
+          stroke={isOpen ? DS.accentBright : DS.textSub} strokeWidth="1.75" strokeLinecap="round"
           style={{
             transformOrigin: "center",
             transform: isOpen ? "rotate(-45deg) translateY(-5px)" : "rotate(0deg) translateY(0)",
-            transition: `transform ${DS.ms} ${DS.ease}`,
+            transition: `transform ${DS.ms} ${DS.ease}, stroke ${DS.ms} ${DS.ease}`,
           }}
         />
       </svg>
@@ -1248,7 +1541,7 @@ function AnimatedMenuButton({ isOpen, onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   MOBILE PANEL
+   MOBILE PANEL — cinematic drawer
 ───────────────────────────────────────────────────────────────── */
 function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
   useEffect(() => {
@@ -1284,13 +1577,29 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(5,5,15,0.45)",
-          backdropFilter: "blur(4px) saturate(0.8)",
-          WebkitBackdropFilter: "blur(4px) saturate(0.8)",
+          background: "rgba(0,0,0,0.35)",
+          backdropFilter: "blur(6px) saturate(0.7)",
+          WebkitBackdropFilter: "blur(6px) saturate(0.7)",
           zIndex: 9998,
           animation: `__backdropIn ${DS.ms} ${DS.ease}`,
         }}
       />
+
+      {/* Right radial glow */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: "0",
+          right: "0",
+          width: "400px",
+          height: "600px",
+          background: "radial-gradient(ellipse at 90% 20%, rgba(79,139,255,0.12) 0%, transparent 60%)",
+          pointerEvents: "none",
+          zIndex: 9998,
+        }}
+      />
+
       <div
         role="dialog"
         aria-modal="true"
@@ -1298,28 +1607,31 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
         style={{
           position: "fixed",
           top: 0, right: 0, bottom: 0,
-          width: "min(340px, 86vw)",
-          background: "rgba(255,255,255,0.97)",
-          backdropFilter: "blur(32px) saturate(1.8)",
-          WebkitBackdropFilter: "blur(32px) saturate(1.8)",
-          borderLeft: "1px solid rgba(37,99,235,0.1)",
+          width: "min(340px, 88vw)",
+          background: "rgba(255,255,255,0.98)",
+          backdropFilter: "blur(40px) saturate(1.6)",
+          WebkitBackdropFilter: "blur(40px) saturate(1.6)",
+          borderLeft: "1px solid rgba(0,0,0,0.08)",
           boxShadow: [
-            "-12px 0 40px rgba(0,0,0,0.1)",
-            "-4px 0 12px rgba(0,0,0,0.05)",
+            "-12px 0 40px rgba(0,0,0,0.12)",
+            "-4px 0 12px rgba(0,0,0,0.06)",
+            "0 0 40px rgba(37,99,235,0.04)",
           ].join(", "),
           overflowY: "auto",
           zIndex: 9999,
           animation: `__panelIn ${DS.msSlow} ${DS.easeOut}`,
         }}
       >
-        {/* Top accent */}
+        {/* Grain */}
+        <GrainOverlay />
+        {/* Top accent gradient */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             top: 0, left: 0, right: 0,
             height: "3px",
-            background: DS.accentGrad,
+            background: "linear-gradient(90deg, #4f8bff, #9b7fff, #38d9f5)",
           }}
         />
 
@@ -1329,8 +1641,8 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "28px 24px 18px",
-            borderBottom: "1px solid rgba(0,0,0,0.05)",
+            padding: "30px 24px 20px",
+            borderBottom: "1px solid rgba(255,255,255,0.04)",
           }}
         >
           <div>
@@ -1339,9 +1651,12 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
                 fontFamily: DS.fontDisplay,
                 fontSize: "18px",
                 fontWeight: 700,
-                color: DS.ink,
-                letterSpacing: "-0.03em",
-                marginBottom: "3px",
+                letterSpacing: "-0.04em",
+                marginBottom: "4px",
+                backgroundImage: "linear-gradient(135deg, #0a0c14 0%, #2563eb 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
               }}
             >
               Navigation
@@ -1351,8 +1666,8 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
                 fontFamily: DS.fontMono,
                 fontSize: "11px",
                 fontWeight: 400,
-                color: DS.inkFaint,
-                letterSpacing: "0.02em",
+                color: DS.textGhost,
+                letterSpacing: "0.04em",
               }}
             >
               ./bhagavan
@@ -1367,39 +1682,37 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
               justifyContent: "center",
               width: "36px",
               height: "36px",
-              background: "rgba(0,0,0,0.04)",
-              border: "1px solid rgba(0,0,0,0.07)",
+              background: DS.glassSurf,
+              border: "1px solid rgba(255,255,255,0.07)",
               borderRadius: "9px",
               cursor: "pointer",
-              color: DS.inkMid,
+              color: "#5a6280",
               outline: "none",
               WebkitTapHighlightColor: "transparent",
               touchAction: "manipulation",
               transition: `all ${DS.msFast} ${DS.ease}`,
             }}
           >
-            <X size={14} strokeWidth={2.5} />
+            <X size={13} strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* Badge row */}
-        <div style={{ padding: "16px 24px 0" }}>
+        {/* Badge */}
+        <div style={{ padding: "18px 24px 0" }}>
           <AvailabilityBadge />
         </div>
 
-        {/* Content */}
-        <div style={{ padding: "16px 18px" }}>
-          {/* Main section */}
+        <div style={{ padding: "18px 18px" }}>
           <div style={{ marginBottom: "8px" }}>
             <div
               style={{
                 fontFamily: DS.fontMono,
-                fontSize: "9.5px",
+                fontSize: "9px",
                 fontWeight: 500,
-                letterSpacing: "0.1em",
-                color: DS.inkGhost,
+                letterSpacing: "0.12em",
+                color: DS.textGhost,
                 textTransform: "uppercase",
-                padding: "0 8px 10px",
+                padding: "0 8px 12px",
               }}
             >
               Main
@@ -1418,22 +1731,21 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
           <div
             style={{
               height: "1px",
-              background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.07) 30%, rgba(0,0,0,0.07) 70%, transparent)",
-              margin: "12px 8px 16px",
+              background: "linear-gradient(90deg, transparent, rgba(79,139,255,0.15) 40%, rgba(79,139,255,0.15) 60%, transparent)",
+              margin: "14px 8px 18px",
             }}
           />
 
-          {/* More section */}
           <div>
             <div
               style={{
                 fontFamily: DS.fontMono,
-                fontSize: "9.5px",
+                fontSize: "9px",
                 fontWeight: 500,
-                letterSpacing: "0.1em",
-                color: DS.inkGhost,
+                letterSpacing: "0.12em",
+                color: DS.textGhost,
                 textTransform: "uppercase",
-                padding: "0 8px 10px",
+                padding: "0 8px 12px",
               }}
             >
               More
@@ -1453,22 +1765,34 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
           {/* CTA */}
           <div
             style={{
-              padding: "20px 8px 8px",
-              animation: `__itemStagger ${DS.msSlow} ${DS.easeOut} ${(PRIMARY.length + SECONDARY.length) * 40}ms backwards`,
+              padding: "22px 8px 10px",
+              position: "relative",
+              animation: `__fadeSlideUp ${DS.msSlow} ${DS.easeOut} ${(PRIMARY.length + SECONDARY.length) * 40 + 80}ms backwards`,
             }}
           >
+            {/* Glow behind CTA */}
+            <div
+              style={{
+                position: "absolute",
+                inset: "10px",
+                background: "radial-gradient(ellipse, rgba(79,139,255,0.15) 0%, transparent 70%)",
+                filter: "blur(16px)",
+                pointerEvents: "none",
+              }}
+            />
             <button
               onClick={(e) => { e.stopPropagation(); onNavigate("/resume"); }}
               style={{
+                position: "relative",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "9px",
                 width: "100%",
-                minHeight: "50px",
-                background: DS.accentGrad,
-                border: "none",
-                borderRadius: "12px",
+                minHeight: "52px",
+                background: "linear-gradient(135deg, rgba(79,139,255,0.9) 0%, rgba(155,127,255,0.9) 100%)",
+                border: "1px solid rgba(79,139,255,0.5)",
+                borderRadius: "13px",
                 cursor: "pointer",
                 fontFamily: DS.fontSans,
                 fontSize: "14.5px",
@@ -1479,15 +1803,29 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
                 WebkitTapHighlightColor: "transparent",
                 touchAction: "manipulation",
                 boxShadow: [
-                  "0 4px 16px rgba(37,99,235,0.3)",
-                  "0 1px 4px rgba(0,0,0,0.1)",
-                  "inset 0 1px 0 rgba(255,255,255,0.15)",
+                  "0 0 24px rgba(79,139,255,0.35)",
+                  "0 8px 24px rgba(79,139,255,0.2)",
+                  "inset 0 1px 0 rgba(255,255,255,0.2)",
                 ].join(", "),
+                animation: "__ctaGlow 3s ease-in-out infinite",
+                overflow: "hidden",
               }}
             >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0, bottom: 0,
+                  left: "-80px",
+                  width: "80px",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+                  transform: "skewX(-15deg)",
+                  animation: "__sweepLight 4s ease-in-out 1s infinite",
+                  pointerEvents: "none",
+                }}
+              />
               <FileText size={16} strokeWidth={2.5} />
               View Resume
-              <ArrowUpRight size={15} strokeWidth={2.5} style={{ opacity: 0.85 }} />
+              <ArrowUpRight size={15} strokeWidth={2.5} style={{ opacity: 0.9 }} />
             </button>
           </div>
         </div>
@@ -1498,7 +1836,6 @@ function MobilePanel({ open, currentRoute, onNavigate, onClose }) {
 
 function PanelItem({ label, Icon, active, onClick, delay }) {
   const [press, setPress] = useState(false);
-
   return (
     <button
       onClick={(e) => { e.stopPropagation(); setPress(false); onClick(); }}
@@ -1517,54 +1854,56 @@ function PanelItem({ label, Icon, active, onClick, delay }) {
         padding: "12px 10px",
         marginBottom: "2px",
         background: active
-          ? "linear-gradient(90deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.05) 100%)"
+          ? "linear-gradient(90deg, rgba(79,139,255,0.1) 0%, rgba(155,127,255,0.07) 100%)"
           : press
-          ? DS.surfHover
+          ? DS.glassHover
           : "transparent",
         border: active
-          ? "1px solid rgba(37,99,235,0.15)"
+          ? "1px solid rgba(37,99,235,0.12)"
           : "1px solid transparent",
         borderLeft: active
-          ? "3px solid rgba(37,99,235,0.7)"
+          ? "3px solid rgba(79,139,255,0.7)"
           : "3px solid transparent",
         borderRadius: "10px",
         cursor: "pointer",
         fontFamily: DS.fontSans,
         fontSize: "15px",
-        fontWeight: active ? 600 : 400,
-        color: active ? DS.accent : DS.ink,
+        fontWeight: active ? 700 : 500,
+        color: active ? "#2563eb" : "#111111",
         textAlign: "left",
         letterSpacing: "-0.015em",
         lineHeight: 1.2,
-        transition: `background ${DS.msFast} ${DS.ease}, color ${DS.msFast} ${DS.ease}, border-color ${DS.msFast} ${DS.ease}`,
+        transition: `all ${DS.msFast} ${DS.ease}`,
         outline: "none",
         WebkitTapHighlightColor: "transparent",
         touchAction: "manipulation",
         animation: `__itemStagger ${DS.msSlow} ${DS.easeOut} ${delay}ms backwards`,
+        boxShadow: active ? "0 0 16px rgba(79,139,255,0.08)" : "none",
       }}
     >
-      {Icon
-        ? (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "28px",
-              height: "28px",
-              background: active
-                ? "rgba(37,99,235,0.1)"
-                : "rgba(0,0,0,0.03)",
-              borderRadius: "7px",
-              flexShrink: 0,
-              border: active ? "1px solid rgba(37,99,235,0.2)" : "1px solid transparent",
-            }}
-          >
-            <Icon size={14} strokeWidth={1.75} style={{ opacity: active ? 1 : 0.4 }} />
-          </div>
-        )
-        : <span style={{ width: "28px", flexShrink: 0 }} />
-      }
+      {Icon ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "28px",
+            height: "28px",
+            background: active ? "rgba(37,99,235,0.07)" : "rgba(0,0,0,0.03)",
+            borderRadius: "7px",
+            flexShrink: 0,
+            border: active ? "1px solid rgba(79,139,255,0.25)" : "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <Icon
+            size={13}
+            strokeWidth={1.75}
+        style={{ color: selected ? '#2563eb' : '#333333', opacity: 1 }}
+          />
+        </div>
+      ) : (
+        <span style={{ width: "28px", flexShrink: 0 }} />
+      )}
       {label}
       {active && (
         <span
@@ -1573,8 +1912,8 @@ function PanelItem({ label, Icon, active, onClick, delay }) {
             width: "6px",
             height: "6px",
             borderRadius: "50%",
-            background: DS.accentGrad,
-            boxShadow: "0 0 6px rgba(37,99,235,0.5)",
+            background: "linear-gradient(135deg, #4f8bff, #9b7fff)",
+            boxShadow: "0 0 8px rgba(79,139,255,0.7)",
             flexShrink: 0,
           }}
         />
@@ -1595,24 +1934,32 @@ export default function Navbar() {
   const [moreOpen,    setMoreOpen]    = useState(false);
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [sweepTick,   setSweepTick]   = useState(0);
 
-  const prevY             = useRef(0);
-  const rafId             = useRef(null);
-  const moreRef           = useRef(null);
-  const navContainerRef   = useRef(null);
-  const itemRefs          = useRef([]);
+  const prevY           = useRef(0);
+  const rafId           = useRef(null);
+  const moreRef         = useRef(null);
+  const navContainerRef = useRef(null);
+  const itemRefs        = useRef([]);
 
   const isMobile       = useMQ("(max-width: 1023px)");
   const isTiny         = useMQ("(max-width: 599px)");
   const scrollProgress = useScrollProgress();
   const activeSection  = useScrollSpy(PRIMARY);
+  const cursorX        = useCursorX();
 
   const route       = location.pathname === "/" ? "/home" : location.pathname;
   const spyPath     = activeSection ? PRIMARY.find(p => p.sectionId === activeSection)?.path : null;
   const activePath  = spyPath ?? route;
   const activeIndex = PRIMARY.findIndex(p => p.path === activePath);
 
-  /* ── Scroll hide/show ── */
+  /* ── Periodic light sweep ── */
+  useEffect(() => {
+    const t = setInterval(() => setSweepTick(n => n + 1), 12000);
+    return () => clearInterval(t);
+  }, []);
+
+  /* ── Scroll behavior ── */
   useEffect(() => {
     const onScroll = () => {
       if (rafId.current) return;
@@ -1620,9 +1967,9 @@ export default function Navbar() {
         const y = window.scrollY;
         setScrolled(y > 24);
         if (isMobile) {
-          if      (y < 8)                  setVisible(true);
-          else if (y < prevY.current - 2)  setVisible(true);
-          else if (y > prevY.current + 2 && y > 60) setVisible(false);
+          if      (y < 8)                                setVisible(true);
+          else if (y < prevY.current - 2)               setVisible(true);
+          else if (y > prevY.current + 2 && y > 60)     setVisible(false);
         } else {
           setVisible(true);
         }
@@ -1676,20 +2023,19 @@ export default function Navbar() {
   }, [navigate]);
 
   /* ── Layout values ── */
-  const navH   = scrolled ? (isTiny ? "60px" : "66px") : (isTiny ? "68px" : "76px");
-  const bg     = scrolled
-    ? "rgba(255,255,255,0.94)"
-    : "rgba(255,255,255,0.82)";
-  const border = scrolled ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.6)";
-  const blur   = scrolled ? "blur(24px) saturate(1.8)" : "blur(12px) saturate(1.4)";
+  const navH   = scrolled ? (isTiny ? "58px" : "64px") : (isTiny ? "66px" : "74px");
+  const bg     = scrolled ? "rgba(255,255,255,0.96)" : "rgba(255,255,255,0.82)";
+  const blur   = scrolled ? "blur(28px) saturate(1.8)" : "blur(16px) saturate(1.4)";
+  const border = scrolled ? "rgba(0,0,0,0.08)" : "rgba(0,0,0,0.05)";
   const shadow = scrolled
     ? [
-        "0 1px 0 rgba(0,0,0,0.06)",
-        "0 4px 24px rgba(0,0,0,0.06)",
-        "0 1px 3px rgba(0,0,0,0.04)",
+        "0 1px 0 rgba(37,99,235,0.06)",
+        "0 8px 32px rgba(0,0,0,0.08)",
+        "0 2px 6px rgba(0,0,0,0.05)",
+        "0 0 40px rgba(37,99,235,0.04)",
       ].join(", ")
     : "none";
-  const padX   = isTiny ? "18px" : "40px";
+  const padX   = isTiny ? "18px" : "44px";
 
   return (
     <>
@@ -1714,27 +2060,33 @@ export default function Navbar() {
             `border-color ${DS.msSlow} ${DS.ease}`,
             `box-shadow ${DS.msSlow} ${DS.ease}`,
             `transform ${DS.ms} ${DS.ease}`,
+            `backdrop-filter ${DS.msSlow} ${DS.ease}`,
           ].join(", "),
           zIndex: 8000,
           isolation: "isolate",
+          overflow: "visible",
         }}
       >
-        {/* Ambient top glow */}
-        <AmbientGlow visible={scrolled} />
+        {/* Grain texture */}
+        <GrainOverlay />
 
-        {/* Inner top highlight */}
+        {/* Animated gradient mesh */}
+        <GradientMesh cursorX={cursorX} />
+
+        {/* Periodic light sweep */}
+        <LightSweep trigger={sweepTick} />
+
+        {/* Inner top highlight line */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
+            top: 0, left: 0, right: 0,
             height: "1px",
-            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0.9) 70%, transparent 100%)",
-            opacity: scrolled ? 0.7 : 0.9,
-            transition: `opacity ${DS.ms} ${DS.ease}`,
+            background: `linear-gradient(90deg, transparent 0%, rgba(37,99,235,${scrolled ? "0.30" : "0.15"}) 30%, rgba(155,127,255,${scrolled ? "0.35" : "0.2"}) 70%, transparent 100%)`,
+            transition: `all ${DS.ms} ${DS.ease}`,
             pointerEvents: "none",
+            zIndex: 3,
           }}
         />
 
@@ -1750,6 +2102,7 @@ export default function Navbar() {
             display: "flex",
             alignItems: "center",
             position: "relative",
+            zIndex: 4,
           }}
         >
           {/* Left — Logo + Badge */}
@@ -1765,7 +2118,7 @@ export default function Navbar() {
             {!isMobile && !isTiny && <AvailabilityBadge />}
           </div>
 
-          {/* Center — Primary nav (absolutely centered) */}
+          {/* Center — Absolutely positioned primary nav */}
           {!isMobile && (
             <div
               ref={navContainerRef}
@@ -1776,7 +2129,6 @@ export default function Navbar() {
                 transform: "translate(-50%, -50%)",
                 display: "flex",
                 alignItems: "center",
-                gap: "0",
               }}
             >
               <SlidingIndicator
@@ -1791,18 +2143,19 @@ export default function Navbar() {
                   active={activePath === path}
                   onClick={() => go(path)}
                   itemRef={el => { itemRefs.current[i] = el; }}
+                  animDelay={200 + i * 60}
                 />
               ))}
             </div>
           )}
 
-          {/* Right — Desktop controls */}
+          {/* Right — Controls */}
           <div
             style={{
               marginLeft: "auto",
               display: "flex",
               alignItems: "center",
-              gap: "6px",
+              gap: "7px",
               flexShrink: 0,
             }}
           >
@@ -1826,8 +2179,8 @@ export default function Navbar() {
                     display: "inline-block",
                     width: "1px",
                     height: "18px",
-                    background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.12), transparent)",
-                    margin: "0 4px",
+                    background: "linear-gradient(180deg, transparent, rgba(79,139,255,0.25), transparent)",
+                    margin: "0 5px",
                   }}
                 />
 
@@ -1848,7 +2201,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile panel */}
       {isMobile && (
         <MobilePanel
           open={mobileOpen}
@@ -1858,7 +2210,6 @@ export default function Navbar() {
         />
       )}
 
-      {/* Command palette */}
       <CommandPalette
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}
