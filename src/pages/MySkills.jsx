@@ -3,33 +3,33 @@
 import React, { useState, useEffect, useRef } from "react";
 
 /* ═══════════════════════════════════════════════════════
-   DESIGN TOKENS  —  Unix terminal × Linear precision
+   DESIGN TOKENS — Pure Black & White Architectural System
 ═══════════════════════════════════════════════════════ */
 const C = {
-  bg:        "#f8f8f7",
-  surface:   "#f2f2f0",
-  surfaceHi: "#eaeae8",
-  white:     "#ffffff",
-  border:    "rgba(0,0,0,0.065)",
-  border2:   "rgba(0,0,0,0.12)",
-  text:      "#0c0c0c",
-  muted:     "#6e6e78",
-  muted2:    "#4a4a52",
-  accent:    "#0057d9",
-  accentSub: "rgba(0,87,217,0.045)",
-  accentLine:"rgba(0,87,217,0.14)",
-  green:     "#047857",
-  greenSub:  "rgba(4,120,87,0.045)",
-  amber:     "#92400e",
-  ink:       "#080808",
-  inkMid:    "#1a1a1a",
+  bg:        "#0B0B0B",
+  surface:   "#111111",
+  surfaceHi: "#151515",
+  white:     "#1A1A1A",
+  border:    "rgba(255,255,255,0.06)",
+  border2:   "rgba(255,255,255,0.12)",
+  text:      "#FFFFFF",
+  muted:     "rgba(255,255,255,0.55)",
+  muted2:    "rgba(255,255,255,0.40)",
+  accent:    "#FFFFFF",
+  accentSub: "rgba(255,255,255,0.04)",
+  accentLine:"rgba(255,255,255,0.08)",
+  green:     "#FFFFFF",
+  greenSub:  "rgba(255,255,255,0.04)",
+  amber:     "#FFFFFF",
+  ink:       "#000000",
+  inkMid:    "#0F0F0F",
 };
 
 const E  = "cubic-bezier(0.16, 1, 0.3, 1)";
 const MS = { fast:"130ms", base:"190ms", slow:"320ms", reveal:"420ms" };
 
 /* ═══════════════════════════════════════════════════════
-   DEVICON CDN — exhaustive map, no broken URLs
+   DEVICON CDN
 ═══════════════════════════════════════════════════════ */
 const IB = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
 const ICONS = {
@@ -75,29 +75,31 @@ const ICONS = {
 };
 
 /* ═══════════════════════════════════════════════════════
-   GLOBAL CSS
-   — RTL / LTR / marquee keyframes
-   — Unix terminal aesthetic: monospace labels, hairline
-     borders, dot indicators, command-palette dropdowns
+   GLOBAL CSS — Monochrome Architectural
 ═══════════════════════════════════════════════════════ */
 const GLOBAL = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; overflow-x:hidden; }
   body {
     font-family:'DM Sans', system-ui, sans-serif;
-    background:${C.bg};
-    color:${C.text};
+    background:#0B0B0B;
+    color:#FFFFFF;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    cursor:none;
   }
-  ::selection { background:rgba(0,87,217,0.12); }
+  a, button, [data-magnetic] { cursor:none; }
+  @keyframes _cursorIn {
+    from { opacity:0; transform:translate(-50%,-50%) scale(0.2); }
+    to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+  }
+  ::selection { background:rgba(255,255,255,0.12); }
   ::-webkit-scrollbar { width:2px; }
   ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:rgba(0,87,217,0.22); border-radius:2px; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.25); border-radius:2px; }
 
-  /* ── Directional entrances ──────────────────────── */
   @keyframes _rtl {
     from { opacity:0; transform:translateX(48px); }
     to   { opacity:1; transform:translateX(0); }
@@ -115,13 +117,11 @@ const GLOBAL = `
   @keyframes _lx    { from{transform:scaleX(0);} to{transform:scaleX(1);} }
   @keyframes _ly    { from{transform:scaleY(0);} to{transform:scaleY(1);} }
 
-  /* ── Moving text marquee (continuous RTL scroll) ── */
   @keyframes _marquee {
     from { transform:translateX(0); }
     to   { transform:translateX(-50%); }
   }
 
-  /* ── Tag & icon micro pops ─────────────────────── */
   @keyframes _tagPop {
     from { opacity:0; transform:translateX(14px) scale(0.92); }
     to   { opacity:1; transform:translateX(0) scale(1); }
@@ -143,20 +143,17 @@ const GLOBAL = `
     to   { opacity:1; transform:translateY(0); }
   }
 
-  /* ── Devicon hover micro-interaction ──────────── */
   .di {
-    transition: transform ${MS.fast} ${E}, filter ${MS.fast} ${E};
+    transition: transform 130ms cubic-bezier(0.16,1,0.3,1), filter 130ms cubic-bezier(0.16,1,0.3,1);
     cursor:default;
   }
   .di:hover {
     transform: scale(1.25) rotate(-6deg);
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 2px 8px rgba(255,255,255,0.18));
   }
 
-  /* ── Nav link hover underline ──────────────────── */
   .snav-btn:hover .snav-line { width:22px !important; }
 
-  /* ── Responsive breakpoints ─────────────────────── */
   @media (prefers-reduced-motion:reduce) {
     *, *::before, *::after {
       animation-duration:0.01ms !important;
@@ -199,7 +196,7 @@ const capabilities = [
       { name:"AI Chatbot Platform", detail:"React + Flask ML backend" },
     ],
     metric:{ value:3,   suffix:"+", label:"Production Systems" },
-    accent:C.accent,
+    accent:"#FFFFFF",
   },
   {
     id:"intelligence", number:"02",
@@ -216,7 +213,7 @@ const capabilities = [
       { name:"Career Recommender",  detail:"Supervised ML prediction" },
     ],
     metric:{ value:90,  suffix:"%", label:"Model Accuracy" },
-    accent:C.green,
+    accent:"#FFFFFF",
   },
   {
     id:"infrastructure", number:"03",
@@ -233,7 +230,7 @@ const capabilities = [
       { name:"OAuth + Database",      detail:"MongoDB Atlas integration" },
     ],
     metric:{ value:5,   suffix:"+", label:"Live Systems" },
-    accent:"#7c3aed",
+    accent:"#FFFFFF",
   },
   {
     id:"foundations", number:"04",
@@ -250,7 +247,7 @@ const capabilities = [
       { name:"OOP Coursework",     detail:"Lab-grade implementations" },
     ],
     metric:{ value:100, suffix:"+", label:"Problems Solved" },
-    accent:"#475569",
+    accent:"#FFFFFF",
   },
 ];
 
@@ -279,7 +276,6 @@ const tooling = [
   { name:"Figma",            level:"Occasional", cat:"Design"   },
 ];
 
-/* Marquee ticker content */
 const TICKER_ITEMS = [
   "React", "Node.js", "Python", "TensorFlow", "MongoDB", "Express",
   "Flask", "Scikit-learn", "JavaScript", "TypeScript", "NumPy", "Pandas",
@@ -323,7 +319,209 @@ function Counter({ value, suffix = "", triggered }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   DEVICON IMG  — FIXED: correct default param syntax
+   MAGNETIC CURSOR
+   — dot:  8px solid white, sticks exactly to pointer
+   — ring: 36px outline, lags behind with lerp (0.12)
+   — on [data-magnetic]: ring expands to 64px + pulls
+     the element toward the cursor up to 18px
+═══════════════════════════════════════════════════════ */
+function MagneticCursor() {
+  const dotRef  = useRef(null);
+  const ringRef = useRef(null);
+
+  useEffect(() => {
+    const dot  = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    // Current raw mouse position
+    let mx = -200, my = -200;
+    // Lagging ring position
+    let rx = -200, ry = -200;
+    // Current ring size (lerped)
+    let rSize = 36;
+    let targetRSize = 36;
+    // Magnetic target element & its pull offset
+    let magEl = null;
+    let magOX = 0, magOY = 0; // element offset
+    let targetMagOX = 0, targetMagOY = 0;
+
+    let rafId = null;
+    let visible = false;
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const onMove = (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+
+      if (!visible) {
+        visible = true;
+        dot.style.opacity  = "1";
+        ring.style.opacity = "1";
+      }
+
+      // Check if we're near a magnetic element
+      const els = document.querySelectorAll("[data-magnetic]");
+      let found = null;
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width  / 2;
+        const cy = r.top  + r.height / 2;
+        const dist = Math.hypot(mx - cx, my - cy);
+        const radius = Math.max(r.width, r.height) * 0.65;
+        if (dist < radius) found = el;
+      });
+
+      if (found) {
+        magEl = found;
+        const r = found.getBoundingClientRect();
+        const cx = r.left + r.width  / 2;
+        const cy = r.top  + r.height / 2;
+        const dx = mx - cx;
+        const dy = my - cy;
+        // Pull strength — closer = stronger
+        const dist = Math.hypot(dx, dy);
+        const pull = 0.38;
+        targetMagOX = dx * pull;
+        targetMagOY = dy * pull;
+        targetRSize = 58;
+      } else {
+        if (magEl) {
+          // Reset element position
+          magEl.style.transform  = "";
+          magEl.style.transition = `transform 400ms cubic-bezier(0.16,1,0.3,1)`;
+        }
+        magEl = null;
+        targetMagOX = 0;
+        targetMagOY = 0;
+        targetRSize = 36;
+      }
+    };
+
+    const onLeave = () => {
+      visible = false;
+      dot.style.opacity  = "0";
+      ring.style.opacity = "0";
+      if (magEl) {
+        magEl.style.transform = "";
+        magEl = null;
+      }
+    };
+
+    const onDown = () => {
+      targetRSize = 22;
+      dot.style.transform = "translate(-50%,-50%) scale(0.5)";
+    };
+    const onUp = () => {
+      targetRSize = magEl ? 58 : 36;
+      dot.style.transform = "translate(-50%,-50%) scale(1)";
+    };
+
+    // Detect hoverable elements to switch ring style
+    const onOverInteractive = (e) => {
+      if (e.target.closest("a,button,[data-magnetic]")) {
+        ring.style.borderColor = "rgba(255,255,255,0.9)";
+        ring.style.background  = "rgba(255,255,255,0.06)";
+      } else {
+        ring.style.borderColor = "rgba(255,255,255,0.45)";
+        ring.style.background  = "transparent";
+      }
+    };
+
+    const tick = () => {
+      // Dot snaps instantly
+      dot.style.left = mx + "px";
+      dot.style.top  = my + "px";
+
+      // Ring lerps behind
+      rx = lerp(rx, mx, 0.13);
+      ry = lerp(ry, my, 0.13);
+      rSize = lerp(rSize, targetRSize, 0.14);
+
+      ring.style.left   = rx + "px";
+      ring.style.top    = ry + "px";
+      ring.style.width  = rSize + "px";
+      ring.style.height = rSize + "px";
+
+      // Magnetic element pull
+      if (magEl) {
+        magOX = lerp(magOX, targetMagOX, 0.14);
+        magOY = lerp(magOY, targetMagOY, 0.14);
+        magEl.style.transform  = `translate(${magOX}px, ${magOY}px)`;
+        magEl.style.transition = "none";
+      } else {
+        magOX = lerp(magOX, 0, 0.12);
+        magOY = lerp(magOY, 0, 0.12);
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    document.addEventListener("mousemove",  onMove,              { passive:true });
+    document.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mousedown",  onDown);
+    document.addEventListener("mouseup",    onUp);
+    document.addEventListener("mouseover",  onOverInteractive,   { passive:true });
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      document.removeEventListener("mousemove",  onMove);
+      document.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mousedown",  onDown);
+      document.removeEventListener("mouseup",    onUp);
+      document.removeEventListener("mouseover",  onOverInteractive);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  const BASE = {
+    position:  "fixed",
+    top:       0,
+    left:      0,
+    transform: "translate(-50%,-50%)",
+    pointerEvents: "none",
+    zIndex:    99999,
+    opacity:   0,
+    animation: "_cursorIn 400ms cubic-bezier(0.16,1,0.3,1) 0.5s both",
+  };
+
+  return (
+    <>
+      {/* Dot — snaps instantly */}
+      <div
+        ref={dotRef}
+        style={{
+          ...BASE,
+          width:        "8px",
+          height:       "8px",
+          borderRadius: "50%",
+          background:   "#FFFFFF",
+          transition:   "transform 120ms cubic-bezier(0.16,1,0.3,1), opacity 200ms ease",
+          willChange:   "left,top,transform",
+        }}
+      />
+      {/* Ring — lags + expands on magnetic */}
+      <div
+        ref={ringRef}
+        style={{
+          ...BASE,
+          width:        "36px",
+          height:       "36px",
+          borderRadius: "50%",
+          border:       "1.5px solid rgba(255,255,255,0.45)",
+          background:   "transparent",
+          transition:   "border-color 180ms ease, background 180ms ease, opacity 200ms ease",
+          willChange:   "left,top,width,height",
+          mixBlendMode: "difference",
+        }}
+      />
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   DEVICON IMG
 ═══════════════════════════════════════════════════════ */
 function DI({ name, size = 18, extraStyle = {} }) {
   const src = ICONS[name];
@@ -340,6 +538,7 @@ function DI({ name, size = 18, extraStyle = {} }) {
         display: "block",
         flexShrink: 0,
         borderRadius: "3px",
+        
         ...extraStyle,
       }}
     />
@@ -347,31 +546,29 @@ function DI({ name, size = 18, extraStyle = {} }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   MARQUEE — continuous RTL ticker with devicons
+   MARQUEE — Monochrome continuous RTL ticker
 ═══════════════════════════════════════════════════════ */
 function Marquee({ speed = 32 }) {
-  const items = [...TICKER_ITEMS, ...TICKER_ITEMS]; // duplicate for seamless loop
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
     <div style={{
       overflow: "hidden",
-      borderTop:    `1px solid ${C.border}`,
-      borderBottom: `1px solid ${C.border}`,
+      borderTop:    `1px solid rgba(255,255,255,0.06)`,
+      borderBottom: `1px solid rgba(255,255,255,0.06)`,
       padding: "10px 0",
-      background: C.surface,
+      background: "#111111",
       position: "relative",
     }}>
-      {/* Fade edges */}
       <div style={{
         position:"absolute", left:0, top:0, bottom:0, width:"80px",
-        background:`linear-gradient(to right, ${C.surface}, transparent)`,
+        background:`linear-gradient(to right, #111111, transparent)`,
         zIndex:2, pointerEvents:"none",
       }}/>
       <div style={{
         position:"absolute", right:0, top:0, bottom:0, width:"80px",
-        background:`linear-gradient(to left, ${C.surface}, transparent)`,
+        background:`linear-gradient(to left, #111111, transparent)`,
         zIndex:2, pointerEvents:"none",
       }}/>
-
       <div
         className="marquee-inner"
         style={{
@@ -390,7 +587,7 @@ function Marquee({ speed = 32 }) {
               display: "flex",
               alignItems: "center",
               gap: "7px",
-              opacity: 0.55,
+              opacity: 0.45,
               flexShrink: 0,
             }}>
               {src && (
@@ -401,14 +598,18 @@ function Marquee({ speed = 32 }) {
                   width={16}
                   height={16}
                   loading="lazy"
-                  style={{ display:"block", borderRadius:"2px" }}
+                  style={{
+                    display:"block",
+                    borderRadius:"2px",
+                    
+                  }}
                 />
               )}
               <span style={{
                 fontFamily: "'DM Mono',monospace",
                 fontSize: "11px",
                 fontWeight: 500,
-                color: C.muted2,
+                color: "rgba(255,255,255,0.50)",
                 letterSpacing: "0.04em",
                 whiteSpace: "nowrap",
               }}>
@@ -423,12 +624,13 @@ function Marquee({ speed = 32 }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   TECH TAG — RTL pop-in + devicon + hover tint
+   TECH TAG — Monochrome
 ═══════════════════════════════════════════════════════ */
 function Tag({ name, accent, visible, delay }) {
   const [hov, setHov] = useState(false);
   return (
     <span
+      data-magnetic
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
@@ -437,11 +639,11 @@ function Tag({ name, accent, visible, delay }) {
         gap: "5px",
         padding: "4px 9px 4px 6px",
         borderRadius: "5px",
-        background:    hov ? `${accent}14` : C.surface,
-        border:        `1px solid ${hov ? `${accent}38` : C.border}`,
+        background:    hov ? "rgba(255,255,255,0.08)" : "#141414",
+        border:        `1px solid ${hov ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.07)"}`,
         fontFamily:    "'DM Mono',monospace",
         fontSize:      "11px",
-        color:         hov ? accent : C.muted2,
+        color:         hov ? "#FFFFFF" : "rgba(255,255,255,0.45)",
         cursor:        "default",
         userSelect:    "none",
         transition:    `background ${MS.fast} ${E}, border-color ${MS.fast} ${E}, color ${MS.fast} ${E}`,
@@ -449,14 +651,22 @@ function Tag({ name, accent, visible, delay }) {
         animation:     visible ? `_tagPop ${MS.slow} ${E} ${delay}s both` : "none",
       }}
     >
-      <DI name={name} size={13} extraStyle={{ opacity: hov ? 1 : 0.65, transition: `opacity ${MS.fast} ${E}` }} />
+      <DI
+        name={name}
+        size={13}
+        extraStyle={{
+          opacity: hov ? 0.9 : 0.5,
+          transition: `opacity ${MS.fast} ${E}`,
+          
+        }}
+      />
       {name}
     </span>
   );
 }
 
 /* ═══════════════════════════════════════════════════════
-   SIDE NAV — Unix dot indicators
+   SIDE NAV — Monochrome dots
 ═══════════════════════════════════════════════════════ */
 function SideNav({ active }) {
   return (
@@ -474,6 +684,7 @@ function SideNav({ active }) {
         <button
           key={c.id}
           className="snav-btn"
+          data-magnetic
           onClick={() => document.getElementById(c.id)?.scrollIntoView({ behavior:"smooth" })}
           aria-label={`Jump to ${c.domain}`}
           style={{
@@ -492,7 +703,7 @@ function SideNav({ active }) {
             style={{
               height: "1.5px",
               width: active === i ? "22px" : "10px",
-              background: active === i ? C.accent : C.border2,
+              background: active === i ? "#FFFFFF" : "rgba(255,255,255,0.18)",
               borderRadius: "1px",
               transition: `all ${MS.slow} ${E}`,
             }}
@@ -501,7 +712,7 @@ function SideNav({ active }) {
             fontFamily: "'DM Mono',monospace",
             fontSize: "9px",
             fontWeight: 500,
-            color: C.muted,
+            color: "rgba(255,255,255,0.55)",
             opacity: active === i ? 1 : 0,
             transition: `opacity ${MS.slow} ${E}`,
           }}>
@@ -514,9 +725,9 @@ function SideNav({ active }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   MONO LABEL — Unix section identifier
+   MONO LABEL
 ═══════════════════════════════════════════════════════ */
-function ML({ children, color = C.accent, style = {} }) {
+function ML({ children, color = "rgba(255,255,255,0.55)", style = {} }) {
   return (
     <span style={{
       display: "block",
@@ -534,7 +745,7 @@ function ML({ children, color = C.accent, style = {} }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   CURSOR BLINK — terminal aesthetic detail
+   CURSOR BLINK
 ═══════════════════════════════════════════════════════ */
 function TermCursor() {
   return (
@@ -542,7 +753,7 @@ function TermCursor() {
       display: "inline-block",
       width: "8px",
       height: "1.1em",
-      background: C.accent,
+      background: "#FFFFFF",
       marginLeft: "3px",
       verticalAlign: "middle",
       animation: "_blink 1.1s step-end infinite",
@@ -552,11 +763,11 @@ function TermCursor() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   SECTION HEADER — RTL entry
+   SECTION HEADER
 ═══════════════════════════════════════════════════════ */
 function SH({ eyebrow, title, sub, visible, dark = false, delay = 0, cursor = false }) {
-  const tc = dark ? "#fff" : C.text;
-  const ec = dark ? "rgba(0,87,217,0.55)" : C.accent;
+  const tc = "#FFFFFF";
+  const ec = "rgba(255,255,255,0.45)";
   return (
     <div style={{
       marginBottom: "2.5rem",
@@ -565,8 +776,8 @@ function SH({ eyebrow, title, sub, visible, dark = false, delay = 0, cursor = fa
     }}>
       <ML color={ec} style={{ marginBottom:"10px" }}>{eyebrow}</ML>
       <h2 style={{
-        fontFamily: "'Cormorant',Georgia,serif",
-        fontSize: "clamp(1.75rem,4vw,2.75rem)",
+        fontFamily: "'Dancing Script',cursive",
+        fontSize: "clamp(2.8rem,5.5vw,4.5rem)",
         fontWeight: 700,
         color: tc,
         letterSpacing: "-0.025em",
@@ -580,7 +791,7 @@ function SH({ eyebrow, title, sub, visible, dark = false, delay = 0, cursor = fa
       {sub && (
         <p style={{
           fontSize: "14px",
-          color: dark ? "rgba(255,255,255,0.42)" : C.muted,
+          color: "rgba(255,255,255,0.38)",
           lineHeight: 1.65,
           maxWidth: "500px",
         }}>
@@ -592,18 +803,13 @@ function SH({ eyebrow, title, sub, visible, dark = false, delay = 0, cursor = fa
 }
 
 /* ═══════════════════════════════════════════════════════
-   CAPABILITY ROW — alternating RTL / LTR per row
+   CAPABILITY ROW — Monochrome alternating
 ═══════════════════════════════════════════════════════ */
 function CapRow({ cap, visible, delay, ri }) {
   const [hov, setHov] = useState(false);
   const even = ri % 2 === 0;
   const la = even ? "_ltr" : "_rtl";
   const ra = even ? "_rtl" : "_ltr";
-  const abg =
-    cap.accent === C.accent   ? "rgba(0,87,217,0.04)"   :
-    cap.accent === C.green    ? "rgba(4,120,87,0.04)"   :
-    cap.accent === "#7c3aed"  ? "rgba(124,58,237,0.04)" :
-    "rgba(71,85,105,0.04)";
 
   return (
     <div
@@ -614,8 +820,8 @@ function CapRow({ cap, visible, delay, ri }) {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: 0,
-        borderBottom: `1px solid ${C.border}`,
-        background: hov ? abg : "transparent",
+        borderBottom: `1px solid rgba(255,255,255,0.06)`,
+        background: hov ? "#141414" : "transparent",
         transition: `background ${MS.fast} ${E}, transform ${MS.base} ${E}`,
         transform: hov ? "translateY(-2px)" : "translateY(0)",
       }}
@@ -623,42 +829,41 @@ function CapRow({ cap, visible, delay, ri }) {
       {/* LEFT */}
       <div style={{
         padding: "2.25rem 2.5rem",
-        borderRight: `1px solid ${hov ? C.border2 : C.border}`,
+        borderRight: `1px solid ${hov ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.06)"}`,
         transition: `border-color ${MS.fast} ${E}`,
         position: "relative",
         opacity: visible ? 1 : 0,
         animation: visible ? `${la} ${MS.reveal} ${E} ${delay}s both` : "none",
       }}>
-        {/* Accent bar — scaleY entry */}
+        {/* Accent bar */}
         <div style={{
           position: "absolute", left: 0, top:"18px", bottom:"18px",
           width: "2px",
-          background: cap.accent,
+          background: hov ? "#FFFFFF" : "rgba(255,255,255,0.25)",
           borderRadius: "0 2px 2px 0",
           transformOrigin: "top",
           transform: visible ? "scaleY(1)" : "scaleY(0)",
-          transition: `transform ${MS.slow} ${E} ${delay+0.18}s`,
+          transition: `transform ${MS.slow} ${E} ${delay+0.18}s, background ${MS.fast} ${E}`,
         }}/>
-        {/* Number + expanding line */}
         <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"16px" }}>
-          <ML color={cap.accent}>{cap.number}</ML>
+          <ML color="rgba(255,255,255,0.45)">{cap.number}</ML>
           <div style={{
             height: "1px", width:"20px",
-            background: cap.accent,
+            background: "rgba(255,255,255,0.30)",
             transformOrigin: "left",
             transform: visible ? "scaleX(1)" : "scaleX(0)",
             transition: `transform ${MS.base} ${E} ${delay+0.24}s`,
           }}/>
         </div>
         <h3 style={{
-          fontFamily: "'Cormorant',Georgia,serif",
-          fontSize: "1.65rem", fontWeight: 700,
-          color: C.text, lineHeight: 1.1,
+          fontFamily: "'Dancing Script',cursive",
+          fontSize: "2.2rem", fontWeight: 700,
+          color: "#FFFFFF", lineHeight: 1.1,
           letterSpacing: "-0.025em", marginBottom: "12px",
         }}>
           {cap.domain}
         </h3>
-        <p style={{ fontSize:"14px", color:C.muted2, lineHeight:1.75, maxWidth:"400px" }}>
+        <p style={{ fontSize:"14px", color:"rgba(255,255,255,0.42)", lineHeight:1.75, maxWidth:"400px" }}>
           {cap.outcome}
         </p>
         {/* Metric counter */}
@@ -668,17 +873,16 @@ function CapRow({ cap, visible, delay, ri }) {
           animation: visible ? `_countUp ${MS.slow} ${E} ${delay+0.32}s both` : "none",
         }}>
           <div style={{
-            fontFamily: "'Cormorant',Georgia,serif",
-            fontSize: "2.6rem", fontWeight: 700,
-            color: hov ? cap.accent : C.text,
+            fontFamily: "'Dancing Script',cursive",
+            fontSize: "3.5rem", fontWeight: 700,
+            color: "#FFFFFF",
             lineHeight: 1, letterSpacing: "-0.03em",
-            transition: `color ${MS.base} ${E}`,
           }}>
             <Counter value={cap.metric.value} suffix={cap.metric.suffix} triggered={visible}/>
           </div>
           <div style={{
             fontFamily: "'DM Mono',monospace",
-            fontSize: "10px", color: C.muted,
+            fontSize: "10px", color: "rgba(255,255,255,0.35)",
             letterSpacing: "0.08em", marginTop: "4px",
             opacity: hov ? 0.9 : 0.5,
             transition: `opacity ${MS.fast} ${E}`,
@@ -694,7 +898,6 @@ function CapRow({ cap, visible, delay, ri }) {
         opacity: visible ? 1 : 0,
         animation: visible ? `${ra} ${MS.reveal} ${E} ${delay+0.07}s both` : "none",
       }}>
-        {/* Tech tag rows */}
         <div style={{ marginBottom:"22px" }}>
           {Object.entries(cap.tech).map(([cat, items], ci) => (
             <div key={cat} style={{
@@ -704,7 +907,10 @@ function CapRow({ cap, visible, delay, ri }) {
               alignItems: "baseline",
               flexWrap: "wrap",
             }}>
-              <ML color={cap.accent} style={{ minWidth:"84px", flexShrink:0, paddingTop:"2px" }}>
+              <ML
+                color="rgba(255,255,255,0.35)"
+                style={{ minWidth:"84px", flexShrink:0, paddingTop:"2px" }}
+              >
                 {cat}
               </ML>
               <div style={{ display:"flex", flexWrap:"wrap", gap:"5px" }}>
@@ -712,7 +918,7 @@ function CapRow({ cap, visible, delay, ri }) {
                   <Tag
                     key={t}
                     name={t}
-                    accent={cap.accent}
+                    accent="#FFFFFF"
                     visible={visible}
                     delay={delay + 0.14 + ci * 0.07 + ti * 0.035}
                   />
@@ -721,7 +927,7 @@ function CapRow({ cap, visible, delay, ri }) {
             </div>
           ))}
         </div>
-        {/* Proof bullets — RTL stagger */}
+        {/* Proof bullets */}
         <div style={{ display:"flex", flexDirection:"column", gap:"8px", marginBottom:"20px" }}>
           {cap.proof.map((p, pi) => (
             <div key={p.name} style={{
@@ -731,13 +937,13 @@ function CapRow({ cap, visible, delay, ri }) {
             }}>
               <div style={{
                 width:"3px", height:"3px", borderRadius:"50%",
-                background: hov ? cap.accent : C.border2,
+                background: hov ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.2)",
                 flexShrink:0, marginTop:"7px",
                 transition:`background ${MS.fast} ${E}`,
               }}/>
               <div>
-                <span style={{ fontSize:"13px", fontWeight:500, color:C.text }}>{p.name}</span>
-                <span style={{ fontSize:"12px", color:C.muted, marginLeft:"8px" }}>— {p.detail}</span>
+                <span style={{ fontSize:"13px", fontWeight:500, color:"#FFFFFF" }}>{p.name}</span>
+                <span style={{ fontSize:"12px", color:"rgba(255,255,255,0.38)", marginLeft:"8px" }}>— {p.detail}</span>
               </div>
             </div>
           ))}
@@ -745,14 +951,14 @@ function CapRow({ cap, visible, delay, ri }) {
         {/* Context footer */}
         <div style={{
           paddingTop:"14px",
-          borderTop:`1px solid ${C.border}`,
+          borderTop:`1px solid rgba(255,255,255,0.06)`,
           display:"flex", gap:"8px", alignItems:"center",
         }}>
-          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:C.muted }}>
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.35)" }}>
             {cap.period}
           </span>
-          <span style={{ fontSize:"11px", color:C.muted, opacity:0.35 }}>·</span>
-          <span style={{ fontSize:"11px", color:C.muted }}>{cap.context}</span>
+          <span style={{ fontSize:"11px", color:"rgba(255,255,255,0.20)" }}>·</span>
+          <span style={{ fontSize:"11px", color:"rgba(255,255,255,0.35)" }}>{cap.context}</span>
         </div>
       </div>
     </div>
@@ -760,17 +966,18 @@ function CapRow({ cap, visible, delay, ri }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   METRIC CARD
+   METRIC CARD — Monochrome
 ═══════════════════════════════════════════════════════ */
 function MetCard({ value, suffix, label, sub, triggered, delay }) {
   const [hov, setHov] = useState(false);
   return (
     <div
+      data-magnetic
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         padding: "2rem 1.5rem",
-        background: C.white,
+        background: "#111111",
         transform: hov ? "scale(1.016)" : "scale(1)",
         transition: `transform ${MS.fast} ${E}`,
         opacity: triggered ? 1 : 0,
@@ -778,17 +985,16 @@ function MetCard({ value, suffix, label, sub, triggered, delay }) {
       }}
     >
       <div style={{
-        fontFamily: "'Cormorant',Georgia,serif",
-        fontSize: "2.75rem", fontWeight: 700,
-        color: hov ? C.accent : C.text,
+        fontFamily: "'Dancing Script',cursive",
+        fontSize: "3.25rem", fontWeight: 700,
+        color: "#FFFFFF",
         lineHeight: 1, letterSpacing: "-0.03em", marginBottom: "6px",
-        transition: `color ${MS.base} ${E}`,
       }}>
         <Counter value={value} suffix={suffix} triggered={triggered}/>
       </div>
-      <div style={{ fontSize:"13.5px", fontWeight:500, color:C.text, marginBottom:"4px" }}>{label}</div>
+      <div style={{ fontSize:"13.5px", fontWeight:500, color:"#FFFFFF", marginBottom:"4px" }}>{label}</div>
       <div style={{
-        fontSize: "11.5px", color: C.muted, lineHeight: 1.5,
+        fontSize: "11.5px", color: "rgba(255,255,255,0.38)", lineHeight: 1.5,
         opacity: hov ? 0.9 : 0.52,
         transition: `opacity ${MS.fast} ${E}`,
       }}>
@@ -799,18 +1005,19 @@ function MetCard({ value, suffix, label, sub, triggered, delay }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   TRAJECTORY CARD — RTL + scaleY side line
+   TRAJECTORY CARD — Monochrome
 ═══════════════════════════════════════════════════════ */
 function TrajCard({ item, visible, delay }) {
   const [hov, setHov] = useState(false);
   return (
     <div
+      data-magnetic
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         padding: "1.75rem",
-        background: C.white,
-        border: `1px solid ${hov ? C.border2 : C.border}`,
+        background: "#111111",
+        border: `1px solid ${hov ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"}`,
         borderRadius: "10px",
         position: "relative",
         transform: hov ? "translateY(-6px)" : "translateY(0)",
@@ -821,58 +1028,59 @@ function TrajCard({ item, visible, delay }) {
     >
       <div style={{
         position: "absolute", left:0, top:"18px", bottom:"18px",
-        width: "2px", background: C.accent,
+        width: "2px",
+        background: hov ? "#FFFFFF" : "rgba(255,255,255,0.2)",
         borderRadius: "0 2px 2px 0", transformOrigin: "top",
         transform: visible ? "scaleY(1)" : "scaleY(0)",
-        transition: `transform ${MS.slow} ${E} ${delay+0.15}s`,
+        transition: `transform ${MS.slow} ${E} ${delay+0.15}s, background ${MS.fast} ${E}`,
       }}/>
       <div style={{ paddingLeft:"12px" }}>
         <div style={{ fontSize:"1.35rem", marginBottom:"10px" }}>{item.icon}</div>
         <h3 style={{
           fontFamily: "'DM Mono',monospace",
           fontSize:"13px", fontWeight:600,
-          color:C.text, marginBottom:"8px",
+          color:"#FFFFFF", marginBottom:"8px",
         }}>
           {item.area}
         </h3>
-        <p style={{ fontSize:"12.5px", color:C.muted, lineHeight:1.65 }}>{item.detail}</p>
+        <p style={{ fontSize:"12.5px", color:"rgba(255,255,255,0.40)", lineHeight:1.65 }}>{item.detail}</p>
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════
-   PHILOSOPHY CARD — alternating RTL / LTR
+   PHILOSOPHY CARD — Monochrome
 ═══════════════════════════════════════════════════════ */
 function PhilCard({ item, visible, delay, idx }) {
   const dir = idx % 2 === 0 ? "_rtl" : "_ltr";
   return (
     <div style={{
       padding: "2rem 2.5rem",
-      background: "rgba(255,255,255,0.025)",
+      background: "rgba(255,255,255,0.02)",
       opacity: visible ? 1 : 0,
       animation: visible ? `${dir} ${MS.reveal} ${E} ${delay}s both` : "none",
     }}>
       <div style={{ display:"flex", alignItems:"flex-start", gap:"12px", marginBottom:"14px" }}>
         <div style={{ flexShrink:0, paddingTop:"2px" }}>
-          <ML color="rgba(0,87,217,0.55)" style={{ marginBottom:"4px" }}>{item.n}</ML>
+          <ML color="rgba(255,255,255,0.30)" style={{ marginBottom:"4px" }}>{item.n}</ML>
           <div style={{
-            height:"1px", background:"rgba(0,87,217,0.3)",
+            height:"1px", background:"rgba(255,255,255,0.15)",
             transformOrigin:"left",
             transform: visible ? "scaleX(1)" : "scaleX(0)",
             transition: `transform ${MS.slow} ${E} ${delay+0.2}s`,
           }}/>
         </div>
         <h3 style={{
-          fontFamily: "'Cormorant',Georgia,serif",
-          fontSize:"1.3rem", fontWeight:600,
-          color:"#fff", lineHeight:1.2, letterSpacing:"-0.02em",
+          fontFamily: "'Dancing Script',cursive",
+          fontSize:"1.75rem", fontWeight:600,
+          color:"#FFFFFF", lineHeight:1.2, letterSpacing:"-0.02em",
         }}>
           {item.statement}
         </h3>
       </div>
       <p style={{
-        fontSize:"13px", color:"rgba(255,255,255,0.4)",
+        fontSize:"13px", color:"rgba(255,255,255,0.35)",
         lineHeight:1.7, paddingLeft:"28px",
       }}>
         {item.elaboration}
@@ -882,13 +1090,13 @@ function PhilCard({ item, visible, delay, idx }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   TOOL CARD — RTL entry, devicon, translateX hover
+   TOOL CARD — Monochrome
 ═══════════════════════════════════════════════════════ */
 function ToolCard({ tool, visible, delay }) {
   const [hov, setHov] = useState(false);
-  const lc = tool.level==="Daily" ? C.accent : tool.level==="Regular" ? C.green : "#475569";
   return (
     <div
+      data-magnetic
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
@@ -896,8 +1104,8 @@ function ToolCard({ tool, visible, delay }) {
         alignItems: "center",
         justifyContent: "space-between",
         padding: "11px 14px",
-        background: C.white,
-        border: `1px solid ${hov ? C.border2 : C.border}`,
+        background: "#111111",
+        border: `1px solid ${hov ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"}`,
         borderRadius: "8px",
         transform: hov ? "translateX(-3px)" : "translateX(0)",
         transition: `border-color ${MS.fast} ${E}, transform ${MS.fast} ${E}`,
@@ -908,23 +1116,29 @@ function ToolCard({ tool, visible, delay }) {
       <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
         <div style={{
           width:"6px", height:"6px", borderRadius:"50%",
-          background:lc, flexShrink:0,
+          background: hov ? "#FFFFFF" : "rgba(255,255,255,0.35)",
+          flexShrink:0,
+          transition:`background ${MS.fast} ${E}`,
         }}/>
         <DI
           name={tool.name}
           size={16}
-          extraStyle={{ opacity: hov ? 1 : 0.62, transition:`opacity ${MS.fast} ${E}` }}
+          extraStyle={{
+            opacity: hov ? 0.9 : 0.45,
+            transition:`opacity ${MS.fast} ${E}`,
+            
+          }}
         />
         <span style={{
           fontFamily:"'DM Mono',monospace",
-          fontSize:"12px", fontWeight:500, color:C.text,
+          fontSize:"12px", fontWeight:500, color:"#FFFFFF",
         }}>
           {tool.name}
         </span>
       </div>
       <span style={{
         fontFamily:"'DM Mono',monospace",
-        fontSize:"10px", color:C.muted,
+        fontSize:"10px", color:"rgba(255,255,255,0.35)",
         opacity: hov ? 1 : 0.5,
         transition: `opacity ${MS.fast} ${E}`,
       }}>
@@ -935,7 +1149,7 @@ function ToolCard({ tool, visible, delay }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   FOOTER CTA
+   FOOTER CTA — Monochrome
 ═══════════════════════════════════════════════════════ */
 function FooterCTA({ label, sub, href, accent, visible, delay }) {
   const [hov, setHov] = useState(false);
@@ -943,6 +1157,7 @@ function FooterCTA({ label, sub, href, accent, visible, delay }) {
   return (
     <a
       href={href}
+      data-magnetic
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => { setHov(false); setPress(false); }}
       onMouseDown={() => setPress(true)}
@@ -955,11 +1170,11 @@ function FooterCTA({ label, sub, href, accent, visible, delay }) {
         borderRadius: "10px",
         textDecoration: "none",
         background: accent
-          ? (hov ? "rgba(0,87,217,0.15)" : "rgba(0,87,217,0.10)")
+          ? (hov ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.07)")
           : (hov ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)"),
         border: `1px solid ${accent
-          ? (hov ? "rgba(0,87,217,0.4)" : "rgba(0,87,217,0.25)")
-          : (hov ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.07)")}`,
+          ? (hov ? "rgba(255,255,255,0.30)" : "rgba(255,255,255,0.15)")
+          : (hov ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.07)")}`,
         transition: `background ${MS.fast} ${E}, border-color ${MS.fast} ${E}`,
         opacity: visible ? 1 : 0,
         transform: visible ? (press ? "scale(0.98)" : "translateY(0)") : "translateY(10px)",
@@ -968,12 +1183,11 @@ function FooterCTA({ label, sub, href, accent, visible, delay }) {
     >
       <div>
         <ML color="rgba(255,255,255,0.25)" style={{ marginBottom:"4px" }}>{sub}</ML>
-        <div style={{ fontSize:"14px", fontWeight:500, color:"#fff" }}>{label}</div>
+        <div style={{ fontSize:"14px", fontWeight:500, color:"#FFFFFF" }}>{label}</div>
       </div>
-      {/* Arrow — translates right on hover (horizontal only) */}
       <svg
         width="14" height="14" viewBox="0 0 24 24" fill="none"
-        stroke={accent ? C.accent : "rgba(255,255,255,0.3)"}
+        stroke="rgba(255,255,255,0.55)"
         strokeWidth="2" strokeLinecap="round"
         style={{
           transform: hov ? "translateX(4px)" : "translateX(0)",
@@ -1021,14 +1235,15 @@ export default function Skills() {
   return (
     <>
       <style>{GLOBAL}</style>
+      <MagneticCursor />
       <SideNav active={activeSection} />
 
-      {/* Subtle grid texture — composited layer */}
+      {/* Background grid texture */}
       <div aria-hidden="true" style={{
         position:"fixed", inset:0, zIndex:0, pointerEvents:"none",
         backgroundImage:[
-          "linear-gradient(rgba(0,0,0,0.016) 1px, transparent 1px)",
-          "linear-gradient(90deg, rgba(0,0,0,0.016) 1px, transparent 1px)",
+          "linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px)",
+          "linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px)",
         ].join(","),
         backgroundSize:"64px 64px",
         maskImage:"radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)",
@@ -1038,24 +1253,24 @@ export default function Skills() {
       <div style={{ position:"relative", zIndex:1 }}>
 
         {/* ─────────────────── HERO ─────────────────── */}
-        <header ref={hR} style={SP("8rem","5rem")}>
+        <header ref={hR} style={{ ...SP("8rem","5rem"), background:"#0B0B0B" }}>
           <div style={W}>
-            {/* Eyebrow — RTL */}
+            {/* Eyebrow */}
             <div style={{
               display:"flex", alignItems:"center", gap:"12px", marginBottom:"2rem",
               opacity: hV ? 1 : 0,
               animation: hV ? `_rtl ${MS.slow} ${E} 0.05s both` : "none",
             }}>
-              <div style={{ width:"20px", height:"1px", background:C.accent }}/>
+              <div style={{ width:"20px", height:"1px", background:"rgba(255,255,255,0.55)" }}/>
               <ML>Technical Profile · B.Tech AIDS · 2026</ML>
               <TermCursor />
             </div>
 
-            {/* Headline — RTL */}
+            {/* Headline */}
             <h1 style={{
-              fontFamily:"'Cormorant',Georgia,serif",
-              fontSize:"clamp(2.75rem,6.5vw,5.25rem)", fontWeight:700,
-              color:C.text, lineHeight:1.03, letterSpacing:"-0.03em",
+              fontFamily:"'Dancing Script',cursive",
+              fontSize:"clamp(3.5rem,8vw,7rem)", fontWeight:700,
+              color:"#FFFFFF", lineHeight:1.03, letterSpacing:"-0.03em",
               marginBottom:"1.5rem", maxWidth:"820px",
               opacity: hV ? 1 : 0,
               animation: hV ? `_rtl ${MS.reveal} ${E} 0.12s both` : "none",
@@ -1063,9 +1278,9 @@ export default function Skills() {
               Engineering Systems<br/>That Scale
             </h1>
 
-            {/* Sub — RTL */}
+            {/* Sub */}
             <p style={{
-              fontSize:"1rem", color:C.muted2, lineHeight:1.75,
+              fontSize:"1rem", color:"rgba(255,255,255,0.42)", lineHeight:1.75,
               maxWidth:"580px", marginBottom:"3rem",
               opacity: hV ? 1 : 0,
               animation: hV ? `_rtl ${MS.reveal} ${E} 0.20s both` : "none",
@@ -1073,11 +1288,12 @@ export default function Skills() {
               End-to-end platforms integrating application logic, data systems, and ML pipelines — with production context and measurable outcomes.
             </p>
 
-            {/* Pillars with devicons — scale-in */}
+            {/* Pillars */}
             <div className="hpillars" style={{
               display:"grid", gridTemplateColumns:"repeat(3,1fr)",
-              gap:"1px", background:C.border,
+              gap:"1px", background:"rgba(255,255,255,0.06)",
               borderRadius:"12px", overflow:"hidden",
+              border:"1px solid rgba(255,255,255,0.06)",
               opacity: hV ? 1 : 0,
               animation: hV ? `_si ${MS.slow} ${E} 0.28s both` : "none",
             }}>
@@ -1086,13 +1302,12 @@ export default function Skills() {
                 { label:"Applied AI",          desc:"ML pipelines in real applications",  icons:["Python","TensorFlow","Keras"] },
                 { label:"Production Delivery", desc:"Shipped, deployed, tested",          icons:["Git / GitHub","Vercel","Postman"] },
               ].map((p, i) => (
-                <div key={i} style={{ padding:"1.75rem 1.5rem", background:C.bg }}>
+                <div key={i} style={{ padding:"1.75rem 1.5rem", background:"#0B0B0B" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"8px" }}>
-                    <div style={{ width:"4px", height:"4px", borderRadius:"50%", background:C.accent }}/>
-                    <span style={{ fontSize:"13.5px", fontWeight:600, color:C.text }}>{p.label}</span>
+                    <div style={{ width:"4px", height:"4px", borderRadius:"50%", background:"rgba(255,255,255,0.55)" }}/>
+                    <span style={{ fontSize:"13.5px", fontWeight:600, color:"#FFFFFF" }}>{p.label}</span>
                   </div>
-                  <p style={{ fontSize:"12px", color:C.muted, lineHeight:1.6, marginBottom:"12px" }}>{p.desc}</p>
-                  {/* Icon row — RTL stagger */}
+                  <p style={{ fontSize:"12px", color:"rgba(255,255,255,0.38)", lineHeight:1.6, marginBottom:"12px" }}>{p.desc}</p>
                   <div style={{ display:"flex", gap:"6px" }}>
                     {p.icons.map((ic, ii) => (
                       <img
@@ -1104,7 +1319,9 @@ export default function Skills() {
                         height={18}
                         loading="lazy"
                         style={{
-                          display:"block", borderRadius:"2px", opacity: 0.6,
+                          display:"block", borderRadius:"2px",
+                          opacity: 0.5,
+                          
                           animation: hV ? `_iconIn 280ms ${E} ${0.34 + i*0.06 + ii*0.04}s both` : "none",
                         }}
                       />
@@ -1116,15 +1333,16 @@ export default function Skills() {
           </div>
         </header>
 
-        {/* ─── MARQUEE TICKER (continuous RTL) ─── */}
+        {/* ─── MARQUEE TICKER ─── */}
         <Marquee speed={34} />
 
         {/* ─────────────────── OVERVIEW ─────────────────── */}
-        <section ref={oR} style={SP("4rem","5rem")}>
+        <section ref={oR} style={{ ...SP("4rem","5rem"), background:"#0B0B0B" }}>
           <div style={W}>
             <div style={{
               padding:"2.5rem 3rem", borderRadius:"14px",
-              border:`1px solid ${C.accentLine}`, background:C.accentSub,
+              border:`1px solid rgba(255,255,255,0.08)`,
+              background:"rgba(255,255,255,0.04)",
               opacity: oV ? 1 : 0,
               animation: oV ? `_rtl ${MS.reveal} ${E} 0.05s both` : "none",
             }}>
@@ -1132,13 +1350,13 @@ export default function Skills() {
                 <div>
                   <ML style={{ marginBottom:"14px" }}>Primary Strength</ML>
                   <h2 style={{
-                    fontFamily:"'Cormorant',Georgia,serif",
-                    fontSize:"2rem", fontWeight:700,
-                    color:C.text, letterSpacing:"-0.025em", lineHeight:1.1, marginBottom:"12px",
+                    fontFamily:"'Dancing Script',cursive",
+                    fontSize:"2.8rem", fontWeight:700,
+                    color:"#FFFFFF", letterSpacing:"-0.025em", lineHeight:1.1, marginBottom:"12px",
                   }}>
                     Full-Stack × AI Integration
                   </h2>
-                  <p style={{ fontSize:"14px", color:C.muted2, lineHeight:1.75 }}>
+                  <p style={{ fontSize:"14px", color:"rgba(255,255,255,0.42)", lineHeight:1.75 }}>
                     Production web systems incorporating ML inference — from training through API deployment to interface.
                   </p>
                 </div>
@@ -1151,20 +1369,27 @@ export default function Skills() {
                     <div key={i} style={{
                       display:"flex", alignItems:"center", justifyContent:"space-between",
                       padding:"10px 14px", borderRadius:"8px",
-                      background:"rgba(255,255,255,0.58)", border:`1px solid ${C.border}`,
+                      background:"rgba(255,255,255,0.04)",
+                      border:`1px solid rgba(255,255,255,0.07)`,
                     }}>
                       <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
                         {x.icons.map(ic => (
-                          <img key={ic} src={ICONS[ic]} alt={ic} className="di" width={16} height={16}
-                            loading="lazy" style={{ display:"block", borderRadius:"2px" }} />
+                          <img
+                            key={ic} src={ICONS[ic]} alt={ic} className="di"
+                            width={16} height={16} loading="lazy"
+                            style={{
+                              display:"block", borderRadius:"2px",
+                              
+                            }}
+                          />
                         ))}
                         <span style={{
-                          fontFamily:"'DM Mono',monospace", fontSize:"12px", fontWeight:500, color:C.text,
+                          fontFamily:"'DM Mono',monospace", fontSize:"12px", fontWeight:500, color:"#FFFFFF",
                         }}>
                           {x.pair}
                         </span>
                       </div>
-                      <span style={{ fontSize:"11.5px", color:C.muted }}>{x.note}</span>
+                      <span style={{ fontSize:"11.5px", color:"rgba(255,255,255,0.38)" }}>{x.note}</span>
                     </div>
                   ))}
                 </div>
@@ -1174,7 +1399,14 @@ export default function Skills() {
         </section>
 
         {/* ─────────────────── CAPABILITIES ─────────────────── */}
-        <section ref={cR} style={{ borderTop:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}` }}>
+        <section
+          ref={cR}
+          style={{
+            borderTop:`1px solid rgba(255,255,255,0.06)`,
+            borderBottom:`1px solid rgba(255,255,255,0.06)`,
+            background:"#0B0B0B",
+          }}
+        >
           <div style={W}>
             <div style={{ padding:"4rem 0 2.5rem" }}>
               <SH
@@ -1200,13 +1432,14 @@ export default function Skills() {
         <Marquee speed={28} />
 
         {/* ─────────────────── METRICS ─────────────────── */}
-        <section ref={mR} style={{ ...SP(), background:C.surface }}>
+        <section ref={mR} style={{ ...SP(), background:"#0F0F0F" }}>
           <div style={W}>
             <SH eyebrow="Section 03" title="Impact Metrics" visible={mV}/>
             <div style={{
               display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",
-              gap:"1px", background:C.border,
-              border:`1px solid ${C.border}`, borderRadius:"12px", overflow:"hidden",
+              gap:"1px", background:"rgba(255,255,255,0.06)",
+              border:`1px solid rgba(255,255,255,0.06)`,
+              borderRadius:"12px", overflow:"hidden",
             }}>
               {[
                 { value:3,   suffix:"",   label:"Industry Internships", sub:"Paid, production" },
@@ -1222,11 +1455,12 @@ export default function Skills() {
         </section>
 
         {/* ─────────────────── PHILOSOPHY ─────────────────── */}
-        <section ref={pR} style={{ ...SP(), background:C.ink, position:"relative", overflow:"hidden" }}>
+        <section ref={pR} style={{ ...SP(), background:"#000000", position:"relative", overflow:"hidden" }}>
+          {/* Ultra-subtle white glow */}
           <div aria-hidden="true" style={{
             position:"absolute", left:"-8%", bottom:"-25%",
             width:"480px", height:"480px", borderRadius:"50%",
-            background:"radial-gradient(circle, rgba(0,87,217,0.07), transparent 70%)",
+            background:"radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%)",
             filter:"blur(70px)", pointerEvents:"none",
             opacity: pV ? 1 : 0,
             transition:`opacity 0.8s ${E}`,
@@ -1241,8 +1475,8 @@ export default function Skills() {
             />
             <div className="pgrid" style={{
               display:"grid", gridTemplateColumns:"repeat(2,1fr)",
-              gap:"1px", background:"rgba(255,255,255,0.042)",
-              border:"1px solid rgba(255,255,255,0.065)",
+              gap:"1px", background:"rgba(255,255,255,0.04)",
+              border:"1px solid rgba(255,255,255,0.06)",
               borderRadius:"12px", overflow:"hidden",
             }}>
               {philosophy.map((p, i) => (
@@ -1253,7 +1487,7 @@ export default function Skills() {
         </section>
 
         {/* ─────────────────── TOOLING ─────────────────── */}
-        <section ref={tR} style={{ ...SP(), borderTop:`1px solid ${C.border}` }}>
+        <section ref={tR} style={{ ...SP(), borderTop:`1px solid rgba(255,255,255,0.06)`, background:"#0B0B0B" }}>
           <div style={W}>
             <SH eyebrow="Section 05" title="Tooling Familiarity" visible={tV}/>
             {/* Legend */}
@@ -1264,13 +1498,19 @@ export default function Skills() {
               animation: tV ? `_fade ${MS.slow} ${E} 0.08s both` : "none",
             }}>
               {[
-                { label:"Daily",      c:C.accent },
-                { label:"Regular",    c:C.green },
-                { label:"Occasional", c:"#475569" },
+                { label:"Daily",      opacity:"0.90" },
+                { label:"Regular",    opacity:"0.55" },
+                { label:"Occasional", opacity:"0.30" },
               ].map(x => (
                 <div key={x.label} style={{ display:"flex", alignItems:"center", gap:"6px" }}>
-                  <div style={{ width:"6px", height:"6px", borderRadius:"50%", background:x.c }}/>
-                  <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:C.muted2, fontWeight:500 }}>
+                  <div style={{
+                    width:"6px", height:"6px", borderRadius:"50%",
+                    background:`rgba(255,255,255,${x.opacity})`,
+                  }}/>
+                  <span style={{
+                    fontFamily:"'DM Mono',monospace", fontSize:"11px",
+                    color:"rgba(255,255,255,0.45)", fontWeight:500,
+                  }}>
                     {x.label}
                   </span>
                 </div>
@@ -1285,7 +1525,7 @@ export default function Skills() {
         </section>
 
         {/* ─────────────────── TRAJECTORY ─────────────────── */}
-        <section ref={trR} style={{ ...SP(), background:C.surface, borderTop:`1px solid ${C.border}` }}>
+        <section ref={trR} style={{ ...SP(), background:"#0F0F0F", borderTop:`1px solid rgba(255,255,255,0.06)` }}>
           <div style={W}>
             <SH
               eyebrow="Section 06"
@@ -1304,28 +1544,29 @@ export default function Skills() {
         </section>
 
         {/* ─────────────────── FOOTER ─────────────────── */}
-        <footer ref={fR} style={{ background:C.ink, position:"relative", overflow:"hidden" }}>
-          {/* Wave */}
-          <div style={{ position:"relative", height:"56px", background:C.surface, overflow:"hidden" }}>
+        <footer ref={fR} style={{ background:"#000000", position:"relative", overflow:"hidden" }}>
+          {/* Wave transition */}
+          <div style={{ position:"relative", height:"56px", background:"#0F0F0F", overflow:"hidden" }}>
             <svg viewBox="0 0 1440 56" preserveAspectRatio="none"
               style={{ position:"absolute", bottom:0, left:0, width:"100%", height:"100%" }}>
-              <path d="M0,0 C360,56 720,0 1080,28 C1260,42 1380,14 1440,28 L1440,56 L0,56 Z" fill={C.ink}/>
+              <path d="M0,0 C360,56 720,0 1080,28 C1260,42 1380,14 1440,28 L1440,56 L0,56 Z" fill="#000000"/>
             </svg>
           </div>
 
-          {/* Grid + radial */}
+          {/* Subtle grid */}
           <div aria-hidden="true" style={{
             position:"absolute", inset:0, zIndex:0, pointerEvents:"none",
             backgroundImage:[
-              "linear-gradient(rgba(0,87,217,0.028) 1px, transparent 1px)",
-              "linear-gradient(90deg, rgba(0,87,217,0.028) 1px, transparent 1px)",
+              "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
             ].join(","),
             backgroundSize:"48px 48px",
           }}/>
+          {/* Subtle white glow */}
           <div aria-hidden="true" style={{
             position:"absolute", left:"-5%", top:"15%",
             width:"420px", height:"420px", borderRadius:"50%",
-            background:"radial-gradient(circle, rgba(0,87,217,0.06), transparent 70%)",
+            background:"radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%)",
             filter:"blur(60px)", pointerEvents:"none",
           }}/>
 
@@ -1341,22 +1582,24 @@ export default function Skills() {
                   <div style={{
                     display:"inline-flex", alignItems:"center", gap:"6px",
                     padding:"5px 12px", borderRadius:"999px",
-                    background:"rgba(4,120,87,0.09)", border:"1px solid rgba(4,120,87,0.22)",
+                    background:"rgba(255,255,255,0.06)",
+                    border:"1px solid rgba(255,255,255,0.12)",
                     marginBottom:"20px",
                     opacity: fV ? 1 : 0,
                     animation: fV ? `_rtl ${MS.slow} ${E} 0.05s both` : "none",
                   }}>
                     <div style={{
-                      width:"5px", height:"5px", borderRadius:"50%", background:C.green,
+                      width:"5px", height:"5px", borderRadius:"50%",
+                      background:"rgba(255,255,255,0.85)",
                       animation:"_pulse 2.2s ease-in-out infinite",
                     }}/>
-                    <ML color={C.green}>Open to Opportunities · 2026</ML>
+                    <ML color="rgba(255,255,255,0.65)">Open to Opportunities · 2026</ML>
                   </div>
 
                   <h2 style={{
-                    fontFamily:"'Cormorant',Georgia,serif",
-                    fontSize:"clamp(2.25rem,5vw,4.25rem)", fontWeight:700,
-                    color:"#fff", lineHeight:1.04, letterSpacing:"-0.03em", marginBottom:"14px",
+                    fontFamily:"'Dancing Script',cursive",
+                    fontSize:"clamp(3rem,6vw,5.5rem)", fontWeight:700,
+                    color:"#FFFFFF", lineHeight:1.04, letterSpacing:"-0.03em", marginBottom:"14px",
                     opacity: fV ? 1 : 0,
                     animation: fV ? `_rtl ${MS.reveal} ${E} 0.12s both` : "none",
                   }}>
@@ -1364,7 +1607,7 @@ export default function Skills() {
                   </h2>
 
                   <p style={{
-                    fontSize:"15px", color:"rgba(255,255,255,0.38)",
+                    fontSize:"15px", color:"rgba(255,255,255,0.35)",
                     lineHeight:1.75, maxWidth:"400px",
                     opacity: fV ? 1 : 0,
                     animation: fV ? `_rtl ${MS.reveal} ${E} 0.20s both` : "none",
@@ -1394,14 +1637,14 @@ export default function Skills() {
             }}>
               <div>
                 <div style={{
-                  fontFamily:"'Cormorant',Georgia,serif",
-                  fontSize:"1.4rem", fontWeight:700, color:"#fff",
+                  fontFamily:"'Dancing Script',cursive",
+                  fontSize:"2rem", fontWeight:700, color:"#FFFFFF",
                   letterSpacing:"-0.03em", marginBottom:"10px",
                 }}>
-                  Bhagavan<span style={{ color:C.accent }}>.</span>
+                  Bhagavan<span style={{ color:"rgba(255,255,255,0.35)" }}>.</span>
                 </div>
                 <p style={{
-                  fontSize:"12.5px", color:"rgba(255,255,255,0.32)",
+                  fontSize:"12.5px", color:"rgba(255,255,255,0.28)",
                   lineHeight:1.75, marginBottom:"20px", maxWidth:"240px",
                 }}>
                   B.Tech AIDS · Ramachandra College · Andhra Pradesh, India.
@@ -1413,14 +1656,16 @@ export default function Skills() {
                     { l:"✉",  h:"mailto:g.sivasatyasaibhagavan@gmail.com" },
                   ].map((s, i) => (
                     <a key={i} href={s.h}
+                      data-magnetic
                       target={s.h.startsWith("http") ? "_blank" : undefined}
                       rel={s.h.startsWith("http") ? "noopener noreferrer" : undefined}
                       style={{
                         width:"32px", height:"32px", borderRadius:"7px",
-                        background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.07)",
+                        background:"rgba(255,255,255,0.04)",
+                        border:"1px solid rgba(255,255,255,0.08)",
                         display:"flex", alignItems:"center", justifyContent:"center",
                         fontFamily:"'DM Mono',monospace",
-                        color:"rgba(255,255,255,0.3)", textDecoration:"none", fontSize:"11px",
+                        color:"rgba(255,255,255,0.35)", textDecoration:"none", fontSize:"11px",
                       }}
                     >
                       {s.l}
@@ -1433,7 +1678,7 @@ export default function Skills() {
                 <ML color="rgba(255,255,255,0.18)" style={{ marginBottom:"18px" }}>Navigate</ML>
                 {["Overview","Capabilities","Metrics","Philosophy","Trajectory"].map((l, i) => (
                   <a key={i} href="#" style={{
-                    display:"block", fontSize:"13px", color:"rgba(255,255,255,0.38)",
+                    display:"block", fontSize:"13px", color:"rgba(255,255,255,0.32)",
                     textDecoration:"none", marginBottom:"10px",
                   }}>{l}</a>
                 ))}
@@ -1448,7 +1693,7 @@ export default function Skills() {
                   { l:"Certifications", h:"#" },
                 ].map((l, i) => (
                   <a key={i} href={l.h} style={{
-                    display:"block", fontSize:"13px", color:"rgba(255,255,255,0.38)",
+                    display:"block", fontSize:"13px", color:"rgba(255,255,255,0.32)",
                     textDecoration:"none", marginBottom:"10px",
                   }}>
                     {l.l}
@@ -1462,11 +1707,14 @@ export default function Skills() {
                   { lb:"Email",    v:"g.sivasatyasaibhagavan@gmail.com" },
                   { lb:"Phone",    v:"+91 7569205626" },
                   { lb:"Location", v:"Andhra Pradesh, IN" },
-                  { lb:"Status",   v:"Available · Immediate", g:true },
+                  { lb:"Status",   v:"Available · Immediate", bright:true },
                 ].map((c, i) => (
                   <div key={i} style={{ marginBottom:"14px" }}>
-                    <ML color="rgba(255,255,255,0.2)" style={{ fontSize:"9px", marginBottom:"3px" }}>{c.lb}</ML>
-                    <div style={{ fontSize:"12.5px", color: c.g ? C.green : "rgba(255,255,255,0.45)" }}>
+                    <ML color="rgba(255,255,255,0.20)" style={{ fontSize:"9px", marginBottom:"3px" }}>{c.lb}</ML>
+                    <div style={{
+                      fontSize:"12.5px",
+                      color: c.bright ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.42)",
+                    }}>
                       {c.v}
                     </div>
                   </div>
@@ -1482,7 +1730,7 @@ export default function Skills() {
             }}>
               <div style={{
                 fontFamily:"'DM Mono',monospace", fontSize:"11px",
-                color:"rgba(255,255,255,0.2)",
+                color:"rgba(255,255,255,0.20)",
               }}>
                 © 2026 Siva Satya Sai Bhagavan
               </div>
@@ -1490,7 +1738,7 @@ export default function Skills() {
                 {["Privacy","Terms","Sitemap"].map(l => (
                   <a key={l} href="#" style={{
                     fontFamily:"'DM Mono',monospace", fontSize:"11px",
-                    color:"rgba(255,255,255,0.2)", textDecoration:"none",
+                    color:"rgba(255,255,255,0.20)", textDecoration:"none",
                   }}>
                     {l}
                   </a>
@@ -1498,11 +1746,13 @@ export default function Skills() {
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:"6px" }}>
                 <div style={{
-                  width:"5px", height:"5px", borderRadius:"50%", background:C.green,
+                  width:"5px", height:"5px", borderRadius:"50%",
+                  background:"rgba(255,255,255,0.75)",
                   animation:"_pulse 2.2s ease-in-out infinite",
                 }}/>
                 <span style={{
-                  fontFamily:"'DM Mono',monospace", fontSize:"11px", color:C.green,
+                  fontFamily:"'DM Mono',monospace", fontSize:"11px",
+                  color:"rgba(255,255,255,0.55)",
                 }}>
                   Available for hire
                 </span>

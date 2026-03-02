@@ -1,1005 +1,1398 @@
-import { useState, useEffect, useRef } from "react";
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
 import {
   Trophy, Award, Users, Code2, GitBranch, Briefcase,
-  GraduationCap, Target, CheckCircle, ExternalLink,
+  GraduationCap, Target, CheckCircle2, ExternalLink,
   Github, Linkedin, Download, X, ChevronRight,
-  Calendar, Clock, Zap, Database, Server, Terminal,
-  TrendingUp, Shield, Cpu, Layers
+  Zap, Shield, TrendingUp, Cpu, Layers, MapPin, ArrowUpRight
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS - WHITE THEME
+   DESIGN TOKENS — Pure Black & White Architectural System
 ═══════════════════════════════════════════════════════════════ */
-const T = {
-  bg: "#ffffff",
-  surface: "#f8f9fa",
-  raised: "#f0f2f5",
-  ink: "#000000",
-  inkSub: "#3a3a42",
-  inkMute: "#6a6a75",
-  inkFaint: "#c0c0c8",
-  line: "rgba(0,0,0,0.08)",
-  lineMd: "rgba(0,0,0,0.12)",
-  accent: "#5b7fff",
-  accentSoft: "rgba(91,127,255,0.08)",
-  green: "#10b981",
-  greenSoft: "rgba(16,185,129,0.08)",
-  ease: "cubic-bezier(0.16, 1, 0.3, 1)",
+const C = {
+  bg:        "#0B0B0B",
+  surface:   "#111111",
+  white:     "#151515",
+  border:    "rgba(255,255,255,0.06)",
+  border2:   "rgba(255,255,255,0.12)",
+  text:      "#FFFFFF",
+  muted:     "rgba(255,255,255,0.55)",
+  muted2:    "rgba(255,255,255,0.70)",
+  accent:    "#FFFFFF",
+  accentSub: "rgba(255,255,255,0.04)",
 };
 
+const E = "cubic-bezier(0.16, 1, 0.3, 1)";
+
 /* ═══════════════════════════════════════════════════════════════
-   DATA — REWRITTEN: HONEST, FACTUAL, NO HYPE
+   DEVICON CDN MAP
 ═══════════════════════════════════════════════════════════════ */
-const achievements = [
+const IB = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
+const ICONS = {
+  "React":           `${IB}/react/react-original.svg`,
+  "Node.js":         `${IB}/nodejs/nodejs-original.svg`,
+  "Express":         `${IB}/express/express-original.svg`,
+  "MongoDB":         `${IB}/mongodb/mongodb-original.svg`,
+  "Socket.io":       `${IB}/socketio/socketio-original.svg`,
+  "Docker":          `${IB}/docker/docker-original.svg`,
+  "AWS":             `${IB}/amazonwebservices/amazonwebservices-original-wordmark.svg`,
+  "Python":          `${IB}/python/python-original.svg`,
+  "TensorFlow":      `${IB}/tensorflow/tensorflow-original.svg`,
+  "Kubernetes":      `${IB}/kubernetes/kubernetes-original.svg`,
+  "Django":          `${IB}/django/django-plain.svg`,
+  "PostgreSQL":      `${IB}/postgresql/postgresql-original.svg`,
+  "Git":             `${IB}/git/git-original.svg`,
+  "GitHub Actions":  `${IB}/github/github-original.svg`,
+  "JavaScript":      `${IB}/javascript/javascript-original.svg`,
+  "Vercel":          `${IB}/vercel/vercel-original.svg`,
+  "JWT":             `${IB}/nodejs/nodejs-plain.svg`,
+};
+
+const TICKER = [
+  "React","Node.js","MongoDB","Docker","AWS","Python","TensorFlow",
+  "JavaScript","PostgreSQL","Git","Django","Kubernetes","Express","GitHub Actions",
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════════ */
+const ACHIEVEMENTS = [
   {
     id: 1,
+    year: "2024",
     category: "Competition",
     icon: Trophy,
     title: "Hackathon — 1st Place",
     event: "Brainovision Talent Hunt 2024",
     rank: "1st Place · National Level",
+    duration: "24 hours",
+    location: "National",
     context: "24-hour hackathon with 200+ participating teams. Task was to build a functional e-commerce platform within the time limit. Team of 5, open to all engineering students nationally.",
     ownership: "Served as team lead and primary backend developer. Responsible for system architecture, authentication implementation, and coordinating task distribution among teammates.",
-    contribution: "Built the backend using Node.js and Express. Implemented JWT-based authentication. Set up MongoDB schemas for product and order data. Containerized the application using Docker for deployment consistency.",
     decisions: [
       "Chose MERN stack based on team familiarity and development speed under time constraint",
       "Used JWT with short expiry + refresh token pattern to handle auth without over-engineering",
       "Added Socket.io for real-time bid updates — accepted the added complexity for a key feature requirement",
-      "Containerized with Docker to avoid environment mismatch issues during final demo deployment"
+      "Containerized with Docker to avoid environment mismatch issues during final demo deployment",
     ],
     risks: [
       "Time constraint risked incomplete features → Prioritized core functionality first, added extras only after core was stable",
       "Real-time feature could introduce bugs under demo pressure → Tested with multiple browser sessions before submission",
-      "Docker setup unfamiliar to some teammates → Documented steps and walked through setup together"
+      "Docker setup unfamiliar to some teammates → Documented steps and walked through setup together",
     ],
     outcome: "Placed 1st among 200+ teams. Won ₹50,000 prize. Judges noted the deployment setup and authentication flow as well-structured for a 24-hour build.",
-    tech: ["React", "Node.js", "Express", "MongoDB", "Socket.io", "JWT", "Docker", "AWS"],
-    color: "#5b7fff",
-    year: "2024",
-    duration: "24 hours",
-    link: null,
-    metrics: {
-      team: "5 members",
-      competitors: "200+ teams",
-      codebase: "~6,000 lines"
-    }
+    tech: ["React", "Node.js", "MongoDB", "Socket.io", "JWT", "Docker", "AWS"],
+    metrics: { team: "5 members", competitors: "200+ teams", codebase: "~6,000 lines" },
+    impact: [
+      { metric: "1st",   label: "National Rank",   detail: "Among 200+ competing teams across India" },
+      { metric: "₹50K",  label: "Prize Won",       detail: "Cash prize awarded by judges" },
+      { metric: "24h",   label: "Build Window",    detail: "Full working solution delivered in 24 hours" },
+    ],
   },
-
   {
     id: 2,
+    year: "2023–25",
     category: "Professional Development",
     icon: GraduationCap,
     title: "Technical Certifications",
     event: "AWS · Coursera · Udemy",
     rank: "15+ Certifications Completed",
+    duration: "Ongoing",
+    location: "Self-directed",
     context: "Completed certifications across cloud infrastructure, full-stack development, and machine learning over two years. Certifications were selected based on gaps identified during project work, not collected arbitrarily.",
     ownership: "Self-directed. Identified which domains to study based on what was blocking project progress. Applied each certification's concepts in a personal project within the same month.",
-    contribution: "Completed structured programs from AWS, Microsoft Learn, and Coursera. Prioritized applied understanding over just passing assessments. Each cert was paired with a hands-on implementation.",
     decisions: [
       "Started with AWS fundamentals before deploying any backend to production infrastructure",
       "Focused on the JavaScript/Node.js ecosystem to maintain consistency across frontend and backend projects",
       "Studied ML theory certifications before building classification projects to understand model behavior",
-      "Completed a Docker + CI/CD certification after struggling with manual deployment on an early project"
+      "Completed a Docker + CI/CD certification after struggling with manual deployment on an early project",
     ],
     risks: [
       "Risk of completing certs without retaining knowledge → Immediately applied each topic in a project",
       "Risk of shallow breadth across too many domains → Limited to 3 core domains with deeper project work in each",
-      "Risk of theoretical-only understanding → Every certification was followed by hands-on implementation"
+      "Risk of theoretical-only understanding → Every certification was followed by hands-on implementation",
     ],
     outcome: "15+ certifications completed across cloud, full-stack, and AI/ML. Concepts directly applied in 6 personal projects. Contributed to more structured decision-making in project architecture.",
     tech: ["AWS", "React", "Python", "TensorFlow", "Docker", "Kubernetes", "Node.js"],
-    color: "#8b5cf6",
-    year: "2023–2025",
-    duration: "Ongoing",
-    link: "/certifications",
-    metrics: {
-      total: "15+ certs",
-      platforms: "AWS, Coursera, Udemy",
-      domains: "Cloud, Full-Stack, AI/ML"
-    }
+    metrics: { total: "15+ certs", platforms: "AWS, Coursera, Udemy", domains: "Cloud, Full-Stack, AI/ML" },
+    impact: [
+      { metric: "15+",  label: "Certifications",   detail: "Across cloud, full-stack, and AI/ML domains" },
+      { metric: "3",    label: "Core Domains",     detail: "Cloud · Full-Stack · AI/ML" },
+      { metric: "6",    label: "Projects Applied", detail: "Each cert concept applied hands-on" },
+    ],
   },
-
   {
     id: 3,
+    year: "2023–25",
     category: "Project Portfolio",
     icon: Code2,
     title: "Production Applications",
     event: "Personal & Academic Projects",
     rank: "6 Deployed Projects",
+    duration: "Ongoing",
+    location: "Deployed",
     context: "Built and deployed 6 applications independently across full-stack web development, machine learning, and data science. Each project was scoped, built, and deployed without external scaffolding.",
     ownership: "Sole developer on all 6 projects. Handled frontend, backend, database design, authentication, and deployment for each. Made all technical and architectural decisions independently.",
-    contribution: "Implemented complete application stacks including UI, REST APIs, database schemas, auth flows, and deployment configurations. Selected tech based on project requirements rather than familiarity by default.",
     decisions: [
       "Used MERN for projects requiring dynamic UIs and real-time data; Django for data-heavy or ML-backed backends",
-      "Implemented auth (JWT or session-based) in every project as a consistent practice — not added as an afterthought",
+      "Implemented auth (JWT or session-based) in every project as a consistent practice",
       "Chose PostgreSQL for structured relational data, MongoDB where schema flexibility was justified",
-      "Deployed frontend on Vercel, backend on Railway, and used AWS EC2 for projects requiring custom infrastructure"
+      "Deployed frontend on Vercel, backend on Railway, and used AWS EC2 for projects requiring custom infrastructure",
     ],
     risks: [
       "Maintaining 6 live projects solo creates update overhead → Used GitHub Actions for automated CI/CD where feasible",
       "Free-tier hosting has uptime and resource limits → Chose hosting based on each project's traffic expectations",
-      "Knowledge silos from solo work → Documented architecture decisions and kept all repos public with READMEs"
+      "Knowledge silos from solo work → Documented architecture decisions and kept all repos public with READMEs",
     ],
     outcome: "All 6 projects deployed and accessible. Resume Builder receives consistent monthly traffic. Fake News Detector tested at 95% accuracy on the validation set. Each project targets a distinct technical domain.",
     tech: ["React", "Node.js", "Python", "Django", "PostgreSQL", "MongoDB", "AWS", "Vercel"],
-    color: "#ec4899",
-    year: "2023–2025",
-    duration: "Ongoing",
-    link: "/projects",
-    metrics: {
-      deployed: "6 projects",
-      domains: "Web, ML, DS",
-      uptime: "Free-tier hosted"
-    }
+    metrics: { deployed: "6 projects", domains: "Web, ML, DS", uptime: "Free-tier hosted" },
+    impact: [
+      { metric: "6",    label: "Deployed Apps",    detail: "Production apps across Web, ML, and DS" },
+      { metric: "95%",  label: "Model Accuracy",   detail: "Fake News Detector validation accuracy" },
+      { metric: "3",    label: "Tech Domains",     detail: "Full-stack · ML · Data Science" },
+    ],
   },
-
   {
     id: 4,
+    year: "2024–25",
     category: "Open Source",
     icon: GitBranch,
     title: "GitHub Activity",
     event: "Public Repositories & Code Sharing",
     rank: "12+ Public Repositories",
+    duration: "Ongoing",
+    location: "github.com/bhagavan444",
     context: "Maintained a public GitHub profile with projects spanning internship deliverables, personal builds, and learning exercises. Focused on clean commit history, readable READMEs, and reproducible setup instructions.",
     ownership: "Managed all repositories independently. Wrote documentation, responded to any questions, and maintained code quality across repos over time.",
-    contribution: "Wrote detailed READMEs with setup steps, environment variables, and architecture notes. Used conventional commits for readable project history. Added GitHub Actions for automated testing on select projects.",
     decisions: [
       "Open-sourced all personal projects to build a reviewable code record and make work verifiable",
       "Invested time in documentation to make repos usable without direct support",
       "Used semantic versioning and conventional commits on larger projects for structured history",
-      "Added automated deployment workflows on projects where manual deployment was error-prone"
+      "Added automated deployment workflows on projects where manual deployment was error-prone",
     ],
     risks: [
       "Public code invites scrutiny → Maintained consistent style, refactored before making repos public",
       "Dependency vulnerabilities in public repos → Used Dependabot alerts and updated packages regularly",
-      "Community questions taking time → Clear docs reduced repetitive questions significantly"
+      "Community questions taking time → Clear docs reduced repetitive questions significantly",
     ],
     outcome: "12+ public repositories maintained. Profile serves as a working code portfolio across multiple domains. Consistent commit history reflects active, ongoing development practice.",
-    tech: ["Git", "GitHub Actions", "Markdown", "CI/CD"],
-    color: "#10b981",
-    year: "2024–2025",
-    duration: "Ongoing",
-    link: "https://github.com/bhagavan444",
-    metrics: {
-      repos: "12+ public",
-      commits: "Consistent",
-      focus: "Docs + CI/CD"
-    }
+    tech: ["Git", "GitHub Actions", "JavaScript", "Python"],
+    metrics: { repos: "12+ public", commits: "Consistent", focus: "Docs + CI/CD" },
+    impact: [
+      { metric: "12+",  label: "Public Repos",    detail: "Open-source profile across multiple domains" },
+      { metric: "CI",   label: "GitHub Actions",  detail: "Automated deployment on select repos" },
+      { metric: "100%", label: "Documented",      detail: "All repos have READMEs with setup steps" },
+    ],
   },
-
   {
     id: 5,
+    year: "2024–25",
     category: "Technical Skills",
-    icon: Terminal,
+    icon: Target,
     title: "DSA Problem Solving",
     event: "LeetCode · HackerRank",
     rank: "100+ Problems Solved",
+    duration: "Ongoing",
+    location: "LeetCode / HackerRank",
     context: "Practiced data structures and algorithms on LeetCode and HackerRank as part of interview preparation and to strengthen problem decomposition skills. Focus on understanding patterns, not just passing test cases.",
     ownership: "Self-directed practice schedule. Identified weak areas (graphs, DP) through failed attempts and targeted those specifically. Tracked progress manually to ensure coverage across topic categories.",
-    contribution: "Solved 100+ problems across arrays, strings, linked lists, trees, graphs, and dynamic programming. Reviewed optimal solutions after solving to identify more efficient approaches.",
     decisions: [
       "Prioritized medium-difficulty problems after basics were solid, as they reflect actual interview difficulty",
       "Studied top solutions after each problem to understand alternative approaches and tradeoffs",
-      "Practiced verbal explanation of solutions to prepare for interview communication, not just code output",
-      "Tracked problem categories to ensure coverage rather than solving whatever appeared by default"
+      "Practiced verbal explanation of solutions to prepare for interview communication",
+      "Tracked problem categories to ensure coverage rather than solving whatever appeared by default",
     ],
     risks: [
       "Pattern memorization without understanding → Re-solved problems from scratch after 2 weeks to verify retention",
       "Narrow focus on competitive problems → Balanced with system design reading to cover interview breadth",
-      "Platform-specific patterns not generalizing → Applied similar patterns in real project code where applicable"
+      "Platform-specific patterns not generalizing → Applied similar patterns in real project code where applicable",
     ],
     outcome: "Solved 100+ problems with documented coverage across core DSA topics. Improved ability to recognize patterns and evaluate time/space tradeoffs during project implementation decisions.",
-    tech: ["Python", "JavaScript", "Data Structures", "Algorithms"],
-    color: "#f59e0b",
-    year: "2024–2025",
-    duration: "Ongoing",
-    link: null,
-    metrics: {
-      problems: "100+",
-      platforms: "LeetCode, HackerRank",
-      focus: "Patterns, Complexity"
-    }
+    tech: ["Python", "JavaScript"],
+    metrics: { problems: "100+", platforms: "LeetCode, HackerRank", focus: "Patterns, Complexity" },
+    impact: [
+      { metric: "100+", label: "Problems Solved",  detail: "Across arrays, trees, graphs, DP" },
+      { metric: "2",    label: "Platforms",        detail: "LeetCode and HackerRank" },
+      { metric: "Med",  label: "Difficulty Focus", detail: "Medium problems aligned to interview level" },
+    ],
   },
-
   {
     id: 6,
+    year: "2023–24",
     category: "Workshops & Learning",
     icon: Briefcase,
     title: "Technical Workshops",
     event: "AI/ML · Cloud · Full-Stack Training",
     rank: "4 Workshops Attended",
+    duration: "Various",
+    location: "Multiple venues",
     context: "Participated in 4 technical workshops covering AI/ML applications, cloud deployment, and full-stack development practices. Workshops were instructor-led with hands-on sessions and project components.",
     ownership: "Attended as an active participant. Completed all hands-on tasks during sessions and followed up by implementing related concepts in personal projects within the following week.",
-    contribution: "Completed workshop exercises and built small projects using each workshop's focus area. Connected with instructors for questions on practical implementation. Shared key takeaways with peers in study group.",
     decisions: [
       "Selected workshops that addressed gaps in current project knowledge, not general interest topics",
       "Implemented one small project per workshop within the following week to apply and retain what was covered",
       "Focused on sessions with hands-on labs rather than lecture-only formats for better retention",
-      "Documented key learnings in personal notes for future reference during project work"
+      "Documented key learnings in personal notes for future reference during project work",
     ],
     risks: [
       "Workshop content staying theoretical → Built a project using each workshop's tools within one week of completion",
       "Too many workshops diluting focus → Limited to 4 per year, selected deliberately",
-      "Workshop network connections fading → Followed up with at least one question or message per contact"
+      "Workshop network connections fading → Followed up with at least one question or message per contact",
     ],
     outcome: "Completed 4 workshops with hands-on project output from each. Gained working familiarity with enterprise tools (AWS console, TensorFlow pipelines, Docker Compose). Built 3 small projects directly from workshop content.",
     tech: ["TensorFlow", "AWS", "React", "Docker"],
-    color: "#06b6d4",
-    year: "2023–2024",
-    duration: "Various",
-    link: null,
-    metrics: {
-      workshops: "4 completed",
-      hours: "40+ training",
-      projects: "3 built"
-    }
-  }
+    metrics: { workshops: "4 completed", hours: "40+ training", projects: "3 built" },
+    impact: [
+      { metric: "4",   label: "Workshops",      detail: "AI/ML · Cloud · Full-Stack tracks" },
+      { metric: "40+", label: "Training Hours",  detail: "Instructor-led hands-on sessions" },
+      { metric: "3",   label: "Projects Built",  detail: "Built from workshop content directly" },
+    ],
+  },
 ];
 
-const metrics = [
-  { label: "Production Projects", value: "6", suffix: "", desc: "Designed, deployed & maintained", icon: Code2, color: "#5b7fff" },
-  { label: "Hackathons", value: "3", suffix: "", desc: "National level competitions", icon: Trophy, color: "#10b981" },
-  { label: "Certifications", value: "15", suffix: "+", desc: "AWS, Coursera, Udemy & more", icon: Award, color: "#8b5cf6" },
-  { label: "DSA Problems", value: "100", suffix: "+", desc: "LeetCode & HackerRank", icon: Target, color: "#f59e0b" },
-  { label: "Public Repos", value: "12", suffix: "+", desc: "Open source on GitHub", icon: GitBranch, color: "#ec4899" },
-  { label: "Workshops", value: "4", suffix: "", desc: "Industry training completed", icon: Users, color: "#06b6d4" }
+const METRICS = [
+  { label: "Production Projects", value: "6",   suffix: "",  icon: Code2,        },
+  { label: "National Hackathons", value: "3",   suffix: "",  icon: Trophy,       },
+  { label: "Certifications",      value: "15",  suffix: "+", icon: Award,        },
+  { label: "DSA Problems",        value: "100", suffix: "+", icon: Target,       },
+  { label: "Public Repos",        value: "12",  suffix: "+", icon: GitBranch,    },
+  { label: "Workshops",           value: "4",   suffix: "",  icon: Users,        },
 ];
 
-const principles = [
-  {
-    icon: Layers,
-    title: "Build for Scalability",
-    description: "Design systems that handle growth without rewrites. Start with clean architecture and clear separation of concerns — scaling becomes a configuration problem, not a rebuild.",
-    color: "#5b7fff"
-  },
-  {
-    icon: Shield,
-    title: "Secure by Default",
-    description: "Treat authentication, authorization, and input validation as core requirements from the start. Security added as an afterthought is harder to audit and easier to miss.",
-    color: "#10b981"
-  },
-  {
-    icon: TrendingUp,
-    title: "Measure Before Optimizing",
-    description: "Instrument systems with logging and basic monitoring before assuming where the bottleneck is. Optimize based on observed behavior, not guesswork.",
-    color: "#8b5cf6"
-  },
-  {
-    icon: Cpu,
-    title: "Make Tradeoffs Explicit",
-    description: "Every technical decision trades one thing for another. Document the reasoning behind architectural choices so the tradeoff is visible and reversible if requirements change.",
-    color: "#f59e0b"
-  }
+const PRINCIPLES = [
+  { icon: Layers,    title: "Build for Scalability",       description: "Design systems that handle growth without rewrites. Start with clean architecture and clear separation of concerns — scaling becomes a configuration problem, not a rebuild." },
+  { icon: Shield,    title: "Secure by Default",           description: "Treat authentication, authorization, and input validation as core requirements from the start. Security added as an afterthought is harder to audit and easier to miss." },
+  { icon: TrendingUp, title: "Measure Before Optimizing",  description: "Instrument systems with logging and basic monitoring before assuming where the bottleneck is. Optimize based on observed behavior, not guesswork." },
+  { icon: Cpu,       title: "Make Tradeoffs Explicit",     description: "Every technical decision trades one thing for another. Document the reasoning behind architectural choices so the tradeoff is visible and reversible if requirements change." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   ANIMATED COUNTER HOOK
+   GLOBAL CSS — identical system to Education.jsx
 ═══════════════════════════════════════════════════════════════ */
-function useCounter(target, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+const GLOBAL = `
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
-  const animate = () => {
-    if (hasAnimated) return;
-    setHasAnimated(true);
-    const startTime = Date.now();
-    const endValue = parseFloat(target);
-    const updateCount = () => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(easeOut * endValue);
-      if (progress < 1) requestAnimationFrame(updateCount);
-      else setCount(endValue);
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; overflow-x:hidden; }
+  body {
+    font-family:'DM Sans', system-ui, sans-serif;
+    background:#0B0B0B; color:#FFFFFF;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  ::selection { background:rgba(255,255,255,0.12); }
+  ::-webkit-scrollbar { width:2px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.25); border-radius:2px; }
+
+  /* ── MAGNETIC CURSOR ── */
+  #mc-dot {
+    position:fixed; top:0; left:0;
+    width:10px; height:10px;
+    background:#FFFFFF;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:99999;
+    transform:translate(-50%,-50%);
+    will-change:left,top;
+    transition:width 180ms ${E}, height 180ms ${E}, opacity 150ms linear;
+    mix-blend-mode:difference;
+  }
+  #mc-dot.hov { width:48px; height:48px; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.35); mix-blend-mode:normal; }
+  #mc-dot.out { opacity:0; }
+  #mc-ring {
+    position:fixed; top:0; left:0;
+    width:36px; height:36px;
+    border:1px solid rgba(255,255,255,0.30);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:99998;
+    transform:translate(-50%,-50%);
+    will-change:left,top;
+    transition:opacity 150ms linear;
+  }
+  #mc-ring.out { opacity:0; }
+
+  @media (max-width:768px) {
+    body { cursor:auto; }
+    #mc-dot, #mc-ring { display:none !important; }
+    a, button, [role="button"] { cursor:auto !important; }
+  }
+  @media (min-width:769px) {
+    a, button, [role="button"] { cursor:none !important; }
+  }
+
+  .dancing-h1 { font-family:'Dancing Script',cursive !important; font-weight:900; letter-spacing:-0.01em; line-height:0.92; color:#FFFFFF; }
+  .dancing-h2 { font-family:'Dancing Script',cursive !important; font-weight:800; letter-spacing:-0.005em; line-height:0.95; color:#FFFFFF; }
+  .dancing-h3 { font-family:'Dancing Script',cursive !important; font-weight:700; line-height:1.0; color:#FFFFFF; }
+
+  @keyframes _rtl      { from{opacity:0;transform:translateX(48px);}  to{opacity:1;transform:translateX(0);} }
+  @keyframes _ltr      { from{opacity:0;transform:translateX(-48px);} to{opacity:1;transform:translateX(0);} }
+  @keyframes _up       { from{opacity:0;transform:translateY(28px);}  to{opacity:1;transform:translateY(0);} }
+  @keyframes _marquee  { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @keyframes _pulse    { 0%,100%{opacity:0.3;transform:scale(1);} 50%{opacity:1;transform:scale(1.35);} }
+  @keyframes _blink    { 0%,100%{opacity:1;} 50%{opacity:0;} }
+  @keyframes _fadeSlide{ from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes _slideIn  { from{transform:scaleX(0);transform-origin:left;} to{transform:scaleX(1);transform-origin:left;} }
+  @keyframes _modalIn  { from{opacity:0;transform:translateY(40px) scale(0.96);} to{opacity:1;transform:translateY(0) scale(1);} }
+
+  .di { transition:transform 130ms ${E}, filter 130ms ${E}; }
+  .di:hover { transform:scale(1.25) rotate(-6deg); filter:drop-shadow(0 2px 6px rgba(255,255,255,0.15)); }
+
+  button:focus-visible, a:focus-visible { outline:2px solid rgba(255,255,255,0.4); outline-offset:2px; }
+
+  @media (prefers-reduced-motion:reduce) {
+    *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+    .mqinner { animation:none !important; }
+  }
+
+  @media (max-width:768px) {
+    .snav { display:none !important; }
+    .ach-grid { grid-template-columns:1fr !important; }
+    .stats-row { grid-template-columns:repeat(2,1fr) !important; gap:1rem !important; }
+    .sum-grid  { grid-template-columns:1fr 1fr !important; gap:0.65rem !important; }
+    .foot-row  { flex-direction:column !important; align-items:flex-start !important; }
+    .foot-links { gap:0.5rem !important; }
+    .modal-inner { border-radius:16px !important; max-height:90vh !important; }
+    .modal-head  { padding:1.25rem !important; flex-direction:column !important; align-items:flex-start !important; }
+    .modal-body  { padding:1.25rem !important; }
+  }
+  @media (max-width:420px) {
+    .stats-row { grid-template-columns:1fr 1fr !important; }
+    .sum-grid  { grid-template-columns:1fr !important; }
+  }
+`;
+
+/* ═══════════════════════════════════════════════════════════════
+   MAGNETIC CURSOR
+═══════════════════════════════════════════════════════════════ */
+function MagneticCursor() {
+  const dotRef  = useRef(null);
+  const ringRef = useRef(null);
+  const mouse   = useRef({ x: -200, y: -200 });
+  const smooth  = useRef({ x: -200, y: -200 });
+  const rafRef  = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || window.innerWidth <= 768) return;
+    const dot  = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    const move = (e) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+      dot.style.left = `${e.clientX}px`;
+      dot.style.top  = `${e.clientY}px`;
     };
-    requestAnimationFrame(updateCount);
-  };
+    const enter = (e) => { if (e.target.closest("a, button, [role='button'], .card-hover")) dot.classList.add("hov"); };
+    const leave = (e) => { if (e.target.closest("a, button, [role='button'], .card-hover")) dot.classList.remove("hov"); };
+    const bodyLeave = () => { dot.classList.add("out"); ring.classList.add("out"); };
+    const bodyEnter = () => { dot.classList.remove("out"); ring.classList.remove("out"); };
 
-  return [count, animate, hasAnimated];
-}
+    document.addEventListener("mousemove",  move,  { passive: true });
+    document.addEventListener("mouseover",  enter);
+    document.addEventListener("mouseout",   leave);
+    document.addEventListener("mouseleave", bodyLeave);
+    document.addEventListener("mouseenter", bodyEnter);
 
-/* ═══════════════════════════════════════════════════════════════
-   INTERSECTION OBSERVER HOOK
-═══════════════════════════════════════════════════════════════ */
-function useInView(threshold = 0.2) {
-  const ref = useRef(null);
-  const [isInView, setIsInView] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsInView(true); },
-      { threshold }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold]);
-  return [ref, isInView];
-}
+    const tick = () => {
+      smooth.current.x += (mouse.current.x - smooth.current.x) * 0.10;
+      smooth.current.y += (mouse.current.y - smooth.current.y) * 0.10;
+      ring.style.left = `${smooth.current.x}px`;
+      ring.style.top  = `${smooth.current.y}px`;
+      rafRef.current  = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
 
-/* ═══════════════════════════════════════════════════════════════
-   METRIC CARD
-═══════════════════════════════════════════════════════════════ */
-function MetricCard({ metric, index }) {
-  const [ref, isInView] = useInView(0.3);
-  const [count, animate, hasAnimated] = useCounter(metric.value);
-
-  useEffect(() => {
-    if (isInView && !hasAnimated) animate();
-  }, [isInView, hasAnimated, animate]);
+    return () => {
+      document.removeEventListener("mousemove",  move);
+      document.removeEventListener("mouseover",  enter);
+      document.removeEventListener("mouseout",   leave);
+      document.removeEventListener("mouseleave", bodyLeave);
+      document.removeEventListener("mouseenter", bodyEnter);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
-    <div
-      ref={ref}
-      className="metric-card"
-      style={{
-        background: "#fff",
-        border: `1.5px solid ${T.line}`,
-        borderRadius: "16px",
-        padding: "28px 24px",
-        textAlign: "center",
-        transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-        opacity: isInView ? 1 : 0,
-        transform: isInView ? "translateY(0)" : "translateY(20px)",
-        transitionDelay: `${index * 80}ms`,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-8px) scale(1.02)";
-        e.currentTarget.style.borderColor = T.lineMd;
-        e.currentTarget.style.boxShadow = `0 16px 48px rgba(0,0,0,0.08)`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0) scale(1)";
-        e.currentTarget.style.borderColor = T.line;
-        e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.03)";
-      }}
-    >
-      <div style={{
-        width: "56px", height: "56px", margin: "0 auto 16px",
-        background: `${metric.color}10`, borderRadius: "12px",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        <metric.icon size={28} style={{ color: metric.color }} />
-      </div>
-      <div className="metric-value" style={{
-        fontFamily: "'Fraunces', serif", fontSize: "36px", fontWeight: 700,
-        color: metric.color, marginBottom: "6px", letterSpacing: "-0.02em",
-      }}>
-        {count.toFixed(count < 10 ? 1 : 0)}{metric.suffix}
-      </div>
-      <div className="metric-label" style={{ fontSize: "15px", fontWeight: 600, color: T.ink, marginBottom: "4px" }}>
-        {metric.label}
-      </div>
-      <div className="metric-desc" style={{ fontSize: "13px", color: T.inkMute, lineHeight: 1.4 }}>
-        {metric.desc}
+    <>
+      <div id="mc-dot"  ref={dotRef}  />
+      <div id="mc-ring" ref={ringRef} />
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HOOKS
+═══════════════════════════════════════════════════════════════ */
+function useInView(t = 0.08) {
+  const ref = useRef(null);
+  const [vis, sv] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) sv(true); }, { threshold: t });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [t]);
+  return [ref, vis];
+}
+
+function useMob() {
+  const [m, sm] = useState(false);
+  useEffect(() => {
+    const fn = () => sm(window.innerWidth < 768);
+    fn(); window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return m;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COUNTER
+═══════════════════════════════════════════════════════════════ */
+function Counter({ value, triggered }) {
+  const [n, sn] = useState(0);
+  const done = useRef(false);
+  useEffect(() => {
+    if (!triggered || done.current) return;
+    done.current = true;
+    const raw = parseInt(String(value).replace(/[^0-9]/g, "")) || 0;
+    const dur = 1200, t0 = Date.now();
+    const tick = () => {
+      const p = Math.min((Date.now() - t0) / dur, 1);
+      sn(Math.floor(raw * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick); else sn(raw);
+    };
+    requestAnimationFrame(tick);
+  }, [triggered, value]);
+
+  const fmt = (x) => {
+    const s = String(value);
+    if (s.endsWith("+")) return `${x}+`;
+    if (s.includes("K")) return `${Math.floor(x / 1000)}K+`;
+    return `${x}`;
+  };
+  return <>{fmt(n)}</>;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DEVICON
+═══════════════════════════════════════════════════════════════ */
+function DI({ name, size = 18, style = {} }) {
+  const src = ICONS[name];
+  if (!src) return null;
+  return (
+    <img src={src} alt={name} className="di" width={size} height={size} loading="lazy"
+      style={{ display: "block", flexShrink: 0, borderRadius: "3px", ...style }} />
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════════════════════════ */
+function Marquee({ speed = 36 }) {
+  const items = [...TICKER, ...TICKER];
+  return (
+    <div style={{ overflow:"hidden", borderTop:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}`, padding:"10px 0", background:C.surface, position:"relative" }}>
+      {["left","right"].map(s => (
+        <div key={s} style={{ position:"absolute", [s]:0, top:0, bottom:0, width:"64px", background:`linear-gradient(to ${s==="left"?"right":"left"}, ${C.surface}, transparent)`, zIndex:2, pointerEvents:"none" }} />
+      ))}
+      <div className="mqinner" style={{ display:"flex", alignItems:"center", gap:"40px", width:"max-content", animation:`_marquee ${speed}s linear infinite`, willChange:"transform" }}>
+        {items.map((name, i) => (
+          <div key={`${name}-${i}`} style={{ display:"flex", alignItems:"center", gap:"9px", opacity:0.4, flexShrink:0 }}>
+            {ICONS[name] && <img src={ICONS[name]} alt={name} className="di" width={20} height={20} loading="lazy" style={{ display:"block", borderRadius:"3px" }} />}
+            <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"12px", fontWeight:500, color:"rgba(255,255,255,0.6)", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>{name}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAIN COMPONENT
+   SCROLL PROGRESS
 ═══════════════════════════════════════════════════════════════ */
-export default function Achievements() {
-  const [activeAchievement, setActiveAchievement] = useState(null);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [heroRef, heroInView] = useInView(0.1);
-
+function ScrollBar() {
+  const [pct, sp] = useState(0);
+  const raf = useRef(null);
   useEffect(() => {
-    document.body.style.overflow = activeAchievement ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [activeAchievement]);
+    const fn = () => {
+      if (raf.current) return;
+      raf.current = requestAnimationFrame(() => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        sp((window.scrollY / max) * 100);
+        raf.current = null;
+      });
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => { window.removeEventListener("scroll", fn); if (raf.current) cancelAnimationFrame(raf.current); };
+  }, []);
+  return (
+    <div style={{ position:"fixed", top:0, left:0, right:0, height:"2px", background:"rgba(255,255,255,0.06)", zIndex:9998 }}>
+      <div style={{ height:"100%", width:`${pct}%`, background:"#FFFFFF", transition:"width 0.1s linear" }} />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDE NAV
+═══════════════════════════════════════════════════════════════ */
+function SideNav({ active }) {
+  return (
+    <nav className="snav" style={{ position:"fixed", left:"1.25rem", top:"50%", transform:"translateY(-50%)", zIndex:100, display:"flex", flexDirection:"column", gap:"14px" }}>
+      {ACHIEVEMENTS.map((a, i) => (
+        <button key={a.id}
+          onClick={() => document.getElementById(`ach-${a.id}`)?.scrollIntoView({ behavior:"smooth" })}
+          aria-label={`Jump to ${a.title}`}
+          style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", cursor:"none", padding:0 }}
+        >
+          <div style={{ height:"1.5px", width:active===i?"22px":"10px", background:active===i?"#FFFFFF":"rgba(255,255,255,0.18)", borderRadius:"1px", transition:`all 320ms ${E}` }} />
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"9px", fontWeight:500, color:C.muted, opacity:active===i?1:0, transition:`opacity 320ms ${E}` }}>{String(i+1).padStart(2,"0")}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MONO LABEL + TERM CURSOR
+═══════════════════════════════════════════════════════════════ */
+function ML({ children, color = C.muted, style = {} }) {
+  return (
+    <span style={{ display:"block", fontFamily:"'DM Mono',monospace", fontSize:"10px", fontWeight:500, letterSpacing:"0.14em", textTransform:"uppercase", color, ...style }}>{children}</span>
+  );
+}
+function TermCursor() {
+  return <span style={{ display:"inline-block", width:"8px", height:"1.1em", background:"#FFFFFF", marginLeft:"3px", verticalAlign:"middle", animation:"_blink 1.1s step-end infinite", borderRadius:"1px" }} />;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAG BUTTON
+═══════════════════════════════════════════════════════════════ */
+function MagBtn({ children, href, extraStyle = {} }) {
+  const [pos, sp] = useState({ x:0, y:0 });
+  const [h, sh]   = useState(false);
+  const ref = useRef(null);
+  const mob = useMob();
+  return (
+    <a ref={ref} href={href} target="_blank" rel="noopener noreferrer"
+      onMouseMove={(e) => {
+        if (mob || !ref.current) return;
+        const r = ref.current.getBoundingClientRect();
+        sp({ x:(e.clientX-r.left-r.width/2)*0.22, y:(e.clientY-r.top-r.height/2)*0.22 });
+      }}
+      onMouseEnter={() => sh(true)}
+      onMouseLeave={() => { sh(false); sp({ x:0,y:0 }); }}
+      style={{
+        display:"inline-flex", alignItems:"center", gap:"8px",
+        padding:"10px 18px", minHeight:"44px",
+        background: h?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.06)",
+        border:`1px solid ${h?"rgba(255,255,255,0.25)":"rgba(255,255,255,0.15)"}`,
+        borderRadius:"8px", fontSize:"13px", fontWeight:600,
+        color:"#FFFFFF", textDecoration:"none",
+        fontFamily:"'DM Mono',monospace",
+        transition:`all 190ms ${E}`,
+        transform: mob?"none":`translate(${pos.x}px,${pos.y}px)`,
+        ...extraStyle,
+      }}
+    >{children}</a>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TECH TAG — colored devicons
+═══════════════════════════════════════════════════════════════ */
+function TechTag({ name, visible, delay = 0 }) {
+  const [h, sh] = useState(false);
+  return (
+    <span onMouseEnter={() => sh(true)} onMouseLeave={() => sh(false)}
+      style={{
+        display:"inline-flex", alignItems:"center", gap:"7px",
+        padding:"6px 12px 6px 9px", borderRadius:"7px",
+        background: h?"#1A1A1A":C.surface,
+        border:`1px solid ${h?"rgba(255,255,255,0.15)":"rgba(255,255,255,0.08)"}`,
+        fontFamily:"'DM Mono',monospace", fontSize:"12px",
+        color: h?"#FFFFFF":"rgba(255,255,255,0.70)",
+        userSelect:"none",
+        transition:`background 130ms ${E}, border-color 130ms ${E}, color 130ms ${E}`,
+        opacity: visible?1:0,
+        animation: visible?`_tagPop 320ms ${E} ${delay}s both`:"none",
+      }}
+    >
+      <DI name={name} size={16} style={{ opacity: h?1:0.85, transition:`opacity 130ms ${E}` }} />
+      {name}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACHIEVEMENT SECTION — mirrors EduSection structure exactly
+═══════════════════════════════════════════════════════════════ */
+function AchSection({ data, ri, isLast, onOpen }) {
+  const [ref, vis] = useInView(0.07);
+  const [tab, st]  = useState("decisions");
+  const [tilt, tt] = useState({ x:0, y:0 });
+  const mob  = useMob();
+  const even = ri % 2 === 0;
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: ${T.bg};
-          color: ${T.ink};
-          line-height: 1.6;
-          -webkit-font-smoothing: antialiased;
-        }
+    <section id={`ach-${data.id}`} ref={ref} style={{
+      minHeight: mob?"auto":"100vh",
+      display:"flex", alignItems:"center", position:"relative",
+      padding: mob?"3rem 0 3.5rem":"8rem 0",
+      borderBottom: isLast?"none":`1px solid ${C.border}`,
+    }}>
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.15); }
+      {/* Year watermark */}
+      <div style={{
+        position:"absolute",
+        left: mob?"-3%":"-2%",
+        top:  mob?"2%":"16%",
+        fontSize: mob?"clamp(4.5rem,20vw,6.5rem)":"clamp(10rem,18vw,20rem)",
+        fontFamily:"'Dancing Script',cursive",
+        fontWeight:900,
+        color:"rgba(255,255,255,0.025)",
+        lineHeight:1,
+        userSelect:"none", pointerEvents:"none",
+      }}>{data.year}</div>
 
-        @media (max-width: 1024px) {
-          .main-container { padding: 100px 32px 80px !important; }
-          .hero-section { margin-bottom: 60px !important; }
-          .metrics-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important; gap: 16px !important; }
-          .achievements-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
-          .principles-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; }
-        }
+      {/* Glow */}
+      <div style={{
+        position:"absolute", left:"12%", top:"28%",
+        width: mob?"180px":"420px", height: mob?"180px":"420px",
+        borderRadius:"50%",
+        background:`radial-gradient(circle, rgba(255,255,255,${mob?"0.025":"0.03"}) 0%, transparent 70%)`,
+        filter:`blur(${mob?50:80}px)`, pointerEvents:"none",
+      }} />
 
-        @media (max-width: 768px) {
-          .main-container { padding: 80px 24px 60px !important; }
-          .hero-title { font-size: clamp(36px, 10vw, 56px) !important; line-height: 1.1 !important; }
-          .hero-description { font-size: 16px !important; padding: 0 !important; }
-          .hero-buttons { flex-direction: column !important; width: 100% !important; }
-          .hero-buttons a, .hero-buttons button { width: 100% !important; justify-content: center !important; }
-          .metric-card { padding: 20px 16px !important; }
-          .metric-value { font-size: 28px !important; }
-          .metric-label { font-size: 13px !important; }
-          .metric-desc { font-size: 11px !important; }
-          .achievement-card { border-radius: 16px !important; }
-          .achievement-header { height: 140px !important; }
-          .achievement-icon-wrapper { width: 70px !important; height: 70px !important; }
-          .achievement-icon-wrapper svg { width: 36px !important; height: 36px !important; }
-          .achievement-content { padding: 20px !important; }
-          .achievement-title { font-size: 18px !important; }
-          .achievement-event { font-size: 13px !important; }
-          .achievement-description { font-size: 14px !important; }
-          .metrics-row { grid-template-columns: 1fr 1fr 1fr !important; gap: 8px !important; }
-          .metric-box { padding: 10px 8px !important; }
-          .metric-box-value { font-size: 13px !important; }
-          .metric-box-label { font-size: 9px !important; }
-          .tech-stack { gap: 6px !important; }
-          .tech-badge { padding: 4px 10px !important; font-size: 11px !important; }
-          .view-details-btn { padding: 12px !important; font-size: 13px !important; }
-          .section-title { font-size: clamp(28px, 6vw, 36px) !important; margin-bottom: 12px !important; }
-          .section-description { font-size: 14px !important; margin-bottom: 40px !important; }
-          .principle-card { padding: 24px 20px !important; }
-          .principle-icon-wrapper { width: 48px !important; height: 48px !important; margin-bottom: 16px !important; }
-          .principle-icon-wrapper svg { width: 24px !important; height: 24px !important; }
-          .principle-title { font-size: 18px !important; margin-bottom: 10px !important; }
-          .principle-description { font-size: 14px !important; }
-        }
+      <div style={{ maxWidth:"1240px", margin:"0 auto", padding:mob?"0 1rem":"0 2rem", width:"100%" }}>
+        <div style={{
+          display:"grid",
+          gridTemplateColumns: mob?"1fr":"1.45fr 0.85fr",
+          gap: mob?"1.75rem":"4rem",
+          alignItems:"start",
+        }}>
 
-        @media (max-width: 480px) {
-          .main-container { padding: 70px 20px 50px !important; }
-          .hero-badge { font-size: 11px !important; padding: 6px 14px !important; }
-          .metrics-grid { grid-template-columns: 1fr 1fr !important; }
-          .metrics-row { grid-template-columns: 1fr !important; gap: 6px !important; }
-          .principles-grid { grid-template-columns: 1fr !important; }
-          .modal-content { border-radius: 20px !important; max-height: 85vh !important; }
-          .modal-header { padding: 24px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
-          .modal-close-btn { position: absolute !important; top: 20px !important; right: 20px !important; }
-          .modal-body { padding: 24px 20px !important; }
-          .modal-section { margin-bottom: 24px !important; }
-          .modal-section-title { font-size: 18px !important; margin-bottom: 10px !important; }
-          .modal-section-text { font-size: 14px !important; }
-          .decision-item, .risk-item { padding: 12px !important; }
-          .decision-item span, .risk-item span { font-size: 13px !important; }
-          .tech-tags { gap: 8px !important; }
-          .tech-tag { padding: 6px 12px !important; font-size: 12px !important; }
-        }
+          {/* ── LEFT ── */}
+          <div style={{ opacity:vis?1:0, animation:vis?`${even?"_ltr":"_rtl"} 440ms ${E} 0.04s both`:"none" }}>
+            <div style={{ marginBottom: mob?"1rem":"2rem" }}>
 
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(40px) scale(0.95); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
+              {/* Period + type */}
+              <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"10px" }}>
+                <div style={{
+                  width:"2px", height: mob?"28px":"34px",
+                  background:"rgba(255,255,255,0.5)",
+                  transformOrigin:"top",
+                  transform:vis?"scaleY(1)":"scaleY(0)",
+                  transition:`transform 320ms ${E} 0.2s`,
+                }} />
+                <div>
+                  <ML style={{ marginBottom:"2px" }}>{data.year} · {data.duration}</ML>
+                  <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"9px", color:C.muted, letterSpacing:"0.06em" }}>{data.category}</span>
+                </div>
+              </div>
 
-      <div style={{ minHeight: "100vh", background: T.bg }}>
-        <div className="main-container" style={{ maxWidth: "1400px", margin: "0 auto", padding: "140px 48px 120px" }}>
+              {/* Title — Dancing Script */}
+              <h2 className="dancing-h2" style={{
+                fontSize: mob?"clamp(1.8rem,7.5vw,2.5rem)":"clamp(2.8rem,4.5vw,4rem)",
+                marginBottom:"8px",
+              }}>{data.title}</h2>
 
-          {/* ── HERO ── */}
+              {/* Event */}
+              <div style={{ fontSize:mob?"0.95rem":"1.1rem", fontWeight:600, color:"rgba(255,255,255,0.65)", marginBottom:"7px" }}>
+                {data.event}
+              </div>
+
+              {/* Location row */}
+              <div style={{ display:"flex", alignItems:"center", gap:"5px", fontSize:"12px", color:C.muted }}>
+                <MapPin size={11} />{data.location}
+              </div>
+
+              {/* Rank pill */}
+              <div style={{
+                marginTop:"10px", display:"inline-flex", alignItems:"center", gap:"6px",
+                padding:"4px 10px", borderRadius:"5px",
+                background:"rgba(255,255,255,0.05)", border:`1px solid rgba(255,255,255,0.12)`,
+              }}>
+                <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"#FFFFFF", animation:"_pulse 2s ease-in-out infinite" }} />
+                <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.7)", letterSpacing:"0.08em", textTransform:"uppercase" }}>
+                  {data.rank}
+                </span>
+              </div>
+            </div>
+
+            {/* Animated underline */}
+            <div style={{
+              height:"1px", width:"80px", marginBottom: mob?"1.1rem":"2rem",
+              background:"rgba(255,255,255,0.3)",
+              borderRadius:"2px", transformOrigin:"left",
+              transform:vis?"scaleX(1)":"scaleX(0)",
+              transition:`transform 320ms ${E} 0.22s`,
+            }} />
+
+            {/* Context summary */}
+            <p style={{
+              fontSize: mob?"0.875rem":"0.97rem",
+              color:"rgba(255,255,255,0.65)", lineHeight:1.72,
+              marginBottom: mob?"1.25rem":"2.5rem",
+            }}>{data.context}</p>
+
+            {/* Tabs */}
+            <div style={{ marginBottom: mob?"0.9rem":"2rem" }}>
+              <div style={{ display:"flex", gap: mob?"1.25rem":"2rem", borderBottom:`1px solid ${C.border}` }}>
+                {["decisions","risks","tech"].map(t => (
+                  <button key={t} onClick={() => st(t)} style={{
+                    background:"none", border:"none",
+                    padding: mob?"0.55rem 0":"0.75rem 0",
+                    minHeight:"38px",
+                    fontSize: mob?"12.5px":"13.5px", fontWeight:600,
+                    color: tab===t?"#FFFFFF":"rgba(255,255,255,0.5)",
+                    cursor:"none", textTransform:"capitalize",
+                    transition:`color 190ms ${E}`, position:"relative",
+                  }}>
+                    {t}
+                    {tab===t && <div style={{ position:"absolute", bottom:-1, left:0, right:0, height:"1px", background:"#FFFFFF", animation:`_slideIn 190ms ${E}` }} />}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Tab content */}
+            <div style={{ minHeight: mob?"auto":"220px" }}>
+              {tab==="decisions" && (
+                <ul style={{ listStyle:"none", display:"flex", flexDirection:"column", gap: mob?"0.7rem":"0.9rem", animation:`_fadeSlide 320ms ${E}` }}>
+                  {data.decisions.map((item, i) => (
+                    <li key={i} style={{ display:"flex", gap:"0.8rem", alignItems:"flex-start" }}>
+                      <Zap size={13} style={{ color:"rgba(255,255,255,0.5)", flexShrink:0, marginTop:"3px" }} />
+                      <span style={{ fontSize: mob?"13px":"13.5px", color:"rgba(255,255,255,0.65)", lineHeight:1.65 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {tab==="risks" && (
+                <ul style={{ listStyle:"none", display:"flex", flexDirection:"column", gap: mob?"0.7rem":"0.9rem", animation:`_fadeSlide 320ms ${E}` }}>
+                  {data.risks.map((item, i) => (
+                    <li key={i} style={{ display:"flex", gap:"0.8rem", alignItems:"flex-start" }}>
+                      <Shield size={13} style={{ color:"rgba(255,255,255,0.45)", flexShrink:0, marginTop:"3px" }} />
+                      <span style={{ fontSize: mob?"13px":"13.5px", color:"rgba(255,255,255,0.65)", lineHeight:1.65 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {tab==="tech" && (
+                <div style={{ display:"flex", flexWrap:"wrap", gap:"8px", animation:`_fadeSlide 320ms ${E}` }}>
+                  {data.tech.map((t, ti) => (
+                    <TechTag key={t} name={t} visible={tab==="tech"} delay={ti * 0.04} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* View full case study */}
+            <div style={{ marginTop: mob?"1.4rem":"3rem" }}>
+              <button
+                className="card-hover"
+                onClick={() => onOpen(data)}
+                style={{
+                  display:"inline-flex", alignItems:"center", gap:"8px",
+                  padding: mob?"8px 13px":"10px 18px", minHeight:"44px",
+                  background:"rgba(255,255,255,0.06)",
+                  border:`1px solid rgba(255,255,255,0.15)`,
+                  borderRadius:"8px", fontSize: mob?"12px":"13px", fontWeight:600,
+                  color:"#FFFFFF", fontFamily:"'DM Mono',monospace",
+                  cursor:"none", transition:`all 190ms ${E}`,
+                }}
+                onMouseEnter={(e)=>{ e.currentTarget.style.background="rgba(255,255,255,0.12)"; e.currentTarget.style.borderColor="rgba(255,255,255,0.25)"; }}
+                onMouseLeave={(e)=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(255,255,255,0.15)"; }}
+              >
+                <ArrowUpRight size={13} />
+                View Full Case Study
+              </button>
+            </div>
+          </div>
+
+          {/* ── RIGHT — Impact Card ── */}
           <div
-            ref={heroRef}
-            className="hero-section"
+            className="card-hover"
+            onMouseMove={(e) => {
+              if (mob || !ref.current) return;
+              const r = ref.current.getBoundingClientRect();
+              tt({ x:((e.clientY-r.top)/r.height-0.5)*1.5, y:-((e.clientX-r.left)/r.width-0.5)*1.5 });
+            }}
+            onMouseLeave={() => tt({ x:0, y:0 })}
             style={{
-              textAlign: "center", marginBottom: "100px",
-              opacity: heroInView ? 1 : 0,
-              transform: heroInView ? "translateY(0)" : "translateY(32px)",
-              transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+              opacity:vis?1:0,
+              animation:vis?`${even?"_rtl":"_ltr"} 440ms ${E} 0.10s both`:"none",
+              position: mob?"relative":"sticky",
+              top: mob?"auto":"6rem",
             }}
           >
-            <div className="hero-badge" style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "8px 18px", background: T.greenSoft,
-              border: `1.5px solid ${T.green}30`, borderRadius: "999px",
-              color: T.green, fontSize: "13px", fontWeight: 600,
-              letterSpacing: "0.03em", marginBottom: "32px",
+            <div style={{
+              position:"relative",
+              padding: mob?"1.1rem":"2.5rem 2rem",
+              background:C.surface,
+              border:`1px solid rgba(255,255,255,0.08)`,
+              borderRadius: mob?"14px":"18px",
+              transform: mob?"none":`perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition:`transform 190ms ${E}`,
             }}>
-              <CheckCircle size={16} />
-              Open to Software Engineering Roles · 2026 Graduate
-            </div>
+              {/* Inner radial */}
+              <div style={{ position:"absolute", inset:0, borderRadius:"inherit", background:"radial-gradient(circle at 50% 30%, rgba(255,255,255,0.03) 0%, transparent 65%)", pointerEvents:"none" }} />
+              {/* Top shimmer */}
+              <div style={{ position:"absolute", top:0, left:"20%", right:"20%", height:"1px", background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", borderRadius:"0 0 2px 2px" }} />
 
-            <h1 className="hero-title" style={{
-              fontFamily: "'Fraunces', serif",
-              fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 700,
-              color: T.ink, marginBottom: "20px",
-              letterSpacing: "-0.03em", lineHeight: 1,
-            }}>
-              Documented Work
-              <br />
-              <span style={{
-                background: `linear-gradient(135deg, ${T.accent} 0%, #8b5cf6 100%)`,
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                backgroundClip: "text", position: "relative",
-              }}>
-                & Outcomes
-                <div style={{
-                  position: "absolute", bottom: "-8px", left: 0, right: 0,
-                  height: "3px",
-                  background: `linear-gradient(90deg, ${T.accent}, #8b5cf6)`,
-                  borderRadius: "2px",
-                }} />
-              </span>
-            </h1>
+              <ML style={{ marginBottom: mob?"0.9rem":"2rem" }}>Impact Metrics</ML>
 
-            <p className="hero-description" style={{
-              fontSize: "18px", lineHeight: 1.7, color: T.inkSub,
-              fontWeight: 400, maxWidth: "620px", margin: "0 auto 40px",
-            }}>
-              A record of technical work, competitive results, and learning milestones
-              from internships, personal projects, and structured practice.
-            </p>
-
-            <div className="hero-buttons" style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/resume" style={{
-                display: "inline-flex", alignItems: "center", gap: "10px",
-                padding: "14px 28px",
-                background: `linear-gradient(135deg, ${T.accent} 0%, #8b5cf6 100%)`,
-                border: "none", borderRadius: "12px", color: "#ffffff",
-                fontSize: "15px", fontWeight: 600, textDecoration: "none", cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                boxShadow: `0 4px 16px ${T.accent}30`,
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px) scale(1.02)"; e.currentTarget.style.boxShadow = `0 8px 24px ${T.accent}40`; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = `0 4px 16px ${T.accent}30`; }}
-              >
-                <Download size={18} />Download Resume
-              </a>
-              <a href="https://github.com/bhagavan444" target="_blank" rel="noopener noreferrer" style={{
-                display: "inline-flex", alignItems: "center", gap: "10px",
-                padding: "14px 28px", background: "rgba(0,0,0,0.03)",
-                border: `1.5px solid ${T.lineMd}`, borderRadius: "12px",
-                color: T.inkSub, fontSize: "15px", fontWeight: 600,
-                textDecoration: "none", cursor: "pointer", transition: "all 0.3s ease",
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.03)"; e.currentTarget.style.transform = "translateY(0)"; }}
-              >
-                <Github size={18} />GitHub
-              </a>
-              <a href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" target="_blank" rel="noopener noreferrer" style={{
-                display: "inline-flex", alignItems: "center", gap: "10px",
-                padding: "14px 28px", background: "rgba(0,0,0,0.03)",
-                border: `1.5px solid ${T.lineMd}`, borderRadius: "12px",
-                color: T.inkSub, fontSize: "15px", fontWeight: 600,
-                textDecoration: "none", cursor: "pointer", transition: "all 0.3s ease",
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.03)"; e.currentTarget.style.transform = "translateY(0)"; }}
-              >
-                <Linkedin size={18} />LinkedIn
-              </a>
-            </div>
-          </div>
-
-          {/* ── METRICS DASHBOARD ── */}
-          <div className="metrics-grid" style={{
-            display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "20px", marginBottom: "100px",
-          }}>
-            {metrics.map((metric, i) => <MetricCard key={i} metric={metric} index={i} />)}
-          </div>
-
-          {/* ── ACHIEVEMENTS ── */}
-          <div style={{ marginBottom: "100px" }}>
-            <h2 className="section-title" style={{
-              fontFamily: "'Fraunces', serif",
-              fontSize: "clamp(32px, 4vw, 42px)", fontWeight: 700,
-              color: T.ink, marginBottom: "16px", textAlign: "center", letterSpacing: "-0.02em",
-            }}>
-              Achievements & Case Studies
-            </h2>
-            <p className="section-description" style={{
-              fontSize: "16px", color: T.inkSub, textAlign: "center",
-              maxWidth: "560px", margin: "0 auto 60px", lineHeight: 1.7,
-            }}>
-              A factual account of competitions, projects, certifications, and technical
-              practice with context and outcomes where measurable.
-            </p>
-
-            <div className="achievements-grid" style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
-              gap: "24px",
-            }}>
-              {achievements.map((achievement) => (
-                <div
-                  key={achievement.id}
-                  className="achievement-card"
-                  onMouseEnter={() => setHoveredCard(achievement.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  onClick={() => setActiveAchievement(achievement)}
-                  style={{
-                    background: "#fff",
-                    border: `1.5px solid ${hoveredCard === achievement.id ? T.lineMd : T.line}`,
-                    borderRadius: "20px", overflow: "hidden",
-                    transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)", cursor: "pointer",
-                    transform: hoveredCard === achievement.id ? "translateY(-8px)" : "translateY(0)",
-                    boxShadow: hoveredCard === achievement.id ? "0 20px 60px rgba(0,0,0,0.1)" : "0 2px 12px rgba(0,0,0,0.03)",
-                  }}
-                >
-                  {/* Card Header */}
-                  <div className="achievement-header" style={{
-                    height: "180px",
-                    background: `linear-gradient(135deg, ${achievement.color}12 0%, ${achievement.color}05 100%)`,
-                    position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
+              <div style={{ display:"flex", flexDirection:"column", gap: mob?"0.9rem":"2rem" }}>
+                {data.impact.map((item, i) => (
+                  <div key={i} style={{
+                    paddingBottom: i<data.impact.length-1?(mob?"0.9rem":"2rem"):0,
+                    borderBottom:  i<data.impact.length-1?`1px solid ${C.border}`:"none",
+                    opacity:vis?1:0,
+                    animation:vis?`_rtl 320ms ${E} ${0.2+i*0.08}s both`:"none",
                   }}>
                     <div style={{
-                      position: "absolute", top: "16px", left: "16px",
-                      display: "flex", alignItems: "center", gap: "6px",
-                      padding: "6px 14px", background: "rgba(255,255,255,0.95)",
-                      backdropFilter: "blur(8px)", border: `1.5px solid ${T.line}`,
-                      borderRadius: "8px", fontSize: "12px", fontWeight: 600, color: T.inkSub,
+                      fontFamily:"'Dancing Script',cursive",
+                      fontWeight:900,
+                      fontSize: mob?"2.2rem":"3.2rem",
+                      color:"#FFFFFF", lineHeight:1,
+                      marginBottom:"4px", letterSpacing:"-0.01em",
                     }}>
-                      <Calendar size={13} />
-                      {achievement.year}
+                      <Counter value={item.metric} triggered={vis} />
                     </div>
-                    <div className="achievement-icon-wrapper" style={{
-                      width: "90px", height: "90px",
-                      background: "rgba(255,255,255,0.95)", backdropFilter: "blur(12px)",
-                      border: `2px solid ${achievement.color}30`, borderRadius: "18px",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      boxShadow: `0 8px 32px ${achievement.color}20`,
-                    }}>
-                      <achievement.icon size={44} style={{ color: achievement.color }} />
-                    </div>
+                    <div style={{ fontSize: mob?"12.5px":"15px", fontWeight:600, color:"#FFFFFF", marginBottom:"2px" }}>{item.label}</div>
+                    <div style={{ fontSize: mob?"11px":"12.5px", color:C.muted, lineHeight:1.5 }}>{item.detail}</div>
                   </div>
+                ))}
+              </div>
 
-                  {/* Card Content */}
-                  <div className="achievement-content" style={{ padding: "28px" }}>
-                    <span style={{
-                      display: "inline-block", padding: "6px 14px",
-                      background: `${achievement.color}10`,
-                      border: `1.5px solid ${achievement.color}25`,
-                      borderRadius: "8px", color: achievement.color,
-                      fontSize: "11px", fontWeight: 700,
-                      textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px",
-                    }}>
-                      {achievement.category}
-                    </span>
-
-                    <h3 className="achievement-title" style={{
-                      fontFamily: "'Fraunces', serif", fontSize: "22px", fontWeight: 700,
-                      color: T.ink, marginBottom: "6px", letterSpacing: "-0.01em",
-                    }}>
-                      {achievement.title}
-                    </h3>
-                    <p className="achievement-event" style={{
-                      fontSize: "14px", color: T.inkMute, marginBottom: "4px", fontWeight: 600,
-                    }}>
-                      {achievement.event}
-                    </p>
-                    <p style={{ fontSize: "13px", color: achievement.color, fontWeight: 600, marginBottom: "16px" }}>
-                      {achievement.rank}
-                    </p>
-                    <p className="achievement-description" style={{
-                      fontSize: "14.5px", color: T.inkSub, lineHeight: 1.7, marginBottom: "20px",
-                    }}>
-                      {achievement.context.slice(0, 140)}…
-                    </p>
-
-                    {/* Metrics Row */}
-                    <div className="metrics-row" style={{
-                      display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-                      gap: "10px", marginBottom: "20px",
-                    }}>
-                      {Object.entries(achievement.metrics).map(([key, value]) => (
-                        <div key={key} className="metric-box" style={{
-                          padding: "12px", background: T.surface,
-                          border: `1.5px solid ${T.line}`, borderRadius: "10px", textAlign: "center",
-                        }}>
-                          <div className="metric-box-value" style={{
-                            fontSize: "14px", fontWeight: 700, color: T.ink, marginBottom: "3px",
-                          }}>
-                            {value}
-                          </div>
-                          <div className="metric-box-label" style={{
-                            fontSize: "10px", color: T.inkMute,
-                            textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600,
-                          }}>
-                            {key.replace("_", " ")}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="tech-stack" style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
-                      {achievement.tech.slice(0, 4).map((tech, i) => (
-                        <span key={i} className="tech-badge" style={{
-                          padding: "5px 12px", background: T.surface,
-                          border: `1.5px solid ${T.line}`, borderRadius: "6px",
-                          fontSize: "12px", color: T.inkSub, fontWeight: 500,
-                        }}>
-                          {tech}
-                        </span>
-                      ))}
-                      {achievement.tech.length > 4 && (
-                        <span className="tech-badge" style={{
-                          padding: "5px 12px", background: T.surface,
-                          border: `1.5px solid ${T.line}`, borderRadius: "6px",
-                          fontSize: "12px", color: T.inkSub, fontWeight: 600,
-                        }}>
-                          +{achievement.tech.length - 4}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* View Details Button */}
-                    <button className="view-details-btn" style={{
-                      width: "100%", display: "flex", alignItems: "center",
-                      justifyContent: "center", gap: "8px", padding: "14px",
-                      background: hoveredCard === achievement.id ? `${achievement.color}12` : `${achievement.color}08`,
-                      border: `1.5px solid ${hoveredCard === achievement.id ? `${achievement.color}30` : `${achievement.color}20`}`,
-                      borderRadius: "12px", color: achievement.color,
-                      fontSize: "14px", fontWeight: 600, cursor: "pointer", transition: "all 0.3s ease",
-                    }}>
-                      View Full Case Study
-                      <ChevronRight size={18} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── ENGINEERING PRINCIPLES ── */}
-          <div style={{ marginBottom: "100px" }}>
-            <h2 className="section-title" style={{
-              fontFamily: "'Fraunces', serif",
-              fontSize: "clamp(32px, 4vw, 42px)", fontWeight: 700,
-              color: T.ink, marginBottom: "16px", textAlign: "center", letterSpacing: "-0.02em",
-            }}>
-              How I Approach Building
-            </h2>
-            <p className="section-description" style={{
-              fontSize: "16px", color: T.inkSub, textAlign: "center",
-              maxWidth: "560px", margin: "0 auto 60px", lineHeight: 1.7,
-            }}>
-              Principles that consistently inform technical decisions across projects —
-              from initial architecture to deployment and maintenance.
-            </p>
-
-            <div className="principles-grid" style={{
-              display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px",
-            }}>
-              {principles.map((principle, index) => (
-                <div key={index} className="principle-card" style={{
-                  background: "#fff", border: `1.5px solid ${T.line}`,
-                  borderRadius: "16px", padding: "32px 28px",
-                  transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
-                }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.borderColor = T.lineMd; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.08)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = T.line; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.03)"; }}
-                >
-                  <div className="principle-icon-wrapper" style={{
-                    width: "56px", height: "56px",
-                    background: `${principle.color}10`, borderRadius: "12px",
-                    display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px",
-                  }}>
-                    <principle.icon size={28} style={{ color: principle.color }} />
-                  </div>
-                  <h3 className="principle-title" style={{
-                    fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                    color: T.ink, marginBottom: "12px", letterSpacing: "-0.01em",
-                  }}>
-                    {principle.title}
-                  </h3>
-                  <p className="principle-description" style={{ fontSize: "15px", color: T.inkSub, lineHeight: 1.7 }}>
-                    {principle.description}
-                  </p>
-                </div>
-              ))}
+              {/* Outcome strip */}
+              <div style={{
+                marginTop: mob?"1rem":"1.75rem",
+                paddingTop: mob?"0.9rem":"1.5rem",
+                borderTop:`1px solid ${C.border}`,
+              }}>
+                <ML style={{ marginBottom:"6px", fontSize:"9px" }}>Outcome</ML>
+                <p style={{ fontSize: mob?"11px":"12px", color:"rgba(255,255,255,0.6)", lineHeight:1.6 }}>
+                  {data.outcome.slice(0, 120)}…
+                </p>
+              </div>
             </div>
           </div>
 
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* ── MODAL ── */}
-      {activeAchievement && (
-        <div
-          onClick={() => setActiveAchievement(null)}
-          style={{
-            position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
-            backdropFilter: "blur(12px)", zIndex: 9999,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            padding: "20px", overflowY: "auto",
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="modal-content"
+/* ═══════════════════════════════════════════════════════════════
+   METRIC SUMMARY CARD
+═══════════════════════════════════════════════════════════════ */
+function SumCard({ stat, vis, delay }) {
+  const [h, sh] = useState(false);
+  const mob = useMob();
+  const IconComp = stat.icon;
+  return (
+    <div onMouseEnter={() => sh(true)} onMouseLeave={() => sh(false)} style={{
+      padding: mob?"0.9rem":"2rem",
+      background:C.surface,
+      border:`1px solid ${h?"rgba(255,255,255,0.15)":"rgba(255,255,255,0.08)"}`,
+      borderRadius:"12px",
+      transform: h&&!mob?"translateY(-4px)":"translateY(0)",
+      transition:`transform 190ms ${E}, border-color 130ms ${E}`,
+      opacity:vis?1:0,
+      animation:vis?`_up 440ms ${E} ${delay}s both`:"none",
+      display:"flex", flexDirection:"column", gap:"12px",
+    }}>
+      <div style={{
+        width:"42px", height:"42px",
+        background:"rgba(255,255,255,0.06)",
+        borderRadius:"10px",
+        display:"flex", alignItems:"center", justifyContent:"center",
+        flexShrink:0,
+      }}>
+        <IconComp size={20} style={{ color:"rgba(255,255,255,0.7)" }} />
+      </div>
+      <div>
+        <div style={{
+          fontFamily:"'Dancing Script',cursive",
+          fontWeight:900,
+          fontSize: mob?"2rem":"2.8rem",
+          color:"#FFFFFF", lineHeight:1, marginBottom:"0.35rem", letterSpacing:"-0.02em",
+        }}>{stat.value}{stat.suffix}</div>
+        <div style={{ fontSize: mob?"11.5px":"14px", fontWeight:600, color:"rgba(255,255,255,0.80)", marginBottom:"3px" }}>{stat.label}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CASE STUDY MODAL
+═══════════════════════════════════════════════════════════════ */
+function Modal({ data, onClose }) {
+  const mob = useMob();
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+  }, [onClose]);
+
+  const Section = ({ title, children }) => (
+    <div className="modal-section" style={{ marginBottom:"2rem" }}>
+      <h3 style={{
+        fontFamily:"'Dancing Script',cursive",
+        fontWeight:800,
+        fontSize: mob?"1.5rem":"2rem",
+        color:"#FFFFFF", marginBottom:"0.9rem", letterSpacing:"-0.01em",
+      }}>{title}</h3>
+      {children}
+    </div>
+  );
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position:"fixed", inset:0,
+        background:"rgba(0,0,0,0.75)",
+        backdropFilter:"blur(16px)",
+        zIndex:9999,
+        display:"flex", alignItems:"center", justifyContent:"center",
+        padding:"20px",
+        overflowY:"auto",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="modal-inner"
+        style={{
+          background:"#111111",
+          border:`1px solid rgba(255,255,255,0.10)`,
+          borderRadius:"24px",
+          maxWidth:"860px", width:"100%",
+          maxHeight:"88vh", overflowY:"auto",
+          position:"relative",
+          animation:`_modalIn 360ms ${E}`,
+          boxShadow:"0 32px 96px rgba(0,0,0,0.6)",
+        }}
+      >
+        {/* Shimmer top */}
+        <div style={{ position:"absolute", top:0, left:"20%", right:"20%", height:"1px", background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)" }} />
+
+        {/* Modal Header */}
+        <div className="modal-head" style={{
+          padding: mob?"1.5rem":"2.5rem 2.5rem 2rem",
+          borderBottom:`1px solid ${C.border}`,
+          display:"flex", alignItems:"flex-start",
+          justifyContent:"space-between", gap:"20px",
+        }}>
+          <div style={{ flex:1 }}>
+            <ML style={{ marginBottom:"10px" }}>{data.category} · {data.year}</ML>
+            <h2 className="dancing-h2" style={{
+              fontSize: mob?"clamp(1.8rem,6vw,2.6rem)":"clamp(2.4rem,4vw,3.2rem)",
+              marginBottom:"6px",
+            }}>{data.title}</h2>
+            <div style={{ fontSize: mob?"0.9rem":"1rem", color:"rgba(255,255,255,0.65)", fontWeight:600, marginBottom:"4px" }}>{data.event}</div>
+            <div style={{
+              display:"inline-flex", alignItems:"center", gap:"6px", marginTop:"8px",
+              padding:"4px 10px", borderRadius:"5px",
+              background:"rgba(255,255,255,0.05)", border:`1px solid rgba(255,255,255,0.12)`,
+              fontFamily:"'DM Mono',monospace", fontSize:"10px", color:"rgba(255,255,255,0.7)",
+              letterSpacing:"0.06em",
+            }}>{data.rank}</div>
+          </div>
+          <button
+            onClick={onClose}
             style={{
-              background: "#fff", border: `1.5px solid ${T.lineMd}`,
-              borderRadius: "24px", maxWidth: "1000px", width: "100%",
-              maxHeight: "90vh", overflowY: "auto", position: "relative",
-              animation: "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-              boxShadow: "0 32px 96px rgba(0,0,0,0.2)",
+              width:"44px", height:"44px",
+              background:"rgba(255,255,255,0.05)",
+              border:`1px solid rgba(255,255,255,0.12)`,
+              borderRadius:"12px", color:"rgba(255,255,255,0.7)",
+              display:"flex", alignItems:"center", justifyContent:"center",
+              cursor:"none", transition:`all 190ms ${E}`, flexShrink:0,
             }}
+            onMouseEnter={(e)=>{ e.currentTarget.style.background="rgba(255,255,255,0.12)"; e.currentTarget.style.color="#FFFFFF"; }}
+            onMouseLeave={(e)=>{ e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.color="rgba(255,255,255,0.7)"; }}
           >
-            {/* Modal Header */}
-            <div className="modal-header" style={{
-              padding: "36px 40px", borderBottom: `1.5px solid ${T.line}`,
-              display: "flex", alignItems: "flex-start",
-              justifyContent: "space-between", gap: "20px",
-            }}>
-              <div style={{ flex: 1 }}>
-                <span style={{
-                  display: "inline-block", padding: "6px 14px",
-                  background: `${activeAchievement.color}10`,
-                  border: `1.5px solid ${activeAchievement.color}25`,
-                  borderRadius: "8px", color: activeAchievement.color,
-                  fontSize: "11px", fontWeight: 700,
-                  textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px",
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="modal-body" style={{ padding: mob?"1.5rem":"2.5rem" }}>
+
+          <Section title="Context">
+            <p style={{ fontSize: mob?"14px":"15px", color:"rgba(255,255,255,0.65)", lineHeight:1.75 }}>{data.context}</p>
+          </Section>
+
+          <Section title="My Role & Scope">
+            <p style={{ fontSize: mob?"14px":"15px", color:"rgba(255,255,255,0.65)", lineHeight:1.75 }}>{data.ownership}</p>
+          </Section>
+
+          <Section title="Technical Decisions">
+            <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+              {data.decisions.map((d, i) => (
+                <div key={i} style={{
+                  display:"flex", alignItems:"flex-start", gap:"12px",
+                  padding:"14px 16px",
+                  background:C.bg,
+                  border:`1px solid rgba(255,255,255,0.07)`,
+                  borderRadius:"10px",
                 }}>
-                  {activeAchievement.category}
-                </span>
-                <h2 style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "30px", fontWeight: 700,
-                  color: T.ink, marginBottom: "6px", letterSpacing: "-0.02em",
-                }}>
-                  {activeAchievement.title}
-                </h2>
-                <p style={{ fontSize: "15px", color: T.inkMute, fontWeight: 500, marginBottom: "4px" }}>
-                  {activeAchievement.event}
-                </p>
-                <p style={{ fontSize: "14px", color: activeAchievement.color, fontWeight: 600 }}>
-                  {activeAchievement.rank}
-                </p>
-              </div>
-              <button
-                onClick={() => setActiveAchievement(null)}
-                className="modal-close-btn"
-                style={{
-                  width: "44px", height: "44px",
-                  background: "rgba(239,68,68,0.08)",
-                  border: "1.5px solid rgba(239,68,68,0.2)",
-                  borderRadius: "12px", color: "#ef4444",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  cursor: "pointer", transition: "all 0.2s ease", flexShrink: 0,
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(239,68,68,0.15)"; e.currentTarget.style.transform = "scale(1.05)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(239,68,68,0.08)"; e.currentTarget.style.transform = "scale(1)"; }}
-              >
-                <X size={22} />
-              </button>
+                  <Zap size={15} style={{ color:"rgba(255,255,255,0.55)", flexShrink:0, marginTop:"2px" }} />
+                  <span style={{ fontSize: mob?"13px":"14px", color:"rgba(255,255,255,0.70)", lineHeight:1.7 }}>{d}</span>
+                </div>
+              ))}
             </div>
+          </Section>
 
-            {/* Modal Body */}
-            <div className="modal-body" style={{ padding: "40px" }}>
-
-              {/* Context */}
-              <div className="modal-section" style={{ marginBottom: "32px" }}>
-                <h3 className="modal-section-title" style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                  color: activeAchievement.color, marginBottom: "12px", letterSpacing: "-0.01em",
+          <Section title="Risks & How They Were Handled">
+            <div style={{ display:"flex", flexDirection:"column", gap:"10px" }}>
+              {data.risks.map((r, i) => (
+                <div key={i} style={{
+                  display:"flex", alignItems:"flex-start", gap:"12px",
+                  padding:"14px 16px",
+                  background:"rgba(255,255,255,0.02)",
+                  border:`1px solid rgba(255,255,255,0.06)`,
+                  borderRadius:"10px",
                 }}>
-                  Context
-                </h3>
-                <p className="modal-section-text" style={{ fontSize: "16px", color: T.inkSub, lineHeight: 1.75 }}>
-                  {activeAchievement.context}
-                </p>
-              </div>
+                  <Shield size={15} style={{ color:"rgba(255,255,255,0.45)", flexShrink:0, marginTop:"2px" }} />
+                  <span style={{ fontSize: mob?"13px":"14px", color:"rgba(255,255,255,0.70)", lineHeight:1.7 }}>{r}</span>
+                </div>
+              ))}
+            </div>
+          </Section>
 
-              {/* Ownership Scope */}
-              <div className="modal-section" style={{ marginBottom: "32px" }}>
-                <h3 className="modal-section-title" style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                  color: activeAchievement.color, marginBottom: "12px", letterSpacing: "-0.01em",
-                }}>
-                  My Role & Scope
-                </h3>
-                <p className="modal-section-text" style={{ fontSize: "16px", color: T.inkSub, lineHeight: 1.75 }}>
-                  {activeAchievement.ownership}
-                </p>
-              </div>
+          <Section title="Outcome">
+            <p style={{ fontSize: mob?"14px":"15px", color:"rgba(255,255,255,0.65)", lineHeight:1.75 }}>{data.outcome}</p>
+          </Section>
 
-              {/* Technical Decisions */}
-              <div className="modal-section" style={{ marginBottom: "32px" }}>
-                <h3 className="modal-section-title" style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                  color: activeAchievement.color, marginBottom: "16px", letterSpacing: "-0.01em",
+          <Section title="Technologies Used">
+            <div style={{ display:"flex", flexWrap:"wrap", gap:"8px" }}>
+              {data.tech.map((t, i) => (
+                <TechTag key={t} name={t} visible={true} delay={i * 0.03} />
+              ))}
+            </div>
+          </Section>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ROOT
+═══════════════════════════════════════════════════════════════ */
+export default function Achievements() {
+  const [heroRef, heroVis] = useInView(0.06);
+  const [sumRef,  sumVis]  = useInView(0.06);
+  const [priRef,  priVis]  = useInView(0.06);
+  const [activeModal, setActiveModal] = useState(null);
+  const mob = useMob();
+  const [active, sa] = useState(0);
+
+  useEffect(() => {
+    const fn = () => {
+      const mid = window.innerHeight / 2;
+      ACHIEVEMENTS.forEach((a, i) => {
+        const el = document.getElementById(`ach-${a.id}`);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= mid) sa(i);
+      });
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  const pad = mob ? "0 1rem" : "0 2rem";
+
+  return (
+    <>
+      <style>{GLOBAL}</style>
+      <MagneticCursor />
+      <ScrollBar />
+      <SideNav active={active} />
+
+      {/* Grid texture */}
+      <div aria-hidden="true" style={{
+        position:"fixed", inset:0, zIndex:0, pointerEvents:"none",
+        backgroundImage:[
+          "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        ].join(","),
+        backgroundSize:"64px 64px",
+        maskImage:"radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)",
+        WebkitMaskImage:"radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)",
+      }} />
+
+      <div style={{ position:"relative", zIndex:1 }}>
+
+        {/* ═══════ HERO ═══════ */}
+        <header ref={heroRef} style={{
+          maxWidth:"1240px", margin:"0 auto", padding:pad,
+          paddingTop:    mob?"3.5rem":"8rem",
+          paddingBottom: mob?"2rem":"6rem",
+          borderBottom:`1px solid ${C.border}`,
+          position:"relative",
+        }}>
+          <div aria-hidden="true" style={{
+            position:"absolute", top:"20%", left:"50%", transform:"translateX(-50%)",
+            width: mob?"280px":"640px", height: mob?"140px":"300px",
+            borderRadius:"50%",
+            background:"radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)",
+            filter:`blur(${mob?50:80}px)`, pointerEvents:"none",
+          }} />
+
+          {/* Eyebrow */}
+          <div style={{
+            display:"flex", alignItems:"center", gap:"10px",
+            marginBottom: mob?"0.9rem":"2rem",
+            opacity:heroVis?1:0, animation:heroVis?`_rtl 320ms ${E} 0.05s both`:"none",
+          }}>
+            <div style={{ width:"14px", height:"1px", background:"rgba(255,255,255,0.4)" }} />
+            <ML>Documented Work & Outcomes · 2023 – 2025</ML>
+            <TermCursor />
+          </div>
+
+          {/* H1 — Dancing Script */}
+          <h1 className="dancing-h1" style={{
+            fontSize: mob?"clamp(2.8rem,12vw,4.5rem)":"clamp(5rem,9vw,8.5rem)",
+            marginBottom:"16px",
+            maxWidth:"1000px",
+            opacity:heroVis?1:0, animation:heroVis?`_rtl 440ms ${E} 0.12s both`:"none",
+          }}>
+            Achievements<br />
+            <span style={{ fontWeight:700, fontSize:"0.72em", opacity:0.55 }}>& Case Studies</span>
+          </h1>
+
+          {/* Bar */}
+          <div style={{
+            height:"2px", width: mob?"80px":"140px",
+            background:"rgba(255,255,255,0.35)",
+            borderRadius:"2px", marginBottom: mob?"1.25rem":"3rem",
+            transformOrigin:"left",
+            transform:heroVis?"scaleX(1)":"scaleX(0)",
+            transition:`transform 320ms ${E} 0.18s`,
+          }} />
+
+          {/* Subtitle */}
+          <p style={{
+            fontSize: mob?"0.875rem":"1.05rem", color:"rgba(255,255,255,0.6)", lineHeight:1.75,
+            maxWidth: mob?"100%":"580px",
+            marginBottom: mob?"1.75rem":"4rem",
+            opacity:heroVis?1:0, animation:heroVis?`_rtl 440ms ${E} 0.22s both`:"none",
+          }}>
+            A factual record of competitions, projects, certifications, and technical
+            practice — with context, decisions, risks, and measurable outcomes.
+          </p>
+
+          {/* Hero stats */}
+          <div className="stats-row" style={{
+            display:"grid", gridTemplateColumns:"repeat(4,1fr)",
+            gap: mob?"0.9rem":"3rem", maxWidth: mob?"100%":"860px",
+          }}>
+            {[
+              { value:"6",   label:"Projects Deployed"  },
+              { value:"15+", label:"Certifications"     },
+              { value:"100+",label:"DSA Problems"       },
+              { value:"1st", label:"National Hackathon"  },
+            ].map((s, i) => (
+              <div key={i} style={{
+                opacity:heroVis?1:0,
+                animation:heroVis?`_rtl 440ms ${E} ${0.28+i*0.06}s both`:"none",
+              }}>
+                <div style={{
+                  fontFamily:"'Dancing Script',cursive",
+                  fontWeight:900,
+                  fontSize: mob?"2rem":"3.4rem",
+                  color:"#FFFFFF", lineHeight:1, marginBottom:"4px", letterSpacing:"-0.02em",
                 }}>
-                  Technical Decisions
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {activeAchievement.decisions.map((decision, i) => (
-                    <div key={i} className="decision-item" style={{
-                      display: "flex", alignItems: "flex-start", gap: "12px",
-                      padding: "16px", background: T.surface,
-                      border: `1.5px solid ${T.line}`, borderRadius: "12px",
-                    }}>
-                      <Zap size={18} style={{ color: activeAchievement.color, flexShrink: 0, marginTop: "2px" }} />
-                      <span style={{ fontSize: "15px", color: T.inkSub, lineHeight: 1.7 }}>{decision}</span>
-                    </div>
-                  ))}
+                  <Counter value={s.value} triggered={heroVis} />
+                </div>
+                <div style={{ fontSize: mob?"9px":"11px", color:C.muted, fontWeight:500, letterSpacing:"0.03em", fontFamily:"'DM Mono',monospace", textTransform:"uppercase" }}>
+                  {s.label}
                 </div>
               </div>
+            ))}
+          </div>
 
-              {/* Risks Managed */}
-              {activeAchievement.risks && (
-                <div className="modal-section" style={{ marginBottom: "32px" }}>
-                  <h3 className="modal-section-title" style={{
-                    fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                    color: activeAchievement.color, marginBottom: "16px", letterSpacing: "-0.01em",
-                  }}>
-                    Risks & How They Were Handled
-                  </h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {activeAchievement.risks.map((risk, i) => (
-                      <div key={i} className="risk-item" style={{
-                        display: "flex", alignItems: "flex-start", gap: "12px",
-                        padding: "16px", background: "rgba(239,68,68,0.04)",
-                        border: "1.5px solid rgba(239,68,68,0.12)", borderRadius: "12px",
-                      }}>
-                        <Shield size={18} style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }} />
-                        <span style={{ fontSize: "15px", color: T.inkSub, lineHeight: 1.7 }}>{risk}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+          {/* CTA Buttons */}
+          <div style={{
+            display:"flex", gap:"0.75rem", flexWrap:"wrap", marginTop: mob?"1.75rem":"3.5rem",
+            opacity:heroVis?1:0, animation:heroVis?`_rtl 440ms ${E} 0.42s both`:"none",
+          }}>
+            <MagBtn href="/resume" extraStyle={mob?{padding:"8px 13px",fontSize:"12px",minHeight:"38px"}:{}}>
+              <Download size={14} />Download Resume
+            </MagBtn>
+            <MagBtn href="https://github.com/bhagavan444" extraStyle={mob?{padding:"8px 13px",fontSize:"12px",minHeight:"38px"}:{}}>
+              <Github size={14} />GitHub
+            </MagBtn>
+            <MagBtn href="https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" extraStyle={mob?{padding:"8px 13px",fontSize:"12px",minHeight:"38px"}:{}}>
+              <Linkedin size={14} />LinkedIn
+            </MagBtn>
+          </div>
+        </header>
 
-              {/* Outcome */}
-              <div className="modal-section" style={{ marginBottom: "32px" }}>
-                <h3 className="modal-section-title" style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                  color: activeAchievement.color, marginBottom: "12px", letterSpacing: "-0.01em",
-                }}>
-                  Outcome
-                </h3>
-                <p className="modal-section-text" style={{ fontSize: "16px", color: T.inkSub, lineHeight: 1.75 }}>
-                  {activeAchievement.outcome}
-                </p>
-              </div>
+        <Marquee speed={36} />
 
-              {/* Technologies */}
-              <div className="modal-section" style={{ marginBottom: "32px" }}>
-                <h3 className="modal-section-title" style={{
-                  fontFamily: "'Fraunces', serif", fontSize: "20px", fontWeight: 700,
-                  color: activeAchievement.color, marginBottom: "16px", letterSpacing: "-0.01em",
-                }}>
-                  Technologies Used
-                </h3>
-                <div className="tech-tags" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                  {activeAchievement.tech.map((tech, i) => (
-                    <span key={i} className="tech-tag" style={{
-                      padding: "8px 16px",
-                      background: `${activeAchievement.color}10`,
-                      border: `1.5px solid ${activeAchievement.color}25`,
-                      borderRadius: "8px", fontSize: "14px",
-                      color: activeAchievement.color, fontWeight: 600,
-                    }}>
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
+        {/* ═══════ ACHIEVEMENT SECTIONS ═══════ */}
+        {ACHIEVEMENTS.map((ach, i) => (
+          <AchSection key={ach.id} data={ach} ri={i} isLast={i===ACHIEVEMENTS.length-1} onOpen={setActiveModal} />
+        ))}
 
-              {/* External Link */}
-              {activeAchievement.link && (
-                <a href={activeAchievement.link} target="_blank" rel="noopener noreferrer" style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  gap: "10px", width: "100%", padding: "16px",
-                  background: `linear-gradient(135deg, ${activeAchievement.color} 0%, ${activeAchievement.color}dd 100%)`,
-                  border: "none", borderRadius: "12px", color: "#fff",
-                  fontSize: "15px", fontWeight: 600, textDecoration: "none", transition: "all 0.3s ease",
+        <Marquee speed={28} />
+
+        {/* ═══════ METRICS SUMMARY ═══════ */}
+        <section ref={sumRef} style={{
+          maxWidth:"1240px", margin:"0 auto", padding:pad,
+          paddingTop:    mob?"3rem":"8rem",
+          paddingBottom: mob?"3rem":"8rem",
+          borderTop:`1px solid ${C.border}`,
+        }}>
+          <div style={{ marginBottom:"2rem", opacity:sumVis?1:0, animation:sumVis?`_rtl 440ms ${E} 0s both`:"none" }}>
+            <ML style={{ marginBottom:"10px" }}>Full Achievement Profile</ML>
+            <h2 className="dancing-h2" style={{
+              fontSize: mob?"clamp(2rem,7vw,3rem)":"clamp(2.8rem,5vw,4.5rem)",
+              marginBottom:"10px",
+              display:"flex", alignItems:"center",
+            }}>
+              Aggregate Overview<TermCursor />
+            </h2>
+            <p style={{ fontSize: mob?"12.5px":"13.5px", color:C.muted, lineHeight:1.65, maxWidth:"440px" }}>
+              Across competitions, certifications, open source, and structured practice.
+            </p>
+          </div>
+
+          <div className="sum-grid" style={{
+            display:"grid",
+            gridTemplateColumns: mob?"1fr 1fr":"repeat(auto-fit,minmax(200px,1fr))",
+            gap: mob?"0.65rem":"1.25rem",
+          }}>
+            {METRICS.map((s, i) => (
+              <SumCard key={i} stat={s} vis={sumVis} delay={i*0.06} />
+            ))}
+          </div>
+        </section>
+
+        <Marquee speed={32} />
+
+        {/* ═══════ ENGINEERING PRINCIPLES ═══════ */}
+        <section ref={priRef} style={{
+          maxWidth:"1240px", margin:"0 auto", padding:pad,
+          paddingTop:    mob?"3rem":"8rem",
+          paddingBottom: mob?"3rem":"8rem",
+          borderTop:`1px solid ${C.border}`,
+        }}>
+          <div style={{ marginBottom:"2.5rem", opacity:priVis?1:0, animation:priVis?`_rtl 440ms ${E} 0s both`:"none" }}>
+            <ML style={{ marginBottom:"10px" }}>Engineering Philosophy</ML>
+            <h2 className="dancing-h2" style={{
+              fontSize: mob?"clamp(2rem,7vw,3rem)":"clamp(2.8rem,5vw,4.5rem)",
+              marginBottom:"10px",
+            }}>
+              How I Approach Building
+            </h2>
+            <p style={{ fontSize: mob?"12.5px":"13.5px", color:C.muted, lineHeight:1.65, maxWidth:"480px" }}>
+              Principles that consistently inform technical decisions across projects —
+              from initial architecture to deployment and maintenance.
+            </p>
+          </div>
+
+          <div style={{
+            display:"grid",
+            gridTemplateColumns: mob?"1fr":"repeat(auto-fit,minmax(280px,1fr))",
+            gap: mob?"0.9rem":"1.5rem",
+          }}>
+            {PRINCIPLES.map((p, i) => {
+              const IconComp = p.icon;
+              return (
+                <div key={i} style={{
+                  padding: mob?"1.25rem":"2rem 1.75rem",
+                  background:C.surface,
+                  border:`1px solid rgba(255,255,255,0.08)`,
+                  borderRadius:"14px",
+                  opacity:priVis?1:0,
+                  animation:priVis?`_up 440ms ${E} ${i*0.08}s both`:"none",
+                  transition:`border-color 190ms ${E}, transform 190ms ${E}`,
                 }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${activeAchievement.color}40`; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                  onMouseEnter={(e)=>{ e.currentTarget.style.borderColor="rgba(255,255,255,0.16)"; e.currentTarget.style.transform="translateY(-4px)"; }}
+                  onMouseLeave={(e)=>{ e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"; e.currentTarget.style.transform="translateY(0)"; }}
                 >
-                  <ExternalLink size={18} />
-                  View Related Work
-                </a>
-              )}
+                  <div style={{
+                    width:"48px", height:"48px",
+                    background:"rgba(255,255,255,0.06)",
+                    borderRadius:"10px",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    marginBottom:"1.25rem",
+                  }}>
+                    <IconComp size={22} style={{ color:"rgba(255,255,255,0.7)" }} />
+                  </div>
+                  <h3 className="dancing-h3" style={{ fontSize: mob?"1.4rem":"1.7rem", marginBottom:"0.6rem" }}>{p.title}</h3>
+                  <p style={{ fontSize: mob?"13px":"14px", color:"rgba(255,255,255,0.60)", lineHeight:1.72 }}>{p.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ═══════ FOOTER ═══════ */}
+        <footer style={{
+          maxWidth:"1240px", margin:"0 auto", padding:pad,
+          paddingTop:    mob?"2rem":"4rem",
+          paddingBottom: mob?"2rem":"4rem",
+          borderTop:`1px solid ${C.border}`,
+        }}>
+          <div className="foot-row" style={{
+            display:"flex", alignItems:"center",
+            justifyContent:"space-between", gap:"1rem", flexWrap:"wrap",
+          }}>
+            <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+              <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"#FFFFFF", animation:"_pulse 2.2s ease-in-out infinite" }} />
+              <span style={{ fontFamily:"'DM Mono',monospace", fontSize: mob?"10px":"12.5px", color:"rgba(255,255,255,0.65)" }}>
+                All work independently verifiable
+              </span>
+            </div>
+            <div className="foot-links" style={{ display:"flex", flexWrap:"wrap", gap:"0.6rem" }}>
+              {[
+                { label:"Email",    href:"mailto:g.sivasatyasaibhagavan@gmail.com" },
+                { label:"LinkedIn", href:"https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" },
+                { label:"GitHub",   href:"https://github.com/bhagavan444" },
+              ].map(l => (
+                <MagBtn key={l.label} href={l.href} extraStyle={{ padding:"6px 12px", fontSize:"11px", minHeight:"34px" }}>
+                  {l.label}
+                </MagBtn>
+              ))}
             </div>
           </div>
-        </div>
-      )}
+          <div style={{
+            marginTop: mob?"1.25rem":"3rem",
+            paddingTop: mob?"0.9rem":"1.5rem",
+            borderTop:`1px solid ${C.border}`,
+            display:"flex", justifyContent:"space-between", alignItems:"center",
+            flexWrap:"wrap", gap:"0.4rem",
+          }}>
+            <div style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", color:C.muted }}>
+              © 2026 Siva Satya Sai Bhagavan
+            </div>
+            <div style={{ display:"flex", gap:"14px" }}>
+              {["Privacy","Terms","Sitemap"].map(l => (
+                <a key={l} href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", color:C.muted, textDecoration:"none" }}>{l}</a>
+              ))}
+            </div>
+          </div>
+        </footer>
+
+      </div>
+
+      {/* ═══════ CASE STUDY MODAL ═══════ */}
+      {activeModal && <Modal data={activeModal} onClose={() => setActiveModal(null)} />}
     </>
   );
 }

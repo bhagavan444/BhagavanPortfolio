@@ -4,23 +4,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { MapPin, CheckCircle2, ArrowUpRight } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS
+   DESIGN TOKENS — Pure Black & White Architectural System
 ═══════════════════════════════════════════════════════════════ */
 const C = {
-  bg:        "#f8f8f7",
-  surface:   "#f2f2f0",
-  white:     "#ffffff",
-  border:    "rgba(0,0,0,0.065)",
-  border2:   "rgba(0,0,0,0.12)",
-  text:      "#0c0c0c",
-  muted:     "#6e6e78",
-  muted2:    "#4a4a52",
-  accent:    "#0057d9",
-  accentSub: "rgba(0,87,217,0.045)",
-  green:     "#047857",
-  greenSub:  "rgba(4,120,87,0.045)",
-  purple:    "#6d28d9",
-  purpleSub: "rgba(109,40,217,0.045)",
+  bg:        "#0B0B0B",
+  surface:   "#111111",
+  white:     "#151515",
+  border:    "rgba(255,255,255,0.06)",
+  border2:   "rgba(255,255,255,0.12)",
+  text:      "#FFFFFF",
+  muted:     "rgba(255,255,255,0.55)",
+  muted2:    "rgba(255,255,255,0.70)",
+  accent:    "#FFFFFF",
+  accentSub: "rgba(255,255,255,0.04)",
+  green:     "#FFFFFF",
+  greenSub:  "rgba(255,255,255,0.04)",
+  purple:    "#FFFFFF",
+  purpleSub: "rgba(255,255,255,0.04)",
 };
 
 const E = "cubic-bezier(0.16, 1, 0.3, 1)";
@@ -63,44 +63,45 @@ const TICKER = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   GLOBAL CSS  — identical to Internships.jsx, zero changes
+   GLOBAL CSS
 ═══════════════════════════════════════════════════════════════ */
 const GLOBAL = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; overflow-x:hidden; }
   body {
     font-family:'DM Sans', system-ui, sans-serif;
-    background:${C.bg}; color:${C.text};
+    background:#0B0B0B; color:#FFFFFF;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     cursor: none;
   }
-  ::selection { background:rgba(0,87,217,0.12); }
+  ::selection { background:rgba(255,255,255,0.12); }
   ::-webkit-scrollbar { width:2px; }
   ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:rgba(0,87,217,0.22); border-radius:2px; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.25); border-radius:2px; }
 
+  /* ── MAGNETIC CURSOR ── */
   #mc-dot {
     position:fixed; top:0; left:0;
     width:10px; height:10px;
-    background:${C.accent};
+    background:#FFFFFF;
     border-radius:50%;
     pointer-events:none;
     z-index:99999;
     transform:translate(-50%,-50%);
     will-change:transform;
     transition:width 180ms ${E}, height 180ms ${E}, background 180ms ${E}, opacity 150ms linear;
-    mix-blend-mode:multiply;
+    mix-blend-mode:difference;
   }
-  #mc-dot.hov { width:44px; height:44px; background:rgba(0,87,217,0.1); border:1.5px solid ${C.accent}; }
+  #mc-dot.hov { width:48px; height:48px; background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.35); mix-blend-mode:normal; }
   #mc-dot.out { opacity:0; }
 
   #mc-ring {
     position:fixed; top:0; left:0;
-    width:34px; height:34px;
-    border:1px solid rgba(0,87,217,0.28);
+    width:36px; height:36px;
+    border:1px solid rgba(255,255,255,0.30);
     border-radius:50%;
     pointer-events:none;
     z-index:99998;
@@ -119,6 +120,30 @@ const GLOBAL = `
     a, button, [role="button"] { cursor:none !important; }
   }
 
+  /* ── DANCING HEADING STYLES ── */
+  .dancing-h1 {
+    font-family:'Dancing Script', cursive !important;
+    font-weight:900;
+    letter-spacing:-0.01em;
+    line-height:0.92;
+    color:#FFFFFF;
+  }
+  .dancing-h2 {
+    font-family:'Dancing Script', cursive !important;
+    font-weight:800;
+    letter-spacing:-0.005em;
+    line-height:0.95;
+    color:#FFFFFF;
+  }
+  .dancing-h3 {
+    font-family:'Dancing Script', cursive !important;
+    font-weight:700;
+    letter-spacing:0em;
+    line-height:1.0;
+    color:#FFFFFF;
+  }
+
+  /* ── KEYFRAMES ── */
   @keyframes _rtl  { from{opacity:0;transform:translateX(48px);}  to{opacity:1;transform:translateX(0);} }
   @keyframes _ltr  { from{opacity:0;transform:translateX(-48px);} to{opacity:1;transform:translateX(0);} }
   @keyframes _marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
@@ -128,11 +153,12 @@ const GLOBAL = `
   @keyframes _blink   { 0%,100%{opacity:1;} 50%{opacity:0;} }
   @keyframes _fadeSlide { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
   @keyframes _slideIn { from{transform:scaleX(0);transform-origin:left;} to{transform:scaleX(1);transform-origin:left;} }
+  @keyframes _floatY  { 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-6px);} }
 
   .di { transition:transform 130ms ${E}, filter 130ms ${E}; }
-  .di:hover { transform:scale(1.25) rotate(-6deg); filter:drop-shadow(0 2px 6px rgba(0,0,0,0.18)); }
+  .di:hover { transform:scale(1.25) rotate(-6deg); filter:drop-shadow(0 2px 6px rgba(255,255,255,0.12)); }
 
-  button:focus-visible, a:focus-visible { outline:2px solid ${C.accent}; outline-offset:2px; }
+  button:focus-visible, a:focus-visible { outline:2px solid rgba(255,255,255,0.4); outline-offset:2px; }
 
   @media (prefers-reduced-motion:reduce) {
     *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
@@ -156,7 +182,7 @@ const GLOBAL = `
 `;
 
 /* ═══════════════════════════════════════════════════════════════
-   DATA — Education (same shape as EXP in Internships.jsx)
+   DATA
 ═══════════════════════════════════════════════════════════════ */
 const EDU = [
   {
@@ -205,8 +231,8 @@ const EDU = [
     location: "Gudivada, Andhra Pradesh",
     type: "Mathematics, Physics, Chemistry · Board of Intermediate Education, AP",
     status: "completed",
-    accent: C.purple,
-    accentSub: C.purpleSub,
+    accent: C.accent,
+    accentSub: C.accentSub,
     certId: "1N1K1j6QGrgNPNL2D9UmfJAL2PVSulhPJ",
     score: "7.8 CGPA",
     alignment: "Foundation for: ML optimization · Algorithm design · Computational modelling",
@@ -239,8 +265,8 @@ const EDU = [
     location: "Gudivada, Andhra Pradesh",
     type: "Secondary Education · Board of Secondary Education, AP",
     status: "completed",
-    accent: C.green,
-    accentSub: C.greenSub,
+    accent: C.accent,
+    accentSub: C.accentSub,
     certId: "1p1RXnVn9jySamu8OiIWF0WFhe7G6QxiL",
     score: "9.5 GPA",
     alignment: "Achievement: Top academic performance · 100/100 in Mathematics",
@@ -266,7 +292,7 @@ const EDU = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   MAGNETIC CURSOR  — copy-pasted exactly from Internships.jsx
+   MAGNETIC CURSOR — fully working
 ═══════════════════════════════════════════════════════════════ */
 function MagneticCursor() {
   const dotRef  = useRef(null);
@@ -283,10 +309,19 @@ function MagneticCursor() {
 
     const move = (e) => {
       mouse.current = { x: e.clientX, y: e.clientY };
-      dot.style.transform = `translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
+      dot.style.left = `${e.clientX}px`;
+      dot.style.top  = `${e.clientY}px`;
     };
-    const enter     = (e) => { if (e.target.closest("a, button, [role='button'], .card-hover")) dot.classList.add("hov"); };
-    const leave     = (e) => { if (e.target.closest("a, button, [role='button'], .card-hover")) dot.classList.remove("hov"); };
+    const enter = (e) => {
+      if (e.target.closest("a, button, [role='button'], .card-hover")) {
+        dot.classList.add("hov");
+      }
+    };
+    const leave = (e) => {
+      if (e.target.closest("a, button, [role='button'], .card-hover")) {
+        dot.classList.remove("hov");
+      }
+    };
     const bodyLeave = () => { dot.classList.add("out"); ring.classList.add("out"); };
     const bodyEnter = () => { dot.classList.remove("out"); ring.classList.remove("out"); };
 
@@ -299,7 +334,8 @@ function MagneticCursor() {
     const tick = () => {
       smooth.current.x += (mouse.current.x - smooth.current.x) * 0.10;
       smooth.current.y += (mouse.current.y - smooth.current.y) * 0.10;
-      ring.style.transform = `translate(${smooth.current.x}px,${smooth.current.y}px) translate(-50%,-50%)`;
+      ring.style.left = `${smooth.current.x}px`;
+      ring.style.top  = `${smooth.current.y}px`;
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -348,7 +384,7 @@ function useMob() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   COUNTER — identical to Internships.jsx
+   COUNTER
 ═══════════════════════════════════════════════════════════════ */
 function Counter({ value, triggered }) {
   const [n, sn] = useState(0);
@@ -390,14 +426,14 @@ function DI({ name, size = 18, extraStyle = {} }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MARQUEE — identical to Internships.jsx
+   MARQUEE
 ═══════════════════════════════════════════════════════════════ */
 function Marquee({ speed = 36 }) {
   const items = [...TICKER, ...TICKER];
   return (
     <div style={{
       overflow: "hidden", borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}`,
-      padding: "9px 0", background: C.surface, position: "relative",
+      padding: "10px 0", background: C.surface, position: "relative",
     }}>
       {["left", "right"].map(s => (
         <div key={s} style={{
@@ -411,12 +447,12 @@ function Marquee({ speed = 36 }) {
         animation: `_marquee ${speed}s linear infinite`, willChange: "transform",
       }}>
         {items.map((name, i) => (
-          <div key={`${name}-${i}`} style={{ display: "flex", alignItems: "center", gap: "9px", opacity: 0.52, flexShrink: 0 }}>
+          <div key={`${name}-${i}`} style={{ display: "flex", alignItems: "center", gap: "9px", opacity: 0.38, flexShrink: 0 }}>
             {ICONS[name] && (
               <img src={ICONS[name]} alt={name} className="di" width={20} height={20} loading="lazy"
                 style={{ display: "block", borderRadius: "3px" }} />
             )}
-            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "13px", fontWeight: 500, color: C.muted2, letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
+            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
               {name}
             </span>
           </div>
@@ -427,7 +463,7 @@ function Marquee({ speed = 36 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SCROLL PROGRESS — identical to Internships.jsx
+   SCROLL PROGRESS
 ═══════════════════════════════════════════════════════════════ */
 function ScrollBar() {
   const [pct, sp] = useState(0);
@@ -445,10 +481,10 @@ function ScrollBar() {
     return () => { window.removeEventListener("scroll", fn); if (raf.current) cancelAnimationFrame(raf.current); };
   }, []);
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: C.surface, zIndex: 9998 }}>
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: "rgba(255,255,255,0.06)", zIndex: 9998 }}>
       <div style={{
         height: "100%", width: `${pct}%`,
-        background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+        background: "#FFFFFF",
         transition: "width 0.1s linear",
       }} />
     </div>
@@ -456,7 +492,7 @@ function ScrollBar() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SIDE NAV — same as Internships.jsx, keyed to EDU
+   SIDE NAV
 ═══════════════════════════════════════════════════════════════ */
 function SideNav({ active }) {
   return (
@@ -472,7 +508,7 @@ function SideNav({ active }) {
         >
           <div style={{
             height: "1.5px", width: active === i ? "22px" : "10px",
-            background: active === i ? e.accent : C.border2,
+            background: active === i ? "#FFFFFF" : "rgba(255,255,255,0.18)",
             borderRadius: "1px", transition: `all 320ms ${E}`,
           }} />
           <span style={{
@@ -486,9 +522,9 @@ function SideNav({ active }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MONO LABEL + TERM CURSOR — identical
+   MONO LABEL + TERM CURSOR
 ═══════════════════════════════════════════════════════════════ */
-function ML({ children, color = C.accent, style = {} }) {
+function ML({ children, color = "rgba(255,255,255,0.55)", style = {} }) {
   return (
     <span style={{
       display: "block", fontFamily: "'DM Mono',monospace", fontSize: "10px",
@@ -501,40 +537,40 @@ function TermCursor() {
   return (
     <span style={{
       display: "inline-block", width: "8px", height: "1.1em",
-      background: C.accent, marginLeft: "3px", verticalAlign: "middle",
+      background: "#FFFFFF", marginLeft: "3px", verticalAlign: "middle",
       animation: "_blink 1.1s step-end infinite", borderRadius: "1px",
     }} />
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   TAG — identical to Internships.jsx
+   TAG
 ═══════════════════════════════════════════════════════════════ */
-function Tag({ name, accent, visible, delay }) {
+function Tag({ name, visible, delay }) {
   const [h, sh] = useState(false);
   return (
     <span onMouseEnter={() => sh(true)} onMouseLeave={() => sh(false)} style={{
       display: "inline-flex", alignItems: "center", gap: "8px",
       padding: "7px 14px 7px 10px", borderRadius: "7px",
-      background:  h ? `${accent}14` : C.surface,
-      border:      `1px solid ${h ? `${accent}38` : C.border}`,
+      background:  h ? "#1A1A1A" : C.surface,
+      border:      `1px solid ${h ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.08)"}`,
       fontFamily:  "'DM Mono',monospace", fontSize: "13px",
-      color:       h ? accent : C.muted2,
+      color:       h ? "#FFFFFF" : "rgba(255,255,255,0.7)",
       userSelect:  "none",
       transition:  `background 130ms ${E}, border-color 130ms ${E}, color 130ms ${E}`,
       opacity:     visible ? 1 : 0,
       animation:   visible ? `_tagPop 320ms ${E} ${delay}s both` : "none",
     }}>
-      <DI name={name} size={18} extraStyle={{ opacity: h ? 1 : 0.65, transition: `opacity 130ms ${E}` }} />
+      <DI name={name} size={18} extraStyle={{ opacity: h ? 1 : 0.8, transition: `opacity 130ms ${E}` }} />
       {name}
     </span>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAG BUTTON — identical to Internships.jsx
+   MAG BUTTON
 ═══════════════════════════════════════════════════════════════ */
-function MagBtn({ children, href, accent, extraStyle = {} }) {
+function MagBtn({ children, href, extraStyle = {} }) {
   const [pos, sp] = useState({ x: 0, y: 0 });
   const [h, sh]   = useState(false);
   const ref = useRef(null);
@@ -551,10 +587,10 @@ function MagBtn({ children, href, accent, extraStyle = {} }) {
       style={{
         display: "inline-flex", alignItems: "center", gap: "8px",
         padding: "10px 18px", minHeight: "44px",
-        background: h ? `${accent}20` : `${accent}10`,
-        border: `1px solid ${h ? `${accent}60` : `${accent}35`}`,
+        background: h ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
+        border: `1px solid ${h ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.15)"}`,
         borderRadius: "8px", fontSize: "13px", fontWeight: 600,
-        color: accent, textDecoration: "none",
+        color: "#FFFFFF", textDecoration: "none",
         fontFamily: "'DM Mono',monospace",
         transition: `all 190ms ${E}`,
         transform: mob ? "none" : `translate(${pos.x}px,${pos.y}px)`,
@@ -565,7 +601,7 @@ function MagBtn({ children, href, accent, extraStyle = {} }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   EDUCATION SECTION — mirrors ExpSection exactly
+   EDUCATION SECTION
 ═══════════════════════════════════════════════════════════════ */
 function EduSection({ data, ri, isLast }) {
   const [ref, vis] = useInView(0.07);
@@ -589,17 +625,20 @@ function EduSection({ data, ri, isLast }) {
         left: mob ? "-3%" : "-2%",
         top:  mob ? "2%"  : "16%",
         fontSize: mob ? "clamp(4.5rem,20vw,6.5rem)" : "clamp(10rem,18vw,20rem)",
-        fontFamily: "'Cormorant',Georgia,serif", fontWeight: 700,
-        color: data.accentSub, lineHeight: 1,
-        userSelect: "none", pointerEvents: "none", opacity: 0.3,
+        fontFamily: "'Dancing Script',cursive",
+        fontWeight: 900,
+        
+        color: "rgba(255,255,255,0.025)",
+        lineHeight: 1,
+        userSelect: "none", pointerEvents: "none",
       }}>{data.year}</div>
 
-      {/* Glow */}
+      {/* Subtle glow */}
       <div style={{
         position: "absolute", left: "12%", top: "28%",
         width: mob ? "180px" : "420px", height: mob ? "180px" : "420px",
         borderRadius: "50%",
-        background: `radial-gradient(circle, ${data.accent}${mob ? "07" : "10"} 0%, transparent 70%)`,
+        background: `radial-gradient(circle, rgba(255,255,255,${mob ? "0.025" : "0.035"}) 0%, transparent 70%)`,
         filter: `blur(${mob ? 50 : 80}px)`, pointerEvents: "none",
       }} />
 
@@ -623,13 +662,14 @@ function EduSection({ data, ri, isLast }) {
             <div style={{ marginBottom: mob ? "1rem" : "2rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
                 <div style={{
-                  width: "2px", height: mob ? "28px" : "34px", background: data.accent,
+                  width: "2px", height: mob ? "28px" : "34px",
+                  background: "rgba(255,255,255,0.5)",
                   transformOrigin: "top",
                   transform: vis ? "scaleY(1)" : "scaleY(0)",
                   transition: `transform 320ms ${E} 0.2s`,
                 }} />
                 <div>
-                  <ML color={data.accent} style={{ marginBottom: "2px" }}>
+                  <ML style={{ marginBottom: "2px" }}>
                     {data.period} · {data.duration}
                   </ML>
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "9px", color: C.muted, letterSpacing: "0.06em" }}>
@@ -638,16 +678,18 @@ function EduSection({ data, ri, isLast }) {
                 </div>
               </div>
 
-              {/* Degree as "role" */}
-              <h2 style={{
-                fontFamily: "'Cormorant',Georgia,serif",
-                fontSize: mob ? "clamp(1.7rem,7.5vw,2.3rem)" : "clamp(2.4rem,5vw,3.4rem)",
-                fontWeight: 700, color: C.text,
-                lineHeight: 1.08, letterSpacing: "-0.025em", marginBottom: "6px",
+              {/* Degree heading — Dancing Script */}
+              <h2 className="dancing-h2" style={{
+                fontSize: mob ? "clamp(1.8rem,7.5vw,2.5rem)" : "clamp(2.8rem,4.5vw,4rem)",
+                marginBottom: "8px",
               }}>{data.role}</h2>
 
-              {/* Institution as "company" */}
-              <div style={{ fontSize: mob ? "0.95rem" : "1.15rem", fontWeight: 600, color: C.muted2, marginBottom: "7px" }}>
+              {/* Institution */}
+              <div style={{
+                fontSize: mob ? "0.95rem" : "1.1rem", fontWeight: 600,
+                color: "rgba(255,255,255,0.65)", marginBottom: "7px",
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
                 {data.company}
               </div>
 
@@ -655,20 +697,20 @@ function EduSection({ data, ri, isLast }) {
                 <MapPin size={11} />{data.location}
               </div>
 
-              {/* Status pill — only for current */}
               {data.status === "current" && (
                 <div style={{
                   marginTop: "10px", display: "inline-flex", alignItems: "center", gap: "6px",
                   padding: "4px 10px", borderRadius: "5px",
-                  background: `${data.accent}10`, border: `1px solid ${data.accent}30`,
+                  background: "rgba(255,255,255,0.05)",
+                  border: `1px solid rgba(255,255,255,0.12)`,
                 }}>
                   <div style={{
-                    width: "5px", height: "5px", borderRadius: "50%", background: data.accent,
+                    width: "5px", height: "5px", borderRadius: "50%", background: "#FFFFFF",
                     animation: "_pulse 2s ease-in-out infinite",
                   }} />
                   <span style={{
                     fontFamily: "'DM Mono',monospace", fontSize: "9px",
-                    color: data.accent, letterSpacing: "0.08em", textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.7)", letterSpacing: "0.08em", textTransform: "uppercase",
                   }}>Graduating 2026</span>
                 </div>
               )}
@@ -676,8 +718,8 @@ function EduSection({ data, ri, isLast }) {
 
             {/* Animated underline */}
             <div style={{
-              height: "2px", width: "80px", marginBottom: mob ? "1.1rem" : "2rem",
-              background: `linear-gradient(90deg, ${data.accent}, transparent)`,
+              height: "1px", width: "80px", marginBottom: mob ? "1.1rem" : "2rem",
+              background: "rgba(255,255,255,0.3)",
               borderRadius: "2px", transformOrigin: "left",
               transform: vis ? "scaleX(1)" : "scaleX(0)",
               transition: `transform 320ms ${E} 0.22s`,
@@ -688,7 +730,7 @@ function EduSection({ data, ri, isLast }) {
               <span style={{
                 fontFamily: "'DM Mono',monospace", fontSize: "11px", color: C.muted,
                 padding: "5px 10px", borderRadius: "5px",
-                background: C.surface, border: `1px solid ${C.border}`,
+                background: C.surface, border: `1px solid rgba(255,255,255,0.08)`,
                 display: "inline-block",
               }}>{data.alignment}</span>
             </div>
@@ -696,9 +738,8 @@ function EduSection({ data, ri, isLast }) {
             {/* Summary */}
             <p style={{
               fontSize: mob ? "0.875rem" : "0.97rem",
-              color: C.muted2, lineHeight: 1.72,
+              color: "rgba(255,255,255,0.65)", lineHeight: 1.72,
               marginBottom: mob ? "1.25rem" : "3rem",
-              maxWidth: "100%",
             }}>{data.summary}</p>
 
             {/* Tabs */}
@@ -710,7 +751,7 @@ function EduSection({ data, ri, isLast }) {
                     padding: mob ? "0.55rem 0" : "0.75rem 0",
                     minHeight: "38px",
                     fontSize: mob ? "12.5px" : "13.5px", fontWeight: 600,
-                    color: tab === t ? C.text : C.muted,
+                    color: tab === t ? "#FFFFFF" : "rgba(255,255,255,0.5)",
                     cursor: "none", textTransform: "capitalize",
                     transition: `color 190ms ${E}`, position: "relative",
                   }}>
@@ -718,7 +759,7 @@ function EduSection({ data, ri, isLast }) {
                     {tab === t && (
                       <div style={{
                         position: "absolute", bottom: -1, left: 0, right: 0,
-                        height: "2px", background: data.accent,
+                        height: "1px", background: "#FFFFFF",
                         animation: `_slideIn 190ms ${E}`,
                       }} />
                     )}
@@ -739,10 +780,10 @@ function EduSection({ data, ri, isLast }) {
                     <li key={i} style={{ display: "flex", gap: "0.8rem", alignItems: "flex-start" }}>
                       <div style={{
                         marginTop: "0.44rem", width: "4px", height: "4px", borderRadius: "50%",
-                        background: data.accent, flexShrink: 0,
+                        background: "rgba(255,255,255,0.5)", flexShrink: 0,
                         animation: vis ? `_iconIn 280ms ${E} ${0.1 + i * 0.06}s both` : "none",
                       }} />
-                      <span style={{ fontSize: mob ? "13px" : "13.5px", color: C.muted2, lineHeight: 1.65 }}>{item}</span>
+                      <span style={{ fontSize: mob ? "13px" : "13.5px", color: "rgba(255,255,255,0.65)", lineHeight: 1.65 }}>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -754,10 +795,10 @@ function EduSection({ data, ri, isLast }) {
                 }}>
                   {Object.entries(data.stack).map(([cat, items], ci) => (
                     <div key={cat}>
-                      <ML color={data.accent} style={{ marginBottom: "10px" }}>{cat}</ML>
+                      <ML style={{ marginBottom: "10px" }}>{cat}</ML>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                         {items.map((t, ti) => (
-                          <Tag key={t} name={t} accent={data.accent}
+                          <Tag key={t} name={t}
                             visible={tab === "stack"} delay={ci * 0.06 + ti * 0.035} />
                         ))}
                       </div>
@@ -769,15 +810,15 @@ function EduSection({ data, ri, isLast }) {
 
             {/* Certificate button */}
             <div style={{ marginTop: mob ? "1.4rem" : "3rem" }}>
-              <MagBtn href={driveUrl} accent={data.accent}
+              <MagBtn href={driveUrl}
                 extraStyle={mob ? { padding: "8px 13px", fontSize: "12px", minHeight: "38px" } : {}}>
                 <CheckCircle2 size={13} />
-                View 
+                View Certificate
               </MagBtn>
             </div>
           </div>
 
-          {/* ── RIGHT — Impact Card (identical structure to Internships) ── */}
+          {/* ── RIGHT — Impact Card ── */}
           <div
             className="card-hover"
             onMouseMove={(e) => {
@@ -796,45 +837,47 @@ function EduSection({ data, ri, isLast }) {
             <div style={{
               position: "relative",
               padding: mob ? "1.1rem" : "2.5rem 2rem",
-              background: C.white,
-              border: `1px solid ${C.border}`,
+              background: C.surface,
+              border: `1px solid rgba(255,255,255,0.08)`,
               borderRadius: mob ? "14px" : "18px",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+              boxShadow: "none",
               transform: mob ? "none" : `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: `transform 190ms ${E}`,
             }}>
               {/* Inner radial */}
               <div style={{
                 position: "absolute", inset: 0, borderRadius: "inherit",
-                background: `radial-gradient(circle at 50% 30%, ${data.accent}06 0%, transparent 65%)`,
+                background: "radial-gradient(circle at 50% 30%, rgba(255,255,255,0.03) 0%, transparent 65%)",
                 pointerEvents: "none",
               }} />
               {/* Top shimmer */}
               <div style={{
-                position: "absolute", top: 0, left: "20%", right: "20%", height: "2px",
-                background: `linear-gradient(90deg, transparent, ${data.accent}50, transparent)`,
+                position: "absolute", top: 0, left: "20%", right: "20%", height: "1px",
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
                 borderRadius: "0 0 2px 2px",
               }} />
 
-              <ML color={C.muted} style={{ marginBottom: mob ? "0.9rem" : "2rem" }}>Academic Metrics</ML>
+              <ML style={{ marginBottom: mob ? "0.9rem" : "2rem" }}>Academic Metrics</ML>
 
               <div style={{ display: "flex", flexDirection: "column", gap: mob ? "0.9rem" : "2rem" }}>
                 {data.impact.map((item, i) => (
                   <div key={i} style={{
                     paddingBottom: i < data.impact.length - 1 ? (mob ? "0.9rem" : "2rem") : 0,
-                    borderBottom:  i < data.impact.length - 1 ? `1px solid ${C.border}` : "none",
+                    borderBottom: i < data.impact.length - 1 ? `1px solid ${C.border}` : "none",
                     opacity: vis ? 1 : 0,
                     animation: vis ? `_rtl 320ms ${E} ${0.2 + i * 0.08}s both` : "none",
                   }}>
                     <div style={{
-                      fontFamily: "'Cormorant',Georgia,serif",
-                      fontSize: mob ? "2rem" : "3rem", fontWeight: 700,
-                      color: data.accent, lineHeight: 1,
-                      marginBottom: "4px", letterSpacing: "-0.02em",
+                      fontFamily: "'Dancing Script',cursive",
+                      fontWeight: 900,
+                      
+                      fontSize: mob ? "2.2rem" : "3.2rem",
+                      color: "#FFFFFF", lineHeight: 1,
+                      marginBottom: "4px", letterSpacing: "-0.03em",
                     }}>
                       <Counter value={item.metric} triggered={vis} />
                     </div>
-                    <div style={{ fontSize: mob ? "12.5px" : "15px", fontWeight: 600, color: C.text, marginBottom: "2px" }}>{item.label}</div>
+                    <div style={{ fontSize: mob ? "12.5px" : "15px", fontWeight: 600, color: "#FFFFFF", marginBottom: "2px" }}>{item.label}</div>
                     <div style={{ fontSize: mob ? "11px" : "12.5px", color: C.muted, lineHeight: 1.5 }}>{item.detail}</div>
                   </div>
                 ))}
@@ -848,22 +891,23 @@ function EduSection({ data, ri, isLast }) {
                 display: "flex", alignItems: "center", justifyContent: "space-between",
               }}>
                 <div>
-                  <ML color={C.muted} style={{ marginBottom: "4px", fontSize: "9px" }}>Score</ML>
+                  <ML style={{ marginBottom: "4px", fontSize: "9px" }}>Score</ML>
                   <div style={{
-                    fontFamily: "'Cormorant',Georgia,serif",
-                    fontSize: mob ? "1.4rem" : "1.8rem", fontWeight: 700,
-                    color: data.accent, letterSpacing: "-0.02em",
+                    fontFamily: "'Dancing Script',cursive",
+                    fontWeight: 800,
+                    fontSize: mob ? "1.5rem" : "2rem",
+                    color: "#FFFFFF", letterSpacing: "-0.02em",
                   }}>{data.score}</div>
                 </div>
                 {data.status === "current" && (
                   <div style={{ textAlign: "right" }}>
-                    <ML color={C.muted} style={{ marginBottom: "4px", fontSize: "9px" }}>Status</ML>
+                    <ML style={{ marginBottom: "4px", fontSize: "9px" }}>Status</ML>
                     <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                       <div style={{
-                        width: "5px", height: "5px", borderRadius: "50%", background: data.accent,
+                        width: "5px", height: "5px", borderRadius: "50%", background: "#FFFFFF",
                         animation: "_pulse 2s ease-in-out infinite",
                       }} />
-                      <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "10px", color: data.accent }}>Active</span>
+                      <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "10px", color: "#FFFFFF" }}>Active</span>
                     </div>
                   </div>
                 )}
@@ -874,9 +918,9 @@ function EduSection({ data, ri, isLast }) {
                 <a href={`https://drive.google.com/file/d/${data.certId}/view`} target="_blank" rel="noopener noreferrer"
                   style={{ display: "block", textDecoration: "none" }}>
                   <div style={{
-                    borderRadius: "8px", overflow: "hidden", border: `1px solid ${C.border}`,
+                    borderRadius: "8px", overflow: "hidden", border: `1px solid rgba(255,255,255,0.08)`,
                     position: "relative", transition: `all 190ms ${E}`,
-                    background: C.surface,
+                    background: C.bg,
                     minHeight: "90px",
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}
@@ -901,25 +945,24 @@ function EduSection({ data, ri, isLast }) {
                         if (fallback) fallback.style.display = "flex";
                       }}
                     />
-                    {/* Fallback */}
                     <div style={{
                       display: "none", flexDirection: "column", alignItems: "center",
                       justifyContent: "center", gap: "6px", padding: "24px",
                       fontFamily: "'DM Mono',monospace", fontSize: "11px", color: C.muted,
                     }}>
-                      <CheckCircle2 size={20} color={data.accent} />
+                      <CheckCircle2 size={20} color="#FFFFFF" />
                       View Certificate ↗
                     </div>
                     <div className="cov" style={{
-                      position: "absolute", inset: 0, background: "rgba(0,0,0,0.56)",
+                      position: "absolute", inset: 0, background: "rgba(0,0,0,0.65)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       opacity: 0, transition: `opacity 190ms ${E}`,
                     }}>
                       <div style={{
                         display: "flex", alignItems: "center", gap: "6px",
                         fontSize: "12px", fontWeight: 600, color: "#fff",
-                        padding: "8px 14px", background: "rgba(0,0,0,0.72)",
-                        borderRadius: "6px", border: `1px solid ${data.accent}55`,
+                        padding: "8px 14px", background: "rgba(255,255,255,0.1)",
+                        borderRadius: "6px", border: `1px solid rgba(255,255,255,0.2)`,
                       }}>
                         <ArrowUpRight size={13} />View Certificate
                       </div>
@@ -937,38 +980,39 @@ function EduSection({ data, ri, isLast }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SUM CARD — identical to Internships.jsx
+   SUM CARD
 ═══════════════════════════════════════════════════════════════ */
-function SumCard({ stat, accent, vis, delay }) {
+function SumCard({ stat, vis, delay }) {
   const [h, sh] = useState(false);
   const mob = useMob();
   return (
     <div onMouseEnter={() => sh(true)} onMouseLeave={() => sh(false)} style={{
       padding: mob ? "0.9rem" : "2rem",
-      background: C.white,
-      border: `1px solid ${h ? `${accent}30` : C.border}`,
+      background: C.surface,
+      border: `1px solid ${h ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.08)"}`,
       borderRadius: "12px",
       transform: h && !mob ? "translateY(-4px)" : "translateY(0)",
-      boxShadow: h && !mob ? "0 8px 24px rgba(0,0,0,0.06)" : "none",
-      transition: `transform 190ms ${E}, border-color 130ms ${E}, box-shadow 190ms ${E}`,
+      boxShadow: "none",
+      transition: `transform 190ms ${E}, border-color 130ms ${E}`,
       opacity: vis ? 1 : 0,
       animation: vis ? `_rtl 440ms ${E} ${delay}s both` : "none",
     }}>
       <div style={{
-        fontFamily: "'Cormorant',Georgia,serif",
-        fontSize: mob ? "1.65rem" : "2.5rem", fontWeight: 700,
-        color: h ? accent : C.text,
-        lineHeight: 1, marginBottom: "0.45rem", letterSpacing: "-0.02em",
+        fontFamily: "'Dancing Script',cursive",
+        fontWeight: 900,
+        fontSize: mob ? "1.9rem" : "2.8rem",
+        color: "#FFFFFF",
+        lineHeight: 1, marginBottom: "0.45rem", letterSpacing: "-0.03em",
         transition: `color 190ms ${E}`,
       }}>{stat.value}</div>
-      <div style={{ fontSize: mob ? "11.5px" : "14px", fontWeight: 600, color: C.muted2, marginBottom: "3px" }}>{stat.label}</div>
+      <div style={{ fontSize: mob ? "11.5px" : "14px", fontWeight: 600, color: "rgba(255,255,255,0.80)", marginBottom: "3px" }}>{stat.label}</div>
       <div style={{ fontSize: mob ? "10.5px" : "12.5px", color: C.muted, lineHeight: 1.5 }}>{stat.detail}</div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ROOT — Education version of Internships root
+   ROOT
 ═══════════════════════════════════════════════════════════════ */
 export default function Education() {
   const [heroRef, heroVis] = useInView(0.06);
@@ -1003,8 +1047,8 @@ export default function Education() {
       <div aria-hidden="true" style={{
         position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none",
         backgroundImage: [
-          "linear-gradient(rgba(0,0,0,0.016) 1px, transparent 1px)",
-          "linear-gradient(90deg, rgba(0,0,0,0.016) 1px, transparent 1px)",
+          "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
         ].join(","),
         backgroundSize: "64px 64px",
         maskImage: "radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)",
@@ -1025,7 +1069,7 @@ export default function Education() {
             position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)",
             width: mob ? "280px" : "640px", height: mob ? "140px" : "300px",
             borderRadius: "50%",
-            background: `radial-gradient(circle, ${C.accent}06 0%, transparent 70%)`,
+            background: "radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)",
             filter: `blur(${mob ? 50 : 80}px)`, pointerEvents: "none",
           }} />
 
@@ -1036,28 +1080,29 @@ export default function Education() {
             opacity: heroVis ? 1 : 0,
             animation: heroVis ? `_rtl 320ms ${E} 0.05s both` : "none",
           }}>
-            <div style={{ width: "14px", height: "1px", background: C.accent }} />
+            <div style={{ width: "14px", height: "1px", background: "rgba(255,255,255,0.4)" }} />
             <ML>Academic Record · 2019 – 2026</ML>
             <TermCursor />
           </div>
 
-          {/* H1 */}
-          <h1 style={{
-            fontFamily: "'Cormorant',Georgia,serif",
-            fontSize: mob ? "clamp(2rem,9.5vw,3rem)" : "clamp(3.5rem,8vw,6.5rem)",
-            fontWeight: 700, color: C.text,
-            lineHeight: 1.03, letterSpacing: "-0.03em",
-            marginBottom: "10px", maxWidth: "1000px",
+          {/* H1 — dancing script */}
+          <h1 className="dancing-h1" style={{
+            fontSize: mob ? "clamp(2.8rem,12vw,4.5rem)" : "clamp(5rem,9vw,8.5rem)",
+            marginBottom: "16px",
+            maxWidth: "1000px",
             opacity: heroVis ? 1 : 0,
             animation: heroVis ? `_rtl 440ms ${E} 0.12s both` : "none",
           }}>
-            Academic Foundation
+            Academic<br />
+            <span style={{ fontWeight: 700, fontSize: "0.72em", opacity: 0.55 }}>
+              Foundation
+            </span>
           </h1>
 
-          {/* Gradient bar */}
+          {/* Monochrome bar */}
           <div style={{
-            height: "3px", width: mob ? "120px" : "200px",
-            background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`,
+            height: "2px", width: mob ? "80px" : "140px",
+            background: "rgba(255,255,255,0.35)",
             borderRadius: "2px", marginBottom: mob ? "1.25rem" : "3rem",
             transformOrigin: "left",
             transform: heroVis ? "scaleX(1)" : "scaleX(0)",
@@ -1066,9 +1111,10 @@ export default function Education() {
 
           {/* Subtitle */}
           <p style={{
-            fontSize: mob ? "0.875rem" : "1.12rem", color: C.muted2, lineHeight: 1.75,
-            maxWidth: mob ? "100%" : "640px",
+            fontSize: mob ? "0.875rem" : "1.05rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.75,
+            maxWidth: mob ? "100%" : "580px",
             marginBottom: mob ? "1.75rem" : "4rem",
+            fontFamily: "'DM Sans', sans-serif",
             opacity: heroVis ? 1 : 0,
             animation: heroVis ? `_rtl 440ms ${E} 0.22s both` : "none",
           }}>
@@ -1093,13 +1139,14 @@ export default function Education() {
                 animation: heroVis ? `_rtl 440ms ${E} ${0.28 + i * 0.06}s both` : "none",
               }}>
                 <div style={{
-                  fontFamily: "'Cormorant',Georgia,serif",
-                  fontSize: mob ? "1.9rem" : "3rem", fontWeight: 700,
-                  color: C.text, lineHeight: 1, marginBottom: "4px", letterSpacing: "-0.03em",
+                  fontFamily: "'Dancing Script',cursive",
+                  fontWeight: 900,
+                  fontSize: mob ? "2rem" : "3.4rem",
+                  color: "#FFFFFF", lineHeight: 1, marginBottom: "4px", letterSpacing: "-0.03em",
                 }}>
                   <Counter value={s.value} triggered={heroVis} />
                 </div>
-                <div style={{ fontSize: mob ? "9px" : "12px", color: C.muted, fontWeight: 500, letterSpacing: "0.02em" }}>
+                <div style={{ fontSize: mob ? "9px" : "11px", color: C.muted, fontWeight: 500, letterSpacing: "0.03em", fontFamily: "'DM Mono',monospace", textTransform: "uppercase" }}>
                   {s.label}
                 </div>
               </div>
@@ -1128,11 +1175,9 @@ export default function Education() {
             animation: sumVis ? `_rtl 440ms ${E} 0s both` : "none",
           }}>
             <ML style={{ marginBottom: "10px" }}>Full Academic Profile</ML>
-            <h2 style={{
-              fontFamily: "'Cormorant',Georgia,serif",
-              fontSize: mob ? "clamp(1.5rem,5vw,2.2rem)" : "clamp(1.75rem,4vw,2.6rem)",
-              fontWeight: 700, color: C.text,
-              letterSpacing: "-0.025em", marginBottom: "7px",
+            <h2 className="dancing-h2" style={{
+              fontSize: mob ? "clamp(2rem,7vw,3rem)" : "clamp(2.8rem,5vw,4.5rem)",
+              marginBottom: "10px",
               display: "flex", alignItems: "center",
             }}>
               Aggregate Overview<TermCursor />
@@ -1148,14 +1193,14 @@ export default function Education() {
             gap: mob ? "0.65rem" : "1.25rem",
           }}>
             {[
-              { value: "7.9",      label: "B.Tech CGPA",          detail: "AI & Data Science · Ramachandra College of Engineering", accent: C.accent  },
-              { value: "8+",       label: "Projects Shipped",      detail: "Production apps and ML pipelines — not academic prototypes", accent: C.purple  },
-              { value: "3",        label: "Industry Internships",  detail: "Full-stack · Computer Vision · Data Science",             accent: C.green   },
-              { value: "20+",      label: "Certifications",        detail: "AWS · Google AI · IBM · Microsoft — applied in projects",  accent: C.accent  },
-              { value: "9.5",      label: "SSC GPA",               detail: "100/100 in Mathematics · top academic cohort",            accent: C.green   },
-              { value: "1st",      label: "National Hackathon",    detail: "1st place among 200+ teams · ₹50,000 prize",             accent: C.purple  },
+              { value: "7.9",      label: "B.Tech CGPA",          detail: "AI & Data Science · Ramachandra College of Engineering" },
+              { value: "8+",       label: "Projects Shipped",      detail: "Production apps and ML pipelines — not academic prototypes" },
+              { value: "3",        label: "Industry Internships",  detail: "Full-stack · Computer Vision · Data Science" },
+              { value: "20+",      label: "Certifications",        detail: "AWS · Google AI · IBM · Microsoft — applied in projects" },
+              { value: "9.5",      label: "SSC GPA",               detail: "100/100 in Mathematics · top academic cohort" },
+              { value: "1st",      label: "National Hackathon",    detail: "1st place among 200+ teams · ₹50,000 prize" },
             ].map((s, i) => (
-              <SumCard key={i} stat={s} accent={s.accent} vis={sumVis} delay={i * 0.06} />
+              <SumCard key={i} stat={s} vis={sumVis} delay={i * 0.06} />
             ))}
           </div>
         </section>
@@ -1173,10 +1218,10 @@ export default function Education() {
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div style={{
-                width: "5px", height: "5px", borderRadius: "50%", background: C.green,
+                width: "5px", height: "5px", borderRadius: "50%", background: "#FFFFFF",
                 animation: "_pulse 2.2s ease-in-out infinite",
               }} />
-              <span style={{ fontFamily: "'DM Mono',monospace", fontSize: mob ? "10px" : "12.5px", color: C.muted2 }}>
+              <span style={{ fontFamily: "'DM Mono',monospace", fontSize: mob ? "10px" : "12.5px", color: "rgba(255,255,255,0.65)" }}>
                 All certificates independently verifiable
               </span>
             </div>
@@ -1187,7 +1232,7 @@ export default function Education() {
                 { label: "LinkedIn", href: "https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" },
                 { label: "GitHub",   href: "https://github.com/bhagavan444" },
               ].map(l => (
-                <MagBtn key={l.label} href={l.href} accent={C.accent}
+                <MagBtn key={l.label} href={l.href}
                   extraStyle={{ padding: "6px 12px", fontSize: "11px", minHeight: "34px" }}>
                   {l.label}
                 </MagBtn>

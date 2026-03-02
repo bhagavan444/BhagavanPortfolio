@@ -1,1045 +1,1050 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ExternalLink, CheckCircle2, Calendar, Award, Code2, Cloud, Brain, Database, Terminal, Shield, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
 
-/* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS — WHITE BACKGROUND PREMIUM
-═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS — Pure Black & White Architectural System
+   (identical to Skills page)
+═══════════════════════════════════════════════════════ */
 const C = {
-  bg: "#ffffff",
-  surface: "#f9fafb",
-  surface2: "#f3f4f6",
-  surface3: "#e5e7eb",
-  border: "rgba(0,0,0,0.06)",
-  border2: "rgba(0,0,0,0.10)",
-  border3: "rgba(0,0,0,0.14)",
-  text: "#0f172a",
-  muted: "#64748b",
-  muted2: "#475569",
-  accent: "#4f7fff",
-  accentDim: "rgba(79,127,255,0.08)",
-  green: "#10b981",
-  greenDim: "rgba(16,185,129,0.08)",
-  purple: "#a78bfa",
-  purpleDim: "rgba(167,139,250,0.08)",
-  amber: "#f59e0b",
-  amberDim: "rgba(245,158,11,0.08)",
-  rose: "#f43f5e",
-  roseDim: "rgba(244,63,94,0.08)",
+  bg:        "#0B0B0B",
+  surface:   "#111111",
+  surfaceHi: "#151515",
+  border:    "rgba(255,255,255,0.06)",
+  border2:   "rgba(255,255,255,0.12)",
+  text:      "#FFFFFF",
+  muted:     "rgba(255,255,255,0.55)",
+  muted2:    "rgba(255,255,255,0.40)",
+  accent:    "#FFFFFF",
+  accentSub: "rgba(255,255,255,0.04)",
+  accentLine:"rgba(255,255,255,0.08)",
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   SKILL ICON MAPPING (DevIcons with colored variants)
-═══════════════════════════════════════════════════════════════ */
-const skillIcons = {
-  "React": "devicon-react-original colored",
-  "Node.js": "devicon-nodejs-plain colored",
-  "MongoDB": "devicon-mongodb-plain colored",
-  "Express": "devicon-express-original",
-  "Hooks": "devicon-react-original colored",
-  "Context API": "devicon-react-original colored",
-  "Performance": "devicon-react-original colored",
-  "ES6+": "devicon-javascript-plain colored",
-  "Async/Await": "devicon-javascript-plain colored",
-  "Closures": "devicon-javascript-plain colored",
-  "Prototypes": "devicon-javascript-plain colored",
-  "Django": "devicon-django-plain colored",
-  "ORM": "devicon-django-plain colored",
-  "REST API": "devicon-fastapi-plain colored",
-  "PostgreSQL": "devicon-postgresql-plain colored",
-  "HTML5": "devicon-html5-plain colored",
-  "Accessibility": "devicon-html5-plain colored",
-  "SEO": "devicon-html5-plain colored",
-  "Web Standards": "devicon-html5-plain colored",
-  "Flexbox": "devicon-css3-plain colored",
-  "Grid": "devicon-css3-plain colored",
-  "Animations": "devicon-css3-plain colored",
-  "Responsive Design": "devicon-css3-plain colored",
-  "AWS": "devicon-amazonwebservices-plain-wordmark colored",
-  "EC2": "devicon-amazonwebservices-plain-wordmark colored",
-  "S3": "devicon-amazonwebservices-plain-wordmark colored",
-  "Lambda": "devicon-amazonwebservices-plain-wordmark colored",
-  "Azure": "devicon-azure-plain colored",
-  "VMs": "devicon-azure-plain colored",
-  "Storage": "devicon-azure-plain colored",
-  "Networking": "devicon-azure-plain colored",
-  "Distributed Systems": "devicon-kubernetes-plain colored",
-  "Scalability": "devicon-kubernetes-plain colored",
-  "Fault Tolerance": "devicon-kubernetes-plain colored",
-  "Jenkins": "devicon-jenkins-plain colored",
-  "Docker": "devicon-docker-plain colored",
-  "Git": "devicon-git-plain colored",
-  "Automation": "devicon-jenkins-plain colored",
-  "Kubernetes": "devicon-kubernetes-plain colored",
-  "Model Deployment": "devicon-kubernetes-plain colored",
-  "Monitoring": "devicon-prometheus-original colored",
-  "Python": "devicon-python-plain colored",
-  "Scikit-learn": "devicon-scikitlearn-plain colored",
-  "TensorFlow": "devicon-tensorflow-original colored",
-  "Keras": "devicon-keras-plain colored",
-  "Model Tuning": "devicon-python-plain colored",
-  "Neural Networks": "devicon-tensorflow-original colored",
-  "CNN": "devicon-tensorflow-original colored",
-  "RNN": "devicon-tensorflow-original colored",
-  "Transfer Learning": "devicon-tensorflow-original colored",
-  "GPT": "devicon-openai-plain",
-  "Prompt Engineering": "devicon-openai-plain",
-  "Fine-tuning": "devicon-openai-plain",
-  "Embeddings": "devicon-openai-plain",
-  "OOP": "devicon-python-plain colored",
-  "Data Structures": "devicon-python-plain colored",
-  "Algorithms": "devicon-python-plain colored",
-  "Clean Code": "devicon-python-plain colored",
-  "Java": "devicon-java-plain colored",
-  "Spring Boot": "devicon-spring-plain colored",
-  "Maven": "devicon-maven-plain colored",
-  "Microservices": "devicon-spring-plain colored",
-  "Problem Solving": "devicon-cplusplus-plain colored",
-  "Optimization": "devicon-cplusplus-plain colored",
-  "Design Patterns": "devicon-cplusplus-plain colored",
-  "R": "devicon-r-plain colored",
-  "Statistical Computing": "devicon-r-plain colored",
-  "ggplot2": "devicon-r-plain colored",
-  "Data Viz": "devicon-r-plain colored",
-  "Pandas": "devicon-pandas-plain colored",
-  "NumPy": "devicon-numpy-plain colored",
-  "Data Analysis": "devicon-pandas-plain colored",
+const E  = "cubic-bezier(0.16, 1, 0.3, 1)";
+const MS = { fast:"130ms", base:"190ms", slow:"320ms", reveal:"420ms" };
+
+/* ═══════════════════════════════════════════════════════
+   DEVICON CDN
+═══════════════════════════════════════════════════════ */
+const IB = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
+const ICONS = {
+  "React":           `${IB}/react/react-original.svg`,
+  "Node.js":         `${IB}/nodejs/nodejs-original.svg`,
+  "MongoDB":         `${IB}/mongodb/mongodb-original.svg`,
+  "Express":         `${IB}/express/express-original.svg`,
+  "Hooks":           `${IB}/react/react-original.svg`,
+  "Context API":     `${IB}/react/react-original.svg`,
+  "Performance":     `${IB}/react/react-original.svg`,
+  "ES6+":            `${IB}/javascript/javascript-original.svg`,
+  "Async/Await":     `${IB}/javascript/javascript-original.svg`,
+  "Closures":        `${IB}/javascript/javascript-original.svg`,
+  "Prototypes":      `${IB}/javascript/javascript-original.svg`,
+  "Django":          `${IB}/django/django-plain.svg`,
+  "ORM":             `${IB}/django/django-plain.svg`,
+  "REST API":        `${IB}/fastapi/fastapi-original.svg`,
+  "PostgreSQL":      `${IB}/postgresql/postgresql-original.svg`,
+  "HTML5":           `${IB}/html5/html5-original.svg`,
+  "Accessibility":   `${IB}/html5/html5-original.svg`,
+  "SEO":             `${IB}/html5/html5-original.svg`,
+  "Web Standards":   `${IB}/html5/html5-original.svg`,
+  "Flexbox":         `${IB}/css3/css3-original.svg`,
+  "Grid":            `${IB}/css3/css3-original.svg`,
+  "Animations":      `${IB}/css3/css3-original.svg`,
+  "Responsive Design":`${IB}/css3/css3-original.svg`,
+  "AWS":             `${IB}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
+  "EC2":             `${IB}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
+  "S3":              `${IB}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
+  "Lambda":          `${IB}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
+  "Azure":           `${IB}/azure/azure-original.svg`,
+  "VMs":             `${IB}/azure/azure-original.svg`,
+  "Storage":         `${IB}/azure/azure-original.svg`,
+  "Networking":      `${IB}/azure/azure-original.svg`,
+  "Jenkins":         `${IB}/jenkins/jenkins-original.svg`,
+  "Docker":          `${IB}/docker/docker-original.svg`,
+  "Git":             `${IB}/git/git-original.svg`,
+  "Automation":      `${IB}/jenkins/jenkins-original.svg`,
+  "Kubernetes":      `${IB}/kubernetes/kubernetes-original.svg`,
+  "Model Deployment":`${IB}/kubernetes/kubernetes-original.svg`,
+  "Monitoring":      `${IB}/prometheus/prometheus-original.svg`,
+  "Python":          `${IB}/python/python-original.svg`,
+  "Scikit-learn":    `${IB}/scikitlearn/scikitlearn-original.svg`,
+  "TensorFlow":      `${IB}/tensorflow/tensorflow-original.svg`,
+  "Keras":           `${IB}/keras/keras-original.svg`,
+  "Model Tuning":    `${IB}/python/python-original.svg`,
+  "Neural Networks": `${IB}/tensorflow/tensorflow-original.svg`,
+  "CNN":             `${IB}/tensorflow/tensorflow-original.svg`,
+  "RNN":             `${IB}/tensorflow/tensorflow-original.svg`,
+  "Transfer Learning":`${IB}/tensorflow/tensorflow-original.svg`,
+  "GPT":             `${IB}/openal/openal-plain.svg`,
+  "Prompt Engineering":`${IB}/python/python-original.svg`,
+  "Fine-tuning":     `${IB}/python/python-original.svg`,
+  "Embeddings":      `${IB}/python/python-original.svg`,
+  "OOP":             `${IB}/java/java-original.svg`,
+  "Data Structures": `${IB}/python/python-original.svg`,
+  "Algorithms":      `${IB}/python/python-original.svg`,
+  "Clean Code":      `${IB}/python/python-original.svg`,
+  "Java":            `${IB}/java/java-original.svg`,
+  "Spring Boot":     `${IB}/spring/spring-original.svg`,
+  "Maven":           `${IB}/maven/maven-original.svg`,
+  "Microservices":   `${IB}/spring/spring-original.svg`,
+  "Problem Solving": `${IB}/cplusplus/cplusplus-original.svg`,
+  "Optimization":    `${IB}/cplusplus/cplusplus-original.svg`,
+  "Design Patterns": `${IB}/cplusplus/cplusplus-original.svg`,
+  "R":               `${IB}/r/r-original.svg`,
+  "Statistical Computing":`${IB}/r/r-original.svg`,
+  "ggplot2":         `${IB}/r/r-original.svg`,
+  "Data Viz":        `${IB}/r/r-original.svg`,
+  "Pandas":          `${IB}/pandas/pandas-original.svg`,
+  "NumPy":           `${IB}/numpy/numpy-original.svg`,
+  "Data Analysis":   `${IB}/pandas/pandas-original.svg`,
+  "Distributed Systems":`${IB}/kubernetes/kubernetes-original.svg`,
+  "Scalability":     `${IB}/kubernetes/kubernetes-original.svg`,
+  "Fault Tolerance": `${IB}/kubernetes/kubernetes-original.svg`,
+  "JavaScript":      `${IB}/javascript/javascript-original.svg`,
+  "TypeScript":      `${IB}/typescript/typescript-original.svg`,
+  "Git / GitHub":    `${IB}/github/github-original.svg`,
+  "VS Code":         `${IB}/vscode/vscode-original.svg`,
+  "Postman":         `${IB}/postman/postman-original.svg`,
+  "Jupyter Notebook":`${IB}/jupyter/jupyter-original.svg`,
+  "Figma":           `${IB}/figma/figma-original.svg`,
+  "Vercel":          `${IB}/vercel/vercel-original.svg`,
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   DATA  —  rewritten with honest, grounded copy
-═══════════════════════════════════════════════════════════════ */
-const certificationsData = {
-  featured: [
-    {
-      id: "fullstack-web",
-      title: "Full Stack Web Development",
-      issuer: "Tech Academy",
-      year: "2024",
-      duration: "6 months",
-      link: "https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view",
-      skills: ["React", "Node.js", "MongoDB", "Express"],
-      impact: {
-        metric: "MERN Stack",
-        label: "Practical Training",
-        detail: "Covered full-stack fundamentals through guided projects. Concepts were later applied while building the ATS Resume Builder.",
-      },
-      appliedIn: "Provided foundational exposure applied in building authentication flows and REST APIs for personal projects.",
-      verified: true,
-      accent: C.accent,
-      accentDim: C.accentDim,
-    },
-    {
-      id: "ml-python",
-      title: "Machine Learning with Python",
-      issuer: "ML Academy",
-      year: "2024",
-      duration: "7 months",
-      link: "https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view",
-      skills: ["Python", "Scikit-learn", "TensorFlow", "Keras"],
-      impact: {
-        metric: "Core ML",
-        label: "Concepts Covered",
-        detail: "Introduced supervised and unsupervised learning methods. Concepts were practiced on small datasets including text classification tasks.",
-      },
-      appliedIn: "Provided conceptual grounding for projects involving classification pipelines and basic NLP tasks.",
-      verified: true,
-      accent: C.purple,
-      accentDim: C.purpleDim,
-    },
-    {
-      id: "aws-cloud",
-      title: "AWS Cloud Practitioner",
-      issuer: "Amazon Web Services",
-      year: "2024",
-      duration: "3 months",
-      link: "https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view",
-      skills: ["AWS", "EC2", "S3", "Lambda"],
-      impact: {
-        metric: "Cloud Basics",
-        label: "Practitioner Level",
-        detail: "Entry-level coverage of AWS services including compute, storage, and networking fundamentals.",
-      },
-      appliedIn: "Foundational understanding used when deploying projects to cloud environments during coursework.",
-      verified: true,
-      accent: C.green,
-      accentDim: C.greenDim,
-    },
-  ],
+/* ═══════════════════════════════════════════════════════
+   GLOBAL CSS
+═══════════════════════════════════════════════════════ */
+const GLOBAL = `
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
 
-  domains: {
-    "Web Development": {
-      icon: Code2,
-      accent: C.accent,
-      certs: [
-        {
-          title: "Full Stack Web Development",
-          issuer: "Tech Academy",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view",
-          skills: ["React", "Node.js", "MongoDB", "Express"],
-          appliedIn: "Concepts referenced while building the Resume Builder and AI Chat Workspace projects.",
-        },
-        {
-          title: "React Development",
-          issuer: "Meta",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1yy4OpoVRAX2ZGVPUH9VmorLc2kiXalYf/view",
-          skills: ["React", "Hooks", "Context API", "Performance"],
-          appliedIn: "Practical exposure to component architecture and state management patterns.",
-        },
-        {
-          title: "JavaScript (Advanced)",
-          issuer: "JS Academy",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1zrscfW3cyWq59mMYsK399CRjgEjA-zbd/view",
-          skills: ["ES6+", "Async/Await", "Closures", "Prototypes"],
-          appliedIn: "Deepened understanding of core JS concepts used across all frontend work.",
-        },
-        {
-          title: "Django Framework",
-          issuer: "Django Foundation",
-          year: "2023",
-          link: "https://drive.google.com/file/d/1QdiX2u-ARCZCEdEmlu4l3ChnQT-SmhKc/view",
-          skills: ["Django", "ORM", "REST API", "PostgreSQL"],
-          appliedIn: "Covered Django ORM and REST API basics; applied in backend coursework projects.",
-        },
-        {
-          title: "HTML5 & Semantic Markup",
-          issuer: "W3C",
-          year: "2023",
-          link: "https://drive.google.com/file/d/1NYtaxfhQUfxaL4n6Vv6gJSEQMySy1gqr/view",
-          skills: ["HTML5", "Accessibility", "SEO", "Web Standards"],
-          appliedIn: "Focused on semantic structure, accessibility basics, and web standards compliance.",
-        },
-        {
-          title: "CSS3 & Modern Layouts",
-          issuer: "CSS Academy",
-          year: "2023",
-          link: "https://drive.google.com/file/d/1iC65FGw0MSmjeKIivdnrZVm3GfXOKVvE/view",
-          skills: ["Flexbox", "Grid", "Animations", "Responsive Design"],
-          appliedIn: "Covered Flexbox, Grid, and responsive layout techniques used in personal projects.",
-        },
-      ],
-    },
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; overflow-x:hidden; }
+  body {
+    font-family:'DM Sans', system-ui, sans-serif;
+    background:#0B0B0B;
+    color:#FFFFFF;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  a, button, [data-magnetic] { cursor:none; }
+  @keyframes _cursorIn {
+    from { opacity:0; transform:translate(-50%,-50%) scale(0.2); }
+    to   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+  }
+  ::selection { background:rgba(255,255,255,0.12); }
+  ::-webkit-scrollbar { width:2px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.25); border-radius:2px; }
 
-    "Cloud & DevOps": {
-      icon: Cloud,
-      accent: C.green,
-      certs: [
-        {
-          title: "AWS Cloud Practitioner",
-          issuer: "Amazon Web Services",
-          year: "2024",
-          link: "https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view",
-          skills: ["AWS", "EC2", "S3", "Lambda"],
-          appliedIn: "Entry-level coverage of AWS core services. Concepts referenced when deploying personal projects.",
-        },
-        {
-          title: "Azure Fundamentals",
-          issuer: "Microsoft",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1ygiQILNjBAfcZse27n_px1_tgupajlWM/view",
-          skills: ["Azure", "VMs", "Storage", "Networking"],
-          appliedIn: "Introduced Azure compute, storage, and basic networking concepts.",
-        },
-        {
-          title: "Cloud Computing",
-          issuer: "Cloud Academy",
-          year: "2023",
-          link: "https://drive.google.com/file/d/13gTq6yHm8jCOvqHKRjPpGw4hU4p7kovX/view",
-          skills: ["Distributed Systems", "Scalability", "Fault Tolerance"],
-          appliedIn: "Covered distributed systems theory and foundational cloud architecture principles.",
-        },
-        {
-          title: "CI/CD Pipelines",
-          issuer: "DevOps Academy",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1xccQv29hZCWCvr-JnM-nEfE8meESrWIr/view",
-          skills: ["Jenkins", "Docker", "Git", "Automation"],
-          appliedIn: "Introduced CI/CD concepts using Jenkins and Docker in guided lab exercises.",
-        },
-        {
-          title: "MLOps",
-          issuer: "MLOps Institute",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1BmvjGknXs-K5wOfepFcl_CuU8DsFBApP/view",
-          skills: ["Kubernetes", "Docker", "Model Deployment", "Monitoring"],
-          appliedIn: "Covered basics of packaging and deploying ML models using Docker and Kubernetes.",
-        },
-      ],
-    },
+  @keyframes _rtl  { from{opacity:0;transform:translateX(48px);} to{opacity:1;transform:translateX(0);} }
+  @keyframes _ltr  { from{opacity:0;transform:translateX(-48px);} to{opacity:1;transform:translateX(0);} }
+  @keyframes _up   { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes _fade { from{opacity:0;} to{opacity:1;} }
+  @keyframes _si   { from{opacity:0;transform:scale(0.96);} to{opacity:1;transform:scale(1);} }
+  @keyframes _lx   { from{transform:scaleX(0);} to{transform:scaleX(1);} }
+  @keyframes _ly   { from{transform:scaleY(0);} to{transform:scaleY(1);} }
+  @keyframes _tagPop { from{opacity:0;transform:translateX(14px) scale(0.92);} to{opacity:1;transform:translateX(0) scale(1);} }
+  @keyframes _iconIn { from{opacity:0;transform:translateX(10px) scale(0.78);} to{opacity:1;transform:translateX(0) scale(1);} }
+  @keyframes _pulse  { 0%,100%{opacity:0.3;transform:scale(1);} 50%{opacity:1;transform:scale(1.35);} }
+  @keyframes _blink  { 0%,100%{opacity:1;} 50%{opacity:0;} }
+  @keyframes _countUp{ from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes _marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @keyframes _expand { 0%{opacity:0;transform:scaleY(0.94) translateY(-8px);} 100%{opacity:1;transform:scaleY(1) translateY(0);} }
 
-    "AI & Machine Learning": {
-      icon: Brain,
-      accent: C.purple,
-      certs: [
-        {
-          title: "Machine Learning with Python",
-          issuer: "ML Academy",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view",
-          skills: ["Scikit-learn", "TensorFlow", "Keras", "Model Tuning"],
-          appliedIn: "Practical exposure to supervised learning and model evaluation. Applied in classification projects.",
-        },
-        {
-          title: "Deep Learning Specialization",
-          issuer: "AI Research Lab",
-          year: "2024",
-          link: "https://drive.google.com/file/d/19vV6Nyq8A418eDvQ2ezrek4pqyUBb6X6/view",
-          skills: ["Neural Networks", "CNN", "RNN", "Transfer Learning"],
-          appliedIn: "Introduced neural network fundamentals; concepts applied in image and text classification exercises.",
-        },
-        {
-          title: "Large Language Models",
-          issuer: "OpenAI Institute",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1CyN6_Bm3c68R0NkQWWTOgNAXTv27In_s/view",
-          skills: ["GPT", "Prompt Engineering", "Fine-tuning", "Embeddings"],
-          appliedIn: "Covered LLM fundamentals including prompting, embeddings, and basic fine-tuning concepts.",
-        },
-      ],
-    },
+  .di {
+    transition: transform 130ms cubic-bezier(0.16,1,0.3,1), filter 130ms cubic-bezier(0.16,1,0.3,1);
+    cursor:default;
+  }
+  .di:hover {
+    transform: scale(1.25) rotate(-6deg);
+    filter: drop-shadow(0 2px 8px rgba(255,255,255,0.18));
+  }
+  .snav-btn:hover .snav-line { width:22px !important; }
 
-    "Programming & Foundations": {
-      icon: Terminal,
-      accent: C.amber,
-      certs: [
-        {
-          title: "Python Programming",
-          issuer: "Python Institute",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1rZNRLvle0r_gUqzDjxR3_k6yApSyMxz6/view",
-          skills: ["OOP", "Data Structures", "Algorithms", "Clean Code"],
-          appliedIn: "Covered OOP, core data structures, and algorithmic problem solving in Python.",
-        },
-        {
-          title: "Java Programming",
-          issuer: "Oracle",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1esxKzHNp_cuB7G87hs2MDeMpr2LKXucM/view",
-          skills: ["Java", "Spring Boot", "Maven", "Microservices"],
-          appliedIn: "Introduced Java fundamentals and Spring Boot basics through guided exercises.",
-        },
-        {
-          title: "Algorithmic Thinking",
-          issuer: "Programming Institute",
-          year: "2023",
-          link: "https://drive.google.com/file/d/1SwQGo_zGZIGcTzzlMApXZU0Wt5ScyWXx/view",
-          skills: ["Algorithms", "Problem Solving", "Optimization", "Design Patterns"],
-          appliedIn: "Focused on problem decomposition, time complexity, and common design patterns.",
-        },
-        {
-          title: "R Programming",
-          issuer: "R Consortium",
-          year: "2023",
-          link: "https://drive.google.com/file/d/1vFclrkOAe3GaA8brE3c5Sjd0k5RMXwr-/view",
-          skills: ["R", "Statistical Computing", "ggplot2", "Data Viz"],
-          appliedIn: "Covered R basics, statistical computing, and data visualization using ggplot2.",
-        },
-      ],
-    },
+  @media (prefers-reduced-motion:reduce) {
+    *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+    .marquee-inner { animation:none !important; }
+  }
+  @media (max-width:1024px) {
+    .cert-grid    { grid-template-columns:1fr !important; }
+    .hero-pillars { grid-template-columns:1fr 1fr !important; }
+    .stats-grid   { grid-template-columns:repeat(2,1fr) !important; }
+    .domain-grid  { grid-template-columns:1fr 1fr !important; }
+  }
+  @media (max-width:768px) {
+    .snav         { display:none !important; }
+    .cert-grid, .hero-pillars, .stats-grid, .domain-grid { grid-template-columns:1fr !important; }
+    .footer-row   { flex-direction:column !important; }
+    .fgrid        { grid-template-columns:1fr 1fr !important; }
+  }
+`;
 
-    "Data Science": {
-      icon: Database,
-      accent: "#6366f1",
-      certs: [
-        {
-          title: "Data Science",
-          issuer: "Data Science Institute",
-          year: "2024",
-          link: "https://drive.google.com/file/d/1JENKEIpZkc1Mvro1mmRVyQr5u8fdUXqv/view",
-          skills: ["Python", "Pandas", "NumPy", "Data Analysis"],
-          appliedIn: "Practical exposure to data wrangling and exploratory analysis using Pandas and NumPy.",
-        },
-      ],
+/* ═══════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════ */
+const TICKER_ITEMS = [
+  "React","Node.js","Python","TensorFlow","MongoDB","Django",
+  "Docker","Kubernetes","AWS","Azure","Scikit-learn","Java",
+  "Spring Boot","PostgreSQL","HTML5","CSS3","JavaScript","Git",
+  "Pandas","NumPy","Keras","Jenkins","R","Express",
+];
+
+const domainsData = [
+  {
+    id: "web",
+    number: "01",
+    domain: "Web Development",
+    outcome: "Full-stack fundamentals through guided projects — MERN stack, Django, React patterns, and semantic front-end.",
+    context: "Tech Academy · Meta · JS Academy · Django Foundation · W3C · CSS Academy",
+    period: "2023–2024",
+    metric: { value: 6, suffix: "", label: "Certifications" },
+    tech: {
+      "Frontend":   ["React","HTML5","Flexbox","Animations"],
+      "JavaScript": ["ES6+","Async/Await","Closures","Prototypes"],
+      "Backend":    ["Django","ORM","REST API","PostgreSQL"],
     },
+    certs: [
+      { title:"Full Stack Web Development",    issuer:"Tech Academy",     year:"2024", link:"https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view", note:"Concepts applied in ATS Resume Builder & AI Chat Workspace." },
+      { title:"React Development",             issuer:"Meta",             year:"2024", link:"https://drive.google.com/file/d/1yy4OpoVRAX2ZGVPUH9VmorLc2kiXalYf/view", note:"Hooks, Context API, component architecture used across all React projects." },
+      { title:"JavaScript (Advanced)",         issuer:"JS Academy",       year:"2024", link:"https://drive.google.com/file/d/1zrscfW3cyWq59mMYsK399CRjgEjA-zbd/view", note:"Core JS concepts used across all frontend work." },
+      { title:"Django Framework",              issuer:"Django Foundation", year:"2023", link:"https://drive.google.com/file/d/1QdiX2u-ARCZCEdEmlu4l3ChnQT-SmhKc/view", note:"Applied in backend coursework projects." },
+      { title:"HTML5 & Semantic Markup",       issuer:"W3C",              year:"2023", link:"https://drive.google.com/file/d/1NYtaxfhQUfxaL4n6Vv6gJSEQMySy1gqr/view", note:"Semantic structure and accessibility basics." },
+      { title:"CSS3 & Modern Layouts",         issuer:"CSS Academy",      year:"2023", link:"https://drive.google.com/file/d/1iC65FGw0MSmjeKIivdnrZVm3GfXOKVvE/view", note:"Flexbox, Grid, responsive layout in personal projects." },
+    ],
   },
-};
+  {
+    id: "cloud",
+    number: "02",
+    domain: "Cloud & DevOps",
+    outcome: "Entry-level AWS and Azure coverage plus CI/CD and MLOps fundamentals — cloud compute, storage, and deployment pipelines.",
+    context: "Amazon Web Services · Microsoft · Cloud Academy · DevOps Academy · MLOps Institute",
+    period: "2023–2024",
+    metric: { value: 5, suffix: "", label: "Certifications" },
+    tech: {
+      "AWS":    ["AWS","EC2","S3","Lambda"],
+      "Azure":  ["Azure","VMs","Storage","Networking"],
+      "DevOps": ["Jenkins","Docker","Git","Automation"],
+    },
+    certs: [
+      { title:"AWS Cloud Practitioner", issuer:"Amazon Web Services", year:"2024", link:"https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view", note:"Entry-level AWS core services; concepts referenced when deploying personal projects." },
+      { title:"Azure Fundamentals",     issuer:"Microsoft",           year:"2024", link:"https://drive.google.com/file/d/1ygiQILNjBAfcZse27n_px1_tgupajlWM/view", note:"Azure compute, storage, and basic networking concepts." },
+      { title:"Cloud Computing",        issuer:"Cloud Academy",       year:"2023", link:"https://drive.google.com/file/d/13gTq6yHm8jCOvqHKRjPpGw4hU4p7kovX/view", note:"Distributed systems theory and foundational cloud architecture." },
+      { title:"CI/CD Pipelines",        issuer:"DevOps Academy",      year:"2024", link:"https://drive.google.com/file/d/1xccQv29hZCWCvr-JnM-nEfE8meESrWIr/view", note:"CI/CD concepts using Jenkins and Docker in guided lab exercises." },
+      { title:"MLOps",                  issuer:"MLOps Institute",      year:"2024", link:"https://drive.google.com/file/d/1BmvjGknXs-K5wOfepFcl_CuU8DsFBApP/view", note:"Packaging and deploying ML models with Docker and Kubernetes." },
+    ],
+  },
+  {
+    id: "ai",
+    number: "03",
+    domain: "AI & Machine Learning",
+    outcome: "Supervised learning, neural networks, and LLM fundamentals — models trained and evaluated in classification projects.",
+    context: "ML Academy · AI Research Lab · OpenAI Institute",
+    period: "2024",
+    metric: { value: 3, suffix: "", label: "Certifications" },
+    tech: {
+      "Training":    ["Python","Scikit-learn","TensorFlow","Keras"],
+      "Deep Learning":["Neural Networks","CNN","RNN","Transfer Learning"],
+      "LLMs":        ["GPT","Prompt Engineering","Fine-tuning","Embeddings"],
+    },
+    certs: [
+      { title:"Machine Learning with Python",  issuer:"ML Academy",        year:"2024", link:"https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view", note:"Applied in Fake News Detector and Career Recommender classification projects." },
+      { title:"Deep Learning Specialization",  issuer:"AI Research Lab",   year:"2024", link:"https://drive.google.com/file/d/19vV6Nyq8A418eDvQ2ezrek4pqyUBb6X6/view", note:"Neural network fundamentals applied in image and text classification exercises." },
+      { title:"Large Language Models",         issuer:"OpenAI Institute",  year:"2024", link:"https://drive.google.com/file/d/1CyN6_Bm3c68R0NkQWWTOgNAXTv27In_s/view", note:"LLM fundamentals including prompting, embeddings, and basic fine-tuning." },
+    ],
+  },
+  {
+    id: "foundations",
+    number: "04",
+    domain: "Programming & Foundations",
+    outcome: "OOP, algorithmic thinking, and multi-language fluency across Python, Java, and R with 100+ practice problems solved.",
+    context: "Python Institute · Oracle · Programming Institute · R Consortium",
+    period: "2023–2024",
+    metric: { value: 4, suffix: "", label: "Certifications" },
+    tech: {
+      "Python": ["OOP","Data Structures","Algorithms","Clean Code"],
+      "Java":   ["Java","Spring Boot","Maven","Microservices"],
+      "Other":  ["R","Statistical Computing","Problem Solving","Optimization"],
+    },
+    certs: [
+      { title:"Python Programming",    issuer:"Python Institute",    year:"2024", link:"https://drive.google.com/file/d/1rZNRLvle0r_gUqzDjxR3_k6yApSyMxz6/view", note:"OOP, core data structures, and algorithmic problem solving in Python." },
+      { title:"Java Programming",      issuer:"Oracle",              year:"2024", link:"https://drive.google.com/file/d/1esxKzHNp_cuB7G87hs2MDeMpr2LKXucM/view", note:"Java fundamentals and Spring Boot basics through guided exercises." },
+      { title:"Algorithmic Thinking",  issuer:"Programming Institute",year:"2023", link:"https://drive.google.com/file/d/1SwQGo_zGZIGcTzzlMApXZU0Wt5ScyWXx/view", note:"Problem decomposition, time complexity, and common design patterns." },
+      { title:"R Programming",         issuer:"R Consortium",        year:"2023", link:"https://drive.google.com/file/d/1vFclrkOAe3GaA8brE3c5Sjd0k5RMXwr-/view", note:"R basics, statistical computing, and data visualization via ggplot2." },
+    ],
+  },
+  {
+    id: "data",
+    number: "05",
+    domain: "Data Science",
+    outcome: "Practical data wrangling and exploratory analysis using Pandas and NumPy on real datasets.",
+    context: "Data Science Institute",
+    period: "2024",
+    metric: { value: 1, suffix: "", label: "Certification" },
+    tech: {
+      "Libraries": ["Pandas","NumPy","Data Analysis","Python"],
+    },
+    certs: [
+      { title:"Data Science", issuer:"Data Science Institute", year:"2024", link:"https://drive.google.com/file/d/1JENKEIpZkc1Mvro1mmRVyQr5u8fdUXqv/view", note:"Data wrangling and exploratory analysis using Pandas and NumPy." },
+    ],
+  },
+];
 
-/* ═══════════════════════════════════════════════════════════════
-   FLOATING BACKGROUND ELEMENTS (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function FloatingElements() {
-  return (
-    <>
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "10%", left: "15%", width: "1px", height: "200px", background: `linear-gradient(180deg, transparent, ${C.accent}08, transparent)`, animation: "floatVertical1 35s ease-in-out infinite" }} />
-        <div style={{ position: "absolute", top: "40%", right: "20%", width: "1px", height: "280px", background: `linear-gradient(180deg, transparent, ${C.purple}06, transparent)`, animation: "floatVertical2 40s ease-in-out infinite" }} />
-        <div style={{ position: "absolute", top: "70%", left: "40%", width: "1px", height: "180px", background: `linear-gradient(180deg, transparent, ${C.green}05, transparent)`, animation: "floatVertical1 45s ease-in-out infinite reverse" }} />
-        <div style={{ position: "absolute", top: "60%", left: "10%", width: "400px", height: "400px", borderRadius: "50%", background: `radial-gradient(circle, ${C.green}04 0%, transparent 70%)`, filter: "blur(60px)", animation: "floatHorizontal1 50s linear infinite" }} />
-        <div style={{ position: "absolute", top: "20%", right: "5%", width: "500px", height: "300px", borderRadius: "50%", background: `radial-gradient(ellipse, ${C.accent}03 0%, transparent 60%)`, filter: "blur(80px)", animation: "floatHorizontal2 60s linear infinite reverse" }} />
-        <div style={{ position: "absolute", bottom: "15%", right: "30%", width: "350px", height: "350px", borderRadius: "50%", background: `radial-gradient(circle, ${C.purple}03 0%, transparent 65%)`, filter: "blur(70px)", animation: "floatHorizontal1 55s linear infinite" }} />
-        <div style={{ position: "absolute", top: "25%", left: "50%", width: "300px", height: "1px", background: `linear-gradient(90deg, transparent, ${C.amber}06, transparent)`, transform: "rotate(-15deg)", animation: "floatDiagonal1 50s ease-in-out infinite" }} />
-      </div>
-    </>
-  );
-}
+const FEATURED = [
+  { domain:"Web Development",  cert:"Full Stack Web Development",   issuer:"Tech Academy",       year:"2024", link:"https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view", skills:["React","Node.js","MongoDB","Express"], scope:"MERN Stack", scopeLabel:"Practical Training", detail:"Covered full-stack fundamentals. Concepts applied while building the ATS Resume Builder and AI Chat Workspace." },
+  { domain:"AI & ML",           cert:"Machine Learning with Python", issuer:"ML Academy",          year:"2024", link:"https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view", skills:["Python","Scikit-learn","TensorFlow","Keras"], scope:"Core ML", scopeLabel:"Concepts Covered", detail:"Supervised and unsupervised learning. Applied in Fake News Detector and Career Recommender projects." },
+  { domain:"Cloud",             cert:"AWS Cloud Practitioner",       issuer:"Amazon Web Services", year:"2024", link:"https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view", skills:["AWS","EC2","S3","Lambda"], scope:"Cloud Basics", scopeLabel:"Practitioner Level", detail:"Entry-level coverage of AWS compute, storage, and networking. Referenced during deployment work." },
+];
 
-/* ═══════════════════════════════════════════════════════════════
-   MOVING TEXT STRIPS (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function MovingTextStrips() {
-  const strip1 = "CERTIFIED · PRODUCTION · VERIFIED · DEPLOYED · ARCHITECTED · ";
-  const strip2 = "FULL STACK · MACHINE LEARNING · CLOUD NATIVE · DEVOPS · ";
-  const strip3 = "REACT · PYTHON · AWS · KUBERNETES · TENSORFLOW · ";
-
-  return (
-    <>
-      <div style={{ position: "absolute", top: "35%", left: 0, width: "100%", overflow: "hidden", pointerEvents: "none", opacity: 0.04 }}>
-        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "scrollTextRTL 40s linear infinite", fontFamily: "'DM Mono', monospace", fontSize: "4rem", fontWeight: 700, letterSpacing: "0.3em", color: C.text, filter: "blur(1px)" }}>
-          {strip1.repeat(10)}
-        </div>
-      </div>
-      <div style={{ position: "absolute", top: "60%", left: 0, width: "100%", overflow: "hidden", pointerEvents: "none", opacity: 0.03 }}>
-        <div style={{ display: "flex", whiteSpace: "nowrap", animation: "scrollTextRTL 55s linear infinite", fontFamily: "'DM Mono', monospace", fontSize: "3rem", fontWeight: 600, letterSpacing: "0.25em", color: C.text, filter: "blur(1.5px)" }}>
-          {strip2.repeat(10)}
-        </div>
-      </div>
-      <div style={{ position: "absolute", top: 0, right: "5%", height: "100%", overflow: "hidden", pointerEvents: "none", opacity: 0.025 }}>
-        <div style={{ display: "flex", flexDirection: "column", whiteSpace: "nowrap", animation: "scrollTextTTB 35s linear infinite", fontFamily: "'DM Mono', monospace", fontSize: "2rem", fontWeight: 600, letterSpacing: "0.2em", color: C.text, filter: "blur(1px)" }}>
-          {strip3.repeat(20).split(' · ').map((word, i) => (
-            <div key={i} style={{ padding: "1rem 0" }}>{word}</div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CUSTOM CURSOR (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
+/* ═══════════════════════════════════════════════════════
+   HOOKS
+═══════════════════════════════════════════════════════ */
+function useInView(threshold = 0.1) {
+  const ref = useRef(null);
+  const [vis, setVis] = useState(false);
   useEffect(() => {
-    const handleMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      const target = e.target;
-      const isInteractive = target.tagName === "A" || target.tagName === "BUTTON" || target.closest("[data-magnetic]") || target.closest("[data-hover]");
-      setIsHovering(!!isInteractive);
-    };
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  return (
-    <>
-      <div style={{ position: "fixed", left: position.x, top: position.y, width: isHovering ? "32px" : "8px", height: isHovering ? "32px" : "8px", borderRadius: "50%", background: isHovering ? "transparent" : C.accent, border: isHovering ? `2px solid ${C.accent}` : "none", pointerEvents: "none", zIndex: 10000, transform: "translate(-50%, -50%)", transition: "width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease", mixBlendMode: "difference" }} />
-      <div style={{ position: "fixed", left: position.x, top: position.y, width: isHovering ? "64px" : "48px", height: isHovering ? "64px" : "48px", borderRadius: "50%", background: `radial-gradient(circle, ${C.accent}15 0%, transparent 70%)`, pointerEvents: "none", zIndex: 9999, transform: "translate(-50%, -50%)", transition: "width 0.3s ease, height 0.3s ease" }} />
-    </>
-  );
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVis(true); },
+      { threshold }
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, vis];
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SCROLL PROGRESS (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress((window.scrollY / total) * 100);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: "2px", background: C.surface2, zIndex: 9998 }}>
-      <div style={{ height: "100%", width: `${progress}%`, background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`, transition: "width 0.1s linear" }} />
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ANIMATED COUNTER (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function AnimatedCounter({ value, duration = 2000 }) {
+function Counter({ value, suffix = "", triggered }) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const ref = useRef(null);
-
+  const fired = useRef(false);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
-          const numericValue = parseInt(value.toString().replace(/[^0-9]/g, "")) || 0;
-          const start = 0;
-          const end = numericValue;
-          const startTime = Date.now();
-          const animate = () => {
-            const now = Date.now();
-            const progress = Math.min((now - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(start + (end - start) * eased));
-            if (progress < 1) { requestAnimationFrame(animate); } else { setCount(end); }
-          };
-          animate();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value, duration, hasAnimated]);
-
-  const formatCount = (num) => {
-    if (value.toString().includes("+")) return `${num}+`;
-    return num.toString();
-  };
-
-  return <span ref={ref}>{formatCount(count)}</span>;
+    if (!triggered || fired.current) return;
+    fired.current = true;
+    const dur = 1200, start = Date.now();
+    const tick = () => {
+      const p = Math.min((Date.now() - start) / dur, 1);
+      setCount(Math.floor(value * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+      else setCount(value);
+    };
+    requestAnimationFrame(tick);
+  }, [triggered, value]);
+  return <>{count}{suffix}</>;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   STAT CHIP (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function StatChip({ value, label, icon: Icon, delay = 0 }) {
-  const [inView, setInView] = useState(false);
-  const ref = useRef(null);
+/* ═══════════════════════════════════════════════════════
+   MAGNETIC CURSOR (identical to Skills page)
+═══════════════════════════════════════════════════════ */
+function MagneticCursor() {
+  const dotRef  = useRef(null);
+  const ringRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true); },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    const dot  = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    let mx = -200, my = -200, rx = -200, ry = -200;
+    let rSize = 36, targetRSize = 36;
+    let magEl = null, magOX = 0, magOY = 0, targetMagOX = 0, targetMagOY = 0;
+    let rafId = null, visible = false;
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const onMove = (e) => {
+      mx = e.clientX; my = e.clientY;
+      if (!visible) { visible = true; dot.style.opacity = "1"; ring.style.opacity = "1"; }
+      const els = document.querySelectorAll("[data-magnetic]");
+      let found = null;
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const dist = Math.hypot(mx - cx, my - cy);
+        if (dist < Math.max(r.width, r.height) * 0.65) found = el;
+      });
+      if (found) {
+        magEl = found;
+        const r = found.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const dx = mx - cx, dy = my - cy;
+        targetMagOX = dx * 0.38; targetMagOY = dy * 0.38; targetRSize = 58;
+      } else {
+        if (magEl) { magEl.style.transform = ""; magEl.style.transition = `transform 400ms ${E}`; }
+        magEl = null; targetMagOX = 0; targetMagOY = 0; targetRSize = 36;
+      }
+    };
+    const onLeave = () => { visible = false; dot.style.opacity = "0"; ring.style.opacity = "0"; if (magEl) { magEl.style.transform = ""; magEl = null; } };
+    const onDown  = () => { targetRSize = 22; dot.style.transform = "translate(-50%,-50%) scale(0.5)"; };
+    const onUp    = () => { targetRSize = magEl ? 58 : 36; dot.style.transform = "translate(-50%,-50%) scale(1)"; };
+    const onOver  = (e) => {
+      if (e.target.closest("a,button,[data-magnetic]")) {
+        ring.style.borderColor = "rgba(255,255,255,0.9)"; ring.style.background = "rgba(255,255,255,0.06)";
+      } else { ring.style.borderColor = "rgba(255,255,255,0.45)"; ring.style.background = "transparent"; }
+    };
+    const tick = () => {
+      dot.style.left = mx + "px"; dot.style.top = my + "px";
+      rx = lerp(rx, mx, 0.13); ry = lerp(ry, my, 0.13); rSize = lerp(rSize, targetRSize, 0.14);
+      ring.style.left = rx + "px"; ring.style.top = ry + "px";
+      ring.style.width = rSize + "px"; ring.style.height = rSize + "px";
+      if (magEl) { magOX = lerp(magOX, targetMagOX, 0.14); magOY = lerp(magOY, targetMagOY, 0.14); magEl.style.transform = `translate(${magOX}px,${magOY}px)`; magEl.style.transition = "none"; }
+      else { magOX = lerp(magOX, 0, 0.12); magOY = lerp(magOY, 0, 0.12); }
+      rafId = requestAnimationFrame(tick);
+    };
+    document.addEventListener("mousemove",  onMove,  { passive:true });
+    document.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mousedown",  onDown);
+    document.addEventListener("mouseup",    onUp);
+    document.addEventListener("mouseover",  onOver,  { passive:true });
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      document.removeEventListener("mousemove",  onMove);
+      document.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mousedown",  onDown);
+      document.removeEventListener("mouseup",    onUp);
+      document.removeEventListener("mouseover",  onOver);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
+  const BASE = { position:"fixed", top:0, left:0, transform:"translate(-50%,-50%)", pointerEvents:"none", zIndex:99999, opacity:0, animation:"_cursorIn 400ms cubic-bezier(0.16,1,0.3,1) 0.5s both" };
   return (
-    <div
-      ref={ref}
-      style={{
-        display: "flex", alignItems: "center", gap: "1rem",
-        padding: "1.25rem 1.75rem",
-        background: C.surface, border: `1px solid ${C.border}`, borderRadius: "12px",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateX(0)" : "translateX(40px)",
-        transition: `all 0.7s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
-      }}
-    >
-      {Icon && (
-        <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: C.accentDim, border: `1px solid ${C.accent}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <Icon size={18} color={C.accent} />
-        </div>
-      )}
-      <div>
-        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.6rem", fontWeight: 600, fontStyle: "italic", color: C.text, lineHeight: 1, marginBottom: "0.25rem", letterSpacing: "-0.01em" }}>
-          <AnimatedCounter value={value} />
-        </div>
-        <div style={{ fontSize: "0.8rem", color: C.muted, fontFamily: "'DM Mono', monospace" }}>
-          {label}
-        </div>
+    <>
+      <div ref={dotRef} style={{ ...BASE, width:"8px", height:"8px", borderRadius:"50%", background:"#FFFFFF", transition:`transform 120ms ${E}, opacity 200ms ease`, willChange:"left,top,transform" }}/>
+      <div ref={ringRef} style={{ ...BASE, width:"36px", height:"36px", borderRadius:"50%", border:"1.5px solid rgba(255,255,255,0.45)", background:"transparent", transition:"border-color 180ms ease, background 180ms ease, opacity 200ms ease", willChange:"left,top,width,height", mixBlendMode:"difference" }}/>
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════════════════ */
+function Marquee({ speed = 32 }) {
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
+  return (
+    <div style={{ overflow:"hidden", borderTop:`1px solid rgba(255,255,255,0.06)`, borderBottom:`1px solid rgba(255,255,255,0.06)`, padding:"10px 0", background:"#111111", position:"relative" }}>
+      <div style={{ position:"absolute", left:0, top:0, bottom:0, width:"80px", background:`linear-gradient(to right, #111111, transparent)`, zIndex:2, pointerEvents:"none" }}/>
+      <div style={{ position:"absolute", right:0, top:0, bottom:0, width:"80px", background:`linear-gradient(to left, #111111, transparent)`, zIndex:2, pointerEvents:"none" }}/>
+      <div className="marquee-inner" style={{ display:"flex", alignItems:"center", gap:"32px", width:"max-content", animation:`_marquee ${speed}s linear infinite`, willChange:"transform" }}>
+        {items.map((name, i) => {
+          const src = ICONS[name];
+          return (
+            <div key={`${name}-${i}`} style={{ display:"flex", alignItems:"center", gap:"7px", opacity:0.45, flexShrink:0 }}>
+              {src && <img src={src} alt={name} className="di" width={16} height={16} loading="lazy" style={{ display:"block", borderRadius:"2px" }}/>}
+              <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", fontWeight:500, color:"rgba(255,255,255,0.50)", letterSpacing:"0.04em", whiteSpace:"nowrap" }}>{name}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SKILL TAG WITH COLORED DEVICON (unchanged)
-═══════════════════════════════════════════════════════════════ */
-function SkillTag({ skill, accent, isHovered, onHover, onLeave }) {
-  const iconClass = skillIcons[skill] || "devicon-code-plain";
+/* ═══════════════════════════════════════════════════════
+   DEVICON IMG
+═══════════════════════════════════════════════════════ */
+function DI({ name, size = 18, extraStyle = {} }) {
+  const src = ICONS[name];
+  if (!src) return null;
+  return <img src={src} alt={name} className="di" width={size} height={size} loading="lazy" style={{ display:"block", flexShrink:0, borderRadius:"3px", ...extraStyle }}/>;
+}
 
+/* ═══════════════════════════════════════════════════════
+   TAG
+═══════════════════════════════════════════════════════ */
+function Tag({ name, visible, delay }) {
+  const [hov, setHov] = useState(false);
   return (
     <span
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      style={{
-        display: "inline-flex", alignItems: "center", gap: "0.5rem",
-        padding: "0.5rem 1rem",
-        background: isHovered ? accent + "15" : C.surface2,
-        border: `1px solid ${isHovered ? accent + "40" : C.border}`,
-        borderRadius: "8px",
-        fontSize: "0.8rem", fontWeight: 500,
-        color: isHovered ? C.text : C.muted2,
-        fontFamily: "'DM Mono', monospace",
-        transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-        transform: isHovered ? "translateX(6px)" : "translateX(0)",
-        position: "relative", overflow: "hidden", cursor: "default",
-      }}
+      data-magnetic
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ display:"inline-flex", alignItems:"center", gap:"5px", padding:"4px 9px 4px 6px", borderRadius:"5px", background:hov?"rgba(255,255,255,0.08)":"#141414", border:`1px solid ${hov?"rgba(255,255,255,0.18)":"rgba(255,255,255,0.07)"}`, fontFamily:"'DM Mono',monospace", fontSize:"11px", color:hov?"#FFFFFF":"rgba(255,255,255,0.45)", cursor:"default", userSelect:"none", transition:`background ${MS.fast} ${E}, border-color ${MS.fast} ${E}, color ${MS.fast} ${E}`, opacity:visible?1:0, animation:visible?`_tagPop ${MS.slow} ${E} ${delay}s both`:"none" }}
     >
-      <i className={iconClass} style={{ fontSize: "1.2rem", transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)", transform: isHovered ? "scale(1.15) rotate(5deg)" : "scale(1)" }} />
-      {skill}
-      {isHovered && (
-        <div style={{ position: "absolute", bottom: 0, left: 0, height: "2px", background: accent, animation: "underlineSweep 0.4s ease-out both" }} />
-      )}
-      {isHovered && (
-        <div style={{ position: "absolute", top: 0, left: "-100%", width: "100%", height: "100%", background: `linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)`, animation: "shimmerSweep 0.8s ease-out" }} />
-      )}
+      <DI name={name} size={13} extraStyle={{ opacity:hov?0.9:0.5, transition:`opacity ${MS.fast} ${E}` }}/>
+      {name}
     </span>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   FLAGSHIP CERTIFICATE CARD
-   Only content-bearing labels changed — structure identical.
-═══════════════════════════════════════════════════════════════ */
-function FlagshipCard({ cert, index }) {
-  const [inView, setInView] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-  const [hoveredSkill, setHoveredSkill] = useState(null);
-  const ref = useRef(null);
+/* ═══════════════════════════════════════════════════════
+   SIDE NAV
+═══════════════════════════════════════════════════════ */
+function SideNav({ active }) {
+  return (
+    <nav className="snav" style={{ position:"fixed", left:"1.25rem", top:"50%", transform:"translateY(-50%)", zIndex:100, display:"flex", flexDirection:"column", gap:"14px" }}>
+      {domainsData.map((d, i) => (
+        <button
+          key={d.id}
+          className="snav-btn"
+          data-magnetic
+          onClick={() => document.getElementById(d.id)?.scrollIntoView({ behavior:"smooth" })}
+          aria-label={`Jump to ${d.domain}`}
+          style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", cursor:"pointer", padding:0, outline:"none" }}
+        >
+          <div className="snav-line" style={{ height:"1.5px", width:active===i?"22px":"10px", background:active===i?"#FFFFFF":"rgba(255,255,255,0.18)", borderRadius:"1px", transition:`all ${MS.slow} ${E}` }}/>
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"9px", fontWeight:500, color:"rgba(255,255,255,0.55)", opacity:active===i?1:0, transition:`opacity ${MS.slow} ${E}` }}>{d.number}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+/* ═══════════════════════════════════════════════════════
+   MONO LABEL
+═══════════════════════════════════════════════════════ */
+function ML({ children, color = "rgba(255,255,255,0.55)", style = {} }) {
+  return (
+    <span style={{ display:"block", fontFamily:"'DM Mono',monospace", fontSize:"10px", fontWeight:500, letterSpacing:"0.14em", textTransform:"uppercase", color, ...style }}>
+      {children}
+    </span>
+  );
+}
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: y * 3, y: -x * 3 });
-  };
+/* ═══════════════════════════════════════════════════════
+   TERM CURSOR
+═══════════════════════════════════════════════════════ */
+function TermCursor() {
+  return <span style={{ display:"inline-block", width:"8px", height:"1.1em", background:"#FFFFFF", marginLeft:"3px", verticalAlign:"middle", animation:"_blink 1.1s step-end infinite", borderRadius:"1px" }}/>;
+}
 
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-    setHovered(false);
-  };
+/* ═══════════════════════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════════════════════ */
+function SH({ eyebrow, title, sub, visible, delay = 0, cursor = false }) {
+  return (
+    <div style={{ marginBottom:"2.5rem", opacity:visible?1:0, animation:visible?`_rtl ${MS.reveal} ${E} ${delay}s both`:"none" }}>
+      <ML color="rgba(255,255,255,0.45)" style={{ marginBottom:"10px" }}>{eyebrow}</ML>
+      <h2 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"clamp(2.8rem,5.5vw,4.5rem)", fontWeight:700, color:"#FFFFFF", letterSpacing:"-0.025em", marginBottom:sub?"8px":0, display:"flex", alignItems:"center" }}>
+        {title}
+        {cursor && <TermCursor />}
+      </h2>
+      {sub && <p style={{ fontSize:"14px", color:"rgba(255,255,255,0.38)", lineHeight:1.65, maxWidth:"500px" }}>{sub}</p>}
+    </div>
+  );
+}
 
+/* ═══════════════════════════════════════════════════════
+   DOMAIN ROW  (mirrors CapRow from Skills)
+═══════════════════════════════════════════════════════ */
+function DomainRow({ dom, visible, delay, ri }) {
+  const [hov, setHov] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const even = ri % 2 === 0;
+  const la = even ? "_ltr" : "_rtl";
+  const ra = even ? "_rtl" : "_ltr";
+
+  return (
+    <div id={dom.id}>
+      {/* Main row */}
+      <div
+        className="cert-grid"
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:0, borderBottom:`1px solid rgba(255,255,255,0.06)`, background:hov?"#141414":"transparent", transition:`background ${MS.fast} ${E}, transform ${MS.base} ${E}`, transform:hov?"translateY(-2px)":"translateY(0)" }}
+      >
+        {/* LEFT */}
+        <div style={{ padding:"2.25rem 2.5rem", borderRight:`1px solid ${hov?"rgba(255,255,255,0.10)":"rgba(255,255,255,0.06)"}`, transition:`border-color ${MS.fast} ${E}`, position:"relative", opacity:visible?1:0, animation:visible?`${la} ${MS.reveal} ${E} ${delay}s both`:"none" }}>
+          <div style={{ position:"absolute", left:0, top:"18px", bottom:"18px", width:"2px", background:hov?"#FFFFFF":"rgba(255,255,255,0.25)", borderRadius:"0 2px 2px 0", transformOrigin:"top", transform:visible?"scaleY(1)":"scaleY(0)", transition:`transform ${MS.slow} ${E} ${delay+0.18}s, background ${MS.fast} ${E}` }}/>
+          <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"16px" }}>
+            <ML color="rgba(255,255,255,0.45)">{dom.number}</ML>
+            <div style={{ height:"1px", width:"20px", background:"rgba(255,255,255,0.30)", transformOrigin:"left", transform:visible?"scaleX(1)":"scaleX(0)", transition:`transform ${MS.base} ${E} ${delay+0.24}s` }}/>
+          </div>
+          <h3 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"2.2rem", fontWeight:700, color:"#FFFFFF", lineHeight:1.1, letterSpacing:"-0.025em", marginBottom:"12px" }}>{dom.domain}</h3>
+          <p style={{ fontSize:"14px", color:"rgba(255,255,255,0.42)", lineHeight:1.75, maxWidth:"400px" }}>{dom.outcome}</p>
+          {/* Metric counter */}
+          <div style={{ marginTop:"24px", opacity:visible?1:0, animation:visible?`_countUp ${MS.slow} ${E} ${delay+0.32}s both`:"none" }}>
+            <div style={{ fontFamily:"'Dancing Script',cursive", fontSize:"3.5rem", fontWeight:700, color:"#FFFFFF", lineHeight:1, letterSpacing:"-0.03em" }}>
+              <Counter value={dom.metric.value} suffix={dom.metric.suffix} triggered={visible}/>
+            </div>
+            <div style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", color:"rgba(255,255,255,0.35)", letterSpacing:"0.08em", marginTop:"4px", opacity:hov?0.9:0.5, transition:`opacity ${MS.fast} ${E}` }}>
+              {dom.metric.label}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div style={{ padding:"2.25rem 2.5rem", opacity:visible?1:0, animation:visible?`${ra} ${MS.reveal} ${E} ${delay+0.07}s both`:"none" }}>
+          <div style={{ marginBottom:"22px" }}>
+            {Object.entries(dom.tech).map(([cat, items], ci) => (
+              <div key={cat} style={{ marginBottom:"12px", display:"flex", gap:"10px", alignItems:"baseline", flexWrap:"wrap" }}>
+                <ML color="rgba(255,255,255,0.35)" style={{ minWidth:"84px", flexShrink:0, paddingTop:"2px" }}>{cat}</ML>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:"5px" }}>
+                  {items.map((t, ti) => (
+                    <Tag key={t} name={t} visible={visible} delay={delay + 0.14 + ci * 0.07 + ti * 0.035}/>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Individual certs preview */}
+          <div style={{ display:"flex", flexDirection:"column", gap:"6px", marginBottom:"18px" }}>
+            {dom.certs.slice(0, 3).map((c, ci) => (
+              <div key={c.title} style={{ display:"flex", gap:"10px", alignItems:"flex-start", opacity:visible?1:0, animation:visible?`_rtl ${MS.slow} ${E} ${delay+0.30+ci*0.06}s both`:"none" }}>
+                <div style={{ width:"3px", height:"3px", borderRadius:"50%", background:hov?"rgba(255,255,255,0.7)":"rgba(255,255,255,0.2)", flexShrink:0, marginTop:"7px", transition:`background ${MS.fast} ${E}` }}/>
+                <div>
+                  <span style={{ fontSize:"13px", fontWeight:500, color:"#FFFFFF" }}>{c.title}</span>
+                  <span style={{ fontSize:"12px", color:"rgba(255,255,255,0.38)", marginLeft:"8px" }}>— {c.issuer} · {c.year}</span>
+                </div>
+              </div>
+            ))}
+            {dom.certs.length > 3 && !expanded && (
+              <div style={{ display:"flex", gap:"10px", alignItems:"center" }}>
+                <div style={{ width:"3px", height:"3px", borderRadius:"50%", background:"rgba(255,255,255,0.12)", flexShrink:0 }}/>
+                <button onClick={() => setExpanded(true)} style={{ fontSize:"12px", color:"rgba(255,255,255,0.30)", background:"none", border:"none", cursor:"pointer", padding:0, fontFamily:"'DM Mono',monospace", letterSpacing:"0.05em" }}>
+                  +{dom.certs.length - 3} more
+                </button>
+              </div>
+            )}
+            {expanded && dom.certs.slice(3).map((c, ci) => (
+              <div key={c.title} style={{ display:"flex", gap:"10px", alignItems:"flex-start", animation:`_rtl ${MS.slow} ${E} ${ci*0.05}s both` }}>
+                <div style={{ width:"3px", height:"3px", borderRadius:"50%", background:"rgba(255,255,255,0.2)", flexShrink:0, marginTop:"7px" }}/>
+                <div>
+                  <span style={{ fontSize:"13px", fontWeight:500, color:"#FFFFFF" }}>{c.title}</span>
+                  <span style={{ fontSize:"12px", color:"rgba(255,255,255,0.38)", marginLeft:"8px" }}>— {c.issuer} · {c.year}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Context footer */}
+          <div style={{ paddingTop:"14px", borderTop:`1px solid rgba(255,255,255,0.06)`, display:"flex", gap:"8px", alignItems:"center" }}>
+            <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.35)" }}>{dom.period}</span>
+            <span style={{ fontSize:"11px", color:"rgba(255,255,255,0.20)" }}>·</span>
+            <span style={{ fontSize:"11px", color:"rgba(255,255,255,0.35)" }}>{dom.context}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Expanded cert cards */}
+      <ExpandedCerts dom={dom} expanded={expanded} setExpanded={setExpanded}/>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPANDED CERT CARDS (toggled panel under domain row)
+═══════════════════════════════════════════════════════ */
+function ExpandedCerts({ dom, expanded, setExpanded }) {
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => { if (!expanded) setShowAll(false); }, [expanded]);
+
+  const certsToShow = showAll ? dom.certs : dom.certs.slice(0, 4);
+
+  if (!expanded) return null;
+
+  return (
+    <div style={{ background:"#0D0D0D", borderBottom:`1px solid rgba(255,255,255,0.06)`, padding:"2rem 2.5rem", animation:`_expand ${MS.reveal} ${E} both` }}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:"12px", marginBottom:"16px" }}>
+        {certsToShow.map((cert, ci) => (
+          <CertCard key={cert.title} cert={cert} delay={ci * 0.04}/>
+        ))}
+      </div>
+      <div style={{ display:"flex", gap:"12px", alignItems:"center" }}>
+        {dom.certs.length > 4 && !showAll && (
+          <button onClick={() => setShowAll(true)} style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.35)", background:"none", border:"1px solid rgba(255,255,255,0.07)", borderRadius:"5px", padding:"6px 14px", cursor:"pointer" }}>
+            Show all {dom.certs.length} certs
+          </button>
+        )}
+        <button onClick={() => setExpanded(false)} style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.25)", background:"none", border:"none", cursor:"pointer", padding:0 }}>
+          Collapse ↑
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CERT CARD
+═══════════════════════════════════════════════════════ */
+function CertCard({ cert, delay = 0 }) {
+  const [hov, setHov] = useState(false);
   return (
     <div
-      ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        background: C.surface,
-        border: `1px solid ${hovered ? cert.accent + "40" : C.border}`,
-        borderRadius: "20px", overflow: "hidden",
-        transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${hovered ? "-8px" : "0"})`,
-        boxShadow: hovered ? "0 20px 48px rgba(0,0,0,0.08)" : "0 4px 16px rgba(0,0,0,0.04)",
-        opacity: inView ? 1 : 0,
-        animation: inView ? `slideInFromRight 0.7s cubic-bezier(0.22,1,0.36,1) ${index * 0.15}s both` : "none",
-      }}
+      data-magnetic
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ padding:"1.5rem", background:hov?"#141414":"#111111", border:`1px solid ${hov?"rgba(255,255,255,0.14)":"rgba(255,255,255,0.06)"}`, borderRadius:"10px", transform:hov?"translateY(-4px)":"translateY(0)", transition:`background ${MS.fast} ${E}, border-color ${MS.fast} ${E}, transform ${MS.base} ${E}`, opacity:0, animation:`_rtl ${MS.slow} ${E} ${delay}s both`, position:"relative", overflow:"hidden" }}
     >
-      {/* Top accent */}
-      <div style={{ height: "3px", background: `linear-gradient(90deg, ${cert.accent}, transparent)`, position: "relative", overflow: "hidden" }}>
-        {hovered && (
-          <div style={{ position: "absolute", top: 0, left: "-100%", width: "100%", height: "100%", background: `linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)`, animation: "shimmerSweep 1.5s ease-in-out" }} />
+      {/* Left accent bar */}
+      <div style={{ position:"absolute", left:0, top:"12px", bottom:"12px", width:"2px", background:hov?"#FFFFFF":"rgba(255,255,255,0.20)", borderRadius:"0 2px 2px 0", transition:`background ${MS.fast} ${E}` }}/>
+      <div style={{ paddingLeft:"12px" }}>
+        <h4 style={{ fontSize:"13.5px", fontWeight:600, color:"#FFFFFF", marginBottom:"6px", lineHeight:1.35 }}>{cert.title}</h4>
+        <div style={{ display:"flex", gap:"8px", alignItems:"center", marginBottom:"10px" }}>
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.40)" }}>{cert.issuer}</span>
+          <span style={{ fontSize:"11px", color:"rgba(255,255,255,0.20)" }}>·</span>
+          <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.30)" }}>{cert.year}</span>
+        </div>
+        {cert.note && (
+          <p style={{ fontSize:"12px", color:"rgba(255,255,255,0.30)", lineHeight:1.6, marginBottom:"12px" }}>{cert.note}</p>
         )}
-      </div>
-
-      <div style={{ padding: "2.5rem" }}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1.5rem", marginBottom: "2rem" }}>
-          <div style={{ flex: 1 }}>
-
-            {/* Badges */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-              <div style={{ padding: "0.4rem 0.9rem", background: cert.accentDim, border: `1px solid ${cert.accent}30`, borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, color: cert.accent, fontFamily: "'DM Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                Training Completed
-              </div>
-              {cert.verified && (
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.4rem 0.9rem", background: C.greenDim, border: `1px solid ${C.green}30`, borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, color: C.green, fontFamily: "'DM Mono', monospace" }}>
-                  <Shield size={12} />
-                  Verified
-                </div>
-              )}
-            </div>
-
-            {/* Title */}
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1.2, letterSpacing: "-0.01em", marginBottom: "0.5rem" }}>
-              {cert.title}
-            </h3>
-
-            {/* Meta */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "0.875rem", color: C.muted, marginBottom: "1.5rem" }}>
-              <span>{cert.issuer}</span>
-              <span>•</span>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                <Calendar size={14} />
-                {cert.year}
-              </div>
-              <span>•</span>
-              <span>{cert.duration}</span>
-            </div>
-
-            {/* Skills */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", marginBottom: "2rem" }}>
-              {cert.skills.map((skill, skillIndex) => (
-                <SkillTag
-                  key={skill}
-                  skill={skill}
-                  accent={cert.accent}
-                  isHovered={hoveredSkill === skillIndex}
-                  onHover={() => setHoveredSkill(skillIndex)}
-                  onLeave={() => setHoveredSkill(null)}
-                />
-              ))}
-            </div>
-
-            {/* Scope block — replaces "Production Impact" */}
-            <div style={{ padding: "1.5rem", background: `linear-gradient(135deg, ${cert.accentDim} 0%, transparent 100%)`, border: `1px solid ${cert.accent}20`, borderRadius: "12px", marginBottom: "1.5rem" }}>
-              <div style={{ fontSize: "0.7rem", fontWeight: 700, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: "0.75rem" }}>
-                Training Scope
-              </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.75rem", fontWeight: 700, fontStyle: "italic", color: cert.accent, lineHeight: 1, letterSpacing: "-0.02em" }}>
-                  {cert.impact.metric}
-                </div>
-                <div style={{ fontSize: "1rem", fontWeight: 600, color: C.text }}>
-                  {cert.impact.label}
-                </div>
-              </div>
-              <div style={{ fontSize: "0.875rem", color: C.muted2, lineHeight: 1.6 }}>
-                {cert.impact.detail}
-              </div>
-            </div>
-
-            {/* Applied Knowledge */}
-            <div style={{ padding: "1.25rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "10px", marginBottom: "1.5rem" }}>
-              <div style={{ fontSize: "0.7rem", fontWeight: 700, color: C.muted, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: "0.5rem" }}>
-                How It Connects to Projects
-              </div>
-              <div style={{ fontSize: "0.9rem", color: C.muted2, lineHeight: 1.6 }}>
-                {cert.appliedIn}
-              </div>
-            </div>
-
-            {/* Link */}
-            <a
-              href={cert.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-magnetic
-              style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.875rem 1.5rem", background: cert.accentDim, border: `1px solid ${cert.accent}40`, borderRadius: "10px", fontSize: "0.875rem", fontWeight: 600, color: cert.accent, textDecoration: "none", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", fontFamily: "'DM Mono', monospace" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = cert.accent + "20"; e.currentTarget.style.borderColor = cert.accent + "60"; e.currentTarget.style.transform = "translateX(4px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = cert.accentDim; e.currentTarget.style.borderColor = cert.accent + "40"; e.currentTarget.style.transform = "translateX(0)"; }}
-            >
-              <ExternalLink size={16} />
-              View Credential
-              <ArrowRight size={14} style={{ transition: "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)" }} />
-            </a>
-
-          </div>
-        </div>
+        <a
+          href={cert.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display:"inline-flex", alignItems:"center", gap:"5px", fontFamily:"'DM Mono',monospace", fontSize:"10px", color:hov?"rgba(255,255,255,0.75)":"rgba(255,255,255,0.30)", textDecoration:"none", transition:`color ${MS.fast} ${E}` }}
+        >
+          View Credential
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DOMAIN SECTION (unchanged structure)
-═══════════════════════════════════════════════════════════════ */
-function DomainSection({ domain, data, isActive, onClick }) {
-  const Icon = data.icon;
-  const [hoveredCert, setHoveredCert] = useState(null);
-
+/* ═══════════════════════════════════════════════════════
+   FEATURED CARD  (hero-style, mirrors MetCard feel)
+═══════════════════════════════════════════════════════ */
+function FeaturedCard({ cert, visible, delay, ri }) {
+  const [hov, setHov] = useState(false);
+  const even = ri % 2 === 0;
   return (
-    <div>
-      {/* Domain header */}
-      <div
-        onClick={onClick}
-        data-hover
-        style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1.5rem 2rem", background: isActive ? `${data.accent}08` : C.surface, border: `1px solid ${isActive ? data.accent + "30" : C.border}`, borderRadius: "16px", cursor: "pointer", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", marginBottom: isActive ? "1.5rem" : 0 }}
-        onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background = C.surface2; e.currentTarget.style.borderColor = C.border2; e.currentTarget.style.transform = "translateX(4px)"; } }}
-        onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background = C.surface; e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; } }}
-      >
-        <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: isActive ? `${data.accent}15` : C.surface2, border: `1px solid ${isActive ? data.accent + "40" : C.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", transform: isActive ? "rotate(5deg)" : "rotate(0)" }}>
-          <Icon size={22} style={{ color: isActive ? data.accent : C.muted }} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.4rem", fontWeight: 700, fontStyle: "italic", color: C.text, marginBottom: "0.25rem", letterSpacing: "-0.01em" }}>
-            {domain}
-          </div>
-          <div style={{ fontSize: "0.8rem", color: C.muted, fontFamily: "'DM Mono', monospace" }}>
-            {data.certs.length} {data.certs.length === 1 ? "certification" : "certifications"}
-          </div>
-        </div>
-        <ArrowRight size={20} style={{ color: isActive ? data.accent : C.muted, transform: isActive ? "rotate(90deg)" : "rotate(0)", transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)" }} />
+    <div
+      data-magnetic
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ padding:"2rem", background:hov?"#161616":"#111111", border:`1px solid ${hov?"rgba(255,255,255,0.14)":"rgba(255,255,255,0.06)"}`, borderRadius:"12px", transform:hov?"scale(1.014)":"scale(1)", transition:`background ${MS.base} ${E}, border-color ${MS.fast} ${E}, transform ${MS.base} ${E}`, opacity:visible?1:0, animation:visible?`_${even?"ltr":"rtl"} ${MS.reveal} ${E} ${delay}s both`:"none", position:"relative", overflow:"hidden" }}
+    >
+      {/* Top bar */}
+      <div style={{ position:"absolute", top:0, left:0, right:0, height:"2px", background:hov?"rgba(255,255,255,0.35)":"rgba(255,255,255,0.10)", transition:`background ${MS.base} ${E}` }}/>
+
+      <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"14px" }}>
+        <ML color="rgba(255,255,255,0.35)">{cert.domain}</ML>
+        <div style={{ height:"1px", flex:1, background:"rgba(255,255,255,0.06)" }}/>
+        <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", color:"rgba(255,255,255,0.25)" }}>{cert.year}</span>
       </div>
 
-      {/* Cert grid */}
-      {isActive && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "1.25rem", marginBottom: "2rem", animation: "elasticExpand 0.5s cubic-bezier(0.22, 1, 0.36, 1) both" }}>
-          {data.certs.map((cert, i) => (
-            <div
-              key={i}
-              data-hover
-              onMouseEnter={() => setHoveredCert(i)}
-              onMouseLeave={() => setHoveredCert(null)}
-              style={{ padding: "1.75rem", background: C.surface, border: `1px solid ${hoveredCert === i ? data.accent + "40" : C.border}`, borderRadius: "14px", transition: "all 0.35s cubic-bezier(0.22, 1, 0.36, 1)", opacity: 0, animation: `slideInFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.08}s both`, transform: hoveredCert === i ? "translateY(-4px) translateX(4px)" : "translateY(0) translateX(0)", boxShadow: hoveredCert === i ? "0 12px 32px rgba(0,0,0,0.08)" : "none" }}
-            >
-              <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.25rem", fontWeight: 700, fontStyle: "italic", color: C.text, marginBottom: "0.75rem", letterSpacing: "-0.01em" }}>
-                {cert.title}
-              </h4>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.8rem", color: C.muted, marginBottom: "1.25rem" }}>
-                <span>{cert.issuer}</span>
-                <span>•</span>
-                <span>{cert.year}</span>
-              </div>
+      <h3 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"1.85rem", fontWeight:700, color:"#FFFFFF", lineHeight:1.15, letterSpacing:"-0.02em", marginBottom:"8px" }}>
+        {cert.cert}
+      </h3>
+      <div style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.35)", marginBottom:"16px" }}>{cert.issuer}</div>
 
-              {/* Skills */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.25rem" }}>
-                {cert.skills.map((skill) => {
-                  const iconClass = skillIcons[skill] || "devicon-code-plain";
-                  return (
-                    <span
-                      key={skill}
-                      style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", padding: "0.4rem 0.8rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "6px", fontSize: "0.75rem", fontWeight: 500, color: C.muted2, fontFamily: "'DM Mono', monospace", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = data.accent + "10"; e.currentTarget.style.borderColor = data.accent + "30"; e.currentTarget.style.transform = "translateX(3px)"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = C.surface2; e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; }}
-                    >
-                      <i className={iconClass} style={{ fontSize: "1rem" }} />
-                      {skill}
-                    </span>
-                  );
-                })}
-              </div>
+      {/* Skills */}
+      <div style={{ display:"flex", flexWrap:"wrap", gap:"5px", marginBottom:"18px" }}>
+        {cert.skills.map((s, si) => (
+          <Tag key={s} name={s} visible={visible} delay={delay + 0.12 + si * 0.04}/>
+        ))}
+      </div>
 
-              {/* Applied in */}
-              <div style={{ padding: "1rem", background: C.surface2, border: `1px solid ${C.border}`, borderRadius: "8px", marginBottom: "1.25rem" }}>
-                <div style={{ fontSize: "0.7rem", fontWeight: 700, color: C.muted, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace", marginBottom: "0.4rem" }}>
-                  Relevance to Projects
-                </div>
-                <div style={{ fontSize: "0.85rem", color: C.muted2, lineHeight: 1.5 }}>
-                  {cert.appliedIn}
-                </div>
-              </div>
-
-              <a
-                href={cert.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-magnetic
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", padding: "0.75rem", background: "transparent", border: `1px solid ${C.border2}`, borderRadius: "8px", fontSize: "0.8rem", fontWeight: 600, color: C.text, textDecoration: "none", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", fontFamily: "'DM Mono', monospace" }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = C.surface2; e.currentTarget.style.borderColor = C.border3; e.currentTarget.style.transform = "translateX(4px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = C.border2; e.currentTarget.style.transform = "translateX(0)"; }}
-              >
-                <ExternalLink size={14} />
-                View Credential
-                <ArrowRight size={12} />
-              </a>
-            </div>
-          ))}
+      {/* Scope block */}
+      <div style={{ padding:"14px 16px", background:"rgba(255,255,255,0.03)", border:`1px solid rgba(255,255,255,0.06)`, borderRadius:"8px", marginBottom:"16px" }}>
+        <ML color="rgba(255,255,255,0.25)" style={{ marginBottom:"6px" }}>Training Scope</ML>
+        <div style={{ display:"flex", alignItems:"baseline", gap:"8px", marginBottom:"4px" }}>
+          <span style={{ fontFamily:"'Dancing Script',cursive", fontSize:"1.6rem", fontWeight:700, color:"#FFFFFF", letterSpacing:"-0.02em" }}>{cert.scope}</span>
+          <span style={{ fontSize:"12px", fontWeight:500, color:"rgba(255,255,255,0.60)" }}>{cert.scopeLabel}</span>
         </div>
-      )}
+        <p style={{ fontSize:"12.5px", color:"rgba(255,255,255,0.35)", lineHeight:1.65 }}>{cert.detail}</p>
+      </div>
+
+      <a
+        href={cert.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display:"inline-flex", alignItems:"center", gap:"6px", fontFamily:"'DM Mono',monospace", fontSize:"11px", color:hov?"rgba(255,255,255,0.80)":"rgba(255,255,255,0.35)", textDecoration:"none", padding:"8px 14px", background:hov?"rgba(255,255,255,0.07)":"transparent", border:`1px solid ${hov?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.06)"}`, borderRadius:"6px", transition:`all ${MS.fast} ${E}` }}
+      >
+        View Credential
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ transform:hov?"translateX(3px)":"translateX(0)", transition:`transform ${MS.fast} ${E}` }}><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MAIN COMPONENT (unchanged)
-═══════════════════════════════════════════════════════════════ */
-export default function Certifications() {
-  const [activeDomain, setActiveDomain] = useState(null);
-  const [headerInView, setHeaderInView] = useState(false);
-  const [featuredInView, setFeaturedInView] = useState(false);
-  const [domainsInView, setDomainsInView] = useState(false);
-  const [summaryInView, setSummaryInView] = useState(false);
-  const [scrollDirection, setScrollDirection] = useState("down");
-  const lastScrollY = useRef(0);
+/* ═══════════════════════════════════════════════════════
+   STATS CARD
+═══════════════════════════════════════════════════════ */
+function StatCard({ value, suffix, label, sub, triggered, delay }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      data-magnetic
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{ padding:"2rem 1.5rem", background:"#111111", transform:hov?"scale(1.016)":"scale(1)", transition:`transform ${MS.fast} ${E}`, opacity:triggered?1:0, animation:triggered?`_up 300ms ${E} ${delay}s both`:"none" }}
+    >
+      <div style={{ fontFamily:"'Dancing Script',cursive", fontSize:"3.25rem", fontWeight:700, color:"#FFFFFF", lineHeight:1, letterSpacing:"-0.03em", marginBottom:"6px" }}>
+        <Counter value={value} suffix={suffix} triggered={triggered}/>
+      </div>
+      <div style={{ fontSize:"13.5px", fontWeight:500, color:"#FFFFFF", marginBottom:"4px" }}>{label}</div>
+      <div style={{ fontSize:"11.5px", color:"rgba(255,255,255,0.38)", lineHeight:1.5, opacity:hov?0.9:0.52, transition:`opacity ${MS.fast} ${E}` }}>{sub}</div>
+    </div>
+  );
+}
 
-  const headerRef  = useRef(null);
-  const featuredRef = useRef(null);
-  const domainsRef = useRef(null);
-  const summaryRef = useRef(null);
+/* ═══════════════════════════════════════════════════════
+   FOOTER CTA
+═══════════════════════════════════════════════════════ */
+function FooterCTA({ label, sub, href, accent, visible, delay }) {
+  const [hov, setHov] = useState(false);
+  const [press, setPress] = useState(false);
+  return (
+    <a
+      href={href}
+      data-magnetic
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => { setHov(false); setPress(false); }}
+      onMouseDown={() => setPress(true)}
+      onMouseUp={() => setPress(false)}
+      style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"16px 20px", borderRadius:"10px", textDecoration:"none", background:accent?(hov?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.07)"):(hov?"rgba(255,255,255,0.06)":"rgba(255,255,255,0.03)"), border:`1px solid ${accent?(hov?"rgba(255,255,255,0.30)":"rgba(255,255,255,0.15)"):(hov?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.07)")}`, transition:`background ${MS.fast} ${E}, border-color ${MS.fast} ${E}`, opacity:visible?1:0, transform:visible?(press?"scale(0.98)":"translateY(0)"):"translateY(10px)", animation:visible?`_up ${MS.slow} ${E} ${delay}s both`:"none" }}
+    >
+      <div>
+        <ML color="rgba(255,255,255,0.25)" style={{ marginBottom:"4px" }}>{sub}</ML>
+        <div style={{ fontSize:"14px", fontWeight:500, color:"#FFFFFF" }}>{label}</div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round" style={{ transform:hov?"translateX(4px)":"translateX(0)", transition:`transform ${MS.fast} ${E}` }}>
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   ROOT PAGE
+═══════════════════════════════════════════════════════ */
+export default function Certifications() {
+  const [hR, hV]   = useInView(0.08);
+  const [fR, fV]   = useInView(0.08);
+  const [cR, cV]   = useInView(0.04);
+  const [mR, mV]   = useInView(0.10);
+  const [foR, foV] = useInView(0.04);
+
+  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrollDirection(currentScrollY > lastScrollY.current ? "down" : "up");
-      lastScrollY.current = currentScrollY;
+    const fn = () => {
+      const mid = window.innerHeight / 2;
+      domainsData.forEach((d, i) => {
+        const el = document.getElementById(d.id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= mid) setActiveSection(i);
+      });
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", fn, { passive:true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  useEffect(() => {
-    const observers = [
-      { ref: headerRef,  setter: setHeaderInView  },
-      { ref: featuredRef, setter: setFeaturedInView },
-      { ref: domainsRef, setter: setDomainsInView  },
-      { ref: summaryRef, setter: setSummaryInView  },
-    ];
-    const instances = observers.map(({ ref, setter }) => {
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting && scrollDirection === "down") setter(true); },
-        { threshold: 0.2 }
-      );
-      if (ref.current) obs.observe(ref.current);
-      return obs;
-    });
-    return () => instances.forEach(o => o.disconnect());
-  }, [scrollDirection]);
+  const W  = { maxWidth:"1200px", margin:"0 auto", padding:"0 2rem" };
+  const SP = (t="5rem", b="5rem") => ({ padding:`${t} 0 ${b}` });
 
-  const totalCerts = Object.values(certificationsData.domains).reduce((sum, d) => sum + d.certs.length, 0);
+  const totalCerts = domainsData.reduce((s, d) => s + d.certs.length, 0);
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap');
-        @import url('https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css');
+      <style>{GLOBAL}</style>
+      <MagneticCursor />
+      <SideNav active={activeSection} />
 
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Geist', system-ui, sans-serif; background: ${C.bg}; color: ${C.text}; -webkit-font-smoothing: antialiased; cursor: none; }
-        ::selection { background: ${C.accentDim}; color: ${C.text}; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: ${C.bg}; }
-        ::-webkit-scrollbar-thumb { background: ${C.border3}; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: ${C.muted}; }
+      {/* Background grid texture */}
+      <div aria-hidden="true" style={{ position:"fixed", inset:0, zIndex:0, pointerEvents:"none", backgroundImage:["linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px)","linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px)"].join(","), backgroundSize:"64px 64px", maskImage:"radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)", WebkitMaskImage:"radial-gradient(ellipse 80% 55% at 50% 25%, black 10%, transparent)" }}/>
 
-        @keyframes slideInFromRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes elasticExpand { 0% { opacity: 0; transform: translateY(-12px) scaleY(0.95); } 60% { transform: translateY(0) scaleY(1.02); } 100% { opacity: 1; transform: translateY(0) scaleY(1); } }
-        @keyframes scrollTextRTL { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes scrollTextTTB { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        @keyframes shimmerSweep { 0% { left: -100%; } 100% { left: 100%; } }
-        @keyframes underlineSweep { from { width: 0; } to { width: 100%; } }
-        @keyframes floatVertical1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-40px); } }
-        @keyframes floatVertical2 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(60px); } }
-        @keyframes floatHorizontal1 { from { transform: translateX(0); } to { transform: translateX(100vw); } }
-        @keyframes floatHorizontal2 { from { transform: translateX(0); } to { transform: translateX(-100vw); } }
-        @keyframes floatDiagonal1 { 0%, 100% { transform: translate(0, 0) rotate(-15deg); } 50% { transform: translate(-30px, 20px) rotate(-15deg); } }
-        @keyframes lineGrow { from { width: 0; } to { width: 200px; } }
+      <div style={{ position:"relative", zIndex:1 }}>
 
-        @media (max-width: 768px) { body { cursor: auto; } }
-      `}</style>
+        {/* ─────────────────── HERO ─────────────────── */}
+        <header ref={hR} style={{ ...SP("8rem","5rem"), background:"#0B0B0B" }}>
+          <div style={W}>
+            {/* Eyebrow */}
+            <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"2rem", opacity:hV?1:0, animation:hV?`_rtl ${MS.slow} ${E} 0.05s both`:"none" }}>
+              <div style={{ width:"20px", height:"1px", background:"rgba(255,255,255,0.55)" }}/>
+              <ML>Certifications · B.Tech AIDS · 2026</ML>
+              <TermCursor />
+            </div>
 
-      <CustomCursor />
-      <ScrollProgress />
-      <FloatingElements />
+            {/* Headline */}
+            <h1 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"clamp(3.5rem,8vw,7rem)", fontWeight:700, color:"#FFFFFF", lineHeight:1.03, letterSpacing:"-0.03em", marginBottom:"1.5rem", maxWidth:"820px", opacity:hV?1:0, animation:hV?`_rtl ${MS.reveal} ${E} 0.12s both`:"none" }}>
+              Courses &<br/>Credentials
+            </h1>
 
-      <div style={{ position: "fixed", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, pointerEvents: "none", zIndex: 0 }} />
+            {/* Sub */}
+            <p style={{ fontSize:"1rem", color:"rgba(255,255,255,0.42)", lineHeight:1.75, maxWidth:"560px", marginBottom:"3rem", opacity:hV?1:0, animation:hV?`_rtl ${MS.reveal} ${E} 0.20s both`:"none" }}>
+              Structured training across web development, cloud, and ML — each course tied to specific projects and deliverables.
+            </p>
 
-      <div style={{ position: "relative", zIndex: 1 }}>
-
-        {/* ═══ HERO HEADER ═══ */}
-        <header
-          ref={headerRef}
-          style={{ maxWidth: "1240px", margin: "0 auto", padding: "10rem 2rem 6rem", borderBottom: `1px solid ${C.border}`, position: "relative", opacity: headerInView ? 1 : 0, transform: headerInView ? "translateY(0)" : "translateY(40px)", transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" }}
-        >
-          <MovingTextStrips />
-          <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: "800px", height: "400px", borderRadius: "50%", background: `radial-gradient(circle, ${C.accent}08 0%, transparent 70%)`, filter: "blur(100px)", pointerEvents: "none" }} />
-
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "2rem" }}>
-            <div style={{ width: "48px", height: "2px", background: C.accent }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: C.accent }}>
-              Certifications
-            </span>
-          </div>
-
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(3.5rem, 8vw, 6.5rem)", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: "1rem", maxWidth: "1000px" }}>
-            Courses & Credentials
-          </h1>
-
-          <div style={{ width: "200px", height: "4px", background: `linear-gradient(90deg, ${C.accent}, ${C.purple}, ${C.green})`, borderRadius: "2px", marginBottom: "2.5rem", animation: headerInView ? "lineGrow 0.8s ease 0.2s both" : "none" }} />
-
-          <p style={{ fontSize: "1.25rem", color: C.muted2, lineHeight: 1.8, maxWidth: "720px", marginBottom: "4rem" }}>
-            Training completed across web development, cloud computing, and machine learning. Each course provided structured exposure to the tools and concepts used in the projects listed on this portfolio.
-          </p>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", maxWidth: "900px" }}>
-            <StatChip value={totalCerts} label="Certifications" icon={Award} delay={0} />
-            <StatChip value={5} label="Technical Domains" icon={TrendingUp} delay={0.1} />
-            <StatChip value="5+" label="Personal Projects" icon={CheckCircle2} delay={0.2} />
+            {/* Pillars */}
+            <div className="hero-pillars" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1px", background:"rgba(255,255,255,0.06)", borderRadius:"12px", overflow:"hidden", border:"1px solid rgba(255,255,255,0.06)", opacity:hV?1:0, animation:hV?`_si ${MS.slow} ${E} 0.28s both`:"none" }}>
+              {[
+                { label:"Web & Frontend",     desc:"React, Django, HTML5, CSS3",        icons:["React","HTML5","Django","Flexbox"] },
+                { label:"AI & Cloud",         desc:"TensorFlow, AWS, Azure, Docker",    icons:["TensorFlow","AWS","Azure","Docker"] },
+                { label:"Languages & Data",   desc:"Python, Java, Pandas, R",           icons:["Python","Java","Pandas","R"] },
+              ].map((p, i) => (
+                <div key={i} style={{ padding:"1.75rem 1.5rem", background:"#0B0B0B" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"8px" }}>
+                    <div style={{ width:"4px", height:"4px", borderRadius:"50%", background:"rgba(255,255,255,0.55)" }}/>
+                    <span style={{ fontSize:"13.5px", fontWeight:600, color:"#FFFFFF" }}>{p.label}</span>
+                  </div>
+                  <p style={{ fontSize:"12px", color:"rgba(255,255,255,0.38)", lineHeight:1.6, marginBottom:"12px" }}>{p.desc}</p>
+                  <div style={{ display:"flex", gap:"6px" }}>
+                    {p.icons.map((ic, ii) => (
+                      <img key={ic} src={ICONS[ic]} alt={ic} className="di" width={18} height={18} loading="lazy" style={{ display:"block", borderRadius:"2px", opacity:0.5, animation:hV?`_iconIn 280ms ${E} ${0.34 + i*0.06 + ii*0.04}s both`:"none" }}/>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </header>
 
-        {/* ═══ FEATURED SECTION ═══ */}
-        <section
-          ref={featuredRef}
-          style={{ maxWidth: "1240px", margin: "0 auto", padding: "6rem 2rem", opacity: featuredInView ? 1 : 0, transform: featuredInView ? "translateY(0)" : "translateY(40px)", transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" }}
-        >
-          <div style={{ marginBottom: "3rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-              <Award size={20} color={C.accent} />
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: C.muted }}>
-                Most Relevant
-              </span>
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, fontStyle: "italic", color: C.text, letterSpacing: "-0.01em", marginBottom: "0.75rem" }}>
-              Credentials Tied to Project Work
-            </h2>
-            <p style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8, maxWidth: "680px" }}>
-              These three courses most directly overlap with the technical areas covered in the projects section.
-            </p>
-          </div>
+        {/* ─── MARQUEE ─── */}
+        <Marquee speed={34} />
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            {certificationsData.featured.map((cert, i) => (
-              <FlagshipCard key={cert.id} cert={cert} index={i} />
-            ))}
-          </div>
-        </section>
-
-        {/* ═══ ALL DOMAINS ═══ */}
-        <section
-          ref={domainsRef}
-          style={{ maxWidth: "1240px", margin: "0 auto", padding: "6rem 2rem", borderTop: `1px solid ${C.border}`, opacity: domainsInView ? 1 : 0, transform: domainsInView ? "translateY(0)" : "translateY(40px)", transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" }}
-        >
-          <div style={{ marginBottom: "3rem" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: C.muted, marginBottom: "1rem" }}>
-              Full List
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700, fontStyle: "italic", color: C.text, letterSpacing: "-0.01em", marginBottom: "0.75rem" }}>
-              All Certifications by Domain
-            </h2>
-            <p style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8 }}>
-              Organized by technical area. Click a domain to expand.
-            </p>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-            {Object.entries(certificationsData.domains).map(([domain, data]) => (
-              <DomainSection
-                key={domain}
-                domain={domain}
-                data={data}
-                isActive={activeDomain === domain}
-                onClick={() => setActiveDomain(activeDomain === domain ? null : domain)}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* ═══ SUMMARY FOOTER ═══ */}
-        <section
-          ref={summaryRef}
-          style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 2rem 8rem", opacity: summaryInView ? 1 : 0, transform: summaryInView ? "translateY(0)" : "translateY(40px)", transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" }}
-        >
-          <div style={{ textAlign: "center", padding: "4rem 3rem", background: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%)`, border: `2px solid transparent`, backgroundImage: `linear-gradient(135deg, ${C.accentDim} 0%, ${C.purpleDim} 100%), linear-gradient(90deg, ${C.accent}40, ${C.purple}40)`, backgroundOrigin: "border-box", backgroundClip: "padding-box, border-box", borderRadius: "24px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "300px", background: `radial-gradient(circle, ${C.accent}15 0%, transparent 70%)`, filter: "blur(80px)", pointerEvents: "none" }} />
-
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "4.5rem", fontWeight: 700, fontStyle: "italic", color: C.text, lineHeight: 1, marginBottom: "1rem", letterSpacing: "-0.02em" }}>
-                <AnimatedCounter value={totalCerts} />
-              </div>
-              <div style={{ fontSize: "1.25rem", fontWeight: 600, color: C.text, marginBottom: "0.75rem" }}>
-                Total Certifications
-              </div>
-              <div style={{ fontSize: "1rem", color: C.muted2, lineHeight: 1.8, maxWidth: "560px", margin: "0 auto 2rem" }}>
-                Structured training across five domains, complementing project-based and self-directed learning.
-              </div>
-
-              <a
-                href="#projects"
-                data-magnetic
-                style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.875rem 1.75rem", background: C.accent, borderRadius: "12px", fontSize: "0.9rem", fontWeight: 600, color: "#fff", textDecoration: "none", transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)", fontFamily: "'Geist', sans-serif" }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px) translateX(4px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(79,127,255,0.3)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) translateX(0)"; e.currentTarget.style.boxShadow = "none"; }}
-              >
-                See the Projects
-                <ArrowRight size={16} />
-              </a>
+        {/* ─────────────────── FEATURED ─────────────────── */}
+        <section ref={fR} style={{ ...SP("4rem","5rem"), background:"#0B0B0B" }}>
+          <div style={W}>
+            <SH eyebrow="Section 01" title="Most Relevant" sub="Three credentials most directly tied to shipped project work." visible={fV} cursor/>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))", gap:"12px" }}>
+              {FEATURED.map((cert, i) => (
+                <FeaturedCard key={cert.cert} cert={cert} visible={fV} delay={i * 0.10} ri={i}/>
+              ))}
             </div>
           </div>
         </section>
+
+        {/* ─── MARQUEE ─── */}
+        <Marquee speed={28} />
+
+        {/* ─────────────────── DOMAIN ROWS ─────────────────── */}
+        <section
+          ref={cR}
+          style={{ borderTop:`1px solid rgba(255,255,255,0.06)`, borderBottom:`1px solid rgba(255,255,255,0.06)`, background:"#0B0B0B" }}
+        >
+          <div style={W}>
+            <div style={{ padding:"4rem 0 2.5rem" }}>
+              <SH eyebrow="Section 02" title="All Certifications" sub="Organized by domain. Click rows to expand individual credentials." visible={cV} cursor/>
+            </div>
+          </div>
+          {domainsData.map((dom, i) => (
+            <div key={dom.id}>
+              <div style={W}>
+                <DomainRow dom={dom} visible={cV} delay={i * 0.09} ri={i}/>
+              </div>
+            </div>
+          ))}
+          <div style={{ height:"3rem" }}/>
+        </section>
+
+        {/* ─── MARQUEE ─── */}
+        <Marquee speed={30} />
+
+        {/* ─────────────────── METRICS ─────────────────── */}
+        <section ref={mR} style={{ ...SP(), background:"#0F0F0F" }}>
+          <div style={W}>
+            <SH eyebrow="Section 03" title="Credential Metrics" visible={mV}/>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))", gap:"1px", background:"rgba(255,255,255,0.06)", border:`1px solid rgba(255,255,255,0.06)`, borderRadius:"12px", overflow:"hidden" }}>
+              {[
+                { value:totalCerts, suffix:"",  label:"Total Certifications", sub:"Across 5 domains" },
+                { value:5,          suffix:"",  label:"Technical Domains",    sub:"Web · Cloud · AI · Code · Data" },
+                { value:3,          suffix:"",  label:"Industry Internships", sub:"Applied certificate concepts" },
+                { value:5,          suffix:"+", label:"Live Projects",        sub:"Deployed systems" },
+                { value:20,         suffix:"+", label:"Certifications",       sub:"Including AWS · Azure · GCP" },
+              ].map((m, i) => (
+                <StatCard key={i} {...m} triggered={mV} delay={i * 0.06}/>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─────────────────── FOOTER ─────────────────── */}
+        <footer ref={foR} style={{ background:"#000000", position:"relative", overflow:"hidden" }}>
+          {/* Wave transition */}
+          <div style={{ position:"relative", height:"56px", background:"#0F0F0F", overflow:"hidden" }}>
+            <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ position:"absolute", bottom:0, left:0, width:"100%", height:"100%" }}>
+              <path d="M0,0 C360,56 720,0 1080,28 C1260,42 1380,14 1440,28 L1440,56 L0,56 Z" fill="#000000"/>
+            </svg>
+          </div>
+
+          <div aria-hidden="true" style={{ position:"absolute", inset:0, zIndex:0, pointerEvents:"none", backgroundImage:["linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)","linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)"].join(","), backgroundSize:"48px 48px" }}/>
+          <div aria-hidden="true" style={{ position:"absolute", left:"-5%", top:"15%", width:"420px", height:"420px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%)", filter:"blur(60px)", pointerEvents:"none" }}/>
+
+          <div style={{ ...W, position:"relative", zIndex:1 }}>
+            <div style={{ borderBottom:"1px solid rgba(255,255,255,0.06)", padding:"4rem 0" }}>
+              <div className="footer-row" style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", gap:"2.5rem", flexWrap:"wrap" }}>
+                <div style={{ maxWidth:"540px" }}>
+                  <div style={{ display:"inline-flex", alignItems:"center", gap:"6px", padding:"5px 12px", borderRadius:"999px", background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.12)", marginBottom:"20px", opacity:foV?1:0, animation:foV?`_rtl ${MS.slow} ${E} 0.05s both`:"none" }}>
+                    <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"rgba(255,255,255,0.85)", animation:"_pulse 2.2s ease-in-out infinite" }}/>
+                    <ML color="rgba(255,255,255,0.65)">Open to Opportunities · 2026</ML>
+                  </div>
+                  <h2 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"clamp(3rem,6vw,5.5rem)", fontWeight:700, color:"#FFFFFF", lineHeight:1.04, letterSpacing:"-0.03em", marginBottom:"14px", opacity:foV?1:0, animation:foV?`_rtl ${MS.reveal} ${E} 0.12s both`:"none" }}>
+                    Let's Build Something<br/>Inevitable
+                  </h2>
+                  <p style={{ fontSize:"15px", color:"rgba(255,255,255,0.35)", lineHeight:1.75, maxWidth:"400px", opacity:foV?1:0, animation:foV?`_rtl ${MS.reveal} ${E} 0.20s both`:"none" }}>
+                    Systems engineer. Product thinker. AI architect. Ready to join teams that ship things that matter.
+                  </p>
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:"10px", minWidth:"230px" }}>
+                  <FooterCTA label="Schedule Interview" sub="Primary" href="mailto:g.sivasatyasaibhagavan@gmail.com" accent visible={foV} delay={0.16}/>
+                  <FooterCTA label="View Skills"        sub="Profile" href="/skills"                                  accent={false} visible={foV} delay={0.22}/>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer meta */}
+            <div className="fgrid" style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:"2.5rem", padding:"3rem 0 2.5rem" }}>
+              <div>
+                <div style={{ fontFamily:"'Dancing Script',cursive", fontSize:"2rem", fontWeight:700, color:"#FFFFFF", letterSpacing:"-0.03em", marginBottom:"10px" }}>
+                  Bhagavan<span style={{ color:"rgba(255,255,255,0.35)" }}>.</span>
+                </div>
+                <p style={{ fontSize:"12.5px", color:"rgba(255,255,255,0.28)", lineHeight:1.75, marginBottom:"20px", maxWidth:"240px" }}>
+                  B.Tech AIDS · Ramachandra College · Andhra Pradesh, India.
+                </p>
+                <div style={{ display:"flex", gap:"6px" }}>
+                  {[
+                    { l:"GH", h:"https://github.com/bhagavan444" },
+                    { l:"LI", h:"https://www.linkedin.com/in/gopalajosyula-siva-satya-sai-bhagavan-1624a027b/" },
+                    { l:"✉",  h:"mailto:g.sivasatyasaibhagavan@gmail.com" },
+                  ].map((s, i) => (
+                    <a key={i} href={s.h} data-magnetic target={s.h.startsWith("http")?"_blank":undefined} rel={s.h.startsWith("http")?"noopener noreferrer":undefined} style={{ width:"32px", height:"32px", borderRadius:"7px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Mono',monospace", color:"rgba(255,255,255,0.35)", textDecoration:"none", fontSize:"11px" }}>
+                      {s.l}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <ML color="rgba(255,255,255,0.18)" style={{ marginBottom:"18px" }}>Navigate</ML>
+                {["Overview","Web Dev","Cloud","AI & ML","Foundations","Data"].map((l, i) => (
+                  <a key={i} href="#" style={{ display:"block", fontSize:"13px", color:"rgba(255,255,255,0.32)", textDecoration:"none", marginBottom:"10px" }}>{l}</a>
+                ))}
+              </div>
+              <div>
+                <ML color="rgba(255,255,255,0.18)" style={{ marginBottom:"18px" }}>Work</ML>
+                {[
+                  { l:"All Projects",   h:"/projects" },
+                  { l:"GitHub",         h:"https://github.com/bhagavan444" },
+                  { l:"Resume / CV",    h:"#" },
+                  { l:"Skills Profile", h:"/skills" },
+                ].map((l, i) => (
+                  <a key={i} href={l.h} style={{ display:"block", fontSize:"13px", color:"rgba(255,255,255,0.32)", textDecoration:"none", marginBottom:"10px" }}>{l.l}</a>
+                ))}
+              </div>
+              <div>
+                <ML color="rgba(255,255,255,0.18)" style={{ marginBottom:"18px" }}>Contact</ML>
+                {[
+                  { lb:"Email",    v:"g.sivasatyasaibhagavan@gmail.com" },
+                  { lb:"Phone",    v:"+91 7569205626" },
+                  { lb:"Location", v:"Andhra Pradesh, IN" },
+                  { lb:"Status",   v:"Available · Immediate", bright:true },
+                ].map((c, i) => (
+                  <div key={i} style={{ marginBottom:"14px" }}>
+                    <ML color="rgba(255,255,255,0.20)" style={{ fontSize:"9px", marginBottom:"3px" }}>{c.lb}</ML>
+                    <div style={{ fontSize:"12.5px", color:c.bright?"rgba(255,255,255,0.85)":"rgba(255,255,255,0.42)" }}>{c.v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom bar */}
+            <div style={{ borderTop:"1px solid rgba(255,255,255,0.06)", padding:"1.5rem 0", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"1rem", flexWrap:"wrap" }}>
+              <div style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.20)" }}>
+                © 2026 Siva Satya Sai Bhagavan
+              </div>
+              <div style={{ display:"flex", gap:"20px" }}>
+                {["Privacy","Terms","Sitemap"].map(l => (
+                  <a key={l} href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.20)", textDecoration:"none" }}>{l}</a>
+                ))}
+              </div>
+              <div style={{ display:"flex", alignItems:"center", gap:"6px" }}>
+                <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"rgba(255,255,255,0.75)", animation:"_pulse 2.2s ease-in-out infinite" }}/>
+                <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"11px", color:"rgba(255,255,255,0.55)" }}>Available for hire</span>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
