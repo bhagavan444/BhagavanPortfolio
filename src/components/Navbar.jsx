@@ -76,12 +76,13 @@ const PRIMARY = [
   { label: "Skills",     path: "/myskills",    sectionId: "myskills"    },
   { label: "Projects",   path: "/projects",    sectionId: "projects"    },
   { label: "Experience", path: "/internships", sectionId: "internships" },
+  { label: "Certifications",   path: "/certifications", Icon: Shield        },
   { label: "Contact",    path: "/contact",     sectionId: "contact"     },
 ];
 
 const SECONDARY = [
   { label: "Education",        path: "/education",      Icon: GraduationCap },
-  { label: "Certifications",   path: "/certifications", Icon: Shield        },
+  
   { label: "Competitions",     path: "/hackathons",     Icon: Trophy        },
   { label: "Achievements",     path: "/achivements",    Icon: Award         },
   { label: "Workshops",        path: "/workshops",      Icon: FileText      },
@@ -676,7 +677,7 @@ function Logo({ onClick }) {
           transition: `letter-spacing ${DS.ms} ${DS.ease}`,
         }}
       >
-        G S S S BHAGAVAN
+        ThenameisBhagavan
       </span>
     </button>
   );

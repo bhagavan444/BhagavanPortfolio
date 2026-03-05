@@ -171,90 +171,118 @@ const GLOBAL = `
    DATA
 ═══════════════════════════════════════════════════════════════ */
 const EXP = [
-  {
-    id:1, year:"2025",
-    role:"MERN Stack Intern",
-    company:"StudyOwl Education Pvt Ltd",
-    period:"May – July 2025", duration:"3 months",
-    location:"Hybrid", type:"Full-Stack Development",
-    certPreview:"/images/study.jpg",
-    summary:"Contributed to a production-grade EdTech platform built on the MERN stack. Worked within a cross-functional team to deliver user-facing features, authentication flows, and API-driven data handling — operating under a real-world sprint structure with code review cycles.",
-    impact:[
-      { metric:"3",    label:"Web Modules Delivered",  detail:"Scoped, built, and integrated end-to-end" },
-      { metric:"2",    label:"OAuth Providers",         detail:"Google & GitHub login with JWT session handling" },
-      { metric:"100%", label:"API Connectivity",        detail:"All frontend modules backed by documented REST APIs" },
-    ],
-    contributions:[
-      "Architected reusable React components with controlled state management, reducing duplicate UI logic across three feature modules",
-      "Implemented Google and GitHub OAuth flows end-to-end, including token exchange, JWT generation, and protected route enforcement on the Express layer",
-      "Designed normalized MongoDB schemas for user profiles and application data, accounting for relational lookups and indexing requirements",
-      "Built and validated REST API endpoints handling form submission, file references, and user session data — tested via Postman collections",
-      "Managed version control via Git with feature branches, pull requests, and peer review under an agile-style sprint workflow",
-    ],
-    stack:{
-      Frontend: ["React","HTML","CSS","JavaScript"],
-      Backend:  ["Node.js","Express.js"],
-      Database: ["MongoDB Atlas"],
-      Auth:     ["OAuth","JWT"],
-      Tools:    ["Git","Postman"],
-    },
-  },
-  {
-    id:2, year:"2025",
-    role:"AI / ML Intern",
-    company:"SmartBridge",
-    period:"May – June 2025", duration:"2 months",
-    location:"Remote", type:"Machine Learning & Computer Vision",
-    certPreview:"/images/intern.png",
-    summary:"Worked on an industrial computer vision project — Smart Sorting — focused on building and evaluating CNN-based classification models. Covered the full ML pipeline from data ingestion and preprocessing through to model evaluation and Flask-based API deployment for real-time inference.",
-    impact:[
-      { metric:"2",   label:"ML Pipelines Built",  detail:"End-to-end classification workflows" },
-      { metric:"85%", label:"CNN Accuracy",          detail:"Achieved on held-out image classification set" },
-      { metric:"1",   label:"Inference Endpoint",    detail:"Flask API serving real-time model predictions" },
-    ],
-    contributions:[
-      "Built a CNN image classification model using TensorFlow and Keras, iterating on layer configurations to improve validation accuracy to 85% on the target dataset",
-      "Executed preprocessing pipelines including resizing, normalization, and augmentation (flipping, rotation, zoom) to improve model generalization on limited training data",
-      "Evaluated model performance using accuracy curves, confusion matrices, and per-class precision/recall — identifying and addressing class imbalance issues",
-      "Packaged the trained model into a Flask REST API with a /predict endpoint accepting image uploads and returning class labels with confidence scores",
-      "Validated inference pipeline end-to-end using Postman, verifying response accuracy and latency under simulated real-world input conditions",
-    ],
-    stack:{
-      Core:        ["TensorFlow","Keras","Scikit-learn"],
-      CV:          ["OpenCV"],
-      Data:        ["NumPy","Pandas"],
-      Deployment:  ["Flask API"],
-      Environment: ["Jupyter Notebook","Python"],
-    },
-  },
-  {
-    id:3, year:"2024",
-    role:"Machine Learning & Data Science Intern",
-    company:"Blackbucks",
-    period:"May – June 2024", duration:"2 months",
-    location:"Remote", type:"Data Science & ML",
-    certPreview:"/images/blackbucks.jpeg",
-    summary:"Focused on structured data analysis, feature engineering, and supervised model development across real-world datasets. Applied an experimental mindset — iterating on preprocessing decisions and model selection based on evaluation metrics rather than defaults.",
-    impact:[
-      { metric:"6",    label:"Models Evaluated",  detail:"Supervised classifiers benchmarked and compared" },
-      { metric:"90%+", label:"Best Accuracy",      detail:"Achieved across classification tasks with tuned pipelines" },
-      { metric:"1",    label:"NLP Pipeline",       detail:"TF-IDF vectorization for text classification" },
-    ],
-    contributions:[
-      "Cleaned and preprocessed structured datasets in Pandas — handling missing values, encoding categorical features, and removing outliers to improve downstream model reliability",
-      "Engineered derived features from raw columns, applying domain reasoning to select variables with higher predictive signal for classification targets",
-      "Built and benchmarked six supervised classifiers including Logistic Regression, Decision Tree, and Random Forest — selecting the best-performing model via stratified cross-validation",
-      "Applied TF-IDF vectorization to text data, building a baseline NLP classification pipeline that achieved consistent performance across validation folds",
-      "Documented experimental results using Jupyter Notebooks — tracking accuracy, precision, recall, and F1-score across model iterations for reproducibility",
-    ],
-    stack:{
-      ML:            ["Scikit-learn"],
-      Data:          ["Pandas","NumPy"],
-      NLP:           ["NLTK","TF-IDF"],
-      Visualization: ["Matplotlib"],
-      Tools:         ["Jupyter Notebook","Git"],
-    },
-  },
+
+{
+  id:1,
+  year:"2025",
+  role:"MERN Stack Intern",
+  company:"StudyOwl Education Pvt Ltd",
+  period:"May – July 2025",
+  duration:"3 months",
+  location:"Hybrid",
+  type:"Full-Stack Development",
+  certPreview:"/images/study.jpg",
+
+  summary:
+  "Worked on a production-grade EdTech platform built using the MERN stack. Contributed to feature development, authentication flows, and API-driven modules within an agile sprint environment with code reviews and version-controlled deployments.",
+
+  impact:[
+    { metric:"3", label:"Web Modules Delivered", detail:"Built and integrated full-stack modules" },
+    { metric:"2", label:"OAuth Providers", detail:"Google & GitHub authentication integration" },
+    { metric:"100%", label:"API Connectivity", detail:"Frontend modules fully backed by REST APIs" }
+  ],
+
+  contributions:[
+    "Developed reusable React components with centralized state handling to reduce UI duplication",
+    "Implemented Google and GitHub OAuth authentication including token exchange and JWT session management",
+    "Designed MongoDB schemas for user profiles and application data with optimized indexing",
+    "Created REST APIs for form handling, user sessions, and application data management",
+    "Collaborated using Git feature branches, pull requests, and peer code reviews"
+  ],
+
+  stack:{
+    Frontend:["React","HTML","CSS","JavaScript"],
+    Backend:["Node.js","Express.js"],
+    Database:["MongoDB Atlas"],
+    Auth:["OAuth","JWT"],
+    Tools:["Git","Postman"]
+  }
+},
+
+{
+  id:2,
+  year:"2025",
+  role:"AI / ML Intern",
+  company:"SmartBridge",
+  period:"May – June 2025",
+  duration:"2 months",
+  location:"Remote",
+  type:"Machine Learning & Computer Vision",
+  certPreview:"/images/intern.png",
+
+  summary:
+  "Worked on a computer vision project named Smart Sorting, developing CNN-based classification models and deploying them through a Flask API for real-time inference.",
+
+  impact:[
+    { metric:"2", label:"ML Pipelines Built", detail:"Complete training and evaluation pipelines" },
+    { metric:"85%", label:"CNN Accuracy", detail:"Achieved on validation dataset" },
+    { metric:"1", label:"Inference API", detail:"Flask API serving predictions" }
+  ],
+
+  contributions:[
+    "Built CNN image classification models using TensorFlow and Keras",
+    "Performed dataset preprocessing including normalization, resizing, and augmentation",
+    "Evaluated model performance using confusion matrices and classification metrics",
+    "Deployed trained models through Flask REST APIs with image prediction endpoints",
+    "Validated inference results and latency using Postman testing"
+  ],
+
+  stack:{
+    Core:["TensorFlow","Keras","Scikit-learn"],
+    CV:["OpenCV"],
+    Data:["NumPy","Pandas"],
+    Deployment:["Flask API"],
+    Environment:["Jupyter Notebook","Python"]
+  }
+},
+
+{
+  id:3,
+  year:"2024",
+  role:"Machine Learning & Data Science Intern",
+  company:"Blackbucks",
+  period:"May – June 2024",
+  duration:"2 months",
+  location:"Remote",
+  type:"Data Science & Machine Learning",
+  certPreview:"/images/blackbucks.jpeg",
+
+  summary:
+  "Focused on structured data analysis, feature engineering, and supervised machine learning models across real-world datasets, using experimentation and evaluation metrics to optimize model performance.",
+
+  impact:[
+    { metric:"6", label:"Models Evaluated", detail:"Compared multiple ML algorithms" },
+    { metric:"90%+", label:"Best Accuracy", detail:"Achieved with tuned models" },
+    { metric:"1", label:"NLP Pipeline", detail:"Built TF-IDF text classification model" }
+  ],
+
+  contributions:[
+    "Cleaned and processed structured datasets using Pandas and NumPy",
+    "Performed feature engineering and variable selection for classification tasks",
+    "Implemented multiple ML models including Logistic Regression and Random Forest",
+    "Built NLP classification pipeline using TF-IDF vectorization",
+    "Tracked experimental metrics using Jupyter notebooks for reproducibility"
+  ],
+
+  stack:{
+    ML:["Scikit-learn"],
+    Data:["Pandas","NumPy"],
+    NLP:["NLTK","TF-IDF"],
+    Visualization:["Matplotlib"],
+    Tools:["Jupyter Notebook","Git"]
+  }
+}
+
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1149,7 +1177,7 @@ export default function Internships() {
             opacity: heroVis?1:0,
             animation: heroVis?`_rtl ${MS.reveal} ${E} 0.22s both`:"none",
           }}>
-            Three industry internships spanning full-stack engineering, computer vision, and data science — each with hands-on ownership of real systems, deployed models, and production-grade codebases.
+           Completed three industry internships across full-stack engineering, computer vision, and data science — contributing to real-world systems, developing and deploying machine learning models, and building production-grade applications using modern frameworks, cloud tools, and collaborative engineering workflows.
           </p>
 
           {/* Stats row — skills counter aesthetic */}

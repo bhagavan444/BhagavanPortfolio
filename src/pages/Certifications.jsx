@@ -194,99 +194,397 @@ const domainsData = [
     id: "web",
     number: "01",
     domain: "Web Development",
-    outcome: "Full-stack fundamentals through guided projects — MERN stack, Django, React patterns, and semantic front-end.",
-    context: "Tech Academy · Meta · JS Academy · Django Foundation · W3C · CSS Academy",
+    outcome:
+      "Full-stack application development through real projects — building scalable MERN applications, designing REST APIs, managing databases, and implementing responsive UI systems with modern JavaScript frameworks.",
+
+    context:
+      "Tech Academy · Meta · JS Academy · Django Foundation · W3C · CSS Academy",
+
     period: "2023–2024",
+
     metric: { value: 6, suffix: "", label: "Certifications" },
+
     tech: {
-      "Frontend":   ["React","HTML5","Flexbox","Animations"],
-      "JavaScript": ["ES6+","Async/Await","Closures","Prototypes"],
-      "Backend":    ["Django","ORM","REST API","PostgreSQL"],
+      "Frontend": [
+        "React",
+        "HTML5",
+        "CSS3",
+        "Tailwind",
+        "Flexbox",
+        "Animations",
+        "Responsive Design"
+      ],
+      "JavaScript": [
+        "ES6+",
+        "Async/Await",
+        "Closures",
+        "Prototypes",
+        "DOM Manipulation",
+        "Fetch API"
+      ],
+      "Backend": [
+        "Node.js",
+        "Express",
+        "Django",
+        "REST APIs",
+        "JWT Authentication",
+        "PostgreSQL"
+      ],
+      "Databases": [
+        "MongoDB",
+        "PostgreSQL",
+        "Mongoose",
+        "Data Modeling"
+      ]
     },
+
     certs: [
-      { title:"Full Stack Web Development",    issuer:"Tech Academy",     year:"2024", link:"https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view", note:"Concepts applied in ATS Resume Builder & AI Chat Workspace." },
-      { title:"React Development",             issuer:"Meta",             year:"2024", link:"https://drive.google.com/file/d/1yy4OpoVRAX2ZGVPUH9VmorLc2kiXalYf/view", note:"Hooks, Context API, component architecture used across all React projects." },
-      { title:"JavaScript (Advanced)",         issuer:"JS Academy",       year:"2024", link:"https://drive.google.com/file/d/1zrscfW3cyWq59mMYsK399CRjgEjA-zbd/view", note:"Core JS concepts used across all frontend work." },
-      { title:"Django Framework",              issuer:"Django Foundation", year:"2023", link:"https://drive.google.com/file/d/1QdiX2u-ARCZCEdEmlu4l3ChnQT-SmhKc/view", note:"Applied in backend coursework projects." },
-      { title:"HTML5 & Semantic Markup",       issuer:"W3C",              year:"2023", link:"https://drive.google.com/file/d/1NYtaxfhQUfxaL4n6Vv6gJSEQMySy1gqr/view", note:"Semantic structure and accessibility basics." },
-      { title:"CSS3 & Modern Layouts",         issuer:"CSS Academy",      year:"2023", link:"https://drive.google.com/file/d/1iC65FGw0MSmjeKIivdnrZVm3GfXOKVvE/view", note:"Flexbox, Grid, responsive layout in personal projects." },
-    ],
+      {
+        title: "Full Stack Web Development",
+        issuer: "Tech Academy",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1AfvPfSaXHgVK9lPOsS3MUJimynH6xlog/view",
+        note:
+          "End-to-end web development including frontend architecture, backend APIs, and database integration applied in the ATS Resume Builder project."
+      },
+
+      {
+        title: "React Development",
+        issuer: "Meta",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1yy4OpoVRAX2ZGVPUH9VmorLc2kiXalYf/view",
+        note:
+          "Modern React development using hooks, component composition, state management, and reusable UI architecture."
+      },
+
+      {
+        title: "JavaScript (Advanced)",
+        issuer: "JS Academy",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1zrscfW3cyWq59mMYsK399CRjgEjA-zbd/view",
+        note:
+          "Deep understanding of asynchronous programming, event loops, closures, and modular JavaScript architecture."
+      },
+
+      {
+        title: "Django Framework",
+        issuer: "Django Foundation",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/1QdiX2u-ARCZCEdEmlu4l3ChnQT-SmhKc/view",
+        note:
+          "Backend development using Django ORM, model-view architecture, authentication systems, and REST API integration."
+      },
+
+      {
+        title: "HTML5 & Semantic Markup",
+        issuer: "W3C",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/1NYtaxfhQUfxaL4n6Vv6gJSEQMySy1gqr/view",
+        note:
+          "Accessibility-focused semantic HTML structure improving SEO, readability, and browser compatibility."
+      },
+
+      {
+        title: "CSS3 & Modern Layouts",
+        issuer: "CSS Academy",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/1iC65FGw0MSmjeKIivdnrZVm3GfXOKVvE/view",
+        note:
+          "Modern CSS layout systems including Flexbox, Grid, responsive breakpoints, and animation techniques."
+      }
+    ]
   },
+
   {
     id: "cloud",
     number: "02",
     domain: "Cloud & DevOps",
-    outcome: "Entry-level AWS and Azure coverage plus CI/CD and MLOps fundamentals — cloud compute, storage, and deployment pipelines.",
-    context: "Amazon Web Services · Microsoft · Cloud Academy · DevOps Academy · MLOps Institute",
+
+    outcome:
+      "Practical understanding of cloud infrastructure, containerization, CI/CD automation, and deployment pipelines used for modern scalable applications and machine learning services.",
+
+    context:
+      "Amazon Web Services · Microsoft · Cloud Academy · DevOps Academy · MLOps Institute",
+
     period: "2023–2024",
+
     metric: { value: 5, suffix: "", label: "Certifications" },
+
     tech: {
-      "AWS":    ["AWS","EC2","S3","Lambda"],
-      "Azure":  ["Azure","VMs","Storage","Networking"],
-      "DevOps": ["Jenkins","Docker","Git","Automation"],
+      "AWS": ["AWS", "EC2", "S3", "Lambda", "IAM", "CloudWatch"],
+
+      "Azure": [
+        "Azure",
+        "Virtual Machines",
+        "Storage",
+        "Networking",
+        "Azure Functions"
+      ],
+
+      "DevOps": [
+        "Docker",
+        "Jenkins",
+        "GitHub Actions",
+        "CI/CD",
+        "Automation"
+      ],
+
+      "Deployment": [
+        "Vercel",
+        "Render",
+        "Netlify",
+        "Cloud Deployment"
+      ]
     },
+
     certs: [
-      { title:"AWS Cloud Practitioner", issuer:"Amazon Web Services", year:"2024", link:"https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view", note:"Entry-level AWS core services; concepts referenced when deploying personal projects." },
-      { title:"Azure Fundamentals",     issuer:"Microsoft",           year:"2024", link:"https://drive.google.com/file/d/1ygiQILNjBAfcZse27n_px1_tgupajlWM/view", note:"Azure compute, storage, and basic networking concepts." },
-      { title:"Cloud Computing",        issuer:"Cloud Academy",       year:"2023", link:"https://drive.google.com/file/d/13gTq6yHm8jCOvqHKRjPpGw4hU4p7kovX/view", note:"Distributed systems theory and foundational cloud architecture." },
-      { title:"CI/CD Pipelines",        issuer:"DevOps Academy",      year:"2024", link:"https://drive.google.com/file/d/1xccQv29hZCWCvr-JnM-nEfE8meESrWIr/view", note:"CI/CD concepts using Jenkins and Docker in guided lab exercises." },
-      { title:"MLOps",                  issuer:"MLOps Institute",      year:"2024", link:"https://drive.google.com/file/d/1BmvjGknXs-K5wOfepFcl_CuU8DsFBApP/view", note:"Packaging and deploying ML models with Docker and Kubernetes." },
-    ],
+      {
+        title: "AWS Cloud Practitioner",
+        issuer: "Amazon Web Services",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/17vu2Vd5QnxAHe4iEYv21ADC-Pfs-90U9/view",
+        note:
+          "Fundamentals of cloud infrastructure, compute services, object storage, and scalable system design."
+      },
+
+      {
+        title: "Azure Fundamentals",
+        issuer: "Microsoft",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1ygiQILNjBAfcZse27n_px1_tgupajlWM/view",
+        note:
+          "Azure cloud architecture including networking, compute resources, and storage solutions."
+      },
+
+      {
+        title: "Cloud Computing",
+        issuer: "Cloud Academy",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/13gTq6yHm8jCOvqHKRjPpGw4hU4p7kovX/view",
+        note:
+          "Distributed systems principles, virtualization, and cloud service models."
+      },
+
+      {
+        title: "CI/CD Pipelines",
+        issuer: "DevOps Academy",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1xccQv29hZCWCvr-JnM-nEfE8meESrWIr/view",
+        note:
+          "Continuous integration and delivery pipelines using Jenkins and containerized workflows."
+      },
+
+      {
+        title: "MLOps",
+        issuer: "MLOps Institute",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1BmvjGknXs-K5wOfepFcl_CuU8DsFBApP/view",
+        note:
+          "Machine learning lifecycle management including model packaging, deployment, and monitoring."
+      }
+    ]
   },
+
   {
     id: "ai",
     number: "03",
     domain: "AI & Machine Learning",
-    outcome: "Supervised learning, neural networks, and LLM fundamentals — models trained and evaluated in classification projects.",
+
+    outcome:
+      "Hands-on machine learning development including model training, evaluation, and deployment for real applications such as classification systems, recommendation engines, and intelligent assistants.",
+
     context: "ML Academy · AI Research Lab · OpenAI Institute",
+
     period: "2024",
+
     metric: { value: 3, suffix: "", label: "Certifications" },
+
     tech: {
-      "Training":    ["Python","Scikit-learn","TensorFlow","Keras"],
-      "Deep Learning":["Neural Networks","CNN","RNN","Transfer Learning"],
-      "LLMs":        ["GPT","Prompt Engineering","Fine-tuning","Embeddings"],
+      "ML Libraries": [
+        "Python",
+        "Scikit-learn",
+        "TensorFlow",
+        "Keras",
+        "Pandas"
+      ],
+
+      "Deep Learning": [
+        "Neural Networks",
+        "CNN",
+        "Transfer Learning",
+        "Image Classification"
+      ],
+
+      "LLM": [
+        "Prompt Engineering",
+        "Embeddings",
+        "Fine-tuning",
+        "Chatbot Systems"
+      ]
     },
+
     certs: [
-      { title:"Machine Learning with Python",  issuer:"ML Academy",        year:"2024", link:"https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view", note:"Applied in Fake News Detector and Career Recommender classification projects." },
-      { title:"Deep Learning Specialization",  issuer:"AI Research Lab",   year:"2024", link:"https://drive.google.com/file/d/19vV6Nyq8A418eDvQ2ezrek4pqyUBb6X6/view", note:"Neural network fundamentals applied in image and text classification exercises." },
-      { title:"Large Language Models",         issuer:"OpenAI Institute",  year:"2024", link:"https://drive.google.com/file/d/1CyN6_Bm3c68R0NkQWWTOgNAXTv27In_s/view", note:"LLM fundamentals including prompting, embeddings, and basic fine-tuning." },
-    ],
+      {
+        title: "Machine Learning with Python",
+        issuer: "ML Academy",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1uaTJTnijSpjCsD_ZPHKwen9i3RDYwShK/view",
+        note:
+          "Supervised learning algorithms including regression, classification, and model evaluation techniques."
+      },
+
+      {
+        title: "Deep Learning Specialization",
+        issuer: "AI Research Lab",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/19vV6Nyq8A418eDvQ2ezrek4pqyUBb6X6/view",
+        note:
+          "Neural network fundamentals and convolutional networks applied in image classification systems."
+      },
+
+      {
+        title: "Large Language Models",
+        issuer: "OpenAI Institute",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1CyN6_Bm3c68R0NkQWWTOgNAXTv27In_s/view",
+        note:
+          "Understanding transformer models, prompt design, embeddings, and conversational AI systems."
+      }
+    ]
   },
+
   {
     id: "foundations",
     number: "04",
     domain: "Programming & Foundations",
-    outcome: "OOP, algorithmic thinking, and multi-language fluency across Python, Java, and R with 100+ practice problems solved.",
-    context: "Python Institute · Oracle · Programming Institute · R Consortium",
+
+    outcome:
+      "Strong programming foundation including data structures, algorithms, object-oriented design, and multi-language development across Python, Java, and R.",
+
+    context:
+      "Python Institute · Oracle · Programming Institute · R Consortium",
+
     period: "2023–2024",
+
     metric: { value: 4, suffix: "", label: "Certifications" },
+
     tech: {
-      "Python": ["OOP","Data Structures","Algorithms","Clean Code"],
-      "Java":   ["Java","Spring Boot","Maven","Microservices"],
-      "Other":  ["R","Statistical Computing","Problem Solving","Optimization"],
+      "Python": [
+        "OOP",
+        "Data Structures",
+        "Algorithms",
+        "Clean Code",
+        "Problem Solving"
+      ],
+
+      "Java": [
+        "Java",
+        "Spring Boot",
+        "Maven",
+        "Object-Oriented Design"
+      ],
+
+      "Other": [
+        "R",
+        "Statistical Computing",
+        "Optimization",
+        "Data Visualization"
+      ]
     },
+
     certs: [
-      { title:"Python Programming",    issuer:"Python Institute",    year:"2024", link:"https://drive.google.com/file/d/1rZNRLvle0r_gUqzDjxR3_k6yApSyMxz6/view", note:"OOP, core data structures, and algorithmic problem solving in Python." },
-      { title:"Java Programming",      issuer:"Oracle",              year:"2024", link:"https://drive.google.com/file/d/1esxKzHNp_cuB7G87hs2MDeMpr2LKXucM/view", note:"Java fundamentals and Spring Boot basics through guided exercises." },
-      { title:"Algorithmic Thinking",  issuer:"Programming Institute",year:"2023", link:"https://drive.google.com/file/d/1SwQGo_zGZIGcTzzlMApXZU0Wt5ScyWXx/view", note:"Problem decomposition, time complexity, and common design patterns." },
-      { title:"R Programming",         issuer:"R Consortium",        year:"2023", link:"https://drive.google.com/file/d/1vFclrkOAe3GaA8brE3c5Sjd0k5RMXwr-/view", note:"R basics, statistical computing, and data visualization via ggplot2." },
-    ],
+      {
+        title: "Python Programming",
+        issuer: "Python Institute",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1rZNRLvle0r_gUqzDjxR3_k6yApSyMxz6/view",
+        note:
+          "Core programming principles including OOP, algorithms, and data structures in Python."
+      },
+
+      {
+        title: "Java Programming",
+        issuer: "Oracle",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1esxKzHNp_cuB7G87hs2MDeMpr2LKXucM/view",
+        note:
+          "Object-oriented programming, Java fundamentals, and backend service architecture."
+      },
+
+      {
+        title: "Algorithmic Thinking",
+        issuer: "Programming Institute",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/1SwQGo_zGZIGcTzzlMApXZU0Wt5ScyWXx/view",
+        note:
+          "Problem decomposition, algorithm design patterns, and complexity analysis."
+      },
+
+      {
+        title: "R Programming",
+        issuer: "R Consortium",
+        year: "2023",
+        link:
+          "https://drive.google.com/file/d/1vFclrkOAe3GaA8brE3c5Sjd0k5RMXwr-/view",
+        note:
+          "Statistical computing, exploratory data analysis, and visualization with ggplot2."
+      }
+    ]
   },
+
   {
     id: "data",
     number: "05",
     domain: "Data Science",
-    outcome: "Practical data wrangling and exploratory analysis using Pandas and NumPy on real datasets.",
+
+    outcome:
+      "Data analysis and visualization using Python libraries for data cleaning, transformation, statistical analysis, and exploratory insights on real datasets.",
+
     context: "Data Science Institute",
+
     period: "2024",
+
     metric: { value: 1, suffix: "", label: "Certification" },
+
     tech: {
-      "Libraries": ["Pandas","NumPy","Data Analysis","Python"],
+      "Libraries": [
+        "Pandas",
+        "NumPy",
+        "Matplotlib",
+        "Seaborn",
+        "Data Visualization"
+      ]
     },
+
     certs: [
-      { title:"Data Science", issuer:"Data Science Institute", year:"2024", link:"https://drive.google.com/file/d/1JENKEIpZkc1Mvro1mmRVyQr5u8fdUXqv/view", note:"Data wrangling and exploratory analysis using Pandas and NumPy." },
-    ],
-  },
+      {
+        title: "Data Science",
+        issuer: "Data Science Institute",
+        year: "2024",
+        link:
+          "https://drive.google.com/file/d/1JENKEIpZkc1Mvro1mmRVyQr5u8fdUXqv/view",
+        note:
+          "Practical data analysis, visualization, and feature engineering using Python."
+      }
+    ]
+  }
 ];
 
 const FEATURED = [
@@ -854,7 +1152,7 @@ export default function Certifications() {
 
             {/* Sub */}
             <p style={{ fontSize:"1rem", color:"rgba(255,255,255,0.42)", lineHeight:1.75, maxWidth:"560px", marginBottom:"3rem", opacity:hV?1:0, animation:hV?`_rtl ${MS.reveal} ${E} 0.20s both`:"none" }}>
-              Structured training across web development, cloud, and ML — each course tied to specific projects and deliverables.
+              Structured training across web development, cloud computing, and machine learning, with each course directly connected to practical projects and measurable outcomes. The learning process focused on building real applications, implementing scalable architectures, and applying modern development practices such as REST API design, cloud deployment, and machine learning model evaluation. This approach ensured that theoretical knowledge was consistently reinforced through hands-on development, resulting in production-ready systems and portfolio-grade projects.
             </p>
 
             {/* Pillars */}

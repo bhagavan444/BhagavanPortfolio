@@ -184,67 +184,74 @@ const capabilities = [
   {
     id:"fullstack", number:"01",
     domain:"Full-Stack Engineering",
-    outcome:"Production web systems with OAuth, MongoDB, REST APIs — deployed and user-tested.",
+    outcome:"Designed and deployed scalable full-stack web applications with secure authentication, RESTful APIs, and MongoDB database integration, ensuring reliable user experiences in production environments.",
     context:"StudyOwl Education · MERN Internship", period:"2024",
     tech:{
       "Interface":   ["React","HTML5","CSS3","JavaScript"],
-      "Application": ["Node.js","Express","REST"],
-      "Data":        ["MongoDB","JWT","OAuth"],
+      "Application": ["Node.js","Express","REST APIs"],
+      "Data":        ["MongoDB","JWT Authentication","OAuth"],
+      "Soft Skills": ["Problem Solving","Team Collaboration","Agile Development","Communication"]
     },
     proof:[
-      { name:"ATS Resume Builder",  detail:"Keyword scoring, PDF parsing" },
-      { name:"AI Chatbot Platform", detail:"React + Flask ML backend" },
+      { name:"ATS Resume Builder",  detail:"AI-assisted resume platform with keyword scoring, PDF parsing, and ATS compatibility analysis" },
+      { name:"AI Chatbot Platform", detail:"Interactive chatbot system built with React frontend and Flask ML backend integration" },
     ],
     metric:{ value:3,   suffix:"+", label:"Production Systems" },
     accent:"#FFFFFF",
   },
+
   {
     id:"intelligence", number:"02",
     domain:"Applied Intelligence",
-    outcome:"ML models achieving 90%+ accuracy in NLP classification, deployed via Flask APIs.",
+    outcome:"Developed machine learning models for real-world prediction tasks, achieving over 90% accuracy in NLP classification and deploying models through scalable Flask APIs.",
     context:"Blackbucks · SmartBridge · AI/ML Internship", period:"2024",
     tech:{
       "Training":   ["TensorFlow","Keras","Scikit-learn","CNN"],
       "Processing": ["Python","Pandas","NumPy","NLTK"],
-      "Deploy":     ["Flask API","REST"],
+      "Deploy":     ["Flask API","REST Integration"],
+      "Soft Skills":["Analytical Thinking","Research Mindset","Data Interpretation","Continuous Learning"]
     },
     proof:[
-      { name:"Fake News Detector",  detail:"TF-IDF + 90%+ accuracy" },
-      { name:"Career Recommender",  detail:"Supervised ML prediction" },
+      { name:"Fake News Detector",  detail:"NLP classification system using TF-IDF vectorization achieving 90%+ prediction accuracy" },
+      { name:"Career Recommender",  detail:"Supervised ML model predicting suitable career paths based on skill profiles" },
     ],
     metric:{ value:90,  suffix:"%", label:"Model Accuracy" },
     accent:"#FFFFFF",
   },
+
   {
     id:"infrastructure", number:"03",
     domain:"Infrastructure",
-    outcome:"Full-stack deployment with environment isolation and cloud hosting.",
+    outcome:"Implemented cloud-based deployment pipelines with environment configuration, backend services, and database hosting for reliable full-stack application delivery.",
     context:"Self-Directed Projects", period:"Ongoing",
     tech:{
       "Hosting": ["Vercel","Cloud Platforms"],
-      "Backend": ["Flask","Node"],
+      "Backend": ["Flask","Node.js"],
       "Tooling": ["Environment Config","MongoDB Atlas"],
+      "Soft Skills":["System Thinking","Debugging","Adaptability","Technical Documentation"]
     },
     proof:[
-      { name:"End-to-end Deployment", detail:"Frontend + API hosted" },
-      { name:"OAuth + Database",      detail:"MongoDB Atlas integration" },
+      { name:"End-to-end Deployment", detail:"Hosted full-stack applications with frontend UI and backend API integration" },
+      { name:"OAuth + Database",      detail:"Secure authentication system integrated with MongoDB Atlas cloud database" },
     ],
     metric:{ value:5,   suffix:"+", label:"Live Systems" },
     accent:"#FFFFFF",
   },
+
   {
     id:"foundations", number:"04",
     domain:"Computational Foundations",
-    outcome:"100+ algorithmic problems. Strong OOP design patterns in Python and Java.",
+    outcome:"Built strong computational foundations through extensive practice in data structures, algorithms, and object-oriented programming with over 100 coding problems solved.",
     context:"B.Tech AIDS · Coursework", period:"2022–2026",
     tech:{
       "Languages": ["Python","Java","C"],
       "Concepts":  ["Data Structures","Algorithms","OOP"],
-      "Practice":  ["LeetCode","Academic"],
+      "Practice":  ["LeetCode","Academic Labs"],
+      "Soft Skills":["Logical Reasoning","Persistence","Time Management","Self Learning"]
     },
     proof:[
-      { name:"LeetCode Practice",  detail:"100+ problems solved" },
-      { name:"OOP Coursework",     detail:"Lab-grade implementations" },
+      { name:"LeetCode Practice",  detail:"Solved 100+ algorithmic problems covering arrays, recursion, linked lists, and dynamic programming" },
+      { name:"OOP Coursework",     detail:"Implemented object-oriented design concepts through academic lab projects in Java and Python" },
     ],
     metric:{ value:100, suffix:"+", label:"Problems Solved" },
     accent:"#FFFFFF",
@@ -252,35 +259,71 @@ const capabilities = [
 ];
 
 const philosophy = [
-  { n:"01", statement:"Design systems, not features",       elaboration:"Every component belongs to a larger architecture. Think in data flows and contracts before code." },
-  { n:"02", statement:"Prefer clarity over complexity",     elaboration:"The most maintainable solution is usually the simplest one that solves the right problem." },
-  { n:"03", statement:"Optimize for maintainability first", elaboration:"Premature optimization creates debt. Readable structure outperforms clever code at scale." },
-  { n:"04", statement:"Ship measurable outcomes",           elaboration:"Engineering effort should tie to metrics — retention, accuracy, load time, friction reduction." },
+  { 
+    n:"01", 
+    statement:"Design systems, not isolated features",       
+    elaboration:"Approach every feature as part of a larger system. Define clear data flows, interfaces, and architectural boundaries before writing implementation code." 
+  },
+  { 
+    n:"02", 
+    statement:"Prefer clarity over unnecessary complexity",     
+    elaboration:"Readable and predictable solutions scale better over time. Simplicity improves collaboration, debugging, and long-term maintainability." 
+  },
+  { 
+    n:"03", 
+    statement:"Prioritize maintainability and scalability", 
+    elaboration:"Well-structured codebases reduce technical debt. Clean architecture and modular design enable systems to evolve without constant refactoring." 
+  },
+  { 
+    n:"04", 
+    statement:"Deliver measurable engineering impact",           
+    elaboration:"Engineering decisions should translate into tangible results such as improved performance, model accuracy, user engagement, or reduced system friction." 
+  },
 ];
 
 const trajectory = [
-  { area:"System Design",      detail:"Load balancing, caching, distributed fundamentals",       icon:"⚙️" },
-  { area:"LLM Integration",    detail:"RAG, prompt engineering, production API integration",     icon:"🤖" },
-  { area:"Cloud Architecture", detail:"Docker, cloud-native deployment, infrastructure-as-code", icon:"☁️" },
-  { area:"Type Safety",        detail:"TypeScript migration, strict patterns, compile-time safety", icon:"📘" },
+  { 
+    area:"System Design",
+    detail:"Deepening expertise in scalable architectures including load balancing, caching strategies, distributed systems fundamentals, and high-availability design.",
+    icon:"⚙️"
+  },
+  { 
+    area:"LLM Integration",
+    detail:"Building intelligent applications using RAG pipelines, prompt engineering techniques, and production-grade integration with large language model APIs.",
+    icon:"🤖"
+  },
+  { 
+    area:"Cloud Architecture",
+    detail:"Developing cloud-native systems with containerization, automated deployment pipelines, and infrastructure management for scalable applications.",
+    icon:"☁️"
+  },
+  { 
+    area:"Type Safety",
+    detail:"Adopting TypeScript and strict typing patterns to improve reliability, maintainability, and compile-time error detection in large codebases.",
+    icon:"📘"
+  },
 ];
-
 const tooling = [
-  { name:"Git / GitHub",     level:"Daily",      cat:"Core"     },
-  { name:"VS Code",          level:"Daily",      cat:"Core"     },
-  { name:"Postman",          level:"Daily",      cat:"API"      },
-  { name:"MongoDB Atlas",    level:"Regular",    cat:"Database" },
-  { name:"Jupyter Notebook", level:"Regular",    cat:"ML"       },
-  { name:"Flask Deploy",     level:"Regular",    cat:"Backend"  },
-  { name:"Vercel",           level:"Occasional", cat:"Deploy"   },
-  { name:"Figma",            level:"Occasional", cat:"Design"   },
+  { name:"Git / GitHub",      level:"Daily",      cat:"Version Control" },
+  { name:"VS Code",           level:"Daily",      cat:"Core Development" },
+  { name:"Postman",           level:"Daily",      cat:"API Testing" },
+  { name:"MongoDB Atlas",     level:"Regular",    cat:"Database" },
+  { name:"Jupyter Notebook",  level:"Regular",    cat:"Machine Learning" },
+  { name:"Flask Deployment",  level:"Regular",    cat:"Backend" },
+  { name:"Vercel",            level:"Occasional", cat:"Cloud Deployment" },
+  { name:"Figma",             level:"Occasional", cat:"UI / UX Design" },
 ];
 
 const TICKER_ITEMS = [
-  "React", "Node.js", "Python", "TensorFlow", "MongoDB", "Express",
-  "Flask", "Scikit-learn", "JavaScript", "TypeScript", "NumPy", "Pandas",
-  "Keras", "JWT", "OAuth", "Vercel", "Postman", "Git / GitHub",
-  "VS Code", "Jupyter Notebook", "Java", "C", "HTML5", "CSS3",
+  "React", "Node.js", "Express.js", "MongoDB",
+  "JavaScript", "TypeScript", "HTML5", "CSS3",
+  "Python", "TensorFlow", "Scikit-learn", "Keras",
+  "NumPy", "Pandas", "Flask",
+  "JWT Authentication", "OAuth 2.0",
+  "Git", "GitHub", "VS Code", "Postman",
+  "MongoDB Atlas", "Vercel",
+  "Jupyter Notebook", "REST APIs",
+  "Java", "C"
 ];
 
 /* ═══════════════════════════════════════════════════════
@@ -1275,7 +1318,7 @@ export default function Skills() {
               opacity: hV ? 1 : 0,
               animation: hV ? `_rtl ${MS.reveal} ${E} 0.12s both` : "none",
             }}>
-              Engineering Systems<br/>That Scale
+              Designing Scalable<br/>Engineering Systems
             </h1>
 
             {/* Sub */}
@@ -1285,7 +1328,7 @@ export default function Skills() {
               opacity: hV ? 1 : 0,
               animation: hV ? `_rtl ${MS.reveal} ${E} 0.20s both` : "none",
             }}>
-              End-to-end platforms integrating application logic, data systems, and ML pipelines — with production context and measurable outcomes.
+              End-to-end platforms integrating application logic, data systems, and ML pipelines — delivering production-ready solutions with measurable impact.
             </p>
 
             {/* Pillars */}
@@ -1298,9 +1341,21 @@ export default function Skills() {
               animation: hV ? `_si ${MS.slow} ${E} 0.28s both` : "none",
             }}>
               {[
-                { label:"Systems Thinking",    desc:"Architecture before implementation", icons:["React","Node.js","MongoDB"] },
-                { label:"Applied AI",          desc:"ML pipelines in real applications",  icons:["Python","TensorFlow","Keras"] },
-                { label:"Production Delivery", desc:"Shipped, deployed, tested",          icons:["Git / GitHub","Vercel","Postman"] },
+                { 
+    label:"Systems Thinking",
+    desc:"Designing scalable architectures and defining system structure before implementation",
+    icons:["React","Node.js","MongoDB"]
+  },
+  { 
+    label:"Applied AI",
+    desc:"Developing and integrating machine learning pipelines into real-world applications",
+    icons:["Python","TensorFlow","Keras"]
+  },
+  { 
+    label:"Production Delivery",
+    desc:"Building, testing, and deploying reliable systems for real-world usage",
+    icons:["Git / GitHub","Vercel","Postman"]
+  },
               ].map((p, i) => (
                 <div key={i} style={{ padding:"1.75rem 1.5rem", background:"#0B0B0B" }}>
                   <div style={{ display:"flex", alignItems:"center", gap:"8px", marginBottom:"8px" }}>

@@ -57,9 +57,16 @@ const ICONS = {
 };
 
 const TICKER = [
-  "Python","JavaScript","React","Node.js","TensorFlow","MongoDB","Flask",
-  "Scikit-learn","Pandas","NumPy","OpenCV","Git","Docker","AWS",
-  "Jupyter","MySQL","Keras","Matplotlib","NLTK","Express.js",
+  "Python","JavaScript","TypeScript","React","Next.js",
+  "Node.js","Express.js","Flask","FastAPI",
+  "MongoDB","PostgreSQL","MySQL",
+  "TensorFlow","PyTorch","Scikit-learn","Keras",
+  "Pandas","NumPy","Matplotlib","Seaborn",
+  "OpenCV","NLTK","LangChain","LLMs",
+  "Git","GitHub","Docker","Kubernetes",
+  "AWS","Vercel","Render",
+  "REST APIs","JWT Auth","Microservices",
+  "Jupyter","Data Visualization","Machine Learning"
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -185,112 +192,158 @@ const GLOBAL = `
    DATA
 ═══════════════════════════════════════════════════════════════ */
 const EDU = [
-  {
-    id: 1,
-    year: "2026",
-    role: "B.Tech in Artificial Intelligence & Data Science",
-    company: "Ramachandra College of Engineering",
-    period: "2022 – 2026",
-    duration: "4 years",
-    location: "Eluru, Andhra Pradesh",
-    type: "AI & Data Science · JNTUK Affiliated",
-    status: "current",
-    accent: C.accent,
-    accentSub: C.accentSub,
-    certId: "1wxnzvsS3MA7xWSxuXKeIkS8GaQoG4Y1a",
-    score: "7.9 CGPA",
-    alignment: "Aligned to: Backend Engineering · AI-Integrated Systems · Full-Stack Development",
-    summary:
-      "Four-year programme in Applied AI and Data Science. Coursework spans statistical ML, deep learning architectures, NLP, and full-stack web engineering. Academic work reinforced through three industry internships, 8+ production deployments, and a national hackathon win.",
-    impact: [
-      { metric: "7.9",  label: "CGPA",               detail: "Consistent academic performance across all semesters" },
-      { metric: "3",    label: "Industry Internships", detail: "MERN at StudyOwl · AI/ML at SmartBridge · DS at Blackbucks" },
-      { metric: "8+",   label: "Projects Shipped",     detail: "Production apps — not academic prototypes" },
-    ],
-    contributions: [
-      "Built ATS Resume Builder on MERN stack — keyword scoring engine compares resume tokens against job descriptions, achieving 90%+ ATS pass rate across 3 platforms",
-      "Developed AI Chatbot with server-side API key isolation via Flask — rolling context window management and exponential backoff reduced 429 failures from 12% to under 3%",
-      "Led hackathon team to 1st place nationally among 200+ teams — deployed a working solution in 24 hours, awarded ₹50,000 prize",
-      "Applied TF-IDF vectorization pipeline for fake news classification using Passive Aggressive Classifier — achieved 92% accuracy on held-out test set",
-      "Completed 20+ professional certifications from AWS, Google AI, IBM, and Microsoft — each applied directly in project work and internship deliverables",
-    ],
-    stack: {
-      "Full-Stack":   ["React", "Node.js", "Express.js", "MongoDB"],
-      "AI / ML":      ["TensorFlow", "Keras", "Scikit-learn", "Pandas", "NumPy"],
-      "Data Science": ["Matplotlib", "NLTK", "Jupyter"],
-      "Tools":        ["Git", "Docker", "AWS", "Flask"],
-    },
-  },
-  {
-    id: 2,
-    year: "2022",
-    role: "Intermediate — MPC Stream",
-    company: "Srividhya Junior College",
-    period: "2020 – 2022",
-    duration: "2 years",
-    location: "Gudivada, Andhra Pradesh",
-    type: "Mathematics, Physics, Chemistry · Board of Intermediate Education, AP",
-    status: "completed",
-    accent: C.accent,
-    accentSub: C.accentSub,
-    certId: "1N1K1j6QGrgNPNL2D9UmfJAL2PVSulhPJ",
-    score: "7.8 CGPA",
-    alignment: "Foundation for: ML optimization · Algorithm design · Computational modelling",
-    summary:
-      "Pre-engineering programme covering advanced Mathematics, Physics, and Chemistry. The quantitative rigour of this foundation directly underpins machine learning mathematics — linear algebra, calculus for gradient descent, probability theory, and algorithm complexity analysis.",
-    impact: [
-      { metric: "7.8",  label: "CGPA",             detail: "Strong performance across core science subjects" },
-      { metric: "3",    label: "Core Sciences",     detail: "Maths · Physics · Chemistry — engineering-track stream" },
-      { metric: "2",    label: "Years Foundation",  detail: "Rigorous quantitative base before engineering entry" },
-    ],
-    contributions: [
-      "Mastered advanced calculus and linear algebra — direct mathematical foundation for gradient descent, backpropagation, and loss function optimization in ML",
-      "Studied probability theory and statistics: the quantitative basis for Bayesian inference, classification loss functions, and model evaluation metrics",
-      "Applied physics-based computational reasoning applicable to simulation, numerical methods, and scientific programming workflows",
-      "Developed rigorous analytical problem-solving discipline that translates directly to algorithm design, debugging, and breaking down complex engineering problems",
-      "Built strong examination performance under time constraints — a mental model that carries directly into live coding rounds and technical interviews",
-    ],
-    stack: {
-      "Mathematics": ["HTML", "CSS"],
-      "Sciences":    ["Python", "Jupyter"],
-    },
-  },
-  {
-    id: 3,
-    year: "2020",
-    role: "SSC — State Board Examination",
-    company: "Montessori English Medium High School",
-    period: "2019 – 2020",
-    duration: "1 year",
-    location: "Gudivada, Andhra Pradesh",
-    type: "Secondary Education · Board of Secondary Education, AP",
-    status: "completed",
-    accent: C.accent,
-    accentSub: C.accentSub,
-    certId: "1p1RXnVn9jySamu8OiIWF0WFhe7G6QxiL",
-    score: "9.5 GPA",
-    alignment: "Achievement: Top academic performance · 100/100 in Mathematics",
-    summary:
-      "Secondary education completed with distinction — 9.5 GPA across all subjects with a perfect 100/100 in Mathematics. This early quantitative aptitude was the starting point of the AI and engineering career direction.",
-    impact: [
-      { metric: "9.5",  label: "GPA",          detail: "Top academic performance — distinction across all subjects" },
-      { metric: "100",  label: "Maths Score",   detail: "Perfect 100/100 — established early quantitative aptitude" },
-      { metric: "1",    label: "Class Standing", detail: "Graduated at top of academic cohort" },
-    ],
-    contributions: [
-      "Achieved perfect 100/100 in Mathematics — demonstrating early quantitative aptitude that shaped the decision to pursue engineering and AI",
-      "Scored 9.5 GPA overall — highest academic performance across the full secondary curriculum in all core subjects",
-      "Built strong English language foundation enabling clear technical documentation, structured communication, and professional code commenting",
-      "Developed disciplined study habits and structured problem-solving approach that carried directly through to professional internship delivery",
-      "Identified early interest in computational thinking and logical reasoning — the origin point of the AI/ML career path now being pursued",
-    ],
-    stack: {
-      "Core Subjects": ["HTML", "CSS", "Python"],
-      "Achievements":  ["Git", "VSCode"],
-    },
-  },
-];
+{
+id:1,
+year:"2026",
+role:"B.Tech in Artificial Intelligence & Data Science",
+company:"Ramachandra College of Engineering",
+period:"2022 – 2026",
+duration:"4 years",
+location:"Eluru, Andhra Pradesh",
+type:"AI & Data Science · JNTUK Affiliated",
+status:"current",
+accent:C.accent,
+accentSub:C.accentSub,
+certId:"1wxnzvsS3MA7xWSxuXKeIkS8GaQoG4Y1a",
+score:"7.9 CGPA",
 
+alignment:"Aligned to: Backend Engineering · AI Systems · Full-Stack Platforms · Applied Machine Learning",
+
+summary:
+"Four-year engineering programme focused on Artificial Intelligence, Data Science, and scalable software systems. Academic training combines machine learning theory, deep learning architectures, distributed systems, and full-stack web development. Practical experience reinforced through industry internships, production-grade deployments, research-style ML experiments, and national-level hackathon participation.",
+
+impact:[
+{ metric:"7.9", label:"CGPA", detail:"Consistent academic performance across all semesters" },
+{ metric:"3", label:"Industry Internships", detail:"MERN Development · AI/ML Engineering · Data Science" },
+{ metric:"8+", label:"Production Projects", detail:"Full-stack and ML applications deployed to cloud platforms" },
+],
+
+contributions:[
+"Architected and built an ATS Resume Builder using MERN stack — resume parsing engine compares tokenized resumes against job descriptions achieving 90%+ ATS compatibility",
+"Developed AI chatbot platform with React + Flask backend — implemented rolling context window and server-side API security improving reliability and preventing API exposure",
+"Built deep learning image classifier using TensorFlow and transfer learning for fruit freshness detection — applied MobileNetV2 architecture for real-world inference tasks",
+"Led team during national hackathon to build an online second-hand electronics marketplace within 24 hours — demonstrating rapid system design and deployment capability",
+"Implemented Fake News Detection pipeline using TF-IDF vectorization and Passive Aggressive Classifier achieving 92% accuracy on unseen test data",
+"Completed 20+ professional certifications from AWS, Google AI, IBM, and Microsoft covering cloud infrastructure, ML engineering, and DevOps workflows",
+],
+
+stack:{
+"Full-Stack":[
+"React","Node.js","Express.js","MongoDB","REST APIs","JWT Authentication"
+],
+
+"AI / ML":[
+"TensorFlow","Keras","Scikit-learn","Transfer Learning","Model Evaluation"
+],
+
+"Data Science":[
+"Pandas","NumPy","Matplotlib","NLTK","Jupyter Notebook"
+],
+
+"Tools":[
+"Git","Docker","AWS","Flask","Postman","VS Code"
+]
+},
+},
+
+{
+id:2,
+year:"2022",
+role:"Intermediate — MPC Stream",
+company:"Srividhya Junior College",
+period:"2020 – 2022",
+duration:"2 years",
+location:"Gudivada, Andhra Pradesh",
+type:"Mathematics · Physics · Chemistry · Board of Intermediate Education AP",
+status:"completed",
+accent:C.accent,
+accentSub:C.accentSub,
+certId:"1N1K1j6QGrgNPNL2D9UmfJAL2PVSulhPJ",
+score:"7.8 CGPA",
+
+alignment:"Foundation for: Machine Learning Mathematics · Algorithms · Computational Problem Solving",
+
+summary:
+"Pre-engineering programme focusing on advanced Mathematics, Physics, and Chemistry. The rigorous quantitative training established the mathematical foundation required for machine learning, algorithm design, and computational modelling used later in engineering studies.",
+
+impact:[
+{ metric:"7.8", label:"CGPA", detail:"Strong performance across science and mathematics subjects" },
+{ metric:"3", label:"Core Sciences", detail:"Mathematics · Physics · Chemistry engineering stream" },
+{ metric:"2", label:"Years Study", detail:"Quantitative academic foundation before engineering entry" },
+],
+
+contributions:[
+"Studied calculus, trigonometry, and linear algebra which later became the mathematical basis for machine learning optimization techniques",
+"Built strong understanding of probability and statistics used in ML evaluation metrics, classification algorithms, and predictive modelling",
+"Developed analytical reasoning and structured problem-solving approaches essential for algorithmic thinking",
+"Practiced solving complex mathematical problems under strict exam time limits — directly transferable to coding interviews",
+"Strengthened conceptual understanding of physics-based computational thinking useful for simulation and modelling tasks",
+],
+
+stack:{
+"Mathematics":[
+"Calculus",
+"Linear Algebra",
+"Probability",
+"Statistics"
+],
+
+"Scientific Tools":[
+"Python Basics",
+"Jupyter Notebook"
+]
+},
+},
+
+{
+id:3,
+year:"2020",
+role:"SSC — State Board Examination",
+company:"Montessori English Medium High School",
+period:"2019 – 2020",
+duration:"1 year",
+location:"Gudivada, Andhra Pradesh",
+type:"Secondary Education · Board of Secondary Education AP",
+status:"completed",
+accent:C.accent,
+accentSub:C.accentSub,
+certId:"1p1RXnVn9jySamu8OiIWF0WFhe7G6QxiL",
+score:"9.5 GPA",
+
+alignment:"Achievement: Academic distinction · Perfect Mathematics Score",
+
+summary:
+"Completed secondary education with distinction scoring 9.5 GPA across all subjects including a perfect 100/100 in Mathematics. This early academic achievement established the foundation for pursuing engineering and later specializing in Artificial Intelligence and Data Science.",
+
+impact:[
+{ metric:"9.5", label:"GPA", detail:"Top academic performance across all subjects" },
+{ metric:"100", label:"Math Score", detail:"Perfect 100/100 demonstrating strong quantitative ability" },
+{ metric:"Top", label:"Class Rank", detail:"Graduated among highest academic performers" },
+],
+
+contributions:[
+"Achieved perfect score in Mathematics demonstrating early strength in analytical reasoning and quantitative thinking",
+"Developed strong English communication skills enabling effective technical documentation and coding communication",
+"Built disciplined learning habits and structured study methods which later supported engineering coursework",
+"Developed logical reasoning and computational thinking skills forming the basis for later programming studies",
+"Established interest in technology, algorithms, and computational problem solving leading to AI and software engineering career path",
+],
+
+stack:{
+"Core Subjects":[
+"Mathematics",
+"Science",
+"English"
+],
+
+"Skills Developed":[
+"Logical Reasoning",
+"Problem Solving",
+"Analytical Thinking"
+]
+},
+},
+];
 /* ═══════════════════════════════════════════════════════════════
    MAGNETIC CURSOR — fully working
 ═══════════════════════════════════════════════════════════════ */

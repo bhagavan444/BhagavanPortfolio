@@ -159,146 +159,266 @@ const SECTIONS = [
 ];
 
 const TICKER_ITEMS = [
-  "Node.js","Express","MongoDB","Redis","Docker","AWS","Socket.io","Nginx",
-  "JWT","Stripe","REST","WebSocket","OAuth","Redis Pub/Sub","ACID","Escrow",
+  "Node.js","Express.js","MongoDB","PostgreSQL","Redis",
+  "Docker","Kubernetes","AWS","Vercel","Nginx",
+  "Socket.io","WebSocket","REST API","GraphQL",
+  "JWT","OAuth 2.0","Passport.js","Bcrypt",
+  "Stripe API","Payment Systems","Escrow Logic",
+  "Redis Pub/Sub","Message Queues","Event Streaming",
+  "Microservices","System Design","API Gateway",
+  "ACID Transactions","Database Indexing","Caching",
+  "Git","CI/CD","DevOps","Monitoring"
 ];
 
 const executionPhases = [
-  {
-    id:1, number:"01", time:"0 — 6h",
-    domain:"Foundation & Core Models",
-    outcome:"Data modeling and authentication architecture. JWT + OAuth 2.0 with Docker pipeline.",
-    context:"Database & Auth Layer", period:"Hour 0–6",
-    tech:{
-      "Database":   ["Node.js","MongoDB"],
-      "Auth":       ["JWT","Express"],
-      "DevOps":     ["Docker"],
-    },
-    proof:[
-      { name:"Normalized Schemas",     detail:"User, Product, Bid, Transaction, Notification" },
-      { name:"Auth System",            detail:"JWT rotation + OAuth 2.0 Google/GitHub" },
-    ],
-    metric:{ value:6, suffix:"", label:"Models Designed" },
-    decision:"Chose MongoDB over PostgreSQL",
-    rationale:"Electronics products have highly variable attributes. MongoDB's flexible schema eliminates migration overhead. Critical financial operations use transactions.",
-    tradeoff:"Used MongoDB transactions for bid ops, accepting 2× slower writes for data integrity.",
-  },
-  {
-    id:2, number:"02", time:"6 — 12h",
-    domain:"Listing & Search APIs",
-    outcome:"25+ REST endpoints with S3 image uploads, text search, and cursor pagination.",
-    context:"Product Catalog & Discovery", period:"Hour 6–12",
-    tech:{
-      "API":      ["Express","Node.js"],
-      "Storage":  ["AWS"],
-      "Data":     ["MongoDB"],
-    },
-    proof:[
-      { name:"REST API Layer",    detail:"25+ endpoints, cursor pagination" },
-      { name:"Image Pipeline",    detail:"S3 pre-signed URLs + Sharp.js validation" },
-    ],
-    metric:{ value:25, suffix:"+", label:"API Endpoints" },
-    decision:"MongoDB text indexes over Elasticsearch",
-    rationale:"For 24h MVP with <10k listings, MongoDB is sufficient. Elasticsearch adds deployment complexity.",
-    tradeoff:"Search limited to exact/prefix matching. No fuzzy search.",
-  },
-  {
-    id:3, number:"03", time:"12 — 18h",
-    domain:"Real-time Bidding System",
-    outcome:"WebSocket architecture with Redis pub/sub achieving 45ms average bid propagation.",
-    context:"Live Auction Engine", period:"Hour 12–18",
-    tech:{
-      "Realtime": ["Socket.io","Redis"],
-      "Data":     ["MongoDB"],
-      "Server":   ["Node.js"],
-    },
-    proof:[
-      { name:"WebSocket Server",  detail:"Socket.io + Redis adapter for scale" },
-      { name:"Bid Validation",    detail:"Optimistic locking + version counters" },
-    ],
-    metric:{ value:45, suffix:"ms", label:"Bid Latency" },
-    decision:"Socket.io with Redis adapter",
-    rationale:"Auction updates must reach all clients <100ms. Redis enables multi-server horizontal scaling.",
-    tradeoff:"Added Redis dependency. Polling alternative would have 5× higher latency.",
-  },
-  {
-    id:4, number:"04", time:"18 — 24h",
-    domain:"Payments & Production Deploy",
-    outcome:"Stripe Connect escrow deployed to AWS EC2 with Nginx SSL. 500-user load tested.",
-    context:"Payment & Infrastructure", period:"Hour 18–24",
-    tech:{
-      "Payment":  ["Stripe","Node.js"],
-      "Infra":    ["AWS","Nginx"],
-      "Deploy":   ["Docker"],
-    },
-    proof:[
-      { name:"Stripe Connect",    detail:"Escrow flow + webhook idempotency" },
-      { name:"AWS EC2 Deploy",    detail:"Nginx reverse proxy + SSL" },
-    ],
-    metric:{ value:500, suffix:"", label:"Concurrent Users" },
-    decision:"Stripe Connect with escrow model",
-    rationale:"Escrow protects buyers. Stripe handles PCI compliance so the team doesn't have to.",
-    tradeoff:"7-day escrow hold increases working capital requirements for sellers.",
-  },
+{
+id:1,
+number:"01",
+time:"0 — 6h",
+domain:"Foundation & Core Models",
+outcome:"Initial backend setup including database schema design and authentication architecture using JWT and OAuth 2.0.",
+context:"Database & Authentication Layer",
+period:"Hour 0–6",
+
+tech:{
+"Database":["Node.js","MongoDB"],
+"Auth":["JWT","Express"],
+"DevOps":["Docker"]
+},
+
+proof:[
+{ name:"Data Models", detail:"User, Product, Bid, Transaction, Notification collections" },
+{ name:"Authentication", detail:"JWT session tokens with optional OAuth login via Google/GitHub" }
+],
+
+metric:{ value:6, suffix:"", label:"Core Models" },
+
+decision:"MongoDB selected for product catalog data",
+
+rationale:"Product listings have flexible attributes (brand, condition, specs). MongoDB’s document model allows storing varied product data without frequent schema migrations.",
+
+tradeoff:"Financial operations such as bids and transactions use MongoDB transactions which slightly increase write latency but ensure consistency."
+},
+
+{
+id:2,
+number:"02",
+time:"6 — 12h",
+domain:"Listing & Search APIs",
+outcome:"Backend APIs implemented for product listings, uploads, search, and pagination.",
+
+context:"Product Catalog & Discovery",
+period:"Hour 6–12",
+
+tech:{
+"API":["Express","Node.js"],
+"Storage":["AWS S3"],
+"Data":["MongoDB"]
+},
+
+proof:[
+{ name:"REST API", detail:"Endpoints for listings, search, bidding, and user actions" },
+{ name:"Image Upload", detail:"S3 pre-signed uploads with basic validation using Sharp.js" }
+],
+
+metric:{ value:25, suffix:"+", label:"API Routes" },
+
+decision:"Used MongoDB text indexes instead of Elasticsearch",
+
+rationale:"For an MVP-scale dataset (<10k listings), MongoDB’s built-in indexing provides acceptable search performance without additional infrastructure.",
+
+tradeoff:"Search capabilities are limited compared to Elasticsearch (no fuzzy matching or advanced ranking)."
+},
+
+{
+id:3,
+number:"03",
+time:"12 — 18h",
+domain:"Real-time Bidding System",
+outcome:"Implemented WebSocket-based bidding updates so users see live bid changes across clients.",
+
+context:"Auction & Real-time Updates",
+period:"Hour 12–18",
+
+tech:{
+"Realtime":["Socket.io","Redis"],
+"Data":["MongoDB"],
+"Server":["Node.js"]
+},
+
+proof:[
+{ name:"WebSocket Layer", detail:"Socket.io used to broadcast bid updates to connected clients" },
+{ name:"Bid Validation", detail:"Basic optimistic locking to avoid conflicting bids" }
+],
+
+metric:{ value:45, suffix:"ms", label:"Avg Update Latency" },
+
+decision:"Socket.io with Redis pub/sub",
+
+rationale:"Redis enables broadcasting events between multiple server instances if the system scales horizontally.",
+
+tradeoff:"Adds Redis as an additional service dependency, but improves scalability compared to polling."
+},
+
+{
+id:4,
+number:"04",
+time:"18 — 24h",
+domain:"Payments & Deployment",
+outcome:"Integrated payment processing and deployed the backend to a cloud environment.",
+
+context:"Payments & Infrastructure",
+period:"Hour 18–24",
+
+tech:{
+"Payment":["Stripe","Node.js"],
+"Infra":["AWS","Nginx"],
+"Deploy":["Docker"]
+},
+
+proof:[
+{ name:"Stripe Integration", detail:"Basic payment flow with webhook verification" },
+{ name:"Cloud Deployment", detail:"Docker container deployed on AWS EC2 behind Nginx reverse proxy with SSL" }
+],
+
+metric:{ value:500, suffix:"", label:"Tested Users" },
+
+decision:"Stripe used for payment processing",
+
+rationale:"Stripe provides secure payment handling and reduces the need to manage PCI compliance directly.",
+
+tradeoff:"Escrow-style flows introduce delays before sellers receive funds but provide additional buyer protection."
+}
 ];
 
 const architectureDecisions = [
-  {
-    n:"01",
-    category:"Database Strategy",
-    statement:"MongoDB + Redis Hybrid",
-    elaboration:"MongoDB for flexible product schemas. Redis for real-time bid state and pub/sub. Each tool doing exactly what it does best.",
-    challenge:"Concurrent bid conflicts under load",
-    solution:"Optimistic locking with version counters — one bid wins, others retry atomically.",
-  },
-  {
-    n:"02",
-    category:"Real-time Architecture",
-    statement:"WebSocket with Redis Pub/Sub",
-    elaboration:"Sub-second latency is a hard requirement for auctions. Redis pub/sub enables horizontal scaling across multiple Node instances without shared memory.",
-    challenge:"Connection state breaks on second server",
-    solution:"Sticky sessions with Redis adapter — all servers subscribe to the same Redis channel.",
-  },
-  {
-    n:"03",
-    category:"Payment Processing",
-    statement:"Stripe Connect Escrow",
-    elaboration:"Stripe handles PCI compliance. Escrow protects both buyer and seller through a neutral holding period before funds release.",
-    challenge:"Webhook reliability — Stripe delivers multiple times",
-    solution:"Event ID uniqueness constraint in DB. Duplicates hit constraint, return 200 OK silently.",
-  },
-  {
-    n:"04",
-    category:"Search Architecture",
-    statement:"MongoDB Text Indexes (MVP-first)",
-    elaboration:"Elasticsearch would be overkill for a 24h hackathon with <10k listings. MongoDB text indexes cover prefix and phrase matching at zero added infrastructure cost.",
-    challenge:"Relevance ranking at scale",
-    solution:"Ship MVP with native indexes; migrate to Elasticsearch post-hackathon if needed.",
-  },
+{
+n:"01",
+category:"Database Strategy",
+statement:"MongoDB Document-Based Storage",
+
+elaboration:
+"MongoDB is used as the primary database for storing users, products, bids, and transaction history. The document-based schema fits well for electronics listings where product attributes such as specifications, condition, and accessories vary between items.",
+
+challenge:"Managing complex product attributes without rigid schemas",
+
+solution:
+"Used MongoDB's flexible document structure to store product metadata while maintaining indexed fields for search and filtering."
+},
+
+{
+n:"02",
+category:"Real-time Updates",
+statement:"Socket.io WebSocket Communication",
+
+elaboration:
+"Socket.io is used to enable real-time bid updates across connected users. When a bid is placed, the server broadcasts the update to all clients viewing that auction so they see the latest price immediately.",
+
+challenge:"Handling simultaneous bids from multiple users",
+
+solution:
+"Implemented server-side bid validation and timestamp checks so that only valid higher bids are accepted while outdated bids are rejected."
+},
+
+{
+n:"03",
+category:"Payment Processing",
+statement:"Stripe Payment Integration",
+
+elaboration:
+"Stripe is integrated for handling payments once an auction is completed. It provides secure transaction processing and eliminates the need to manage sensitive payment information directly within the application.",
+
+challenge:"Handling repeated webhook events from Stripe",
+
+solution:
+"Webhook events are validated and logged in the database. Duplicate webhook deliveries are ignored if the transaction has already been processed."
+},
+
+{
+n:"04",
+category:"Search Architecture",
+statement:"MongoDB Text Index Search",
+
+elaboration:
+"MongoDB text indexes are used to enable product search across titles and descriptions. This approach keeps the system simple while still providing fast search capabilities for the initial version of the application.",
+
+challenge:"Maintaining search performance as product listings grow",
+
+solution:
+"Indexes were added to frequently queried fields such as product name and category to improve search performance and filtering."
+},
+
+{
+n:"05",
+category:"API Architecture",
+statement:"RESTful Backend with Express.js",
+
+elaboration:
+"The backend follows RESTful API design using Express.js. APIs manage authentication, product listings, bidding operations, and payment workflows. The codebase is organized using controllers and service layers for easier maintenance.",
+
+challenge:"Maintaining clean and scalable backend structure",
+
+solution:
+"Separated API logic into modular route handlers and controllers, allowing new features to be added without tightly coupling components."
+},
+
+{
+n:"06",
+category:"Deployment Strategy",
+statement:"MERN Stack Deployment",
+
+elaboration:
+"The application backend runs on Node.js with Express while the frontend is built using React. MongoDB Atlas is used as the cloud database, enabling secure remote data access and automatic backups.",
+
+challenge:"Managing environment configuration between development and production",
+
+solution:
+"Used environment variables and configuration files to manage API keys, database URLs, and environment-specific settings."
+}
 ];
 
 const challenges = [
-  {
-    n:"01",
-    challenge:"Concurrent Bid Race Conditions",
-    problem:"Two users bidding simultaneously caused last-write-wins. Losing bid appeared as the winner.",
-    solution:"MongoDB transactions with optimistic locking. Version counter ensures one bid succeeds; the other retries automatically.",
-    outcome:"Zero bid conflicts across 500-user load test.",
-  },
-  {
-    n:"02",
-    challenge:"WebSocket State at Scale",
-    problem:"Memory-based state broke when adding a second server. Users on different servers couldn't see real-time bids.",
-    solution:"Redis pub/sub pattern. All servers subscribe to Redis, broadcast to their own clients — no shared process memory needed.",
-    outcome:"Horizontal scaling achieved. 45ms latency maintained under load.",
-  },
-  {
-    n:"03",
-    challenge:"Payment Webhook Idempotency",
-    problem:"Stripe webhooks delivered multiple times. First implementation processed duplicates, causing double payouts.",
-    solution:"Event ID uniqueness constraint in the database. A duplicate hit constraints and returns 200 OK — Stripe stops retrying.",
-    outcome:"Zero duplicate payments. Zero fraud incidents during judging.",
-  },
+{
+n:"01",
+challenge:"Concurrent Bid Race Conditions",
+
+problem:
+"When multiple users placed bids at nearly the same time, the system risked accepting outdated bids due to simultaneous database updates.",
+
+solution:
+"Implemented server-side validation with MongoDB transactions and optimistic locking using version counters. Each new bid checks the latest bid value before updating the document.",
+
+outcome:
+"Consistent bid ordering ensured even when multiple users placed bids simultaneously."
+},
+
+{
+n:"02",
+challenge:"Real-time Bid Synchronization",
+
+problem:
+"Users viewing the same auction page needed to see bid updates instantly. Without real-time communication, users would see outdated prices until refreshing the page.",
+
+solution:
+"Implemented Socket.io WebSocket communication between the Node.js server and connected clients. When a bid is placed, the server broadcasts the update to all active users viewing that auction.",
+
+outcome:
+"Users receive immediate bid updates across all connected sessions without page refresh."
+},
+
+{
+n:"03",
+challenge:"Payment Webhook Reliability",
+
+problem:
+"Stripe webhooks can be delivered multiple times for reliability. Initial implementation risked processing the same payment event more than once.",
+
+solution:
+"Stored Stripe event IDs in the database and validated each webhook request. Duplicate events are ignored if the event ID already exists.",
+
+outcome:
+"Payment processing became idempotent, preventing duplicate transaction handling."
+},
 ];
 
 const CERT_DRIVE_LINK   = "https://drive.google.com/file/d/1CQaoA9V93Lg4XS1FmcG-0gVUaKvw2zUq/view?usp=sharing";
@@ -916,7 +1036,7 @@ export default function Hackathons() {
 
             {/* Headline */}
             <h1 style={{ fontFamily:"'Dancing Script',cursive", fontSize:"clamp(3.5rem,8vw,7rem)", fontWeight:700, color:"#FFFFFF", lineHeight:1.03, letterSpacing:"-0.03em", marginBottom:"1.5rem", maxWidth:"860px", opacity:hV?1:0, animation:hV?`_rtl ${MS.reveal} ${E} 0.12s both`:"none" }}>
-              Building a Scalable<br/>Marketplace in 24 Hours
+             Building a Scalable Marketplace<br/>in 24 Hours
             </h1>
 
             {/* Sub */}
@@ -982,17 +1102,17 @@ export default function Hackathons() {
                     BrainoVision 2024
                   </h2>
                   <p style={{ fontSize:"13.5px", color:"rgba(255,255,255,0.38)", lineHeight:1.75, marginBottom:"0" }}>
-                    First place at the national championship. Awarded for engineering execution, architecture decisions, and live production deployment — all within 24 hours.
+                    Participated in a national-level hackathon where our team successfully designed and developed a complete working prototype within 24 hours. The project involved full-stack development, system architecture planning, and rapid deployment, demonstrating the ability to build functional software under strict time constraints.
                   </p>
                 </div>
 
                 {/* Stat strip */}
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1px", background:"rgba(255,255,255,0.06)", border:`1px solid rgba(255,255,255,0.08)`, borderTop:"none", borderBottom:"none" }}>
                   {[
-                    { v:"24h",        l:"Build Time"     },
-                    { v:"1st Place",  l:"Rank"           },
-                    { v:"National",   l:"Scope"          },
-                    { v:"2024",       l:"Year"           },
+                    { v:"24h",        l:"Build Time" },
+{ v:"Completed",  l:"Project Status" },
+{ v:"National",   l:"Hackathon Scope" },
+{ v:"2024",       l:"Year" },
                   ].map((s, i) => (
                     <div key={i} style={{ padding:"1rem 1.25rem", background:"rgba(255,255,255,0.02)" }}>
                       <div style={{ fontFamily:"'Dancing Script',cursive", fontSize:"1.6rem", fontWeight:700, color:"#FFFFFF", lineHeight:1, marginBottom:"3px" }}>{s.v}</div>
